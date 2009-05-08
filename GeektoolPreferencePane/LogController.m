@@ -32,18 +32,18 @@ NSString *CopiedRowsType = @"GTLog_Copied_Item";
 - (void)addObject:(id)object
 {
     // save only once
-    [preferencesController setAllowSave:FALSE];
+    [[NSDistributedNotificationCenter defaultCenter] setSuspended:YES];
     [super addObject:object];
-    [preferencesController setAllowSave:TRUE];
+    [[NSDistributedNotificationCenter defaultCenter] setSuspended:NO];
     [preferencesController savePrefs];
 }
 
 - (void)remove:(id)object
 {
     // save only once
-    [preferencesController setAllowSave:FALSE];
+    [[NSDistributedNotificationCenter defaultCenter] setSuspended:YES];
     [super remove:object];
-    [preferencesController setAllowSave:TRUE];
+    [[NSDistributedNotificationCenter defaultCenter] setSuspended:NO];
     [preferencesController savePrefs];
 }
 
@@ -66,7 +66,8 @@ NSString *CopiedRowsType = @"GTLog_Copied_Item";
         while (currentLog = [e nextObject])
         {
             copyLog = [currentLog copy];
-            // localize
+            // TODO: localize
+            // TODO: make the renaming algo more fluid (like how Finder handles duplicate names)
             [copyLog setName:[NSString stringWithFormat: @"%@ %@", [copyLog name],@"copy"]];
             [self addObject:copyLog];
             [copyLog release];
@@ -82,6 +83,7 @@ NSString *CopiedRowsType = @"GTLog_Copied_Item";
     
     [self addObject:toAdd];
     [toAdd release];
+    [preferencesController savePrefs];
 }
 
 
@@ -143,8 +145,10 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 			  row:(int)row
 	dropOperation:(NSTableViewDropOperation)op
 {
+    BOOL result = NO;
+    
     // we need to suspend our saving for a little bit because moveObjectInArrangedObjectsFromIndexes:toIndex: hits it when it removes/adds objects
-    [preferencesController setAllowSave:FALSE];
+    [[NSDistributedNotificationCenter defaultCenter] setSuspended:YES];
     if (row < 0) {
 		row = 0;
 	}
@@ -163,11 +167,13 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
                                    nil];
         [preferencesController logReorder:userInfo];
         
-        [preferencesController setAllowSave:TRUE];
-        return YES;
+        result = YES;
     }
-     [preferencesController setAllowSave:TRUE];
-    return NO;
+    
+    [[NSDistributedNotificationCenter defaultCenter] setSuspended:NO];
+    [preferencesController savePrefs];
+    
+    return result;
 }
 
 -(NSIndexSet *) moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)fromIndexSet

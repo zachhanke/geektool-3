@@ -53,7 +53,7 @@
                                               suspensionBehavior: NSNotificationSuspensionBehaviorDeliverImmediately];
     
     g_logs = nil;
-    [self setAllowSave:TRUE];
+    [[NSDistributedNotificationCenter defaultCenter] setSuspended:NO];
     [self refreshLogsArray];
     [self refreshGroupsArray];
     
@@ -63,6 +63,11 @@
     NSNumber *en = (NSNumber*)CFPreferencesCopyAppValue(CFSTR("enableMenu"), appID);
     if ([en boolValue]) [self loadMenu];    
 
+    // load selection color data
+    NSData *selectionColorData = (NSData*)CFPreferencesCopyAppValue(CFSTR("selectionColor"), appID);
+    if (!selectionColorData) selectionColorData = [NSArchiver archivedDataWithRootObject:[[NSColor alternateSelectedControlColor] colorWithAlphaComponent:0.3]];
+    [self setSelectionColor:selectionColorData];
+    
     [self initGroupsMenu];
     [self saveNotifications];
     //[self updatePanel];
@@ -186,6 +191,7 @@
 - (void)saveNotifications
 {
     // watch all these variables and run the observeValueForKeyPath function below each time any change
+    [self addObserver:self forKeyPath:@"selectionColor" options:0 context:nil];
  	[logManager addObserver:self forKeyPath:@"arrangedObjects.enabled" options:0 context:nil];
     [logManager addObserver:self forKeyPath:@"arrangedObjects.name" options:0 context:nil];
     [logManager addObserver:self forKeyPath:@"arrangedObjects.type" options:0 context:nil];
@@ -229,16 +235,6 @@
         [self notifyHighlight];
     else
         [self savePrefs];
-}
-
-- (BOOL)allowSave
-{
-    return allowSave;
-}
-
-- (void)setAllowSave:(BOOL)flag
-{
-    allowSave = flag;
 }
 
 - (NSMutableDictionary*)g_logs
@@ -310,12 +306,13 @@
     [self g_logsUpdate];
     
     // the below will trigger unnecessary saves, so ignore saves for that part
-    [self setAllowSave:FALSE];
+    [[NSDistributedNotificationCenter defaultCenter] setSuspended:YES];
     
     // switch manager content
     [logManager setContent:[g_logs objectForKey:[groupSelection titleOfSelectedItem]]];
     
-    [self setAllowSave:TRUE];
+    [[NSDistributedNotificationCenter defaultCenter] setSuspended:NO];
+    [self savePrefs];
 }
 
 -(IBAction)defaultImages:(id)sender
@@ -409,9 +406,9 @@
     if ([currentGroup selectedItem] == nil) [currentGroup selectItemAtIndex:0];
     
     // also, since we just selected something, make the log correct as well
-    [self setAllowSave:FALSE];
+    [[NSDistributedNotificationCenter defaultCenter] setSuspended:YES];
     [logManager setContent:[g_logs objectForKey:[groupSelection titleOfSelectedItem]]];
-    [self setAllowSave:TRUE];
+    [[NSDistributedNotificationCenter defaultCenter] setSuspended:NO];
 }
 
 - (void)showGroupsCustomization
@@ -439,15 +436,13 @@
 }
 - (void)geekToolWindowChanged:(NSNotification*)aNotification
 {
-    [self setAllowSave:NO];
-    [[NSDistributedNotificationCenter defaultCenter] setSuspended : YES];
+    [[NSDistributedNotificationCenter defaultCenter] setSuspended: YES];
     NSDictionary *infos = [aNotification userInfo];
     [[logManager selectedObject] setX: [[infos objectForKey: @"x"] intValue]];
     [[logManager selectedObject] setY: [[infos objectForKey: @"y"] intValue]];
     [[logManager selectedObject] setW: [[infos objectForKey: @"w"] intValue]];
     [[logManager selectedObject] setH: [[infos objectForKey: @"h"] intValue]];
-    [[NSDistributedNotificationCenter defaultCenter] setSuspended : NO];
-    [self setAllowSave:YES];
+    [[NSDistributedNotificationCenter defaultCenter] setSuspended: NO];
     [self savePrefs];
 }
 
@@ -591,49 +586,61 @@
     // becasue of our save notifiers, this method gets overcalled
     // by "gating" this, we can control when we want to save so we don't waste
     // (as much) time
-    if (allowSave)
+    // sync our active log with g_logs so g_logs is current before saving
+    [self g_logsUpdate];
+    
+    // when we do -allValues, we get an array of arrays. we would just like
+    // all the values in one array, not multiple arrays
+    NSArray *splinteredLogs = [g_logs allValues];
+    NSMutableArray *allLogs = [NSMutableArray array];
+    
+    NSEnumerator *e = [splinteredLogs objectEnumerator];
+    NSArray *tmpArray = nil;
+    while (tmpArray = [e nextObject])
     {
-        // sync our active log with g_logs so g_logs is current before saving
-        [self g_logsUpdate];
-        
-        // when we do -allValues, we get an array of arrays. we would just like
-        // all the values in one array, not multiple arrays
-        NSArray *splinteredLogs = [g_logs allValues];
-        NSMutableArray *allLogs = [NSMutableArray array];
-        
-        NSEnumerator *e = [splinteredLogs objectEnumerator];
-        NSArray *tmpArray = nil;
-        while (tmpArray = [e nextObject])
-        {
-            [allLogs addObjectsFromArray:tmpArray];
-        }    
-        
-        
-        NSMutableArray *logsArray = [NSMutableArray array];
-        e = [allLogs objectEnumerator];
-        GTLog *gtl = nil;
-        
-        while (gtl = [e nextObject])
-        {
-            [logsArray addObject: [gtl dictionary]];
-        }
-        
-        NSMutableArray *groupsArray = [NSMutableArray array];
-        e = [groups objectEnumerator];
-        NSDictionary *tmpDict = nil;
-        
-        while (tmpDict = [e nextObject])
-        {
-            [groupsArray addObject: [tmpDict valueForKey:@"group"]];
-        }
-        
-        CFPreferencesSetAppValue(CFSTR("currentGroup"), [currentGroup titleOfSelectedItem], appID);
-        CFPreferencesSetAppValue(CFSTR("logs"), logsArray, appID);
-        CFPreferencesSetAppValue(CFSTR("groups"), groupsArray, appID);
-        CFPreferencesAppSynchronize(appID);
-        
-        [self updateWindows];
+        [allLogs addObjectsFromArray:tmpArray];
+    }    
+    
+    
+    NSMutableArray *logsArray = [NSMutableArray array];
+    e = [allLogs objectEnumerator];
+    GTLog *gtl = nil;
+    
+    while (gtl = [e nextObject])
+    {
+        [logsArray addObject: [gtl dictionary]];
     }
+    
+    NSMutableArray *groupsArray = [NSMutableArray array];
+    e = [groups objectEnumerator];
+    NSDictionary *tmpDict = nil;
+    
+    while (tmpDict = [e nextObject])
+    {
+        [groupsArray addObject: [tmpDict valueForKey:@"group"]];
+    }
+    
+    CFPreferencesSetAppValue(CFSTR("currentGroup"), [currentGroup titleOfSelectedItem], appID);
+    CFPreferencesSetAppValue(CFSTR("selectionColor"), [self selectionColor], appID);
+    CFPreferencesSetAppValue(CFSTR("logs"), logsArray, appID);
+    CFPreferencesSetAppValue(CFSTR("groups"), groupsArray, appID);
+    CFPreferencesAppSynchronize(appID);
+    
+    [self updateWindows];
+}
+
+- (void)setSelectionColor:(NSData *)var
+{
+    if(selectionColor != var)
+    {
+        [selectionColor release];
+        selectionColor = [var copy];
+    }
+}
+
+- (NSData*)selectionColor
+{
+    return selectionColor;
 }
 
 - (IBAction)gApply:(id)sender

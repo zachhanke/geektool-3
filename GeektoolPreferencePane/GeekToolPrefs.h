@@ -31,25 +31,25 @@
     NSMutableDictionary *g_logs;
     NSMutableArray *groups;
     NSString *editingGroup;
-    
-    BOOL allowSave;
-    
+        
     BOOL isAddingLog;
     NSString *guiPool;
+    NSData *selectionColor;
 
     int numberOfItemsInPoolMenu;
     
     //NSConnection *theConnection;
     //id RemoteGeekTool;
 }
+- (void)setSelectionColor:(NSData *)var;
+- (NSData*)selectionColor;
+
 - (id)initWithBundle:(NSBundle *)bundle;
 - (void)mainViewDidLoad;
 - (void)refreshLogsArray;
 - (void)refreshGroupsArray;
 - (void)saveNotifications;
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context;
-- (BOOL)allowSave;
-- (void)setAllowSave:(BOOL)flag;
 - (NSMutableDictionary*)g_logs;
 - (void)g_logsAddLog:(GTLog*)log;
 #pragma mark -

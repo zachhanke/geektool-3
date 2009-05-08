@@ -8,10 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0A2AC5970F46777D00D7A7CB /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B97324FDCFA39411CA2CEA /* AppKit.framework */; };
-		0A2AC59A0F46779400D7A7CB /* ImageLogWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F1920ED6614700A05583 /* ImageLogWindowController.m */; };
-		0A2AC59B0F46779600D7A7CB /* ImageLogWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A94F1910ED6614700A05583 /* ImageLogWindowController.h */; };
-		0A2AC59C0F46779600D7A7CB /* ImageLogWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F1900ED6614700A05583 /* ImageLogWindow.m */; };
-		0A2AC59D0F46779600D7A7CB /* ImageLogWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A94F18F0ED6614700A05583 /* ImageLogWindow.h */; };
 		0A7291E50F71EAC10059139E /* defines.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A7291E40F71EAC10059139E /* defines.h */; };
 		0A94F19B0ED6614700A05583 /* GeekTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F18E0ED6614700A05583 /* GeekTool.m */; };
 		0A94F19E0ED6614700A05583 /* LogTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F1940ED6614700A05583 /* LogTextField.m */; };
@@ -20,7 +16,6 @@
 		0A94F1A10ED6614700A05583 /* NSLogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F19A0ED6614700A05583 /* NSLogView.m */; };
 		0A94F1A60ED6615F00A05583 /* GeekTool.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F1A20ED6615F00A05583 /* GeekTool.icns */; };
 		0A94F1A70ED6615F00A05583 /* coin.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F1A30ED6615F00A05583 /* coin.tif */; };
-		0A94F1A80ED6615F00A05583 /* imageLogWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F1A40ED6615F00A05583 /* imageLogWindow.nib */; };
 		0A94F1A90ED6615F00A05583 /* logWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F1A50ED6615F00A05583 /* logWindow.nib */; };
 		0A94F1B30ED661AD00A05583 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F1AB0ED661AD00A05583 /* InfoPlist.strings */; };
 		0A94F1B40ED661AD00A05583 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F1AD0ED661AD00A05583 /* Localizable.strings */; };
@@ -77,10 +72,6 @@
 		0A94F17D0ED6610400A05583 /* GeektoolUninstaller.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeektoolUninstaller.xcodeproj; path = ../GeektoolUninstaller/GeektoolUninstaller.xcodeproj; sourceTree = "<group>"; };
 		0A94F18D0ED6614700A05583 /* GeekTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeekTool.h; sourceTree = "<group>"; };
 		0A94F18E0ED6614700A05583 /* GeekTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeekTool.m; sourceTree = "<group>"; };
-		0A94F18F0ED6614700A05583 /* ImageLogWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLogWindow.h; sourceTree = "<group>"; };
-		0A94F1900ED6614700A05583 /* ImageLogWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageLogWindow.m; sourceTree = "<group>"; };
-		0A94F1910ED6614700A05583 /* ImageLogWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLogWindowController.h; sourceTree = "<group>"; };
-		0A94F1920ED6614700A05583 /* ImageLogWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageLogWindowController.m; sourceTree = "<group>"; };
 		0A94F1930ED6614700A05583 /* LogTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogTextField.h; sourceTree = "<group>"; };
 		0A94F1940ED6614700A05583 /* LogTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogTextField.m; sourceTree = "<group>"; };
 		0A94F1950ED6614700A05583 /* LogWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogWindow.h; sourceTree = "<group>"; };
@@ -91,7 +82,6 @@
 		0A94F19A0ED6614700A05583 /* NSLogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSLogView.m; sourceTree = "<group>"; };
 		0A94F1A20ED6615F00A05583 /* GeekTool.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = GeekTool.icns; sourceTree = "<group>"; };
 		0A94F1A30ED6615F00A05583 /* coin.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = coin.tif; sourceTree = "<group>"; };
-		0A94F1A40ED6615F00A05583 /* imageLogWindow.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = imageLogWindow.nib; sourceTree = "<group>"; };
 		0A94F1A50ED6615F00A05583 /* logWindow.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = logWindow.nib; sourceTree = "<group>"; };
 		0A94F1AC0ED661AD00A05583 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0A94F1AE0ED661AD00A05583 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -176,18 +166,14 @@
 				0A7291E40F71EAC10059139E /* defines.h */,
 				0A94F18D0ED6614700A05583 /* GeekTool.h */,
 				0A94F18E0ED6614700A05583 /* GeekTool.m */,
-				0A94F18F0ED6614700A05583 /* ImageLogWindow.h */,
-				0A94F1900ED6614700A05583 /* ImageLogWindow.m */,
-				0A94F1910ED6614700A05583 /* ImageLogWindowController.h */,
-				0A94F1920ED6614700A05583 /* ImageLogWindowController.m */,
-				0A94F1930ED6614700A05583 /* LogTextField.h */,
-				0A94F1940ED6614700A05583 /* LogTextField.m */,
-				0A94F1950ED6614700A05583 /* LogWindow.h */,
-				0A94F1960ED6614700A05583 /* LogWindow.m */,
 				0A94F1970ED6614700A05583 /* LogWindowController.h */,
 				0A94F1980ED6614700A05583 /* LogWindowController.m */,
+				0A94F1950ED6614700A05583 /* LogWindow.h */,
+				0A94F1960ED6614700A05583 /* LogWindow.m */,
 				0A94F1990ED6614700A05583 /* NSLogView.h */,
 				0A94F19A0ED6614700A05583 /* NSLogView.m */,
+				0A94F1930ED6614700A05583 /* LogTextField.h */,
+				0A94F1940ED6614700A05583 /* LogTextField.m */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -253,7 +239,6 @@
 				0A94F1AD0ED661AD00A05583 /* Localizable.strings */,
 				0A94F1A20ED6615F00A05583 /* GeekTool.icns */,
 				0A94F1A30ED6615F00A05583 /* coin.tif */,
-				0A94F1A40ED6615F00A05583 /* imageLogWindow.nib */,
 				0A94F1A50ED6615F00A05583 /* logWindow.nib */,
 			);
 			name = Resources;
@@ -286,8 +271,6 @@
 				0A94F1CD0ED6627E00A05583 /* LogWindow.h in Headers */,
 				0A94F1CE0ED6628000A05583 /* LogWindowController.h in Headers */,
 				0AC89A530F1C3E42000A795B /* defines.h in Headers */,
-				0A2AC59B0F46779600D7A7CB /* ImageLogWindowController.h in Headers */,
-				0A2AC59D0F46779600D7A7CB /* ImageLogWindow.h in Headers */,
 				0A7291E50F71EAC10059139E /* defines.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -295,7 +278,7 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* Geektool */ = {
+		8D1107260486CEB800E47090 /* GeektoolUninstaller */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Geektool" */;
 			buildPhases = (
@@ -340,7 +323,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* Geektool */,
+				8D1107260486CEB800E47090 /* GeektoolUninstaller */,
 			);
 		};
 /* End PBXProject section */
@@ -376,7 +359,6 @@
 			files = (
 				0A94F1A60ED6615F00A05583 /* GeekTool.icns in Resources */,
 				0A94F1A70ED6615F00A05583 /* coin.tif in Resources */,
-				0A94F1A80ED6615F00A05583 /* imageLogWindow.nib in Resources */,
 				0A94F1A90ED6615F00A05583 /* logWindow.nib in Resources */,
 				0A94F1B30ED661AD00A05583 /* InfoPlist.strings in Resources */,
 				0A94F1B40ED661AD00A05583 /* Localizable.strings in Resources */,
@@ -402,8 +384,6 @@
 				0A94F1C10ED6620700A05583 /* AJRInstallClipView.m in Sources */,
 				0A94F1C20ED6620700A05583 /* AJRInstallScrollView.m in Sources */,
 				0A94F1C30ED6620700A05583 /* AJRScrollView.m in Sources */,
-				0A2AC59A0F46779400D7A7CB /* ImageLogWindowController.m in Sources */,
-				0A2AC59C0F46779600D7A7CB /* ImageLogWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
