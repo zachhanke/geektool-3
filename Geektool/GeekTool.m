@@ -120,6 +120,8 @@
         [g_logs removeObjectsAtIndexes:indexSet];	
         [g_logs insertObjects:objectsToMove atIndexes:destinationIndexes];
 
+        [g_logs makeObjectsPerformSelector:@selector(setHighlighted:) withObject:NO];
+        [self updateWindows:NO];
         [self reorder];
     }
     else if ([[aNotification name] isEqualTo: @"GTTransparency"])
@@ -296,3 +298,4 @@
 	
 	return count;
 }
+@end
