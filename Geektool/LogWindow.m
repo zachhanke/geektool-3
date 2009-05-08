@@ -1,7 +1,9 @@
 #import "LogWindow.h"
 #import <Carbon/Carbon.h>
 
+// simply a window that holds logView, logTextField, and NSImageView
 @implementation LogWindow
+
 - (id)initWithContentRect:(NSRect)contentRect styleMask:(unsigned int)styleMask backing:(NSBackingStoreType)backingType defer:(BOOL)flag
 {
     self = [super initWithContentRect:contentRect styleMask:NSBorderlessWindowMask backing:backingType defer:NO];
@@ -44,6 +46,3 @@
     [self setIgnoresMouseEvents:clickThrough];
 }
 @end
-
-
-

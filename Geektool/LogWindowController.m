@@ -4,6 +4,7 @@
 
 #define ZeroRange NSMakeRange(NSNotFound, 0)
 
+// controls each individual log
 @implementation LogWindowController
 
 - (void)setFont:(NSFont*)font
@@ -18,7 +19,6 @@
 
 - (void)setTextBackgroundColor:(NSColor*)color
 {
-    //[text setBackgroundColor: color];
     [scrollView setBackgroundColor: color];
     [[self window] setBackgroundColor: [NSColor clearColor]];
 }
@@ -98,16 +98,17 @@
 - (void)addText:(NSString*)newText clear:(BOOL)clear
 {
     // TODO: I think here would be the place to add in colors
+    
     NSMutableCharacterSet *cs = [[NSCharacterSet controlCharacterSet] mutableCopy];
-    [cs removeCharactersInRange: NSMakeRange(10,1)]; // this is removing color codes here I think
+    [cs removeCharactersInRange: NSMakeRange(10,1)]; // this is removing invisible characters I think
     
     NSMutableString *theText = [newText mutableCopy];
     NSRange r;
     while (! NSEqualRanges(r=[theText rangeOfCharacterFromSet: cs],ZeroRange))
     {
-//        NSLog(@"range : %i,%i (%@)",r.location,r.length,theText);
         [theText deleteCharactersInRange: r];
     }
+     
     if (clear)
         [text setString: theText];
     else
@@ -118,11 +119,7 @@
 
 - (void)scrollEnd
 {
-    /*
-    int i = ([[text string] length]);
-    if (i<0) i=0;
-     */
-    NSRange range = NSMakeRange([[text string] length],1);
+    NSRange range = NSMakeRange([[text string] length],0);
     [text scrollRangeToVisible: range];
 }
 
@@ -149,11 +146,6 @@
     //[self display];
 }
 
-- (void)setStyle:(int)style
-{
-    [picture setImageFrameStyle: style];
-}
-
 -(void)setFit:(int)fit;
 {
     [picture setImageScaling: fit];
@@ -172,9 +164,9 @@
 - (void)setTextRect:(NSRect)rect
 {
     //[text setFrame: rect];
+    //[text display];
     [scrollView setFrame: rect];
     [scrollView display];
-    //[text display];
 }
 
 - (void)setImage:(NSImage*)anImage

@@ -30,7 +30,6 @@
 - (void)scrollEnd;
 - (void)setHighlighted:(BOOL)flag;
 - (void)setWrap:(BOOL)wrap;
-- (void)setStyle:(int)style;
 - (void)setFit:(int)fit;
 - (void)setCrop:(BOOL)crop;
 - (void)setPictureAlignment:(int)alignment;
