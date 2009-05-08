@@ -33,13 +33,10 @@
     if (shadowText)
         [self hideShadow];
 }
-- (void) enlargeFrame: (int) offset {
-    NSRect newFrame = NSMakeRect([self frame].origin.x - offset,
-                                 [self frame].origin.y - offset,
-                                 [self frame].size.width + 2 * offset,
-                                 [self frame].size.height + 2 * offset);
-    [self setFrame: newFrame];
-    [self setNeedsDisplay: YES];
+
+- (void)setFrame:(NSRect)frameRect
+{
+    [super setFrame:frameRect];
 }
 
 - (void) showShadowHeight: (int) height
