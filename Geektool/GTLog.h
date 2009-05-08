@@ -30,7 +30,7 @@
 
     NSString* group;
     int alignment;
-    NSColor* backgroundColor;
+    NSData* backgroundColor;
     NSString* command;
     BOOL enabled;
     NSString* file;
@@ -39,14 +39,12 @@
     float fontSize;
     BOOL force;
     NSString* forceTitle;
-    int frameType;
     BOOL hide;
     NSImage* imageFailure;
     int imageFit;
     NSImage* imageSuccess;
     NSString* imageURL;
     NSString* name;
-    int NSFrameType;
     int NSImageFit;
     int NSPictureAlignment;
     int pictureAlignment;
@@ -59,8 +57,7 @@
     int h;
     BOOL shadowText;
     float shadowWindow;
-    BOOL showIcon;
-    NSColor* textColor;
+    NSData* textColor;
     float transparency;
     int type;
     BOOL alwaysOnTop;
@@ -76,7 +73,6 @@
 #pragma mark Convience Accessors
 - (NSRect)realRect;
 - (NSRect)rect;
-- (int)NSFrameType;
 - (int)NSImageFit;
 - (int)NSPictureAlignment;
 - (NSFont*)font;
@@ -86,7 +82,7 @@
 #pragma mark -
 #pragma mark KVC Accessors
 - (int)alignment;
-- (NSColor*)backgroundColor;
+- (NSData*)backgroundColor;
 - (NSString*)command;
 - (BOOL)enabled;
 - (NSString*)file;
@@ -95,7 +91,6 @@
 - (BOOL)force;
 - (NSString*)forceTitle;
 - (NSString*)group;
-- (int)frameType;
 - (BOOL)hide;
 - (NSImage*)imageFailure;
 - (int)imageFit;
@@ -110,8 +105,7 @@
 - (float)h;
 - (BOOL)shadowText;
 - (float)shadowWindow;
-- (BOOL)showIcon;
-- (NSColor*)textColor;
+- (NSData*)textColor;
 - (float)transparency;
 - (int)type;
 - (BOOL)alwaysOnTop;
@@ -122,8 +116,7 @@
 #pragma mark Mutators
 - (void)setWindowLevel:(int)level;
 - (void)setAlignment:(int)var;
-- (void)setBackgroundColorWithDictionary:(NSDictionary*)var;
-- (void)setBackgroundColor:(NSColor*)var;
+- (void)setBackgroundColor:(NSData*)var;
 - (void)setCommand:(NSString*)var;
 - (void)setEnabled:(BOOL)var;
 - (void)setFile:(NSString*)var;
@@ -132,7 +125,6 @@
 - (void)setForce:(BOOL)var;
 - (void)setForceTitle:(NSString*)var;
 - (void)setGroup:(NSString*)var;
-- (void)setFrameType:(int)var;
 - (void)setHide:(BOOL)var;
 - (void)setImageFailure:(NSImage*)var;
 - (void)setImageFit:(int)var;
@@ -143,9 +135,7 @@
 - (void)setRefresh:(int)var;
 - (void)setShadowText:(BOOL)var;
 - (void)setShadowWindow:(BOOL)var;
-- (void)setShowIcon:(BOOL)var;
-- (void)setTextColorWithDictionary:(NSDictionary*)var;
-- (void)setTextColor:(NSColor*)var;
+- (void)setTextColor:(NSData*)var;
 - (void)setTransparency:(float)var;
 - (void)setType:(int)var;
 - (void)setAlwaysOnTop:(BOOL)var;

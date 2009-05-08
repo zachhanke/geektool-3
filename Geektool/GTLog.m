@@ -18,26 +18,15 @@
 {
 	if (!(self = [super init])) return nil;
     
-    NSDictionary *textColorDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         [NSNumber numberWithFloat: 0],@"red",
-                                         [NSNumber numberWithFloat: 0],@"green",
-                                         [NSNumber numberWithFloat: 0],@"blue",
-                                         [NSNumber numberWithFloat: 1],@"alpha",
-                                         nil];
+    NSData *textColorData = [NSArchiver archivedDataWithRootObject: [NSColor blackColor]];
     
-    NSDictionary *backgroundColorDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                               [NSNumber numberWithFloat: 1],@"red",
-                                               [NSNumber numberWithFloat: 1],@"green",
-                                               [NSNumber numberWithFloat: 1],@"blue",
-                                               [NSNumber numberWithFloat: 0],@"alpha",
-                                               nil];   
+    NSData *backgroundColorData = [NSArchiver archivedDataWithRootObject: [NSColor clearColor]]; 
     
     NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
                               @"New log", @"name",
                               @"0", @"type",
                               @"1", @"enabled",
                               @"Default", @"group",
-                              
                               
                               @"Monaco", @"fontName",
                               @"12", @"fontSize",
@@ -48,8 +37,8 @@
                               @"0", @"hide",
                               @"10", @"refresh",
                               
-                              textColorDictionary, @"textColor",
-                              backgroundColorDictionary, @"backgroundColor",
+                              textColorData, @"textColor",
+                              backgroundColorData, @"backgroundColor",
                               @"0", @"wrap",
                               @"0", @"shadowText",
                               @"0", @"shadowWindow",
@@ -57,13 +46,11 @@
                               
                               @"0", @"force",
                               @"", @"forceTitle",
-                              @"0", @"showIcon",
                               
                               @"0", @"pictureAlignment",
                               @"", @"imageURL",
                               @"100", @"transparency",
                               @"0", @"imageFit",
-                              @"0", @"frameType",
                               
                               @"0", @"x",
                               @"0", @"y",
@@ -96,19 +83,7 @@
 - (NSDictionary*)dictionary
 {
     //TODO: Add in imageFailure/success preferences
-    NSDictionary *textColorDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         [NSNumber numberWithFloat: [[self textColor]redComponent]]  ,@"red",
-                                         [NSNumber numberWithFloat: [[self textColor]greenComponent]],@"green",
-                                         [NSNumber numberWithFloat: [[self textColor]blueComponent]] ,@"blue",
-                                         [NSNumber numberWithFloat: [[self textColor]alphaComponent]],@"alpha",
-                                         nil];
     
-    NSDictionary *backgroundColorDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                               [NSNumber numberWithFloat: [[self backgroundColor]redComponent]]  ,@"red",
-                                               [NSNumber numberWithFloat: [[self backgroundColor]greenComponent]],@"green",
-                                               [NSNumber numberWithFloat: [[self backgroundColor]blueComponent]] ,@"blue",
-                                               [NSNumber numberWithFloat: [[self backgroundColor]alphaComponent]],@"alpha",
-                                               nil];    
     
     logDictionary=[NSMutableDictionary dictionaryWithObjectsAndKeys:
                                            [self name]                                       ,@"name",
@@ -125,8 +100,8 @@
                                            [NSNumber numberWithBool: [self hide]]            ,@"hide",
                                            [NSNumber numberWithInt: [self refresh]]          ,@"refresh",
                                            
-                                           textColorDictionary                               ,@"textColor",
-                                           backgroundColorDictionary                         ,@"backgroundColor",
+                                           [self textColor]                                  ,@"textColor",
+                                           [self backgroundColor]                            ,@"backgroundColor",
                                            [NSNumber numberWithBool: [self wrap]]            ,@"wrap",
                                            [NSNumber numberWithBool: [self shadowText]]      ,@"shadowText",
                                            [NSNumber numberWithBool: [self shadowWindow]]    ,@"shadowWindow",
@@ -134,13 +109,11 @@
                                            
                                            [NSNumber numberWithBool: [self force]]           ,@"force",
                                            [self forceTitle]                                 ,@"forceTitle",
-                                           [NSNumber numberWithBool: [self showIcon]]        ,@"showIcon",
                                            
                                            [NSNumber numberWithInt: [self pictureAlignment]] ,@"pictureAlignment",
                                            [self imageURL]                                   ,@"imageURL",
                                            [NSNumber numberWithFloat: [self transparency]]   ,@"transparency",
                                            [NSNumber numberWithInt: [self imageFit]]         ,@"imageFit",
-                                           [NSNumber numberWithInt: [self frameType]]        ,@"frameType",
                                            
                                            [NSNumber numberWithInt: [self x]]                ,@"x",
                                            [NSNumber numberWithInt: [self y]]                ,@"y",
@@ -208,8 +181,8 @@
     [self setHide:[[dictionary objectForKey:@"hide"]boolValue]];
     [self setRefresh:[[dictionary objectForKey:@"refresh"]intValue]];
     
-    [self setTextColorWithDictionary:[dictionary objectForKey:@"textColor"]];
-    [self setBackgroundColorWithDictionary:[dictionary objectForKey:@"backgroundColor"]];
+    [self setTextColor:[dictionary objectForKey:@"textColor"]];
+    [self setBackgroundColor:[dictionary objectForKey:@"backgroundColor"]];
     [self setWrap:[[dictionary objectForKey:@"wrap"]boolValue]];
     [self setShadowText:[[dictionary objectForKey:@"shadowText"]boolValue]];
     [self setShadowWindow:[[dictionary objectForKey:@"shadowWindow"]boolValue]];
@@ -217,13 +190,11 @@
     
     [self setForce:[[dictionary objectForKey:@"force"]boolValue]];
     [self setForceTitle:[dictionary objectForKey:@"forceTitle"]];
-    [self setShowIcon:[[dictionary objectForKey:@"showIcon"]boolValue]];
     
     [self setPictureAlignment:[[dictionary objectForKey:@"pictureAlignment"]intValue]];
     [self setImageURL:[dictionary objectForKey:@"imageURL"]];
     [self setTransparency:[[dictionary objectForKey:@"transparency"]floatValue]];
     [self setImageFit:[[dictionary objectForKey:@"imageFit"]intValue]];
-    [self setFrameType:[[dictionary objectForKey:@"frameType"]intValue]];
     
     [self setX:[[dictionary objectForKey:@"x"]floatValue]];
     [self setY:[[dictionary objectForKey:@"y"]floatValue]];
@@ -246,29 +217,6 @@
                       [self y],
                       [self w],
                       [self h]);
-}
-
-- (int)NSFrameType
-{
-    switch ([self frameType])
-    {
-        case FRAME_NONE:
-            return NSImageFrameNone;
-            break;
-        case FRAME_PHOTO:
-            return NSImageFramePhoto;
-            break;
-        case FRAME_GRAYBEZEL:
-            return NSImageFrameGrayBezel;
-            break;
-        case FRAME_GROOVE:
-            return NSImageFrameGroove;
-            break;
-        case FRAME_BUTTON:
-            return NSImageFrameButton;
-            break;
-    }
-    return NSImageFrameGrayBezel;
 }
 
 - (int)NSImageFit
@@ -338,7 +286,7 @@
     return alignment;
 }
 
-- (NSColor*)backgroundColor
+- (NSData*)backgroundColor
 {
     return [[backgroundColor retain] autorelease];
 }
@@ -376,11 +324,6 @@
 - (NSString*)forceTitle
 {
     return [[forceTitle retain] autorelease];
-}
-
-- (int)frameType
-{
-    return frameType;
 }
 
 - (NSString*)group
@@ -458,12 +401,7 @@
     return shadowWindow;
 }
 
-- (BOOL)showIcon
-{
-    return showIcon;
-}
-
-- (NSColor*)textColor
+- (NSData*)textColor
 {
     return [[textColor retain] autorelease];
 }
@@ -513,25 +451,12 @@
     alignment=var;
 }
 
-- (void)setBackgroundColor:(NSColor*)var
+- (void)setBackgroundColor:(NSData*)var
 {
     if(backgroundColor != var)
     {
         [backgroundColor release];
         backgroundColor = [var copy];
-    }
-}
-
-- (void)setBackgroundColorWithDictionary:(NSDictionary*)var
-{
-    NSColor *colorVar = [NSColor colorWithCalibratedRed:[[var objectForKey:@"red"]floatValue] 
-                                                  green:[[var objectForKey:@"green"]floatValue] 
-                                                   blue:[[var objectForKey:@"blue"]floatValue] 
-                                                  alpha:[[var objectForKey:@"alpha"]floatValue]];
-    if(backgroundColor != colorVar)
-    {
-        [backgroundColor release];
-        backgroundColor = [colorVar copy];
     }
 }
 
@@ -594,11 +519,6 @@
         [group release];
         group = [var copy];
     }
-}
-
-- (void)setFrameType:(int)var
-{
-    frameType=var;
 }
 
 - (void)setHide:(BOOL)var
@@ -667,25 +587,7 @@
     shadowWindow=var;
 }
 
-- (void)setShowIcon:(BOOL)var
-{
-    showIcon=var;
-}
-
-- (void)setTextColorWithDictionary:(NSDictionary*)var
-{
-    NSColor *colorVar = [NSColor colorWithCalibratedRed:[[var objectForKey:@"red"]floatValue] 
-                                                  green:[[var objectForKey:@"green"]floatValue] 
-                                                   blue:[[var objectForKey:@"blue"]floatValue] 
-                                                  alpha:[[var objectForKey:@"alpha"]floatValue]];
-    if(textColor != colorVar)
-    {
-        [textColor release];
-        textColor = [colorVar copy];
-    }
-}
-
-- (void)setTextColor:(NSColor*)var
+- (void)setTextColor:(NSData*)var
 {
     if(textColor != var)
     {
@@ -909,13 +811,10 @@
     // set a few attributes pertaining to how the window appears
     [windowController setHasShadow: [self shadowWindow]];
     [windowController setLevel: [self windowLevel]];
-    [self setSticky:  [self windowLevel] == kCGDesktopWindowLevel];
-    [windowController setStyle: [self NSFrameType]];
+    [self setSticky: [self windowLevel] == kCGDesktopWindowLevel];
     [windowController setPictureAlignment: [self NSPictureAlignment]];
-    //NSRect rect = [[windowController window] frame];
-    NSRect rect = [self rect];
     
-    // make it unclickable and make it's size
+    // make it's size and make it unclickable
     [[windowController window] setFrame: [self realRect] display: NO];
     [(LogWindow*)window setClickThrough: YES];
     
@@ -923,7 +822,7 @@
     if ([self type] == TYPE_FILE || [self type] == TYPE_SHELL)
     {
         // get the colors right
-        [windowController setTextBackgroundColor: [self backgroundColor]];
+        [windowController setTextBackgroundColor: [NSUnarchiver unarchiveObjectWithData:[self backgroundColor]]];
         [windowController setShadowText: [self shadowText]];
         
         // Paragraph style
@@ -956,7 +855,7 @@
         attributes = [[NSDictionary dictionaryWithObjectsAndKeys:
                        myParagraphStyle, NSParagraphStyleAttributeName,
                        [self font],      NSFontAttributeName,
-                       [self textColor], NSForegroundColorAttributeName,nil] retain];
+                       [NSUnarchiver unarchiveObjectWithData:[self textColor]], NSForegroundColorAttributeName,nil] retain];
         [myParagraphStyle release];
         [windowController setAttributes: attributes];
     }
@@ -967,42 +866,9 @@
     if ([self type] == TYPE_FILE)
         [windowController scrollEnd];
     
-    // im = image (i think) anyway, modify the width to accomidate the largest image
-    // possible (if needed)
-    int imWidth = 0;
-    if ([self showIcon] && [self type] == TYPE_SHELL)
-    {
-        if ([[self imageSuccess] size].width > [[self imageFailure] size].width )
-            imWidth = [[self imageSuccess] size].width;
-        else
-            imWidth = [[self imageFailure] size].width;
-    }
-    else
-    {
-        [windowController setImage: nil];
-    }
-    
-    // i guess there is something about the graybezel frame that screws something
-    // up.
-    NSRect newRect;
-    if ( [self NSFrameType] == FRAME_GRAYBEZEL )
-    {
-        newRect = NSMakeRect(imWidth + 8,
-                             8,
-                             rect.size.width - 16  - imWidth,
-                             rect.size.height - 16 );
-    }
-    else
-    {
-        newRect = NSMakeRect(imWidth,
-                             0,
-                             rect.size.width - imWidth,
-                             rect.size.height);
-    }
-    
     // commit our rect. rememeber, this is with respect to the log window, hence
     // why our x,y are going to be like 0,0. a bounds rect, if you will
-    [windowController setTextRect: newRect]; 
+    [windowController setTextRect: [self rect]]; 
     
     // sometimes, we just wanted to update the way the window looks, and not
     // destroy our precious timers. this logic will do just that
@@ -1021,6 +887,7 @@
                 if ([self force]) tmp = [self forceTitle];
                 [windowController addText: tmp clear: YES];
             }
+            // TODO: Transparency may be wrong
             // if we have an image command instead
             else if ([self type] == TYPE_IMAGE)
             {
@@ -1110,13 +977,7 @@
     {
         [self terminate];
     }
-    if ([self type] == TYPE_SHELL && [self showIcon])
-    {
-        if ([task terminationStatus] == 0)
-            [windowController setImage: [self imageSuccess]];
-        else
-            [windowController setImage: [self imageFailure]];        
-    }
+
     //[windowController display];
     [task release];
     task = nil;
