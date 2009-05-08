@@ -17,28 +17,30 @@
 
 - (void)awakeFromNib
 {
-    [ self setNextResponder: [ NSApplication sharedApplication ]];
+    [self setNextResponder: [NSApplication sharedApplication]];
+    //[self setAutoresizesSubviews:NO];
     //[self setHighlighted:0];
 }
+
 - (BOOL)acceptsFirstMouse:(NSEvent *)theEvent;
 {
     // lets us so user can move window immediately, instead of clicking on it
     // to make it "active" and then again to actually move it
     return YES;
 }
+
 - (void)drawRect:(NSRect)rect
 {
     NSAutoreleasePool *pool = [[ NSAutoreleasePool alloc ] init ];
-    [ super drawRect: rect ];
+    [super drawRect: rect];
     NSBezierPath *bp = [ NSBezierPath bezierPathWithRect: [ self bounds ]];
     NSColor *color;
     
     // if we want this window to be highlighted
     if (highlighted)
     {
-        // TODO: link into changing color here
-        //color = [[NSColor blackColor] colorWithAlphaComponent:0.1];
-        color = [[ NSColor alternateSelectedControlColor ] colorWithAlphaComponent:0.3];
+        color = [NSUnarchiver unarchiveObjectWithData:
+                 [[NSUserDefaults standardUserDefaults] objectForKey:@"selectionColor"]];
         
         // further drawing will be done with this color
         [ color set ];
@@ -62,6 +64,7 @@
     }
     [ pool release ];
 }
+
 - (void)mouseDragged:(NSEvent *)theEvent;
 {
     // only handle clicks (drags) if the window is highlighted
@@ -141,19 +144,18 @@
             while (yn = [ f nextObject ])
             {
                 float y = [ yn  floatValue ];
-                if ( y-MAGN <= newY && newY <= y+MAGN)
+                if (y-MAGN <= newY && newY <= y+MAGN)
                     newY = y;
-                if ( y-MAGN <= newY + newH && newY + newH <= y+MAGN )
+                if (y-MAGN <= newY + newH && newY + newH <= y+MAGN)
                     newY = y - newH;
             }
         }
     }
     
-    [[ self window ] setFrame: NSMakeRect(newX,newY,newW,newH) display: YES ];
+    [[self window] setFrame: NSMakeRect(newX,newY,newW,newH) display: YES];
 }
 
 // dont push logs up to the top
-
 - (BOOL)shouldDelayWindowOrderingForEvent:(NSEvent *)theEvent
 {
     if ([theEvent type] == NSLeftMouseDragged) return NO;
@@ -163,13 +165,13 @@
 
 - (void)mouseDown:(NSEvent *)theEvent;
 {
-    mouseLoc = [[ self window ] convertBaseToScreen:[theEvent locationInWindow]];
+    mouseLoc = [[self window] convertBaseToScreen:[theEvent locationInWindow]];
     
     // dont accept clicks if the view is not highlighted
     if (!highlighted)
         return;
     
-    windowFrame = [[ self window ] frame ];
+    windowFrame = [[self window] frame];
     
     // figure out where we are clicking
     // either on the resize handle or not
@@ -177,24 +179,24 @@
         dragType=ResizeDragType;
     else
         dragType=MoveDragType;
-    [ self display ];
+    [self display];
 }
 - (void)mouseUp:(NSEvent *)theEvent;
 {
     //NSLog(@"frame: %@",[[ logWindowController window ] stringWithSavedFrame]);
-    if ([ (LogWindowController*)logWindowController type ] == TYPE_SHELL)
-        [ logWindowController scrollEnd ];
-    [ text display ];
+    if ([(LogWindowController*)logWindowController type] == TYPE_SHELL)
+        [logWindowController scrollEnd];
+    [text display];
     
     // tell GTPrefs that we changed and then save afterward
-    [ self sendPosition ];
+    [self sendPosition];
 }
 - (void)setHighlighted:(BOOL)flag;
 {
     highlighted = flag;
     if (highlighted)
-        [[ self window ] makeKeyWindow ];
-    [ self display ];
+        [[self window] makeKeyWindow];
+    [self display];
 }
 
 
