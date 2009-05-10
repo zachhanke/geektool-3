@@ -162,7 +162,6 @@
     else return YES;
 }
 
-
 - (void)mouseDown:(NSEvent *)theEvent;
 {
     mouseLoc = [[self window] convertBaseToScreen:[theEvent locationInWindow]];
@@ -181,6 +180,7 @@
         dragType=MoveDragType;
     [self display];
 }
+
 - (void)mouseUp:(NSEvent *)theEvent;
 {
     //NSLog(@"frame: %@",[[ logWindowController window ] stringWithSavedFrame]);
@@ -191,6 +191,7 @@
     // tell GTPrefs that we changed and then save afterward
     [self sendPosition];
 }
+
 - (void)setHighlighted:(BOOL)flag;
 {
     highlighted = flag;
@@ -198,7 +199,6 @@
         [[self window] makeKeyWindow];
     [self display];
 }
-
 
 - (void)setCrop: (BOOL)aBool;
 {
@@ -223,17 +223,22 @@
 
 // have our window accept commands when its highlighted. when its not, don't
 // allow any direct user interaction
-- (BOOL)acceptsFirstResponder {
+- (BOOL)acceptsFirstResponder
+{
     if (highlighted)
         return YES;
     return NO;
 }
-- (BOOL)resignFirstResponder {
+
+- (BOOL)resignFirstResponder
+{
     if (highlighted)
         return YES;
     return NO;
 }
-- (BOOL)becomeFirstResponder {
+
+- (BOOL)becomeFirstResponder
+{
     if (highlighted)
         return YES;
     return NO;

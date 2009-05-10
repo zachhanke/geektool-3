@@ -868,7 +868,10 @@
     
     // commit our rect. rememeber, this is with respect to the log window, hence
     // why our x,y are going to be like 0,0. a bounds rect, if you will
-    [windowController setTextRect: [self rect]]; 
+    NSRect tmpRect = [self rect];
+    tmpRect.origin.x = 0;
+    tmpRect.origin.y = 0;
+    [windowController setTextRect: tmpRect]; 
     
     // sometimes, we just wanted to update the way the window looks, and not
     // destroy our precious timers. this logic will do just that

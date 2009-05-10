@@ -13,11 +13,6 @@
     [self setReleasedWhenClosed:YES];
     return self;
 }
-
-- (void)display
-{
-    [super display];
-}
  
 - (BOOL)canBecomeKeyWindow
 {

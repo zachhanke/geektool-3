@@ -216,7 +216,6 @@
     [logManager addObserver:self forKeyPath:@"arrangedObjects.imageURL" options:0 context:nil];
     [logManager addObserver:self forKeyPath:@"arrangedObjects.transparency" options:0 context:nil];
     [logManager addObserver:self forKeyPath:@"arrangedObjects.imageFit" options:0 context:nil];
-    [logManager addObserver:self forKeyPath:@"arrangedObjects.frameType" options:0 context:nil];
     [logManager addObserver:self forKeyPath:@"arrangedObjects.x" options:0 context:nil];
     [logManager addObserver:self forKeyPath:@"arrangedObjects.y" options:0 context:nil];
     [logManager addObserver:self forKeyPath:@"arrangedObjects.w" options:0 context:nil];

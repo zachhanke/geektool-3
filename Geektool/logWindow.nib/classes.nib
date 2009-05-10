@@ -1,40 +1,98 @@
-{
-    IBClasses = (
-        {CLASS = AJRInstallClipView; LANGUAGE = ObjC; SUPERCLASS = NSClipView; }, 
-        {
-            CLASS = AJRScrollView; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {textView = id; }; 
-            SUPERCLASS = NSScrollView; 
-        }, 
-        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {CLASS = GTScrollView; LANGUAGE = ObjC; SUPERCLASS = NSScrollView; }, 
-        {CLASS = LogTextField; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
-        {
-            CLASS = LogWindow; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {logView = id; text = id; }; 
-            SUPERCLASS = NSWindow; 
-        }, 
-        {
-            ACTIONS = {makeKeyAndOrderFront = id; }; 
-            CLASS = LogWindowController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {logView = id; picture = id; scrollView = id; text = id; }; 
-            SUPERCLASS = NSWindowController; 
-        }, 
-        {
-            ACTIONS = {autoScrollLock = id; }; 
-            CLASS = MWOutputTextView; 
-            LANGUAGE = ObjC; 
-            SUPERCLASS = NSTextView; 
-        }, 
-        {
-            CLASS = NSLogView; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {corner = id; logWindowController = id; picture = id; text = id; }; 
-            SUPERCLASS = NSView; 
-        }
-    ); 
-    IBVersion = 1; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IBClasses</key>
+	<array>
+		<dict>
+			<key>CLASS</key>
+			<string>LogTextField</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSTextView</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>makeKeyAndOrderFront</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>LogWindowController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>logView</key>
+				<string>id</string>
+				<key>picture</key>
+				<string>id</string>
+				<key>scrollView</key>
+				<string>id</string>
+				<key>text</key>
+				<string>id</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSWindowController</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>AJRScrollView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>textView</key>
+				<string>id</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSScrollView</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>FirstResponder</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>NSLogView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>corner</key>
+				<string>id</string>
+				<key>logWindowController</key>
+				<string>id</string>
+				<key>picture</key>
+				<string>id</string>
+				<key>text</key>
+				<string>id</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSView</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>LogWindow</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>logView</key>
+				<string>id</string>
+				<key>text</key>
+				<string>id</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSWindow</string>
+		</dict>
+	</array>
+	<key>IBVersion</key>
+	<string>1</string>
+</dict>
+</plist>

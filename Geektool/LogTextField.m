@@ -10,20 +10,6 @@
 
 
 @implementation LogTextField
-/*
-- (id)init
-{
-    self = [ super init ];
-    [ self setDrawsBackground: NO ];
-    return self;
-}
-*/
-/*
-- (void)awakeFromNib
-{
-    [ self setAllowsDocumentBackgroundColorChange : YES ];
-}
-*/
 // Shadow
 - (void) drawRect: (NSRect) rect {
     if (shadowText)
@@ -32,11 +18,6 @@
     [ super drawRect: rect ];
     if (shadowText)
         [self hideShadow];
-}
-
-- (void)setFrame:(NSRect)frameRect
-{
-    [super setFrame:frameRect];
 }
 
 - (void) showShadowHeight: (int) height
@@ -58,28 +39,30 @@
     CGSSetGStateAttribute(graphicsPort, CGSUniqueCString("Style"), shadowValues);
 }
 
-- (void) hideShadow {
+- (void) hideShadow
+{
     extern void *CGSReleaseGenericObj(void*);
     [NSGraphicsContext restoreGraphicsState];
     CGSReleaseGenericObj(shadowValues);
 }
-- (BOOL)acceptsFirstResponder {
+
+- (BOOL)acceptsFirstResponder
+{
     return NO;
 }
-- (BOOL)resignFirstResponder {
+
+- (BOOL)resignFirstResponder
+{
     return NO;
 }
-- (BOOL)becomeFirstResponder {
+
+- (BOOL)becomeFirstResponder
+{
     return NO;
 }
+
 - (void)setShadowText:(bool)theShadow
 {
     shadowText = theShadow;
 }
-/*
-- (BOOL)isOpaque
-{
-    return NO;
-}
-*/
 @end
