@@ -665,9 +665,9 @@
     [pool release];
 }
 
-- (void)setHighlighted:(BOOL)myHigtlight
+- (void)setHighlighted:(BOOL)myHighlight
 {
-    [windowController setHighlighted: myHigtlight];
+    [windowController setHighlighted: myHighlight];
 }
 
 - (void)setSticky:(BOOL)flag

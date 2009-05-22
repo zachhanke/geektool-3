@@ -61,7 +61,7 @@
         // if something is highlighted, that means that it is able to be moved around
         if (highlighted > -1)
         {
-            [[g_logs objectAtIndex: highlighted] setHighlighted: NO];
+            [g_logs makeObjectsPerformSelector:@selector(setHighlighted:) withObject:NO];
             highlighted = -1;
         }
     }
@@ -98,7 +98,7 @@
         {
             if (highlighted > -1)
             {
-                [[g_logs objectAtIndex: highlighted] setHighlighted: NO];
+                [g_logs makeObjectsPerformSelector:@selector(setHighlighted:) withObject:NO];
                 highlighted = -1;
             }
         }

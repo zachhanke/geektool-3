@@ -115,8 +115,6 @@
                 }
             }
         }
-        if ([ (LogWindowController*)logWindowController type ] == TYPE_SHELL )
-            [ (LogWindowController*)logWindowController scrollEnd ];
     }
     // we are moving the window, not resizing it
     else
@@ -155,13 +153,6 @@
     [[self window] setFrame: NSMakeRect(newX,newY,newW,newH) display: YES];
 }
 
-// dont push logs up to the top
-- (BOOL)shouldDelayWindowOrderingForEvent:(NSEvent *)theEvent
-{
-    if ([theEvent type] == NSLeftMouseDragged) return NO;
-    else return YES;
-}
-
 - (void)mouseDown:(NSEvent *)theEvent;
 {
     mouseLoc = [[self window] convertBaseToScreen:[theEvent locationInWindow]];
@@ -178,6 +169,8 @@
         dragType=ResizeDragType;
     else
         dragType=MoveDragType;
+    if ([ (LogWindowController*)logWindowController type ] == TYPE_SHELL )
+        [ (LogWindowController*)logWindowController scrollEnd ];
     [self display];
 }
 
@@ -190,6 +183,13 @@
     
     // tell GTPrefs that we changed and then save afterward
     [self sendPosition];
+}
+
+// dont push logs up to the top
+- (BOOL)shouldDelayWindowOrderingForEvent:(NSEvent *)theEvent
+{
+    if ([theEvent type] == NSLeftMouseDragged) return NO;
+    else return YES;
 }
 
 - (void)setHighlighted:(BOOL)flag;

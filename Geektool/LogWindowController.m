@@ -14,7 +14,7 @@
 
 - (void)setShadowText:(bool)shadow
 {
-    [text setShadowText: shadow];
+    //[text setShadowText: shadow];
 }
 
 - (void)setTextBackgroundColor:(NSColor*)color
@@ -119,7 +119,8 @@
 
 - (void)scrollEnd
 {
-    NSRange range = NSMakeRange([[text string] length],0);
+    //NSRange range = NSMakeRange([[text string] length],0);
+    NSRange range = NSMakeRange(0,0);
     [text scrollRangeToVisible: range];
 }
 

@@ -11,6 +11,7 @@
 
 @implementation LogTextField
 // Shadow
+
 - (void) drawRect: (NSRect) rect {
     if (shadowText)
         [self showShadowHeight: 2 radius: 3 azimuth: 135 ka: 0 ];
