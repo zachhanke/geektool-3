@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A2547AC0FCC819E00559A90 /* AIQuartzView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A2547AA0FCC819E00559A90 /* AIQuartzView.h */; };
+		0A2547AD0FCC819E00559A90 /* AIQuartzView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2547AB0FCC819E00559A90 /* AIQuartzView.m */; };
 		0A2AC5970F46777D00D7A7CB /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B97324FDCFA39411CA2CEA /* AppKit.framework */; };
+		0A4ABDED0FC62F1900F66281 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A4ABDEC0FC62F1900F66281 /* Quartz.framework */; };
 		0A7291E50F71EAC10059139E /* defines.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A7291E40F71EAC10059139E /* defines.h */; };
 		0A94F19B0ED6614700A05583 /* GeekTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F18E0ED6614700A05583 /* GeekTool.m */; };
 		0A94F19E0ED6614700A05583 /* LogTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F1940ED6614700A05583 /* LogTextField.m */; };
@@ -19,7 +22,6 @@
 		0A94F1A90ED6615F00A05583 /* logWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F1A50ED6615F00A05583 /* logWindow.nib */; };
 		0A94F1B30ED661AD00A05583 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F1AB0ED661AD00A05583 /* InfoPlist.strings */; };
 		0A94F1B40ED661AD00A05583 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F1AD0ED661AD00A05583 /* Localizable.strings */; };
-		0A94F1B50ED661AD00A05583 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F1AF0ED661AD00A05583 /* MainMenu.nib */; };
 		0A94F1C00ED6620700A05583 /* GTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F1B80ED6620700A05583 /* GTLog.m */; };
 		0A94F1C10ED6620700A05583 /* AJRInstallClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F1BA0ED6620700A05583 /* AJRInstallClipView.m */; };
 		0A94F1C20ED6620700A05583 /* AJRInstallScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F1BC0ED6620700A05583 /* AJRInstallScrollView.m */; };
@@ -67,6 +69,9 @@
 
 /* Begin PBXFileReference section */
 		0A1054900EEB90B5008DD305 /* GeektoolMenu.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeektoolMenu.xcodeproj; path = ../GeektoolMenu/GeektoolMenu.xcodeproj; sourceTree = "<group>"; };
+		0A2547AA0FCC819E00559A90 /* AIQuartzView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIQuartzView.h; sourceTree = "<group>"; };
+		0A2547AB0FCC819E00559A90 /* AIQuartzView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIQuartzView.m; sourceTree = "<group>"; };
+		0A4ABDEC0FC62F1900F66281 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		0A7291E40F71EAC10059139E /* defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = defines.h; sourceTree = "<group>"; };
 		0A7ACF310ED7DAB8009491BF /* GeektoolPreferencePane.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeektoolPreferencePane.xcodeproj; path = ../GeektoolPreferencePane/GeektoolPreferencePane.xcodeproj; sourceTree = "<group>"; };
 		0A94F17D0ED6610400A05583 /* GeektoolUninstaller.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeektoolUninstaller.xcodeproj; path = ../GeektoolUninstaller/GeektoolUninstaller.xcodeproj; sourceTree = "<group>"; };
@@ -85,7 +90,6 @@
 		0A94F1A50ED6615F00A05583 /* logWindow.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = logWindow.nib; sourceTree = "<group>"; };
 		0A94F1AC0ED661AD00A05583 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0A94F1AE0ED661AD00A05583 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
-		0A94F1B00ED661AD00A05583 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		0A94F1B70ED6620700A05583 /* GTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLog.h; sourceTree = "<group>"; };
 		0A94F1B80ED6620700A05583 /* GTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLog.m; sourceTree = "<group>"; };
 		0A94F1B90ED6620700A05583 /* AJRInstallClipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AJRInstallClipView.h; sourceTree = "<group>"; };
@@ -114,6 +118,7 @@
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				0A94F1D20ED662A800A05583 /* Carbon.framework in Frameworks */,
 				0A2AC5970F46777D00D7A7CB /* AppKit.framework in Frameworks */,
+				0A4ABDED0FC62F1900F66281 /* Quartz.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,6 +128,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0A2547AA0FCC819E00559A90 /* AIQuartzView.h */,
+				0A2547AB0FCC819E00559A90 /* AIQuartzView.m */,
 				0A94F1B70ED6620700A05583 /* GTLog.h */,
 				0A94F1B80ED6620700A05583 /* GTLog.m */,
 				0A94F1B90ED6620700A05583 /* AJRInstallClipView.h */,
@@ -181,6 +188,7 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0A4ABDEC0FC62F1900F66281 /* Quartz.framework */,
 				0A94F1D10ED662A800A05583 /* Carbon.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 			);
@@ -234,7 +242,6 @@
 			isa = PBXGroup;
 			children = (
 				0A94F2920ED6630800A05583 /* Info.plist */,
-				0A94F1AF0ED661AD00A05583 /* MainMenu.nib */,
 				0A94F1AB0ED661AD00A05583 /* InfoPlist.strings */,
 				0A94F1AD0ED661AD00A05583 /* Localizable.strings */,
 				0A94F1A20ED6615F00A05583 /* GeekTool.icns */,
@@ -272,6 +279,7 @@
 				0A94F1CE0ED6628000A05583 /* LogWindowController.h in Headers */,
 				0AC89A530F1C3E42000A795B /* defines.h in Headers */,
 				0A7291E50F71EAC10059139E /* defines.h in Headers */,
+				0A2547AC0FCC819E00559A90 /* AIQuartzView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,7 +370,6 @@
 				0A94F1A90ED6615F00A05583 /* logWindow.nib in Resources */,
 				0A94F1B30ED661AD00A05583 /* InfoPlist.strings in Resources */,
 				0A94F1B40ED661AD00A05583 /* Localizable.strings in Resources */,
-				0A94F1B50ED661AD00A05583 /* MainMenu.nib in Resources */,
 				0A94F2930ED6630800A05583 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -384,6 +391,7 @@
 				0A94F1C10ED6620700A05583 /* AJRInstallClipView.m in Sources */,
 				0A94F1C20ED6620700A05583 /* AJRInstallScrollView.m in Sources */,
 				0A94F1C30ED6620700A05583 /* AJRScrollView.m in Sources */,
+				0A2547AD0FCC819E00559A90 /* AIQuartzView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,15 +413,6 @@
 				0A94F1AE0ED661AD00A05583 /* English */,
 			);
 			name = Localizable.strings;
-			path = English.lproj;
-			sourceTree = "<group>";
-		};
-		0A94F1AF0ED661AD00A05583 /* MainMenu.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0A94F1B00ED661AD00A05583 /* English */,
-			);
-			name = MainMenu.nib;
 			path = English.lproj;
 			sourceTree = "<group>";
 		};
@@ -457,7 +456,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.4u.sdk";
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
 			};
 			name = Debug;
 		};
@@ -471,7 +470,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.4u.sdk";
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
 			};
 			name = Release;
 		};

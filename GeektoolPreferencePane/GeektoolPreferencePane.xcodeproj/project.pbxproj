@@ -14,6 +14,7 @@
 		0A3C33210F71481F00DBED55 /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A3C331F0F71481F00DBED55 /* LogController.m */; };
 		0A3CE0D10EDCCDAE006D48DB /* GeekToolPrefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A3CE0CF0EDCCDAE006D48DB /* GeekToolPrefs.m */; };
 		0A3CE0D20EDCCDAE006D48DB /* GeekToolPrefs.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3CE0D00EDCCDAE006D48DB /* GeekToolPrefs.h */; };
+		0A52FA4B0FC636D800B82D72 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A52FA4A0FC636D800B82D72 /* Quartz.framework */; };
 		0AC89A550F1C3E53000A795B /* defines.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AC89A540F1C3E53000A795B /* defines.h */; };
 		0AD772220ED86CAE003EB540 /* GeektoolPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AD772200ED86CAE003EB540 /* GeektoolPrefs.xib */; };
 		0AD7722D0ED86EDC003EB540 /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD772250ED86EDC003EB540 /* left.png */; };
@@ -48,6 +49,7 @@
 		0A3C331F0F71481F00DBED55 /* LogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogController.m; sourceTree = "<group>"; };
 		0A3CE0CF0EDCCDAE006D48DB /* GeekToolPrefs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeekToolPrefs.m; sourceTree = "<group>"; };
 		0A3CE0D00EDCCDAE006D48DB /* GeekToolPrefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeekToolPrefs.h; sourceTree = "<group>"; };
+		0A52FA4A0FC636D800B82D72 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		0AC89A540F1C3E53000A795B /* defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = defines.h; path = ../Geektool/defines.h; sourceTree = SOURCE_ROOT; };
 		0AD772210ED86CAE003EB540 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/GeektoolPrefs.xib; sourceTree = "<group>"; };
 		0AD772250ED86EDC003EB540 /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left.png; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 				8D202CF30486D31800D8A456 /* Cocoa.framework in Frameworks */,
 				8D202CF40486D31800D8A456 /* PreferencePanes.framework in Frameworks */,
 				0AD772760ED87207003EB540 /* Carbon.framework in Frameworks */,
+				0A52FA4B0FC636D800B82D72 /* Quartz.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,6 +163,7 @@
 		1058C7ACFEA557BF11CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0A52FA4A0FC636D800B82D72 /* Quartz.framework */,
 				0AD772750ED87207003EB540 /* Carbon.framework */,
 				1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */,
 				F506C035013D953901CA16C8 /* PreferencePanes.framework */,

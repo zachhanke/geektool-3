@@ -28,6 +28,8 @@
 				<string>id</string>
 				<key>picture</key>
 				<string>id</string>
+				<key>quartzView</key>
+				<string>id</string>
 				<key>scrollView</key>
 				<string>id</string>
 				<key>text</key>
@@ -75,6 +77,19 @@
 			</dict>
 			<key>SUPERCLASS</key>
 			<string>NSView</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>AIQuartzView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>owner</key>
+				<string>id</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>QCView</string>
 		</dict>
 		<dict>
 			<key>CLASS</key>

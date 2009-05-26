@@ -7,6 +7,27 @@
 // controls each individual log
 @implementation LogWindowController
 
+- (void)awakeFromNib
+{
+    //[quartzView setMaxRenderingFrameRate:0.1];
+    //float tmp = [quartzView maxRenderingFrameRate];
+}
+
+- (void)setIdent:(int)value
+{
+    ident = value;
+}
+
+- (int)ident
+{
+    return ident;
+}
+
+- (id)quartzView
+{
+    return quartzView;
+}
+
 - (void)setFont:(NSFont*)font
 {
     [text setFont: font];

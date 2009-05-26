@@ -665,6 +665,7 @@
 
 - (void)loadMenu
 {
+    /*
     NSString *menuExtraPath;
     CFURLRef url;
     unsigned int outExtra;
@@ -678,10 +679,12 @@
     url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, (CFStringRef)menuExtraPath, kCFURLPOSIXPathStyle, NO);
     CoreMenuExtraAddMenuExtra(url, 0, 0, nil, 0, &outExtra);
     CFRelease(url);
+     */
 }
 
 - (void)unloadMenu
 {
+    /*
     typedef struct OpaqueMenuExtraRef *MenuExtraRef;
     unsigned int outExtra;
     
@@ -691,6 +694,7 @@
     CoreMenuExtraGetMenuExtra((CFStringRef)identifier, &menuExtra);
     if (menuExtra != nil)
         CoreMenuExtraRemoveMenuExtra( menuExtra, &outExtra );    
+     */
 }
 
 #pragma mark -

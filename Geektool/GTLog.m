@@ -675,7 +675,7 @@
     [windowController setSticky: flag];
 }
 
-// This function is specifically for viewing files
+// Gets called when initializing a log for viewing
 - (void)openWindow
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -734,6 +734,9 @@
         }
         windowController = [[LogWindowController alloc] initWithWindowNibName: @"logWindow"];
         [windowController setType: [self type]];
+        
+        //we need some way to bridge our GTLog and AIQuartzView. LogWindowController is going to help us whether it wants to or not
+        [windowController setIdent:[self refresh]];
         [[windowController window] setAutodisplay: YES];
         [self updateWindow];
     }
@@ -748,8 +751,15 @@
 - (void)updateCommand:(NSTimer*)timer
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    
+    [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTLogUpdate"
+                                                                   object: @"GeekTool"
+                                                                 userInfo: [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:[self refresh]]
+                                                                                                       forKey:@"ident"]
+                                                       deliverImmediately: YES];
     BOOL free = YES;
     NSPipe *pipe;
+    
     
     switch ([self type])
     {
