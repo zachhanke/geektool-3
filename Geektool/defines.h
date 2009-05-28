@@ -25,6 +25,7 @@
 #define TYPE_SHELL 0
 #define TYPE_IMAGE 1
 #define TYPE_FILE 2
+#define TYPE_QUARTZ 3
 
 // Alignment
 #define ALIGN_LEFT 0

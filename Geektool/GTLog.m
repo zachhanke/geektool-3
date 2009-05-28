@@ -752,11 +752,6 @@
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
-    [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTLogUpdate"
-                                                                   object: @"GeekTool"
-                                                                 userInfo: [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:[self refresh]]
-                                                                                                       forKey:@"ident"]
-                                                       deliverImmediately: YES];
     BOOL free = YES;
     NSPipe *pipe;
     
@@ -807,7 +802,14 @@
             [NSThread detachNewThreadSelector: @selector(setImage:)
                                      toTarget: self
                                    withObject: [self imageURL]];            
-            break;      
+            break;   
+        case TYPE_QUARTZ:
+            [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTLogUpdate"
+                                                                           object: @"GeekTool"
+                                                                         userInfo: [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:[self refresh]]
+                                                                                                               forKey:@"ident"]
+                                                               deliverImmediately: YES];
+            break;
     }
     [pool release];
 }
