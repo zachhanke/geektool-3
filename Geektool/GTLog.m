@@ -9,11 +9,13 @@
 #import "GTLog.h"
 #import "defines.h"
 
-#define NSYES [NSNumber numberWithBool: YES]
-#define NSNO [NSNumber numberWithBool: NO]
-
+// GTLog is a class that is responsible for storing and handling all information
+// pertaining to the log displayed on the screen. It sets up and interacts with
+// other objects such as NSViews to display, update, and manage its graphical
+// representation
 @implementation GTLog
 
+// initialize the log with defaults
 - (id)init
 {
 	if (!(self = [super init])) return nil;
@@ -32,9 +34,9 @@
                               @"12", @"fontSize",
                               
                               @"", @"file",
+                              @"", @"quartzFile",
                               
                               @"", @"command",
-                              @"0", @"hide",
                               @"10", @"refresh",
                               
                               textColorData, @"textColor",
@@ -43,10 +45,7 @@
                               @"0", @"shadowText",
                               @"0", @"shadowWindow",
                               @"0", @"alignment",
-                              
-                              @"0", @"force",
-                              @"", @"forceTitle",
-                              
+                                                            
                               @"0", @"pictureAlignment",
                               @"", @"imageURL",
                               @"100", @"transparency",
@@ -81,11 +80,8 @@
 }
 
 - (NSDictionary*)dictionary
-{
-    //TODO: Add in imageFailure/success preferences
-    
-    
-    logDictionary=[NSMutableDictionary dictionaryWithObjectsAndKeys:
+{    
+    logDictionary = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                            [self name]                                       ,@"name",
                                            [NSNumber numberWithInt: [self type]]             ,@"type",
                                            [NSNumber numberWithBool: [self enabled]]         ,@"enabled",
@@ -95,9 +91,9 @@
                                            [NSNumber numberWithFloat: [self fontSize]]       ,@"fontSize",
                                            
                                            [self file]                                       ,@"file",
+                                           [self quartzFile]                                 ,@"quartzFile",
                                            
                                            [self command]                                    ,@"command",
-                                           [NSNumber numberWithBool: [self hide]]            ,@"hide",
                                            [NSNumber numberWithInt: [self refresh]]          ,@"refresh",
                                            
                                            [self textColor]                                  ,@"textColor",
@@ -105,10 +101,6 @@
                                            [NSNumber numberWithBool: [self wrap]]            ,@"wrap",
                                            [NSNumber numberWithBool: [self shadowText]]      ,@"shadowText",
                                            [NSNumber numberWithBool: [self shadowWindow]]    ,@"shadowWindow",
-                                           [NSNumber numberWithInt: [self alignment]]        ,@"alignment",
-                                           
-                                           [NSNumber numberWithBool: [self force]]           ,@"force",
-                                           [self forceTitle]                                 ,@"forceTitle",
                                            
                                            [NSNumber numberWithInt: [self pictureAlignment]] ,@"pictureAlignment",
                                            [self imageURL]                                   ,@"imageURL",
@@ -124,7 +116,6 @@
                                            nil
                                           ];
     
-    // TODO: memory management
     return logDictionary;   
 }
 
@@ -161,12 +152,7 @@
 }
 
 - (void)setDictionary:(NSDictionary*)dictionary
-{
-    //TODO: THESE ARE HARDCODED!! MAKE A PREFERENCE FOR THEM
-    [self setImageFailure:[NSImage imageNamed:@"defaultFailure"]];
-    [self setImageSuccess:[NSImage imageNamed:@"defaultSuccess"]];
-    //END HARDCODE
-    
+{    
     [self setName:[dictionary objectForKey:@"name"]];
     [self setType:[[dictionary objectForKey:@"type"]intValue]];
     [self setEnabled:[[dictionary objectForKey:@"enabled"]boolValue]];
@@ -176,6 +162,7 @@
     [self setFontSize:[[dictionary objectForKey:@"fontSize"]floatValue]];
     
     [self setFile:[dictionary objectForKey:@"file"]];
+    [self setQuartzFile:[dictionary objectForKey:@"quartzFile"]];
     
     [self setCommand:[dictionary objectForKey:@"command"]];
     [self setHide:[[dictionary objectForKey:@"hide"]boolValue]];
@@ -187,9 +174,6 @@
     [self setShadowText:[[dictionary objectForKey:@"shadowText"]boolValue]];
     [self setShadowWindow:[[dictionary objectForKey:@"shadowWindow"]boolValue]];
     [self setAlignment:[[dictionary objectForKey:@"alignment"]intValue]];
-    
-    [self setForce:[[dictionary objectForKey:@"force"]boolValue]];
-    [self setForceTitle:[dictionary objectForKey:@"forceTitle"]];
     
     [self setPictureAlignment:[[dictionary objectForKey:@"pictureAlignment"]intValue]];
     [self setImageURL:[dictionary objectForKey:@"imageURL"]];
@@ -306,6 +290,11 @@
     return [[file retain] autorelease];
 }
 
+- (NSString*)quartzFile
+{
+    return [[quartzFile retain] autorelease];
+}
+
 - (NSString*)fontName
 {
     return [[fontName retain] autorelease];
@@ -314,16 +303,6 @@
 - (float)fontSize
 {
     return fontSize;
-}
-
-- (BOOL)force
-{
-    return force;
-}
-
-- (NSString*)forceTitle
-{
-    return [[forceTitle retain] autorelease];
 }
 
 - (NSString*)group
@@ -336,19 +315,9 @@
     return hide;
 }
 
-- (NSImage*)imageFailure
-{
-    return [[imageFailure retain] autorelease];
-}
-
 - (int)imageFit
 {
     return imageFit;
-}
-
-- (NSImage*)imageSuccess
-{
-    return [[imageSuccess retain] autorelease];
 }
 
 - (NSString*)imageURL
@@ -483,6 +452,15 @@
     }
 }
 
+- (void)setQuartzFile:(NSString*)var
+{
+    if(quartzFile != var)
+    {
+        [quartzFile release];
+        quartzFile = [var copy];
+    }
+}
+
 - (void)setFontName:(NSString*)var
 {
     if(fontName != var)
@@ -496,21 +474,6 @@
 {
     fontSize = var;
 }
-
-- (void)setForce:(BOOL)var
-{
-    force=var;
-}
-
-- (void)setForceTitle:(NSString*)var
-{
-    if(forceTitle != var)
-    {
-        [forceTitle release];
-        forceTitle = [var copy];
-    }
-}
-
 
 - (void)setGroup:(NSString*)var
 {
@@ -526,27 +489,9 @@
     hide=var;
 }
 
-- (void)setImageFailure:(NSImage*)var
-{
-    if(imageFailure != var)
-    {
-        [imageFailure release];
-        imageFailure = [var copy];
-    }
-}
-
 - (void)setImageFit:(int)var
 {
     imageFit=var;
-}
-
-- (void)setImageSuccess:(NSImage*)var
-{
-    if(imageSuccess != var)
-    {
-        [imageSuccess release];
-        imageSuccess = [var copy];
-    }
 }
 
 - (void)setImageURL:(NSString*)var
@@ -681,16 +626,35 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSPipe *pipe;
     
-    // we will be executing functions to get an output soon
-    // work only if our window controller doesn't exist(?) and enabled
+    // we will be executing functions to get an output soon work only if our
+    // window controller doesn't exist(?) and enabled 
     // looks like one window per window controller
     if ([self enabled] && !windowController)
     {
-        // if the type is file, we need to do some things to get it set up
-        // specifically, it sets up a pipe to watch the output of a file, meaning
-        // it will be changed INSTANTLY (sort of) given any change (interesting...)
-        // this could probably be cut and not many would miss it. chances are, you
-        // are going to want to pipe the info into other things to format it properly
+        // initialize our window controller
+        windowController = [[LogWindowController alloc] initWithWindowNibName: @"logWindow"];
+        [windowController setType: [self type]];
+        
+        [windowController showWindow: self];
+        [[windowController window] setAutodisplay: YES];
+        
+        // we need some way to bridge our GTLog and AIQuartzView.
+        // LogWindowController is going to help through this `ident'
+        [windowController setIdent:[self refresh]];
+        
+        // set the quartz view to be hidden at the moment
+        [[windowController quartzView] setHidden:TRUE];
+        
+        // If the type is FILE, we need to do some things to get it set up
+        // Specifically, it sets up a pipe to watch the output of a file,
+        // however, I don't see it as too useful, as you would probably want to
+        // pipe the information somewhere else before displaying it.
+        // nevertheless, it does have it's uses
+        //
+        // more importantly, we do this initialization here because we only need
+        // to do this once, and this function is the only one that gets executed
+        // once when the window is created. Otherwise, we would be recreating
+        // this command when we are updating (a la SHELL)
         if ([self type] == TYPE_FILE)
         {
             // if no file is specified, don't do anything
@@ -715,6 +679,7 @@
                                                      selector: @selector(newLines:)
                                                          name: @"NSFileHandleReadCompletionNotification"
                                                        object: [pipe fileHandleForReading]];
+
             [[NSNotificationCenter defaultCenter] addObserver: self
                                                      selector: @selector(newLines:)
                                                          name: @"NSFileHandleDataAvailableNotification"
@@ -732,22 +697,23 @@
             // Get the ball rolling
             [task launch];
         }
-        windowController = [[LogWindowController alloc] initWithWindowNibName: @"logWindow"];
-        [windowController setType: [self type]];
-        
-        //we need some way to bridge our GTLog and AIQuartzView. LogWindowController is going to help us whether it wants to or not
-        [windowController setIdent:[self refresh]];
-        [[windowController window] setAutodisplay: YES];
+        else if ([self type] == TYPE_QUARTZ)
+        {
+            [[windowController quartzView] setHidden:FALSE];
+            if (![[self quartzFile] isEqual: @""] && 
+                [[windowController quartzView] loadCompositionFromFile:[self quartzFile]])
+                [[windowController quartzView] setAutostartsRendering:TRUE];
+        }
+
         [self updateWindow];
     }
     else if (![self enabled] && windowController)
         [self terminate];
-    
-    [windowController showWindow: self];
+
     [pool release];
 }
 
-// every timer hits this fn every X seconds. make it lean
+// every timer hits this fn every X seconds. make it lean and mean
 - (void)updateCommand:(NSTimer*)timer
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -802,7 +768,11 @@
             [NSThread detachNewThreadSelector: @selector(setImage:)
                                      toTarget: self
                                    withObject: [self imageURL]];            
-            break;   
+            break;
+            
+        // if its quartz, we just tell AIQuartzView we want a render. notice that
+        // we must send information about ourself so we can render a specific log
+        // (instead of rendering them all)
         case TYPE_QUARTZ:
             [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTLogUpdate"
                                                                            object: @"GeekTool"
@@ -810,12 +780,16 @@
                                                                                                                forKey:@"ident"]
                                                                deliverImmediately: YES];
             break;
+        // notice we don't have a case for FILE because it does not need to be
+        // updated
     }
     [pool release];
 }
 
 // This function just updates the window. It really isn't as hot as I once 
 // thought. updateCommand on the other hand...
+// Called after a window is created or a log's dictionary is changed (some
+// aspect is changed, like the command or size)
 - (void)updateWindow
 {
     NSWindow *window = [windowController window];
@@ -871,12 +845,7 @@
         [myParagraphStyle release];
         [windowController setAttributes: attributes];
     }
-    // keep scrollin, scrollin, scrollin
-    // those pipes are overflowin
-    // keep them text fields scrollin
-    // rawhide!
-    if ([self type] == TYPE_FILE)
-        [windowController scrollEnd];
+
     
     // commit our rect. rememeber, this is with respect to the log window, hence
     // why our x,y are going to be like 0,0. a bounds rect, if you will
@@ -887,27 +856,26 @@
     
     // sometimes, we just wanted to update the way the window looks, and not
     // destroy our precious timers. this logic will do just that
-    if( !([self type] == TYPE_SHELL && keepTimers) )
+    if(!([self type] == TYPE_SHELL && keepTimers))
     {
         // setup some timer stuff
-        if ([self type] == TYPE_SHELL || [self type] == TYPE_IMAGE)
+        if ([self type] == TYPE_SHELL ||
+            [self type] == TYPE_IMAGE ||
+            [self type] == TYPE_QUARTZ)
         {
-            // if we have a shell command
             if ([self type] == TYPE_SHELL)
             {
                 arguments = [[NSArray alloc] initWithObjects: @"-c",[self command], nil];
                 clear = YES;
                 NSString *tmp = @"";
-                if ([self hide]) tmp = @"";
-                if ([self force]) tmp = [self forceTitle];
+
                 [windowController addText: tmp clear: YES];
             }
-            // TODO: Transparency may be wrong
-            // if we have an image command instead
             else if ([self type] == TYPE_IMAGE)
             {
                 // make a nice environment for the image
                 [windowController setTextBackgroundColor: [NSColor clearColor]];
+                // TODO: Transparency may be flipped (ie its opacity)
                 [[windowController window] setAlphaValue: ([self transparency]*100)];
                 [windowController setFit: [self imageFit]];
             }
@@ -929,8 +897,9 @@
             [timer fire];
         }
     }
-    // if ye be of the shell type, thou must scrolleth down
-    if ([self type] == TYPE_SHELL) [windowController scrollEnd];
+    // scroll the text so we stay fresh in the output
+    if (([self type] == TYPE_FILE) || ([self type] == TYPE_SHELL))
+        [windowController scrollEnd];
     
     // display our badass window
     [windowController display];
@@ -963,10 +932,9 @@
         newLines = [[aNotification object] availableData];
     
     newLinesString = [[NSString alloc] initWithData: newLines encoding:NSASCIIStringEncoding];
-    if (! [newLinesString isEqualTo: @""] || [self type] == TYPE_FILE)
+    if (![newLinesString isEqualTo: @""] || [self type] == TYPE_FILE)
     {
-        if (![self hide] && ![self force])
-            [windowController addText: newLinesString clear: ([self type] != TYPE_IMAGE)];
+        [windowController addText: newLinesString clear: ([self type] != TYPE_IMAGE)];
         
         if ([self type] == TYPE_SHELL)
         {

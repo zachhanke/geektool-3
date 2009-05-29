@@ -200,6 +200,7 @@
     [logManager addObserver:self forKeyPath:@"arrangedObjects.fontName" options:0 context:nil];
     [logManager addObserver:self forKeyPath:@"arrangedObjects.fontSize" options:0 context:nil];
     [logManager addObserver:self forKeyPath:@"arrangedObjects.file" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.quartzFile" options:0 context:nil];
     [logManager addObserver:self forKeyPath:@"arrangedObjects.command" options:0 context:nil];
     [logManager addObserver:self forKeyPath:@"arrangedObjects.hide" options:0 context:nil];
     [logManager addObserver:self forKeyPath:@"arrangedObjects.refresh" options:0 context:nil];
