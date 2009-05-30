@@ -61,9 +61,6 @@
 - (IBAction)gChooseFont:(id)sender;
 - (IBAction)selectedGroupChanged:(id)sender;
 - (IBAction)currentGroupChanged:(id)sender;
-- (IBAction)defaultImages:(id)sender;
-- (IBAction)deleteImageSuccess:(id)sender;
-- (IBAction)deleteImageFailure:(id)sender;
 #pragma mark -
 #pragma mark Group Management
 - (void)initGroupsMenu;

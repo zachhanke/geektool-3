@@ -31,9 +31,9 @@
 
 - (void)drawRect:(NSRect)rect
 {
-    NSAutoreleasePool *pool = [[ NSAutoreleasePool alloc ] init ];
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [super drawRect: rect];
-    NSBezierPath *bp = [ NSBezierPath bezierPathWithRect: [ self bounds ]];
+    NSBezierPath *bp = [NSBezierPath bezierPathWithRect: [self bounds]];
     NSColor *color;
     
     // if we want this window to be highlighted
@@ -43,26 +43,26 @@
                  [[NSUserDefaults standardUserDefaults] objectForKey:@"selectionColor"]];
         
         // further drawing will be done with this color
-        [ color set ];
+        [color set];
         
         // fill rect with this color
-        [ bp fill ];
+        [bp fill];
         
         // set the corner image to the resize handle (fun fact: "coin" means
         // "corner" in french)
-        [ corner setImage: [ NSImage imageNamed: @"coin" ]];
+        [corner setImage: [NSImage imageNamed: @"coin"]];
     }
     else
     {
         // make the background clear
-        color = [ NSColor clearColor ];
-        [ color set ];
-        [ bp fill ];
+        color = [NSColor clearColor];
+        [color set];
+        [bp fill];
         
         // get rid of the corner handler, since we won't be needing it
-        [ corner setImage: nil ];
+        [corner setImage: nil];
     }
-    [ pool release ];
+    [pool release];
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent;
@@ -73,42 +73,42 @@
     
     int newX, newY,newW,newH;
     
-    NSPoint currentMouseLoc = [ NSEvent mouseLocation ];
+    NSPoint currentMouseLoc = [NSEvent mouseLocation];
     
     // check to see if we are resizing
     if (dragType == ResizeDragType)
     {
-        newW = windowFrame.size.width + ( currentMouseLoc.x - mouseLoc.x );
-        newH = windowFrame.size.height + ( mouseLoc.y - currentMouseLoc.y );
+        newW = windowFrame.size.width + (currentMouseLoc.x - mouseLoc.x);
+        newH = windowFrame.size.height + (mouseLoc.y - currentMouseLoc.y);
         newX = windowFrame.origin.x;
-        newY = windowFrame.origin.y + ( currentMouseLoc.y - mouseLoc.y );
+        newY = windowFrame.origin.y + (currentMouseLoc.y - mouseLoc.y);
         
         // don't let the window be resized smaller than 20x20
         if (newW < 20)
             newW = 20;
         if (newH < 20)
         {
-            newY = newY - (20-newH);
+            newY = newY - (20 - newH);
             newH = 20;
         }
         
         // snap to edges of window
-        if ([(GeekTool*)[ NSApplication sharedApplication ] magn ])
+        if ([(GeekTool*)[NSApplication sharedApplication] magn])
         {
-            NSEnumerator *e = [[(GeekTool*)[ NSApplication sharedApplication ] xGuides ] objectEnumerator ];
-            NSEnumerator *f = [[(GeekTool*)[ NSApplication sharedApplication ] yGuides ] objectEnumerator ];
-            NSNumber *xn,*yn;
+            NSEnumerator *e = [[(GeekTool*)[NSApplication sharedApplication] xGuides] objectEnumerator];
+            NSEnumerator *f = [[(GeekTool*)[NSApplication sharedApplication] yGuides] objectEnumerator];
+            NSNumber *xn, *yn;
             
-            while (xn = [ e nextObject ])
+            while (xn = [e nextObject])
             {
-                float x = [ xn  floatValue ];
-                if ((x-MAGN <= newX + newW) && (newX + newW <= x+MAGN))
+                float x = [xn floatValue];
+                if ((x - MAGN <= newX + newW) && (newX + newW <= x + MAGN))
                     newW = x - newX;
             }
-            while (yn = [ f nextObject ])
+            while (yn = [f nextObject])
             {
-                float y = [ yn  floatValue ];
-                if ((y-MAGN <= newY) && (newY <= y+MAGN))
+                float y = [yn  floatValue];
+                if ((y - MAGN <= newY) && (newY <= y + MAGN))
                 {
                     newH = newH + ( newY - y);
                     newY = y;
@@ -121,30 +121,30 @@
     {
         newW = windowFrame.size.width;
         newH = windowFrame.size.height;
-        newX = windowFrame.origin.x + ( currentMouseLoc.x - mouseLoc.x );
-        newY = windowFrame.origin.y - ( mouseLoc.y - currentMouseLoc.y );
+        newX = windowFrame.origin.x + (currentMouseLoc.x - mouseLoc.x);
+        newY = windowFrame.origin.y - (mouseLoc.y - currentMouseLoc.y);
         
         // snap to edges of screen if close enough
-        if ([(GeekTool*)[ NSApplication sharedApplication ] magn ])
+        if ([(GeekTool*)[NSApplication sharedApplication] magn])
         {
-            NSEnumerator *e = [[(GeekTool*)[ NSApplication sharedApplication ] xGuides ] objectEnumerator ];
-            NSEnumerator *f = [[(GeekTool*)[ NSApplication sharedApplication ] yGuides ] objectEnumerator ];
-            NSNumber *xn,*yn;
+            NSEnumerator *e = [[(GeekTool*)[NSApplication sharedApplication] xGuides] objectEnumerator];
+            NSEnumerator *f = [[(GeekTool*)[NSApplication sharedApplication] yGuides] objectEnumerator];
+            NSNumber *xn, *yn;
             
-            while (xn = [ e nextObject ])
+            while (xn = [e nextObject])
             {
-                float x = [ xn  floatValue ];
-                if ( x-MAGN <= newX && newX <= x+MAGN )
+                float x = [xn floatValue];
+                if (x - MAGN <= newX && newX <= x + MAGN)
                     newX = x;
-                if (x-MAGN <= newX + newW && newX + newW <= x+MAGN)
+                if (x - MAGN <= newX + newW && newX + newW <= x + MAGN)
                     newX = x - newW;
             }
-            while (yn = [ f nextObject ])
+            while (yn = [f nextObject])
             {
-                float y = [ yn  floatValue ];
-                if (y-MAGN <= newY && newY <= y+MAGN)
+                float y = [yn  floatValue];
+                if (y - MAGN <= newY && newY <= y + MAGN)
                     newY = y;
-                if (y-MAGN <= newY + newH && newY + newH <= y+MAGN)
+                if (y - MAGN <= newY + newH && newY + newH <= y + MAGN)
                     newY = y - newH;
             }
         }
@@ -166,11 +166,11 @@
     // figure out where we are clicking
     // either on the resize handle or not
     if (NSMouseInRect(mouseLoc,NSMakeRect(NSMaxX(windowFrame) - 10,NSMaxY(windowFrame) - NSHeight(windowFrame),10,10),NO))
-        dragType=ResizeDragType;
+        dragType = ResizeDragType;
     else
-        dragType=MoveDragType;
-    if ([ (LogWindowController*)logWindowController type ] == TYPE_SHELL )
-        [ (LogWindowController*)logWindowController scrollEnd ];
+        dragType = MoveDragType;
+    if ([(LogWindowController*)logWindowController type] == TYPE_SHELL)
+        [(LogWindowController*)logWindowController scrollEnd];
     [self display];
 }
 
@@ -200,25 +200,25 @@
     [self display];
 }
 
-- (void)setCrop: (BOOL)aBool;
+- (void)setCrop:(BOOL)aBool;
 {
     crop = aBool;
 }
 
 - (void)sendPosition
 {
-    NSRect screenSize = [[ NSScreen mainScreen ] frame ];
-    LogWindow *logWindow = (LogWindow*)[ self window ];
-    NSRect currentFrame = [ logWindow frame ];
-    [[ NSDistributedNotificationCenter defaultCenter ] postNotificationName: @"GTWindowChanged"
+    NSRect screenSize = [[NSScreen mainScreen] frame];
+    LogWindow *logWindow = (LogWindow*)[self window];
+    NSRect currentFrame = [logWindow frame];
+    [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTWindowChanged"
                                                                      object: @"GeekTool"
-                                                                   userInfo: [ NSDictionary dictionaryWithObjectsAndKeys:
-                                                                              [ NSNumber numberWithInt: currentFrame.origin.x ], @"x",
-                                                                              [ NSNumber numberWithInt: screenSize.size.height - currentFrame.origin.y - currentFrame.size.height ], @"y",
-                                                                              [ NSNumber numberWithInt: currentFrame.size.width ], @"w",
-                                                                              [ NSNumber numberWithInt: currentFrame.size.height ], @"h",
-                                                                              nil ]
-                                                         deliverImmediately: YES];
+                                                                   userInfo: [NSDictionary dictionaryWithObjectsAndKeys:
+                                                                              [NSNumber numberWithInt: currentFrame.origin.x], @"x",
+                                                                              [NSNumber numberWithInt: screenSize.size.height - currentFrame.origin.y - currentFrame.size.height], @"y",
+                                                                              [NSNumber numberWithInt: currentFrame.size.width], @"w",
+                                                                              [NSNumber numberWithInt: currentFrame.size.height], @"h",
+                                                                              nil]
+                                                         deliverImmediately: NO];
 }
 
 // have our window accept commands when its highlighted. when its not, don't

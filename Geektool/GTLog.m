@@ -778,7 +778,7 @@
                                                                            object: @"GeekTool"
                                                                          userInfo: [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:[self refresh]]
                                                                                                                forKey:@"ident"]
-                                                               deliverImmediately: YES];
+                                                               deliverImmediately: NO];
             break;
         // notice we don't have a case for FILE because it does not need to be
         // updated

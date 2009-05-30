@@ -315,38 +315,6 @@
     [self savePrefs];
 }
 
--(IBAction)defaultImages:(id)sender
-{
-    /*
-     NSImage *defaultSuccess = [[NSImage alloc] initWithContentsOfFile:
-     [[self bundle] pathForResource:@"defaultSuccess" ofType: @"png"]];
-     NSImage *defaultFailure = [[NSImage alloc] initWithContentsOfFile:
-     [[self bundle] pathForResource:@"defaultFailure" ofType: @"png"]];
-     [i2ImageSuccess setImage: defaultSuccess];
-     [i2ImageFailure setImage: defaultFailure];
-     [defaultSuccess release];
-     [defaultFailure release];
-     [self applyChanges];
-     [self savePrefs];
-     [self updateWindows];
-     */
-}
-
-- (IBAction)deleteImageSuccess:(id)sender;
-{
-    /*
-     [i2ImageSuccess setImage: nil];
-     [self gApply: self];
-     */
-}
-- (IBAction)deleteImageFailure:(id)sender;
-{
-    /*
-     [i2ImageFailure setImage: nil];
-     [self gApply: self];
-     */
-}
-
 #pragma mark -
 #pragma mark Group Management
 - (void)initGroupsMenu
@@ -434,6 +402,7 @@
                                                        deliverImmediately: YES];
     
 }
+
 - (void)geekToolWindowChanged:(NSNotification*)aNotification
 {
     [[NSDistributedNotificationCenter defaultCenter] setSuspended: YES];
@@ -510,7 +479,7 @@
     [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTUpdateWindows"
                                                                    object: @"GeekToolPrefs"
                                                                  userInfo: nil
-                                                       deliverImmediately: YES];
+                                                       deliverImmediately: NO];
 }
 
 - (void)logReorder:(NSDictionary*)userInfo
@@ -518,7 +487,7 @@
     [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTReorder"
                                                                    object: @"GeekToolPrefs"
                                                                  userInfo: userInfo
-                                                       deliverImmediately: YES];
+                                                       deliverImmediately: NO];
 }
 
 - (void)notifyHighlight
