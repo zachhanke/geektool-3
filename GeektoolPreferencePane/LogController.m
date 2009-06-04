@@ -8,6 +8,7 @@
 
 #import "LogController.h"
 #import "GeekToolPrefs.h"
+#import "GeekTool.h"
 
 NSString *MovedRowsType = @"GTLog_Moved_Item";
 NSString *CopiedRowsType = @"GTLog_Copied_Item";
@@ -202,36 +203,4 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
         return nil;
 }
 
-@end
-
-#pragma mark -
-#pragma mark Quick helper method
-/*
- Implementation of NSIndexSet utility category
- */
-@implementation NSIndexSet (CountOfIndexesInRange)
-
--(unsigned int)countOfIndexesInRange:(NSRange)range
-{
-	unsigned int start, end, count;
-	
-	if ((start == 0) && (range.length == 0))
-	{
-		return 0;	
-	}
-	
-	start	= range.location;
-	end		= start + range.length;
-	count	= 0;
-	
-	unsigned int currentIndex = [self indexGreaterThanOrEqualToIndex:start];
-	
-	while ((currentIndex != NSNotFound) && (currentIndex < end))
-	{
-		count++;
-		currentIndex = [self indexGreaterThanIndex:currentIndex];
-	}
-	
-	return count;
-}
 @end

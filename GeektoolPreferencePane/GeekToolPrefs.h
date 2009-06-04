@@ -6,19 +6,13 @@
 //  Copyright (c) 2002 __MyCompanyName__. All rights reserved.
 //
 
-#import <PreferencePanes/PreferencePanes.h>
 #import <CoreFoundation/CoreFoundation.h>
 #import <Cocoa/Cocoa.h>
 
 #import "GTLog.h"
 
-#define LOGSETN [[self bundle] localizedStringForKey:@"Log Set %i" value:nil table:nil]
-#define NLOGSET [[self bundle] localizedStringForKey:@"New Log Set" value:nil table:nil]
-#define DGROUP [[self bundle] localizedStringForKey:@"Default Group" value:nil table:nil]
-#define COPY [[self bundle] localizedStringForKey:@"copy" value:nil table:nil]
-
 //NSMutableDictionary *g_logs;
-@interface GeekToolPrefs : NSPreferencePane 
+@interface GeekToolPrefs : NSApplication 
 {
     CFStringRef appID;
     

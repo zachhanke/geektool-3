@@ -12,16 +12,6 @@
 #import "defines.h"
 
 @implementation GeekToolPrefs
-- (id)initWithBundle:(NSBundle *)bundle
-{
-    // due to shortcomings of NSUserDefaults, we must use CFPreferences
-    // or else we will write to com.apple.systempreferences, which is
-    // not really what we want to be doing
-    // we are probably going to loose some binding stuff as a result
-    if ((self = [super initWithBundle:bundle]) != nil)
-        appID = CFSTR("com.allocinit.tynsoe.geektool");
-    return self;
-}
 
 - (void)mainViewDidLoad
 {
@@ -60,11 +50,11 @@
     // Yes, we need transparency
     [[NSColorPanel sharedColorPanel] setShowsAlpha: YES];
     
-    NSNumber *en = (NSNumber*)CFPreferencesCopyAppValue(CFSTR("enableMenu"), appID);
+    NSNumber *en = [[NSUserDefaults standardUserDefaults] objectForKey: @"enableMenu"];
     if ([en boolValue]) [self loadMenu];    
 
     // load selection color data
-    NSData *selectionColorData = (NSData*)CFPreferencesCopyAppValue(CFSTR("selectionColor"), appID);
+    NSData *selectionColorData = [[NSUserDefaults standardUserDefaults] objectForKey: @"selectionColor"];
     if (!selectionColorData) selectionColorData = [NSArchiver archivedDataWithRootObject:[[NSColor alternateSelectedControlColor] colorWithAlphaComponent:0.3]];
     [self setSelectionColor:selectionColorData];
     
@@ -99,7 +89,7 @@
     
     // load all log dictionaries into logsArray (dicts come from preferences
     // using these dictionaries, create the actual GTLog objects into g_logs.
-    NSArray *logsArray = (NSArray*)CFPreferencesCopyAppValue(CFSTR("logs"), appID);
+    NSArray *logsArray = [[NSUserDefaults standardUserDefaults] objectForKey: @"logs"];
     
     NSEnumerator *e = [logsArray objectEnumerator];
     NSDictionary *gtDict = nil;
@@ -149,7 +139,7 @@
      end groups
      */
     // load groups from our preferences
-    NSArray *savedGroups = (NSArray*)CFPreferencesCopyAppValue(CFSTR("groups"), appID);
+    NSArray *savedGroups = [[NSUserDefaults standardUserDefaults] objectForKey: @"groups"];
     
     // because we want to be able to do some fancy bindings for our table, we
     // need to store our groups as a dictionary of one value.
@@ -366,7 +356,7 @@
     }
     
     // get everything selected right (don't want nil selections)
-    NSString *currentGroupString = (NSString*)CFPreferencesCopyAppValue(CFSTR("currentGroup"), appID);
+    NSString *currentGroupString = [[NSUserDefaults standardUserDefaults] objectForKey: @"currentGroup"];
     [currentGroup selectItemWithTitle:currentGroupString];
     [groupSelection selectItemAtIndex:0];
     
@@ -424,56 +414,6 @@
 
 }
 
-- (void)geekToolQuit:(NSNotification*)aNotification
-{
-    /*
-     [gEnable setState: NO];
-     */
-}
-
-- (IBAction)toggleEnable:(id)sender
-{
-    NSMutableArray *loginItems = (NSMutableArray*) CFPreferencesCopyValue((CFStringRef)@"AutoLaunchedApplicationDictionary", (CFStringRef) @"loginwindow",
-                                                                          kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
-    NSDictionary *myLoginItem = [NSDictionary dictionaryWithObjectsAndKeys: [NSNumber numberWithBool: NO],
-                                 @"Hide",
-                                 [[self bundle] pathForResource:@"GeekTool" ofType: @"app"],@"Path",
-                                 nil];
-    loginItems = [[loginItems autorelease] mutableCopy];
-    [loginItems removeObject: myLoginItem];
-    
-    if ([sender state] == NO)
-    {
-        CFPreferencesSetValue((CFStringRef) @"AutoLaunchedApplicationDictionary", loginItems,
-                              (CFStringRef)@"loginwindow", kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
-        CFPreferencesSynchronize((CFStringRef) @"loginwindow", kCFPreferencesCurrentUser,
-                                 kCFPreferencesAnyHost);
-        [loginItems release];
-        [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTQuit"
-                                                                       object: @"GeekToolPrefs"
-                                                                     userInfo: nil
-                                                           deliverImmediately: YES];
-        // [gEnable setState: NSOnState];
-        //[RemoteGeekTool deactivate];
-    }
-    else
-    {
-        [loginItems addObject: myLoginItem];
-        CFPreferencesSetValue((CFStringRef) @"AutoLaunchedApplicationDictionary", loginItems,
-                              (CFStringRef)@"loginwindow", kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
-        CFPreferencesSynchronize((CFStringRef) @"loginwindow", kCFPreferencesCurrentUser,
-                                 kCFPreferencesAnyHost);
-        [loginItems release];
-        //[gEnable setState: NSMixedState];
-        NSString *myPath = [[[[[self bundle] pathForResource:@"GeekTool" ofType: @"app"]
-                              stringByAppendingPathComponent: @"Contents"]
-                             stringByAppendingPathComponent: @"MacOS"]
-                            stringByAppendingPathComponent: @"GeekTool"];
-        [NSTask launchedTaskWithLaunchPath: myPath arguments: [NSArray array]];
-    }
-    
-}
-
 - (void)updateWindows
 {
     [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTUpdateWindows"
@@ -522,20 +462,6 @@
                                                                    object: @"GeekToolPrefs"
                                                                  userInfo: userInfo
                                                        deliverImmediately: YES];    
-}
-
-- (void)applyNotification:(NSNotification*)aNotification
-{
-    //[self applyChanges];
-    //[self savePrefs];
-    //[self updateWindows];
-}
-
-- (void)applyAndNotifyNotification:(NSNotification*)aNotification
-{
-    //[self applyChanges];
-    //[self savePrefs];
-    //[self updateWindows];
 }
 
 #pragma mark -
@@ -589,11 +515,10 @@
         [groupsArray addObject: [tmpDict valueForKey:@"group"]];
     }
     
-    CFPreferencesSetAppValue(CFSTR("currentGroup"), [currentGroup titleOfSelectedItem], appID);
-    CFPreferencesSetAppValue(CFSTR("selectionColor"), [self selectionColor], appID);
-    CFPreferencesSetAppValue(CFSTR("logs"), logsArray, appID);
-    CFPreferencesSetAppValue(CFSTR("groups"), groupsArray, appID);
-    CFPreferencesAppSynchronize(appID);
+    [[NSUserDefaults standardUserDefaults] setObject:[currentGroup titleOfSelectedItem] forKey:@"currentGroup"];
+    [[NSUserDefaults standardUserDefaults] setObject:[self selectionColor] forKey:@"selectionColor"];
+    [[NSUserDefaults standardUserDefaults] setObject:logsArray forKey:@"logs"];
+    [[NSUserDefaults standardUserDefaults] setObject:groupsArray forKey:@"groups"];
     
     [self updateWindows];
 }
@@ -623,48 +548,14 @@
 {
     if ([sender state])
     {
-        CFPreferencesSetAppValue(CFSTR("enableMenu"), [NSNumber numberWithBool: YES], appID);
+        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool: YES] forKey: @"enableMenu"];
         [self loadMenu];
     }
     else
     {
-        CFPreferencesSetAppValue(CFSTR("enableMenu"), [NSNumber numberWithBool: NO], appID);
+        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool: NO] forKey: @"enableMenu"];
         [self unloadMenu];
     }
-}
-
-- (void)loadMenu
-{
-    /*
-    NSString *menuExtraPath;
-    CFURLRef url;
-    unsigned int outExtra;
-    
-    menuExtraPath = [[NSBundle bundleWithPath: [[self bundle] pathForResource:@"GeekToolMenu" ofType: @"menu"]
-                      ] pathForResource:@"MenuCracker" ofType: @"menu"];
-    url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, (CFStringRef)menuExtraPath, kCFURLPOSIXPathStyle, NO);
-    CoreMenuExtraAddMenuExtra(url, 0, 0, nil, 0, &outExtra);
-    
-    menuExtraPath = [[self bundle] pathForResource:@"GeekToolMenu" ofType: @"menu"];
-    url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, (CFStringRef)menuExtraPath, kCFURLPOSIXPathStyle, NO);
-    CoreMenuExtraAddMenuExtra(url, 0, 0, nil, 0, &outExtra);
-    CFRelease(url);
-     */
-}
-
-- (void)unloadMenu
-{
-    /*
-    typedef struct OpaqueMenuExtraRef *MenuExtraRef;
-    unsigned int outExtra;
-    
-    CFPreferencesSetAppValue(CFSTR("enableMenu"), [NSNumber numberWithBool: NO], appID);
-    NSString *identifier=@"org.tynsoe.geektool";
-    MenuExtraRef *menuExtra = nil;
-    CoreMenuExtraGetMenuExtra((CFStringRef)identifier, &menuExtra);
-    if (menuExtra != nil)
-        CoreMenuExtraRemoveMenuExtra( menuExtra, &outExtra );    
-     */
 }
 
 #pragma mark -

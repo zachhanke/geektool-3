@@ -30,9 +30,3 @@ toPasteboard:(NSPasteboard *)pboard;
 toIndex:(unsigned int)insertIndex;
 - (id)selectedObject;
 @end
-
-#pragma mark -
-#pragma mark Quick helper method
-@interface NSIndexSet (CountOfIndexesInRange)
--(unsigned int)countOfIndexesInRange:(NSRange)range;
-@end
