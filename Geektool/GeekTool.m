@@ -16,7 +16,8 @@
                                                         selector: @selector(prefsNotification:)
                                                             name: nil
                                                           object: @"GeekToolPrefs"
-                                              suspensionBehavior: NSNotificationSuspensionBehaviorCoalesce];
+                                              suspensionBehavior: NSNotificationSuspensionBehaviorDeliverImmediately];
+                                              //suspensionBehavior: NSNotificationSuspensionBehaviorCoalesce];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(applicationDidChangeScreenParameters:)
@@ -187,10 +188,10 @@
     }  
     // Remove all logs upon the count in preferences
     // (those have been deleted)
-    while ([ g_logs count ] > i )
+    while ([g_logs count] > i )
     {
-        [[ g_logs lastObject ] terminate ];
-        [ g_logs removeLastObject ];
+        [[g_logs lastObject] terminate];
+        [g_logs removeLastObject];
     }
     
     logs = nil;
@@ -199,11 +200,12 @@
                                                                    object: @"GeekTool"
                                                                  userInfo: nil
                                                        deliverImmediately: YES];
-    [pool release];
     
     if (highlighted > -1)
-        [[ g_logs objectAtIndex: highlighted ] setHighlighted: YES ];
+        [[g_logs objectAtIndex: highlighted] setHighlighted: YES];
     [self reorder];
+    
+    [pool release];
 }
 
 // magnetic windows enabled if the command key is held down

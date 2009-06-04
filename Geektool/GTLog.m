@@ -132,7 +132,8 @@
             || (![[aDictionary objectForKey: @"file"] isEqual: [[self dictionary] objectForKey:@"file"]])
             || (![[aDictionary objectForKey: @"command"] isEqual: [[self dictionary] objectForKey:@"command"]])
             || (![[aDictionary objectForKey: @"type"] isEqual: [[self dictionary] objectForKey:@"type"]])
-            || (![[aDictionary objectForKey: @"enabled"] isEqual: [[self dictionary] objectForKey:@"enabled"]]))
+            || (![[aDictionary objectForKey: @"enabled"] isEqual: [[self dictionary] objectForKey:@"enabled"]])
+            || (![[aDictionary objectForKey: @"refresh"] isEqual: [[self dictionary] objectForKey:@"refresh"]]))
             close = YES;
         
         [self setDictionary: aDictionary];

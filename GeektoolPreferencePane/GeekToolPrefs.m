@@ -479,7 +479,7 @@
     [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTUpdateWindows"
                                                                    object: @"GeekToolPrefs"
                                                                  userInfo: nil
-                                                       deliverImmediately: NO];
+                                                       deliverImmediately: YES];
 }
 
 - (void)logReorder:(NSDictionary*)userInfo
