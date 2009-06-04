@@ -12,7 +12,7 @@
 #import "GTLog.h"
 
 //NSMutableDictionary *g_logs;
-@interface GeekToolPrefs : NSApplication 
+@interface GeekToolPrefs : NSObject 
 {
     CFStringRef appID;
     

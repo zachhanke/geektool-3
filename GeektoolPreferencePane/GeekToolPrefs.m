@@ -13,6 +13,22 @@
 
 @implementation GeekToolPrefs
 
++ (void)initialize
+{
+    // Setting up our defaults here
+    NSDictionary *defaults;
+    defaults = [NSDictionary dictionaryWithObjectsAndKeys: 
+                // General
+                [NSArchiver archivedDataWithRootObject:[[NSColor alternateSelectedControlColor] colorWithAlphaComponent:0.3]], @"selectionColor",
+
+                // Sparkle (auto updater)
+                //[NSNumber numberWithInt:2], @"SUUpdate", // the selected tag in the popup box. SUScheduledCheckInterval derived from this value
+                //[NSNumber numberWithLong:86400], @"SUScheduledCheckInterval", // daily
+                
+                nil];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+}
+
 - (void)mainViewDidLoad
 {
     // Register for some notifications
