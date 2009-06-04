@@ -1,0 +1,400 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0A7D37260FD8028D0070D678 /* GeekToolPrefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37210FD8028D0070D678 /* GeekToolPrefs.m */; };
+		0A7D37270FD8028D0070D678 /* GroupController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37230FD8028D0070D678 /* GroupController.m */; };
+		0A7D37280FD8028D0070D678 /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37250FD8028D0070D678 /* LogController.m */; };
+		0A7D37310FD802E30070D678 /* GTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D372E0FD802E30070D678 /* GTLog.m */; };
+		0A7D37320FD802E30070D678 /* LogWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37300FD802E30070D678 /* LogWindow.m */; };
+		0A7D37350FD802EC0070D678 /* LogWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37340FD802EC0070D678 /* LogWindowController.m */; };
+		0A7D373E0FD8030E0070D678 /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37360FD8030E0070D678 /* left.png */; };
+		0A7D373F0FD8030E0070D678 /* center.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37370FD8030E0070D678 /* center.png */; };
+		0A7D37400FD8030E0070D678 /* defaultFailure.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37380FD8030E0070D678 /* defaultFailure.png */; };
+		0A7D37410FD8030E0070D678 /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37390FD8030E0070D678 /* right.png */; };
+		0A7D37420FD8030E0070D678 /* justified.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D373A0FD8030E0070D678 /* justified.png */; };
+		0A7D37430FD8030E0070D678 /* GeekToolPrefs.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D373B0FD8030E0070D678 /* GeekToolPrefs.tiff */; };
+		0A7D37440FD8030E0070D678 /* delete.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D373C0FD8030E0070D678 /* delete.tif */; };
+		0A7D37450FD8030E0070D678 /* defaultSuccess.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D373D0FD8030E0070D678 /* defaultSuccess.png */; };
+		0A7D374A0FD803800070D678 /* GeekTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37490FD803800070D678 /* GeekTool.m */; };
+		0A7D374F0FD803980070D678 /* NSLogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D374C0FD803980070D678 /* NSLogView.m */; };
+		0A7D37500FD803980070D678 /* LogTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D374E0FD803980070D678 /* LogTextField.m */; };
+		0A7D37530FD803AD0070D678 /* AIQuartzView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37520FD803AD0070D678 /* AIQuartzView.m */; };
+		0A7D37560FD803C70070D678 /* coin.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37540FD803C70070D678 /* coin.tif */; };
+		0A7D37650FD804270070D678 /* GeektoolPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37630FD804270070D678 /* GeektoolPrefs.xib */; };
+		0A7D37680FD804690070D678 /* logWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37670FD804690070D678 /* logWindow.xib */; };
+		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		0A7D37200FD8028D0070D678 /* GeekToolPrefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeekToolPrefs.h; path = ../GeektoolPreferencePane/GeekToolPrefs.h; sourceTree = SOURCE_ROOT; };
+		0A7D37210FD8028D0070D678 /* GeekToolPrefs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeekToolPrefs.m; path = ../GeektoolPreferencePane/GeekToolPrefs.m; sourceTree = SOURCE_ROOT; };
+		0A7D37220FD8028D0070D678 /* GroupController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupController.h; path = ../GeektoolPreferencePane/GroupController.h; sourceTree = SOURCE_ROOT; };
+		0A7D37230FD8028D0070D678 /* GroupController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupController.m; path = ../GeektoolPreferencePane/GroupController.m; sourceTree = SOURCE_ROOT; };
+		0A7D37240FD8028D0070D678 /* LogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogController.h; path = ../GeektoolPreferencePane/LogController.h; sourceTree = SOURCE_ROOT; };
+		0A7D37250FD8028D0070D678 /* LogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogController.m; path = ../GeektoolPreferencePane/LogController.m; sourceTree = SOURCE_ROOT; };
+		0A7D372B0FD802D50070D678 /* defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = defines.h; path = ../Geektool/defines.h; sourceTree = SOURCE_ROOT; };
+		0A7D372C0FD802D50070D678 /* CGSPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CGSPrivate.h; path = ../Geektool/CGSPrivate.h; sourceTree = SOURCE_ROOT; };
+		0A7D372D0FD802E30070D678 /* GTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTLog.h; path = ../Geektool/GTLog.h; sourceTree = SOURCE_ROOT; };
+		0A7D372E0FD802E30070D678 /* GTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTLog.m; path = ../Geektool/GTLog.m; sourceTree = SOURCE_ROOT; };
+		0A7D372F0FD802E30070D678 /* LogWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogWindow.h; path = ../Geektool/LogWindow.h; sourceTree = SOURCE_ROOT; };
+		0A7D37300FD802E30070D678 /* LogWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogWindow.m; path = ../Geektool/LogWindow.m; sourceTree = SOURCE_ROOT; };
+		0A7D37330FD802EC0070D678 /* LogWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogWindowController.h; path = ../Geektool/LogWindowController.h; sourceTree = SOURCE_ROOT; };
+		0A7D37340FD802EC0070D678 /* LogWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogWindowController.m; path = ../Geektool/LogWindowController.m; sourceTree = SOURCE_ROOT; };
+		0A7D37360FD8030E0070D678 /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = left.png; path = ../GeektoolPreferencePane/left.png; sourceTree = SOURCE_ROOT; };
+		0A7D37370FD8030E0070D678 /* center.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = center.png; path = ../GeektoolPreferencePane/center.png; sourceTree = SOURCE_ROOT; };
+		0A7D37380FD8030E0070D678 /* defaultFailure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = defaultFailure.png; path = ../GeektoolPreferencePane/defaultFailure.png; sourceTree = SOURCE_ROOT; };
+		0A7D37390FD8030E0070D678 /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = right.png; path = ../GeektoolPreferencePane/right.png; sourceTree = SOURCE_ROOT; };
+		0A7D373A0FD8030E0070D678 /* justified.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = justified.png; path = ../GeektoolPreferencePane/justified.png; sourceTree = SOURCE_ROOT; };
+		0A7D373B0FD8030E0070D678 /* GeekToolPrefs.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = GeekToolPrefs.tiff; path = ../GeektoolPreferencePane/GeekToolPrefs.tiff; sourceTree = SOURCE_ROOT; };
+		0A7D373C0FD8030E0070D678 /* delete.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = delete.tif; path = ../GeektoolPreferencePane/delete.tif; sourceTree = SOURCE_ROOT; };
+		0A7D373D0FD8030E0070D678 /* defaultSuccess.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = defaultSuccess.png; path = ../GeektoolPreferencePane/defaultSuccess.png; sourceTree = SOURCE_ROOT; };
+		0A7D37480FD803800070D678 /* GeekTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeekTool.h; path = ../Geektool/GeekTool.h; sourceTree = SOURCE_ROOT; };
+		0A7D37490FD803800070D678 /* GeekTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeekTool.m; path = ../Geektool/GeekTool.m; sourceTree = SOURCE_ROOT; };
+		0A7D374B0FD803980070D678 /* NSLogView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSLogView.h; path = ../Geektool/NSLogView.h; sourceTree = SOURCE_ROOT; };
+		0A7D374C0FD803980070D678 /* NSLogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSLogView.m; path = ../Geektool/NSLogView.m; sourceTree = SOURCE_ROOT; };
+		0A7D374D0FD803980070D678 /* LogTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogTextField.h; path = ../Geektool/LogTextField.h; sourceTree = SOURCE_ROOT; };
+		0A7D374E0FD803980070D678 /* LogTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogTextField.m; path = ../Geektool/LogTextField.m; sourceTree = SOURCE_ROOT; };
+		0A7D37510FD803AD0070D678 /* AIQuartzView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AIQuartzView.h; path = ../Geektool/AIQuartzView.h; sourceTree = SOURCE_ROOT; };
+		0A7D37520FD803AD0070D678 /* AIQuartzView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AIQuartzView.m; path = ../Geektool/AIQuartzView.m; sourceTree = SOURCE_ROOT; };
+		0A7D37540FD803C70070D678 /* coin.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = coin.tif; path = ../Geektool/coin.tif; sourceTree = SOURCE_ROOT; };
+		0A7D37640FD804270070D678 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = ../GeektoolPreferencePane/English.lproj/GeektoolPrefs.xib; sourceTree = SOURCE_ROOT; };
+		0A7D37670FD804690070D678 /* logWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = logWindow.xib; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		32CA4F630368D1EE00C91783 /* NerdTool_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NerdTool_Prefix.pch; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* NerdTool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NerdTool.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				0A7D372D0FD802E30070D678 /* GTLog.h */,
+				0A7D372E0FD802E30070D678 /* GTLog.m */,
+				0A7D372F0FD802E30070D678 /* LogWindow.h */,
+				0A7D37300FD802E30070D678 /* LogWindow.m */,
+				0A7D37330FD802EC0070D678 /* LogWindowController.h */,
+				0A7D37340FD802EC0070D678 /* LogWindowController.m */,
+				0A7D374B0FD803980070D678 /* NSLogView.h */,
+				0A7D374C0FD803980070D678 /* NSLogView.m */,
+				0A7D374D0FD803980070D678 /* LogTextField.h */,
+				0A7D374E0FD803980070D678 /* LogTextField.m */,
+				0A7D37510FD803AD0070D678 /* AIQuartzView.h */,
+				0A7D37520FD803AD0070D678 /* AIQuartzView.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		0A7D372A0FD802B10070D678 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				0A7D37480FD803800070D678 /* GeekTool.h */,
+				0A7D37490FD803800070D678 /* GeekTool.m */,
+				0A7D37200FD8028D0070D678 /* GeekToolPrefs.h */,
+				0A7D37210FD8028D0070D678 /* GeekToolPrefs.m */,
+				0A7D37220FD8028D0070D678 /* GroupController.h */,
+				0A7D37230FD8028D0070D678 /* GroupController.m */,
+				0A7D37240FD8028D0070D678 /* LogController.h */,
+				0A7D37250FD8028D0070D678 /* LogController.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* NerdTool.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* NerdTool */ = {
+			isa = PBXGroup;
+			children = (
+				0A7D372A0FD802B10070D678 /* Controllers */,
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = NerdTool;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				0A7D372B0FD802D50070D678 /* defines.h */,
+				0A7D372C0FD802D50070D678 /* CGSPrivate.h */,
+				32CA4F630368D1EE00C91783 /* NerdTool_Prefix.pch */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0A7D37360FD8030E0070D678 /* left.png */,
+				0A7D37370FD8030E0070D678 /* center.png */,
+				0A7D37380FD8030E0070D678 /* defaultFailure.png */,
+				0A7D37390FD8030E0070D678 /* right.png */,
+				0A7D373A0FD8030E0070D678 /* justified.png */,
+				0A7D373B0FD8030E0070D678 /* GeekToolPrefs.tiff */,
+				0A7D373C0FD8030E0070D678 /* delete.tif */,
+				0A7D373D0FD8030E0070D678 /* defaultSuccess.png */,
+				8D1107310486CEB800E47090 /* Info.plist */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
+				0A7D37540FD803C70070D678 /* coin.tif */,
+				0A7D37630FD804270070D678 /* GeektoolPrefs.xib */,
+				0A7D37670FD804690070D678 /* logWindow.xib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D1107260486CEB800E47090 /* NerdTool */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "NerdTool" */;
+			buildPhases = (
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NerdTool;
+			productInstallPath = "$(HOME)/Applications";
+			productName = NerdTool;
+			productReference = 8D1107320486CEB800E47090 /* NerdTool.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "NerdTool" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* NerdTool */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D1107260486CEB800E47090 /* NerdTool */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
+				0A7D373E0FD8030E0070D678 /* left.png in Resources */,
+				0A7D373F0FD8030E0070D678 /* center.png in Resources */,
+				0A7D37400FD8030E0070D678 /* defaultFailure.png in Resources */,
+				0A7D37410FD8030E0070D678 /* right.png in Resources */,
+				0A7D37420FD8030E0070D678 /* justified.png in Resources */,
+				0A7D37430FD8030E0070D678 /* GeekToolPrefs.tiff in Resources */,
+				0A7D37440FD8030E0070D678 /* delete.tif in Resources */,
+				0A7D37450FD8030E0070D678 /* defaultSuccess.png in Resources */,
+				0A7D37560FD803C70070D678 /* coin.tif in Resources */,
+				0A7D37650FD804270070D678 /* GeektoolPrefs.xib in Resources */,
+				0A7D37680FD804690070D678 /* logWindow.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072D0486CEB800E47090 /* main.m in Sources */,
+				0A7D37260FD8028D0070D678 /* GeekToolPrefs.m in Sources */,
+				0A7D37270FD8028D0070D678 /* GroupController.m in Sources */,
+				0A7D37280FD8028D0070D678 /* LogController.m in Sources */,
+				0A7D37310FD802E30070D678 /* GTLog.m in Sources */,
+				0A7D37320FD802E30070D678 /* LogWindow.m in Sources */,
+				0A7D37350FD802EC0070D678 /* LogWindowController.m in Sources */,
+				0A7D374A0FD803800070D678 /* GeekTool.m in Sources */,
+				0A7D374F0FD803980070D678 /* NSLogView.m in Sources */,
+				0A7D37500FD803980070D678 /* LogTextField.m in Sources */,
+				0A7D37530FD803AD0070D678 /* AIQuartzView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		0A7D37630FD804270070D678 /* GeektoolPrefs.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A7D37640FD804270070D678 /* English */,
+			);
+			name = GeektoolPrefs.xib;
+			sourceTree = "<group>";
+		};
+		1DDD58140DA1D0A300B32029 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1DDD58150DA1D0A300B32029 /* English */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C01FCF4B08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = NerdTool_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = NerdTool;
+			};
+			name = Debug;
+		};
+		C01FCF4C08A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = NerdTool_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = NerdTool;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "NerdTool" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4B08A954540054247B /* Debug */,
+				C01FCF4C08A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "NerdTool" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

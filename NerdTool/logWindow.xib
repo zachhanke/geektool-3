@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.03">
+  <data>
+    <int key="IBDocument.SystemTarget">1050</int>
+    <string key="IBDocument.SystemVersion">9J61</string>
+    <string key="IBDocument.InterfaceBuilderVersion">677</string>
+    <string key="IBDocument.AppKitVersion">949.46</string>
+    <string key="IBDocument.HIToolboxVersion">353.00</string>
+    <object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
+      <bool key="EncodedWithXMLCoder">YES</bool>
+      <integer value="6"/>
+    </object>
+    <object class="NSArray" key="IBDocument.PluginDependencies">
+      <bool key="EncodedWithXMLCoder">YES</bool>
+      <string>com.apple.QuartzComposerIBPlugin</string>
+      <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+    </object>
+    <object class="NSMutableDictionary" key="IBDocument.Metadata">
+      <bool key="EncodedWithXMLCoder">YES</bool>
+      <object class="NSArray" key="dict.sortedKeys">
+        <bool key="EncodedWithXMLCoder">YES</bool>
+      </object>
+      <object class="NSMutableArray" key="dict.values">
+        <bool key="EncodedWithXMLCoder">YES</bool>
+      </object>
+    </object>
+    <object class="NSMutableArray" key="IBDocument.RootObjects" id="557211054">
+      <bool key="EncodedWithXMLCoder">YES</bool>
+      <object class="NSCustomObject" id="847253739">
+        <string key="NSClassName">LogWindowController</string>
+      </object>
+      <object class="NSCustomObject" id="231461873">
+        <string key="NSClassName">FirstResponder</string>
+      </object>
+      <object class="NSCustomObject" id="176332875">
+        <string key="NSClassName">NSApplication</string>
+      </object>
+      <object class="NSWindowTemplate" id="394099586">
+        <int key="NSWindowStyleMask">15</int>
+        <int key="NSWindowBacking">2</int>
+        <string key="NSWindowRect">{{221, 456}, {420, 101}}</string>
+        <int key="NSWTFlags">1886912512</int>
+        <string key="NSWindowTitle">Window</string>
+        <string key="NSWindowClass">LogWindow</string>
+        <object class="NSMutableString" key="NSViewClass">
+          <characters key="NS.bytes">View</characters>
+        </object>
+        <string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
+        <object class="NSView" key="NSWindowView" id="461287312">
+          <reference key="NSNextResponder"/>
+          <int key="NSvFlags">274</int>
+          <object class="NSMutableArray" key="NSSubviews">
+            <bool key="EncodedWithXMLCoder">YES</bool>
+            <object class="QCView" id="62534435">
+              <reference key="NSNextResponder" ref="461287312"/>
+              <int key="NSvFlags">274</int>
+              <string key="NSFrameSize">{420, 101}</string>
+              <reference key="NSSuperview" ref="461287312"/>
+              <nil key="composition"/>
+              <string key="aspectRatio">{0, 0}</string>
+              <bool key="allowsDragIn">NO</bool>
+              <bool key="allowsDragOut">NO</bool>
+              <float key="maxFPS">0.000000e+00</float>
+              <bool key="autorun">YES</bool>
+              <int key="forwardingEventMask">0</int>
+              <object class="NSColor" key="clearColor">
+                <int key="NSColorSpace">1</int>
+                <bytes key="NSRGB">MCAwIDAgMAA</bytes>
+              </object>
+              <object class="NSColor" key="backgroundColor">
+                <int key="NSColorSpace">1</int>
+                <bytes key="NSRGB">MCAwIDAAA</bytes>
+              </object>
+              <int key="checkerboardSize">0</int>
+              <int key="flags">0</int>
+              <bool key="forcesClear">NO</bool>
+            </object>
+            <object class="NSCustomView" id="557164643">
+              <reference key="NSNextResponder" ref="461287312"/>
+              <int key="NSvFlags">274</int>
+              <string key="NSFrameSize">{420, 101}</string>
+              <reference key="NSSuperview" ref="461287312"/>
+              <string key="NSClassName">NSImageView</string>
+              <string key="NSExtension">NSControl</string>
+            </object>
+            <object class="NSCustomView" id="66047436">
+              <reference key="NSNextResponder" ref="461287312"/>
+              <int key="NSvFlags">282</int>
+              <object class="NSMutableArray" key="NSSubviews">
+                <bool key="EncodedWithXMLCoder">YES</bool>
+                <object class="NSCustomView" id="344874084">
+                  <reference key="NSNextResponder" ref="66047436"/>
+                  <int key="NSvFlags">274</int>
+                  <string key="NSFrameSize">{420, 101}</string>
+                  <reference key="NSSuperview" ref="66047436"/>
+                  <string key="NSClassName">LogTextField</string>
+                  <string key="NSExtension">NSTextView</string>
+                </object>
+              </object>
+              <string key="NSFrameSize">{420, 101}</string>
+              <reference key="NSSuperview" ref="461287312"/>
+              <string key="NSClassName">AJRScrollView</string>
+              <string key="NSExtension">NSScrollView</string>
+            </object>
+            <object class="NSImageView" id="129380996">
+              <reference key="NSNextResponder" ref="461287312"/>
+              <int key="NSvFlags">289</int>
+              <object class="NSMutableSet" key="NSDragTypes">
+                <bool key="EncodedWithXMLCoder">YES</bool>
+                <object class="NSMutableArray" key="set.sortedObjects">
+                  <bool key="EncodedWithXMLCoder">YES</bool>
+                  <string>Apple PDF pasteboard type</string>
+                  <string>Apple PICT pasteboard type</string>
+                  <string>Apple PNG pasteboard type</string>
+                  <string>NSFilenamesPboardType</string>
+                  <string>NeXT Encapsulated PostScript v1.2 pasteboard type</string>
+                  <string>NeXT TIFF v4.0 pasteboard type</string>
+                </object>
+              </object>
+              <string key="NSFrame">{{402, 0}, {18, 17}}</string>
+              <reference key="NSSuperview" ref="461287312"/>
+              <bool key="NSEnabled">YES</bool>
+              <object class="NSImageCell" key="NSCell" id="928389122">
+                <int key="NSCellFlags">130560</int>
+                <int key="NSCellFlags2">33554432</int>
+                <int key="NSAlign">7</int>
+                <int key="NSScale">2</int>
+                <int key="NSStyle">0</int>
+                <bool key="NSAnimates">NO</bool>
+              </object>
+              <bool key="NSEditable">YES</bool>
+            </object>
+            <object class="NSCustomView" id="485539159">
+              <reference key="NSNextResponder" ref="461287312"/>
+              <int key="NSvFlags">274</int>
+              <string key="NSFrameSize">{420, 101}</string>
+              <reference key="NSSuperview" ref="461287312"/>
+              <string key="NSClassName">NSLogView</string>
+              <string key="NSExtension">NSView</string>
+            </object>
+          </object>
+          <string key="NSFrameSize">{420, 101}</string>
+          <reference key="NSSuperview"/>
+        </object>
+        <string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
+        <string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
+      </object>
+    </object>
+    <object class="IBObjectContainer" key="IBDocument.Objects">
+      <object class="NSMutableArray" key="connectionRecords">
+        <bool key="EncodedWithXMLCoder">YES</bool>
+        <object class="IBConnectionRecord">
+          <object class="IBOutletConnection" key="connection">
+            <string key="label">window</string>
+            <reference key="source" ref="847253739"/>
+            <reference key="destination" ref="394099586"/>
+          </object>
+          <int key="connectionID">9</int>
+        </object>
+        <object class="IBConnectionRecord">
+          <object class="IBOutletConnection" key="connection">
+            <string key="label">delegate</string>
+            <reference key="source" ref="394099586"/>
+            <reference key="destination" ref="847253739"/>
+          </object>
+          <int key="connectionID">13</int>
+        </object>
+        <object class="IBConnectionRecord">
+          <object class="IBOutletConnection" key="connection">
+            <string key="label">logWindowController</string>
+            <reference key="source" ref="485539159"/>
+            <reference key="destination" ref="847253739"/>
+          </object>
+          <int key="connectionID">61</int>
+        </object>
+        <object class="IBConnectionRecord">
+          <object class="IBOutletConnection" key="connection">
+            <string key="label">logView</string>
+            <reference key="source" ref="394099586"/>
+            <reference key="destination" ref="485539159"/>
+          </object>
+          <int key="connectionID">62</int>
+        </object>
+        <object class="IBConnectionRecord">
+          <object class="IBOutletConnection" key="connection">
+            <string key="label">corner</string>
+            <reference key="source" ref="485539159"/>
+            <reference key="destination" ref="129380996"/>
+          </object>
+          <int key="connectionID">67</int>
+        </object>
+        <object class="IBConnectionRecord">
+          <object class="IBOutletConnection" key="connection">
+            <string key="label">logView</string>
+            <reference key="source" ref="847253739"/>
+            <reference key="destination" ref="485539159"/>
+          </object>
+          <int key="connectionID">73</int>
+        </object>
+        <object class="IBConnectionRecord">
+          <object class="IBOutletConnection" key="connection">
+            <string key="label">picture</string>
+            <reference key="source" ref="485539159"/>
+            <reference key="destination" ref="557164643"/>
+          </object>
+          <int key="connectionID">95</int>
+        </object>
+        <object class="IBConnectionRecord">
+          <object class="IBOutletConnection" key="connection">
+            <string key="label">picture</string>
+            <reference key="source" ref="847253739"/>
+            <reference key="destination" ref="557164643"/>
+          </object>
+          <int key="connectionID">97</int>
+        </object>
+        <object class="IBConnectionRecord">
+          <object class="IBOutletConnection" key="connection">
+            <string key="label">scrollView</string>
+            <reference key="source" ref="847253739"/>
+            <reference key="destination" ref="66047436"/>
+          </object>
+          <int key="connectionID">111</int>
+        </object>
+        <object class="IBConnectionRecord">
+          <object class="IBOutletConnection" key="connection">
+            <string key="label">textView</string>
+            <reference key="source" ref="66047436"/>
+            <reference key="destination" ref="344874084"/>
+          </object>
+          <int key="connectionID">113</int>
+        </object>
+        <object class="IBConnectionRecord">
+          <object class="IBOutletConnection" key="connection">
+            <string key="label">initialFirstResponder</string>
+            <reference key="source" ref="394099586"/>
+            <reference key="destination" ref="485539159"/>
+          </object>
+          <int key="connectionID">116</int>
+        </object>
+        <object class="IBConnectionRecord">
+          <object class="IBOutletConnection" key="connection">
+            <string key="label">text</string>
+            <reference key="source" ref="485539159"/>
+            <reference key="destination" ref="344874084"/>
+          </object>
+          <int key="connectionID">117</int>
+        </object>
+        <object class="IBConnectionRecord">
+          <object class="IBOutletConnection" key="connection">
+            <string key="label">text</string>
+            <reference key="source" ref="394099586"/>
+            <reference key="destination" ref="344874084"/>
+          </object>
+          <int key="connectionID">122</int>
+        </object>
+        <object class="IBConnectionRecord">
+          <object class="IBOutletConnection" key="connection">
+            <string key="label">text</string>
+            <reference key="source" ref="847253739"/>
+            <reference key="destination" ref="344874084"/>
+          </object>
+          <int key="connectionID">123</int>
+        </object>
+        <object class="IBConnectionRecord">
+          <object class="IBOutletConnection" key="connection">
+            <string key="label">quartzView</string>
+            <reference key="source" ref="847253739"/>
+            <reference key="destination" ref="62534435"/>
+          </object>
+          <int key="connectionID">187</int>
+        </object>
+        <object class="IBConnectionRecord">
+          <object class="IBOutletConnection" key="connection">
+            <string key="label">owner</string>
+            <reference key="source" ref="62534435"/>
+            <reference key="destination" ref="847253739"/>
+          </object>
+          <int key="connectionID">192</int>
+        </object>
+      </object>
+      <object class="IBMutableOrderedSet" key="objectRecords">
+        <object class="NSArray" key="orderedObjects">
+          <bool key="EncodedWithXMLCoder">YES</bool>
+          <object class="IBObjectRecord">
+            <int key="objectID">0</int>
+            <object class="NSArray" key="object" id="0">
+              <bool key="EncodedWithXMLCoder">YES</bool>
+            </object>
+            <reference key="children" ref="557211054"/>
+            <nil key="parent"/>
+          </object>
+          <object class="IBObjectRecord">
+            <int key="objectID">-2</int>
+            <reference key="object" ref="847253739"/>
+            <reference key="parent" ref="0"/>
+            <string type="base64-UTF8" key="objectName">RmlsZSdzIE93bmVyA</string>
+          </object>
+          <object class="IBObjectRecord">
+            <int key="objectID">-1</int>
+            <reference key="object" ref="231461873"/>
+            <reference key="parent" ref="0"/>
+            <string key="objectName">First Responder</string>
+          </object>
+          <object class="IBObjectRecord">
+            <int key="objectID">-3</int>
+            <reference key="object" ref="176332875"/>
+            <reference key="parent" ref="0"/>
+            <string key="objectName">Application</string>
+          </object>
+          <object class="IBObjectRecord">
+            <int key="objectID">5</int>
+            <reference key="object" ref="394099586"/>
+            <object class="NSMutableArray" key="children">
+              <bool key="EncodedWithXMLCoder">YES</bool>
+              <reference ref="461287312"/>
+            </object>
+            <reference key="parent" ref="0"/>
+            <string key="objectName">Window</string>
+          </object>
+          <object class="IBObjectRecord">
+            <int key="objectID">6</int>
+            <reference key="object" ref="461287312"/>
+            <object class="NSMutableArray" key="children">
+              <bool key="EncodedWithXMLCoder">YES</bool>
+              <reference ref="485539159"/>
+              <reference ref="129380996"/>
+              <reference ref="557164643"/>
+              <reference ref="66047436"/>
+              <reference ref="62534435"/>
+            </object>
+            <reference key="parent" ref="394099586"/>
+          </object>
+          <object class="IBObjectRecord">
+            <int key="objectID">60</int>
+            <reference key="object" ref="485539159"/>
+            <reference key="parent" ref="461287312"/>
+          </object>
+          <object class="IBObjectRecord">
+            <int key="objectID">66</int>
+            <reference key="object" ref="129380996"/>
+            <object class="NSMutableArray" key="children">
+              <bool key="EncodedWithXMLCoder">YES</bool>
+              <reference ref="928389122"/>
+            </object>
+            <reference key="parent" ref="461287312"/>
+          </object>
+          <object class="IBObjectRecord">
+            <int key="objectID">94</int>
+            <reference key="object" ref="557164643"/>
+            <reference key="parent" ref="461287312"/>
+          </object>
+          <object class="IBObjectRecord">
+            <int key="objectID">108</int>
+            <reference key="object" ref="66047436"/>
+            <object class="NSMutableArray" key="children">
+              <bool key="EncodedWithXMLCoder">YES</bool>
+              <reference ref="344874084"/>
+            </object>
+            <reference key="parent" ref="461287312"/>
+          </object>
+          <object class="IBObjectRecord">
+            <int key="objectID">109</int>
+            <reference key="object" ref="344874084"/>
+            <reference key="parent" ref="66047436"/>
+          </object>
+          <object class="IBObjectRecord">
+            <int key="objectID">186</int>
+            <reference key="object" ref="62534435"/>
+            <reference key="parent" ref="461287312"/>
+          </object>
+          <object class="IBObjectRecord">
+            <int key="objectID">195</int>
+            <reference key="object" ref="928389122"/>
+            <reference key="parent" ref="129380996"/>
+          </object>
+        </object>
+      </object>
+      <object class="NSMutableDictionary" key="flattenedProperties">
+        <bool key="EncodedWithXMLCoder">YES</bool>
+        <object class="NSMutableArray" key="dict.sortedKeys">
+          <bool key="EncodedWithXMLCoder">YES</bool>
+          <string>-1.IBPluginDependency</string>
+          <string>-2.IBPluginDependency</string>
+          <string>-3.IBPluginDependency</string>
+          <string>-3.ImportedFromIB2</string>
+          <string>108.IBPluginDependency</string>
+          <string>108.ImportedFromIB2</string>
+          <string>109.IBPluginDependency</string>
+          <string>109.ImportedFromIB2</string>
+          <string>186.CustomClassName</string>
+          <string>186.IBPluginDependency</string>
+          <string>186.ImportedFromIB2</string>
+          <string>5.IBEditorWindowLastContentRect</string>
+          <string>5.IBWindowTemplateEditedContentRect</string>
+          <string>5.ImportedFromIB2</string>
+          <string>6.IBPluginDependency</string>
+          <string>6.ImportedFromIB2</string>
+          <string>60.IBPluginDependency</string>
+          <string>60.ImportedFromIB2</string>
+          <string>66.IBPluginDependency</string>
+          <string>66.ImportedFromIB2</string>
+          <string>94.IBPluginDependency</string>
+          <string>94.ImportedFromIB2</string>
+        </object>
+        <object class="NSMutableArray" key="dict.values">
+          <bool key="EncodedWithXMLCoder">YES</bool>
+          <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+          <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+          <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+          <boolean value="YES" id="5"/>
+          <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+          <reference ref="5"/>
+          <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+          <reference ref="5"/>
+          <string>AIQuartzView</string>
+          <string>com.apple.QuartzComposerIBPlugin</string>
+          <reference ref="5"/>
+          <string>{{395, 744}, {420, 101}}</string>
+          <string>{{395, 744}, {420, 101}}</string>
+          <reference ref="5"/>
+          <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+          <reference ref="5"/>
+          <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+          <reference ref="5"/>
+          <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+          <reference ref="5"/>
+          <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+          <reference ref="5"/>
+        </object>
+      </object>
+      <object class="NSMutableDictionary" key="unlocalizedProperties">
+        <bool key="EncodedWithXMLCoder">YES</bool>
+        <object class="NSArray" key="dict.sortedKeys">
+          <bool key="EncodedWithXMLCoder">YES</bool>
+        </object>
+        <object class="NSMutableArray" key="dict.values">
+          <bool key="EncodedWithXMLCoder">YES</bool>
+        </object>
+      </object>
+      <nil key="activeLocalization"/>
+      <object class="NSMutableDictionary" key="localizations">
+        <bool key="EncodedWithXMLCoder">YES</bool>
+        <object class="NSArray" key="dict.sortedKeys">
+          <bool key="EncodedWithXMLCoder">YES</bool>
+        </object>
+        <object class="NSMutableArray" key="dict.values">
+          <bool key="EncodedWithXMLCoder">YES</bool>
+        </object>
+      </object>
+      <nil key="sourceID"/>
+      <int key="maxID">195</int>
+    </object>
+    <object class="IBClassDescriber" key="IBDocument.Classes">
+      <object class="NSMutableArray" key="referencedPartialClassDescriptions">
+        <bool key="EncodedWithXMLCoder">YES</bool>
+        <object class="IBPartialClassDescription">
+          <string key="className">AIQuartzView</string>
+          <string key="superclassName">QCView</string>
+          <object class="NSMutableDictionary" key="outlets">
+            <string key="NS.key.0">owner</string>
+            <string key="NS.object.0">id</string>
+          </object>
+          <object class="IBClassDescriptionSource" key="sourceIdentifier">
+            <string key="majorKey">IBProjectSource</string>
+            <string key="minorKey">AIQuartzView.h</string>
+          </object>
+        </object>
+        <object class="IBPartialClassDescription">
+          <string key="className">AIQuartzView</string>
+          <string key="superclassName">QCView</string>
+          <object class="IBClassDescriptionSource" key="sourceIdentifier">
+            <string key="majorKey">IBUserSource</string>
+            <string key="minorKey"/>
+          </object>
+        </object>
+        <object class="IBPartialClassDescription">
+          <string key="className">AJRScrollView</string>
+          <string key="superclassName">NSScrollView</string>
+          <object class="NSMutableDictionary" key="outlets">
+            <string key="NS.key.0">textView</string>
+            <string key="NS.object.0">id</string>
+          </object>
+          <object class="IBClassDescriptionSource" key="sourceIdentifier">
+            <string key="majorKey">IBProjectSource</string>
+            <string key="minorKey">AJRScrollView.h</string>
+          </object>
+        </object>
+        <object class="IBPartialClassDescription">
+          <string key="className">AJRScrollView</string>
+          <string key="superclassName">NSScrollView</string>
+          <object class="IBClassDescriptionSource" key="sourceIdentifier">
+            <string key="majorKey">IBUserSource</string>
+            <string key="minorKey"/>
+          </object>
+        </object>
+        <object class="IBPartialClassDescription">
+          <string key="className">FirstResponder</string>
+          <object class="IBClassDescriptionSource" key="sourceIdentifier">
+            <string key="majorKey">IBUserSource</string>
+            <string key="minorKey"/>
+          </object>
+        </object>
+        <object class="IBPartialClassDescription">
+          <string key="className">LogTextField</string>
+          <string key="superclassName">NSTextView</string>
+          <object class="IBClassDescriptionSource" key="sourceIdentifier">
+            <string key="majorKey">IBProjectSource</string>
+            <string key="minorKey">LogTextField.h</string>
+          </object>
+        </object>
+        <object class="IBPartialClassDescription">
+          <string key="className">LogTextField</string>
+          <string key="superclassName">NSTextView</string>
+          <object class="IBClassDescriptionSource" key="sourceIdentifier">
+            <string key="majorKey">IBUserSource</string>
+            <string key="minorKey"/>
+          </object>
+        </object>
+        <object class="IBPartialClassDescription">
+          <string key="className">LogWindow</string>
+          <string key="superclassName">NSWindow</string>
+          <object class="NSMutableDictionary" key="outlets">
+            <bool key="EncodedWithXMLCoder">YES</bool>
+            <object class="NSMutableArray" key="dict.sortedKeys">
+              <bool key="EncodedWithXMLCoder">YES</bool>
+              <string>logView</string>
+              <string>text</string>
+            </object>
+            <object class="NSMutableArray" key="dict.values">
+              <bool key="EncodedWithXMLCoder">YES</bool>
+              <string>id</string>
+              <string>id</string>
+            </object>
+          </object>
+          <object class="IBClassDescriptionSource" key="sourceIdentifier">
+            <string key="majorKey">IBProjectSource</string>
+            <string key="minorKey">LogWindow.h</string>
+          </object>
+        </object>
+        <object class="IBPartialClassDescription">
+          <string key="className">LogWindow</string>
+          <string key="superclassName">NSWindow</string>
+          <object class="IBClassDescriptionSource" key="sourceIdentifier">
+            <string key="majorKey">IBUserSource</string>
+            <string key="minorKey"/>
+          </object>
+        </object>
+        <object class="IBPartialClassDescription">
+          <string key="className">LogWindowController</string>
+          <string key="superclassName">NSWindowController</string>
+          <object class="NSMutableDictionary" key="actions">
+            <string key="NS.key.0">makeKeyAndOrderFront:</string>
+            <string key="NS.object.0">id</string>
+          </object>
+          <object class="NSMutableDictionary" key="outlets">
+            <bool key="EncodedWithXMLCoder">YES</bool>
+            <object class="NSMutableArray" key="dict.sortedKeys">
+              <bool key="EncodedWithXMLCoder">YES</bool>
+              <string>logView</string>
+              <string>picture</string>
+              <string>quartzView</string>
+              <string>scrollView</string>
+              <string>text</string>
+            </object>
+            <object class="NSMutableArray" key="dict.values">
+              <bool key="EncodedWithXMLCoder">YES</bool>
+              <string>id</string>
+              <string>id</string>
+              <string>id</string>
+              <string>id</string>
+              <string>id</string>
+            </object>
+          </object>
+          <object class="IBClassDescriptionSource" key="sourceIdentifier">
+            <string key="majorKey">IBProjectSource</string>
+            <string key="minorKey">LogWindowController.h</string>
+          </object>
+        </object>
+        <object class="IBPartialClassDescription">
+          <string key="className">LogWindowController</string>
+          <string key="superclassName">NSWindowController</string>
+          <object class="IBClassDescriptionSource" key="sourceIdentifier">
+            <string key="majorKey">IBUserSource</string>
+            <string key="minorKey"/>
+          </object>
+        </object>
+        <object class="IBPartialClassDescription">
+          <string key="className">NSLogView</string>
+          <string key="superclassName">NSView</string>
+          <object class="NSMutableDictionary" key="outlets">
+            <bool key="EncodedWithXMLCoder">YES</bool>
+            <object class="NSMutableArray" key="dict.sortedKeys">
+              <bool key="EncodedWithXMLCoder">YES</bool>
+              <string>corner</string>
+              <string>logWindowController</string>
+              <string>picture</string>
+              <string>text</string>
+            </object>
+            <object class="NSMutableArray" key="dict.values">
+              <bool key="EncodedWithXMLCoder">YES</bool>
+              <string>id</string>
+              <string>id</string>
+              <string>id</string>
+              <string>id</string>
+            </object>
+          </object>
+          <object class="IBClassDescriptionSource" key="sourceIdentifier">
+            <string key="majorKey">IBProjectSource</string>
+            <string key="minorKey">NSLogView.h</string>
+          </object>
+        </object>
+        <object class="IBPartialClassDescription">
+          <string key="className">NSLogView</string>
+          <string key="superclassName">NSView</string>
+          <object class="IBClassDescriptionSource" key="sourceIdentifier">
+            <string key="majorKey">IBUserSource</string>
+            <string key="minorKey"/>
+          </object>
+        </object>
+      </object>
+    </object>
+    <int key="IBDocument.localizationMode">0</int>
+    <string key="IBDocument.LastKnownRelativeProjectPath">Geektool.xcodeproj</string>
+    <int key="IBDocument.defaultPropertyAccessControl">3</int>
+  </data>
+</archive>

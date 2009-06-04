@@ -9,26 +9,20 @@
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
-	<string>com.allocinit.tynsoe.geektool</string>
+	<string>com.allocinit.${PRODUCT_NAME:identifier}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>${PRODUCT_NAME}</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>ALOC</string>
 	<key>CFBundleVersion</key>
-	<string>3</string>
+	<string>1.0</string>
 	<key>NSMainNibFile</key>
-	<string>GeektoolPrefs</string>
-	<key>NSPrefPaneIconFile</key>
-	<string>GeektoolPreferencePanePref.tiff</string>
-	<key>NSPrefPaneIconLabel</key>
-	<string>GeektoolPreferencePane</string>
+	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
-	<string>GeekToolPrefs</string>
+	<string>NSApplication</string>
 </dict>
 </plist>

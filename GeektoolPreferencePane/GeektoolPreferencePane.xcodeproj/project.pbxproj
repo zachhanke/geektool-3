@@ -36,7 +36,6 @@
 		8D202CED0486D31800D8A456 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D202CEE0486D31800D8A456 /* GeektoolPreferencePanePref.tiff in Resources */ = {isa = PBXBuildFile; fileRef = F506C040013D9D8001CA16C8 /* GeektoolPreferencePanePref.tiff */; };
 		8D202CF30486D31800D8A456 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
-		8D202CF40486D31800D8A456 /* PreferencePanes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F506C035013D953901CA16C8 /* PreferencePanes.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,7 +71,6 @@
 		32DBCFA20370C41700C91783 /* GeektoolPreferencePane_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeektoolPreferencePane_Prefix.pch; sourceTree = "<group>"; };
 		8D202CF70486D31800D8A456 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D202CF80486D31800D8A456 /* GeektoolPreferencePane.prefPane */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GeektoolPreferencePane.prefPane; sourceTree = BUILT_PRODUCTS_DIR; };
-		F506C035013D953901CA16C8 /* PreferencePanes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PreferencePanes.framework; path = /System/Library/Frameworks/PreferencePanes.framework; sourceTree = "<absolute>"; };
 		F506C040013D9D8001CA16C8 /* GeektoolPreferencePanePref.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = GeektoolPreferencePanePref.tiff; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -82,7 +80,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D202CF30486D31800D8A456 /* Cocoa.framework in Frameworks */,
-				8D202CF40486D31800D8A456 /* PreferencePanes.framework in Frameworks */,
 				0AD772760ED87207003EB540 /* Carbon.framework in Frameworks */,
 				0A52FA4B0FC636D800B82D72 /* Quartz.framework in Frameworks */,
 			);
@@ -166,7 +163,6 @@
 				0A52FA4A0FC636D800B82D72 /* Quartz.framework */,
 				0AD772750ED87207003EB540 /* Carbon.framework */,
 				1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */,
-				F506C035013D953901CA16C8 /* PreferencePanes.framework */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -217,9 +213,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		8D202CE80486D31800D8A456 /* GeektoolPreferencePane */ = {
+		8D202CE80486D31800D8A456 /* GeekTool */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1DBD214808BA80EA00186707 /* Build configuration list for PBXNativeTarget "GeektoolPreferencePane" */;
+			buildConfigurationList = 1DBD214808BA80EA00186707 /* Build configuration list for PBXNativeTarget "GeekTool" */;
 			buildPhases = (
 				8D202CE90486D31800D8A456 /* Headers */,
 				8D202CEC0486D31800D8A456 /* Resources */,
@@ -232,7 +228,7 @@
 			);
 			dependencies = (
 			);
-			name = GeektoolPreferencePane;
+			name = GeekTool;
 			productInstallPath = "$(HOME)/Library/PreferencePanes";
 			productName = GeektoolPreferencePane;
 			productReference = 8D202CF80486D31800D8A456 /* GeektoolPreferencePane.prefPane */;
@@ -250,7 +246,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D202CE80486D31800D8A456 /* GeektoolPreferencePane */,
+				8D202CE80486D31800D8A456 /* GeekTool */,
 			);
 		};
 /* End PBXProject section */
@@ -398,7 +394,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1DBD214808BA80EA00186707 /* Build configuration list for PBXNativeTarget "GeektoolPreferencePane" */ = {
+		1DBD214808BA80EA00186707 /* Build configuration list for PBXNativeTarget "GeekTool" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DBD214908BA80EA00186707 /* Debug */,
