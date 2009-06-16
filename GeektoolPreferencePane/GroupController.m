@@ -9,14 +9,28 @@
 #import "GroupController.h"
 
 @implementation GroupController
-#pragma mark Methods
-- (IBAction)addGroup:(id)sender
+
+#pragma mark UI
+- (IBAction)showGroupsCustomization:(id)sender
 {
-    // localize
-    NSMutableDictionary *groupToAdd = [self duplicateCheck:@"New Group"];
-    [self addObject:groupToAdd];
+    [NSApp beginSheet: groupsSheet
+       modalForWindow: [NSApp mainWindow]
+        modalDelegate: nil
+       didEndSelector: nil
+          contextInfo: nil];
+    [NSApp runModalForWindow: [NSApp mainWindow]];
+    // Sheet is up here
+    [NSApp endSheet: groupsSheet];
+    [groupsSheet orderOut: self];
 }
 
+- (IBAction)groupsSheetClose:(id)sender
+{
+    // close the sheet and refresh our menu
+    [NSApp stopModal];
+}
+
+#pragma mark Methods
 - (IBAction)duplicateSelectedGroup:(id)sender
 {
     // just in case this gets called with nothing selected...
@@ -67,32 +81,6 @@
     }
 }
 
-- (IBAction)removeSelectedGroup:(id)sender
-{
-    // just in case this gets called with nothing selected...
-    if ([self selectionIndex] != NSNotFound)
-    {
-        // get our selection (potentially multiple items)
-        NSArray *selectedObjects = [self selectedObjects];
-        NSEnumerator *e = [selectedObjects objectEnumerator];
-        
-        NSDictionary *currentGroup = nil;
-        NSString *currentGroupString = nil;
-        
-        // loop for however many items in the set
-        while (currentGroup = [e nextObject])
-        {
-            currentGroupString = [currentGroup valueForKey:@"group"];
-            
-            // delete the key from the main g_logs
-            [[preferencesController g_logs] removeObjectForKey:currentGroupString];
-            
-            // remove the group from ourself
-            [self removeObject:currentGroup];
-        }
-    }
-}
-
 #pragma mark Checks
 - (BOOL)groupExists:(NSString*)myGroupName
 {
@@ -114,57 +102,6 @@
     }
     //[[self content] addObject: [NSDictionary dictionaryWithObject:newGroupName forKey:@"group"]];
     return [NSMutableDictionary dictionaryWithObject:newGroupName forKey:@"group"];
-}
-
-#pragma mark Table Delegate Methods
-- (BOOL)control:(NSControl *)control textShouldBeginEditing:(NSText *)textObject
-{
-    // we just want to know what the group was called before editing
-    groupBeforeEdit = [[self selectedObject] objectForKey:@"group"];
-    return TRUE;
-}
-
-// textShouldEndEditing: wasn't working for some reason...
-// this just checks to make sure 2 groups dont have the same name when the 
-// group is renamed
-- (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)textObject
-{
-    NSString *groupName = [textObject string];
-    
-    // they have the same name, dont accept the edit
-    if ([self groupExists: groupName] || [groupName isEqualToString:@""])
-        return FALSE;
-    
-    // else, the names are different and proceed with the edit
-    else
-    {
-        // you can never be too careful...
-        int selectionIndex = [self selectionIndex];       
-        if (selectionIndex != NSNotFound)
-        {            
-            // normally, g_logs is updated for us, but since we don't play nice
-            // with logController, we could accidently skip it, so just do it here
-            // for saftey
-            NSMutableArray *origLogs = [[preferencesController g_logs] objectForKey:groupBeforeEdit];
-            
-            // change our group of our logs to the new group
-            [origLogs makeObjectsPerformSelector:@selector(setGroup:) withObject:groupName];
-            
-            // update logs and delete old ones (if needed)
-            if (origLogs)
-            {
-                [[preferencesController g_logs] setObject:origLogs forKey:groupName];
-                [[preferencesController g_logs] removeObjectForKey:groupBeforeEdit];
-            }
-            // otherwise, just make a blank nsmutablearray and put that in
-            else
-            {
-                [[preferencesController g_logs] setObject:[NSMutableArray array] forKey:groupName];
-            }
-            
-        }
-        return TRUE;
-    }
 }
 
 #pragma mark Convience

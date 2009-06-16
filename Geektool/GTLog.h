@@ -10,10 +10,12 @@
 #import <Cocoa/Cocoa.h>
 #import "LogWindowController.h"
 
-@interface GTLog : NSObject <NSCopying>
+@interface GTLog : NSObject <NSCopying,NSCoding>
 {
     IBOutlet id logWindowController;
     LogWindowController *windowController;
+    
+    NSMutableDictionary *properties;
     
     NSArray *arguments;
     NSDictionary *attributes;
@@ -27,38 +29,6 @@
     bool keepTimers;
     int i;
     int windowLevel;
-
-    NSString* group;
-    int alignment;
-    NSData* backgroundColor;
-    NSString* command;
-    BOOL enabled;
-    NSString* file;
-    NSString* quartzFile;
-    NSFont* font;
-    NSString* fontName;
-    float fontSize;
-    BOOL hide;
-    int imageFit;
-    NSString* imageURL;
-    NSString* name;
-    int NSImageFit;
-    int NSPictureAlignment;
-    int pictureAlignment;
-    NSRect realRect;
-    NSRect rect;
-    int refresh;
-    int x;
-    int y;
-    int w;
-    int h;
-    BOOL shadowText;
-    float shadowWindow;
-    NSData* textColor;
-    float transparency;
-    int type;
-    BOOL alwaysOnTop;
-    BOOL wrap;
 }
 
 - (id)initWithDictionary:(NSDictionary*)aDictionary;
@@ -66,6 +36,8 @@
 - (void)setDictionary:(NSDictionary*)aDictionary force:(BOOL)force;
 - (void)setDictionary:(NSDictionary*)dictionary;
 
+- (NSMutableDictionary *)properties;
+- (void)setProperties:(NSDictionary *)newProperties;
 #pragma mark -
 #pragma mark Convience Accessors
 - (NSRect)realRect;
@@ -76,65 +48,6 @@
 #pragma mark -
 #pragma mark Convience Mutators
 
-#pragma mark -
-#pragma mark KVC Accessors
-- (int)alignment;
-- (NSData*)backgroundColor;
-- (NSString*)command;
-- (BOOL)enabled;
-- (NSString*)file;
-- (NSString*)quartzFile;
-- (NSString*)fontName;
-- (float)fontSize;
-- (NSString*)group;
-- (BOOL)hide;
-- (int)imageFit;
-- (NSString*)imageURL;
-- (NSString*)name;
-- (int)pictureAlignment;
-- (int)refresh;
-- (float)x;
-- (float)y;
-- (float)w;
-- (float)h;
-- (BOOL)shadowText;
-- (float)shadowWindow;
-- (NSData*)textColor;
-- (float)transparency;
-- (int)type;
-- (BOOL)alwaysOnTop;
-- (BOOL)wrap;
-- (int)windowLevel;
-
-#pragma mark -
-#pragma mark Mutators
-- (void)setWindowLevel:(int)level;
-- (void)setAlignment:(int)var;
-- (void)setBackgroundColor:(NSData*)var;
-- (void)setCommand:(NSString*)var;
-- (void)setEnabled:(BOOL)var;
-- (void)setFile:(NSString*)var;
-- (void)setQuartzFile:(NSString*)var;
-- (void)setFontName:(NSString*)var;
-- (void)setFontSize:(float)var;
-- (void)setGroup:(NSString*)var;
-- (void)setHide:(BOOL)var;
-- (void)setImageFit:(int)var;
-- (void)setImageURL:(NSString*)var;
-- (void)setName:(NSString*)var;
-- (void)setPictureAlignment:(int)var;
-- (void)setRefresh:(int)var;
-- (void)setShadowText:(BOOL)var;
-- (void)setShadowWindow:(BOOL)var;
-- (void)setTextColor:(NSData*)var;
-- (void)setTransparency:(float)var;
-- (void)setType:(int)var;
-- (void)setAlwaysOnTop:(BOOL)var;
-- (void)setWrap:(BOOL)var;
-- (void)setX:(float)var;
-- (void)setY:(float)var;
-- (void)setW:(float)var;
-- (void)setH:(float)var;
 #pragma mark -
 #pragma mark Logs operations
 - (id)copyWithZone:(NSZone *)zone;

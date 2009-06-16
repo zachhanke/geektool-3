@@ -30,24 +30,6 @@ NSString *CopiedRowsType = @"GTLog_Copied_Item";
 	[super awakeFromNib];
 }
 
-- (void)addObject:(id)object
-{
-    // save only once
-    [[NSDistributedNotificationCenter defaultCenter] setSuspended:YES];
-    [super addObject:object];
-    [[NSDistributedNotificationCenter defaultCenter] setSuspended:NO];
-    [preferencesController savePrefs];
-}
-
-- (void)remove:(id)object
-{
-    // save only once
-    [[NSDistributedNotificationCenter defaultCenter] setSuspended:YES];
-    [super remove:object];
-    [[NSDistributedNotificationCenter defaultCenter] setSuspended:NO];
-    [preferencesController savePrefs];
-}
-
 // thank you mr mmalc, you fixed my setClearsFilterPredicateOnInsertion: problem
 
 #pragma mark Methods

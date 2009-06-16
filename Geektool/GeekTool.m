@@ -187,10 +187,10 @@
     }  
     // Remove all logs upon the count in preferences
     // (those have been deleted)
-    while ([ g_logs count ] > i )
+    while ([g_logs count] > i)
     {
-        [[ g_logs lastObject ] terminate ];
-        [ g_logs removeLastObject ];
+        [[g_logs lastObject] terminate];
+        [g_logs removeLastObject];
     }
     
     logs = nil;

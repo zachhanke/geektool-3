@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A2AEC310FE6DDB000097DCA /* NTGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2AEC300FE6DDB000097DCA /* NTGroup.m */; };
 		0A7D37260FD8028D0070D678 /* GeekToolPrefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37210FD8028D0070D678 /* GeekToolPrefs.m */; };
 		0A7D37270FD8028D0070D678 /* GroupController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37230FD8028D0070D678 /* GroupController.m */; };
 		0A7D37280FD8028D0070D678 /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37250FD8028D0070D678 /* LogController.m */; };
@@ -38,6 +39,8 @@
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		0A2AEC2F0FE6DDB000097DCA /* NTGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTGroup.h; sourceTree = "<group>"; };
+		0A2AEC300FE6DDB000097DCA /* NTGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTGroup.m; sourceTree = "<group>"; };
 		0A7D37200FD8028D0070D678 /* GeekToolPrefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeekToolPrefs.h; path = ../GeektoolPreferencePane/GeekToolPrefs.h; sourceTree = SOURCE_ROOT; };
 		0A7D37210FD8028D0070D678 /* GeekToolPrefs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeekToolPrefs.m; path = ../GeektoolPreferencePane/GeekToolPrefs.m; sourceTree = SOURCE_ROOT; };
 		0A7D37220FD8028D0070D678 /* GroupController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupController.h; path = ../GeektoolPreferencePane/GroupController.h; sourceTree = SOURCE_ROOT; };
@@ -103,6 +106,8 @@
 			children = (
 				0A7D372D0FD802E30070D678 /* GTLog.h */,
 				0A7D372E0FD802E30070D678 /* GTLog.m */,
+				0A2AEC2F0FE6DDB000097DCA /* NTGroup.h */,
+				0A2AEC300FE6DDB000097DCA /* NTGroup.m */,
 				0A7D372F0FD802E30070D678 /* LogWindow.h */,
 				0A7D37300FD802E30070D678 /* LogWindow.m */,
 				0A7D37330FD802EC0070D678 /* LogWindowController.h */,
@@ -291,6 +296,7 @@
 				0A7D374F0FD803980070D678 /* NSLogView.m in Sources */,
 				0A7D37500FD803980070D678 /* LogTextField.m in Sources */,
 				0A7D37530FD803AD0070D678 /* AIQuartzView.m in Sources */,
+				0A2AEC310FE6DDB000097DCA /* NTGroup.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

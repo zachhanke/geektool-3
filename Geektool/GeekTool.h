@@ -3,7 +3,7 @@
 #import <Cocoa/Cocoa.h>
 #import "GTLog.h"
 
-@interface GeekTool : NSApplication
+@interface GeekTool : NSObject
 {    
     id GeekToolPrefs;
     NSUserDefaults *defaults;

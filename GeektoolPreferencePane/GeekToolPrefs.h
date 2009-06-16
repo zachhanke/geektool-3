@@ -35,6 +35,15 @@
     //NSConnection *theConnection;
     //id RemoteGeekTool;
 }
+
+// Saving
+- (NSString *)pathForDataFile;
+- (void)saveDataToDisk;
+- (void)loadDataFromDisk;
+
+- (void)setGroups:(NSArray *)newGroups;
+- (NSMutableArray *)groups;
+
 - (void)setSelectionColor:(NSData *)var;
 - (NSData*)selectionColor;
 

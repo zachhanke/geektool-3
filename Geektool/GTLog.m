@@ -21,10 +21,9 @@
 	if (!(self = [super init])) return nil;
     
     NSData *textColorData = [NSArchiver archivedDataWithRootObject: [NSColor blackColor]];
-    
     NSData *backgroundColorData = [NSArchiver archivedDataWithRootObject: [NSColor clearColor]]; 
     
-    NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
+    properties = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                               @"New log", @"name",
                               @"0", @"type",
                               @"1", @"enabled",
@@ -58,15 +57,41 @@
                               
                               @"0", @"alwaysOnTop",
                               nil];
-    [self initWithDictionary:defaults];
     return self;
 }
 
+- (void)dealloc
+{
+    [properties release];
+    //TODO: uncomment this //[self terminate];
+    [super dealloc];
+}
+
+
+#pragma mark -
+#pragma mark Binding
+
+- (void)setProperties:(NSDictionary *)newProperties
+{
+    if (properties != newProperties)
+    {
+        [properties autorelease];
+        properties = [[NSMutableDictionary alloc] initWithDictionary:newProperties];
+    }
+}
+
+- (NSMutableDictionary *)properties
+{
+    return properties;
+}
+
+/*
 - (id)initWithDictionary:(NSDictionary*)dictionary;
 {
 	if (!(self = [super init])) return nil;
     
-    [self setDictionary:dictionary];
+    [self init];
+    properties = [NSMutableDictionary dictionaryWithDictionary:dictionary];
     
     NSString *appSupp = [[NSString stringWithString: @"~/Library/Application Support/GeekTool Scripts"] stringByExpandingTildeInPath];
     NSMutableDictionary *tempEnv = [NSMutableDictionary dictionaryWithDictionary:
@@ -75,117 +100,35 @@
     [tempEnv setObject: [NSString stringWithFormat: @"%@:%@",appSupp,path] forKey: @"PATH"];
     
     env =  [tempEnv copy];
-    [self setWindowLevel:-1];
+    [properties setObject:[NSNumber numberWithInt:-1] forKey:@"windowLevel"];
     return self;
 }
 
-- (NSDictionary*)dictionary
-{    
-    logDictionary = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                           [self name]                                       ,@"name",
-                                           [NSNumber numberWithInt: [self type]]             ,@"type",
-                                           [NSNumber numberWithBool: [self enabled]]         ,@"enabled",
-                                           [self group]                                      ,@"group",
-                                           
-                                           [self fontName]                                   ,@"fontName",
-                                           [NSNumber numberWithFloat: [self fontSize]]       ,@"fontSize",
-                                           
-                                           [self file]                                       ,@"file",
-                                           [self quartzFile]                                 ,@"quartzFile",
-                                           
-                                           [self command]                                    ,@"command",
-                                           [NSNumber numberWithInt: [self refresh]]          ,@"refresh",
-                                           
-                                           [self textColor]                                  ,@"textColor",
-                                           [self backgroundColor]                            ,@"backgroundColor",
-                                           [NSNumber numberWithBool: [self wrap]]            ,@"wrap",
-                                           [NSNumber numberWithBool: [self shadowText]]      ,@"shadowText",
-                                           [NSNumber numberWithBool: [self shadowWindow]]    ,@"shadowWindow",
-                                           
-                                           [NSNumber numberWithInt: [self pictureAlignment]] ,@"pictureAlignment",
-                                           [self imageURL]                                   ,@"imageURL",
-                                           [NSNumber numberWithFloat: [self transparency]]   ,@"transparency",
-                                           [NSNumber numberWithInt: [self imageFit]]         ,@"imageFit",
-                                           
-                                           [NSNumber numberWithInt: [self x]]                ,@"x",
-                                           [NSNumber numberWithInt: [self y]]                ,@"y",
-                                           [NSNumber numberWithInt: [self w]]                ,@"w",
-                                           [NSNumber numberWithInt: [self h]]                ,@"h",
-                                           
-                                           [NSNumber numberWithBool: [self alwaysOnTop]]     ,@"alwaysOnTop",
-                                           nil
-                                          ];
-    
-    return logDictionary;   
-}
-
 // set the dictionary, but do so as efficiently as possible
-- (void)setDictionary:(NSDictionary*)aDictionary force:(BOOL)force
+- (void)setPropertiesEfficiently:(NSDictionary*)aDictionary
 {
-    // if we are forcing, or the dicts are not the same...
-    if (![aDictionary isEqual: [self dictionary]] || force)
+    // terminate/recreate the log window only if we have to
+    // so this if statement will contain all information that requires a reset of the window
+    BOOL close = NO;
+    if (([aDictionary objectForKey: @"shadowWindow"] != [properties objectForKey:@"shadowWindow"])
+        || (![[aDictionary objectForKey: @"file"] isEqual: [properties objectForKey:@"file"]])
+        || (![[aDictionary objectForKey: @"command"] isEqual: [properties objectForKey:@"command"]])
+        || (![[aDictionary objectForKey: @"type"] isEqual: [properties objectForKey:@"type"]])
+        || (![[aDictionary objectForKey: @"enabled"] isEqual: [properties objectForKey:@"enabled"]]))
+        close = YES;
+    
+    [self setProperties:aDictionary];
+    
+    if (close)
     {
-        // terminate/recreate the log window only if we have to
-        // so this if statement will contain all information that requires a reset of the window
-        BOOL close = NO;
-        if (([aDictionary objectForKey: @"shadowWindow"] != [[self dictionary] objectForKey:@"shadowWindow"])
-            || (![[aDictionary objectForKey: @"file"] isEqual: [[self dictionary] objectForKey:@"file"]])
-            || (![[aDictionary objectForKey: @"command"] isEqual: [[self dictionary] objectForKey:@"command"]])
-            || (![[aDictionary objectForKey: @"type"] isEqual: [[self dictionary] objectForKey:@"type"]])
-            || (![[aDictionary objectForKey: @"enabled"] isEqual: [[self dictionary] objectForKey:@"enabled"]]))
-            close = YES;
-        
-        [self setDictionary: aDictionary];
-        
-        if (close)
-        {
-            [self terminate];
-            [self openWindow];
-        }
-        else
-        {
-            keepTimers = YES;
-            [self updateWindow];
-        }
+        [self terminate];
+        [self openWindow];
     }
-    //[self front];
-}
-
-- (void)setDictionary:(NSDictionary*)dictionary
-{    
-    [self setName:[dictionary objectForKey:@"name"]];
-    [self setType:[[dictionary objectForKey:@"type"]intValue]];
-    [self setEnabled:[[dictionary objectForKey:@"enabled"]boolValue]];
-    [self setGroup:[dictionary objectForKey:@"group"]];
-    
-    [self setFontName:[dictionary objectForKey:@"fontName"]];
-    [self setFontSize:[[dictionary objectForKey:@"fontSize"]floatValue]];
-    
-    [self setFile:[dictionary objectForKey:@"file"]];
-    [self setQuartzFile:[dictionary objectForKey:@"quartzFile"]];
-    
-    [self setCommand:[dictionary objectForKey:@"command"]];
-    [self setHide:[[dictionary objectForKey:@"hide"]boolValue]];
-    [self setRefresh:[[dictionary objectForKey:@"refresh"]intValue]];
-    
-    [self setTextColor:[dictionary objectForKey:@"textColor"]];
-    [self setBackgroundColor:[dictionary objectForKey:@"backgroundColor"]];
-    [self setWrap:[[dictionary objectForKey:@"wrap"]boolValue]];
-    [self setShadowText:[[dictionary objectForKey:@"shadowText"]boolValue]];
-    [self setShadowWindow:[[dictionary objectForKey:@"shadowWindow"]boolValue]];
-    [self setAlignment:[[dictionary objectForKey:@"alignment"]intValue]];
-    
-    [self setPictureAlignment:[[dictionary objectForKey:@"pictureAlignment"]intValue]];
-    [self setImageURL:[dictionary objectForKey:@"imageURL"]];
-    [self setTransparency:[[dictionary objectForKey:@"transparency"]floatValue]];
-    [self setImageFit:[[dictionary objectForKey:@"imageFit"]intValue]];
-    
-    [self setX:[[dictionary objectForKey:@"x"]floatValue]];
-    [self setY:[[dictionary objectForKey:@"y"]floatValue]];
-    [self setW:[[dictionary objectForKey:@"w"]floatValue]];
-    [self setH:[[dictionary objectForKey:@"h"]floatValue]];
-    
-    [self setAlwaysOnTop:[[dictionary objectForKey:@"alwaysOnTop"]boolValue]];
+    else
+    {
+        keepTimers = YES;
+        [self updateWindow];
+    }
 }
 
 #pragma mark -
@@ -259,328 +202,6 @@
 {
     NSFont* newFont = [NSFont fontWithName:fontName size:fontSize];
     return [[newFont retain] autorelease];
-}
-
-#pragma mark -
-#pragma mark KVC Accessors
-// NS* things ^f)lywjoreturn 0 retain] autorelease];^wi[[jddjj
-
-- (int)alignment
-{
-    return alignment;
-}
-
-- (NSData*)backgroundColor
-{
-    return [[backgroundColor retain] autorelease];
-}
-
-- (NSString*)command
-{
-    return [[command retain] autorelease];
-}
-
-- (BOOL)enabled
-{
-    return enabled;
-}
-
-- (NSString*)file
-{
-    return [[file retain] autorelease];
-}
-
-- (NSString*)quartzFile
-{
-    return [[quartzFile retain] autorelease];
-}
-
-- (NSString*)fontName
-{
-    return [[fontName retain] autorelease];
-}
-
-- (float)fontSize
-{
-    return fontSize;
-}
-
-- (NSString*)group
-{
-    return group;
-}
-
-- (BOOL)hide
-{
-    return hide;
-}
-
-- (int)imageFit
-{
-    return imageFit;
-}
-
-- (NSString*)imageURL
-{
-    return [[imageURL retain] autorelease];
-}
-
-- (NSString*)name
-{
-    return [[name retain] autorelease];
-}
-
-- (int)pictureAlignment
-{
-    return pictureAlignment;
-}
-
-- (int)refresh
-{
-    return refresh;
-}
-
-- (float)x
-{
-    return x;
-}
-
-- (float)y
-{
-    return y;
-}
-
-- (float)w
-{
-    return w;
-}
-
-- (float)h
-{
-    return h;
-}
-
-- (BOOL)shadowText
-{
-    return shadowText;
-}
-
-- (float)shadowWindow
-{
-    return shadowWindow;
-}
-
-- (NSData*)textColor
-{
-    return [[textColor retain] autorelease];
-}
-
-- (float)transparency
-{
-    return transparency;
-}
-
-- (int)type
-{
-    return type;
-}
-
-- (BOOL)alwaysOnTop
-{
-    return alwaysOnTop;
-    //return kCGDesktopWindowLevel;
-}
-
-- (BOOL)wrap
-{
-    return wrap;
-}
-
-- (int)windowLevel
-{
-    if (windowLevel != -1)
-        return windowLevel;
-    else
-    {
-        //windowLevel = kCGDesktopWindowLevel;
-        return kCGDesktopWindowLevel;
-    }
-}
-
-#pragma mark -
-#pragma mark KVC Mutators
-
-- (void)setWindowLevel:(int)level
-{
-    windowLevel = level;
-}
-
-- (void)setAlignment:(int)var
-{
-    alignment=var;
-}
-
-- (void)setBackgroundColor:(NSData*)var
-{
-    if(backgroundColor != var)
-    {
-        [backgroundColor release];
-        backgroundColor = [var copy];
-    }
-}
-
-- (void)setCommand:(NSString*)var
-{
-    if(command != var)
-    {
-        [command release];
-        command = [var copy];
-    }
-}
-
-- (void)setEnabled:(BOOL)var
-{
-    enabled=var;
-}
-
-- (void)setFile:(NSString*)var
-{
-    if(file != var)
-    {
-        [file release];
-        file = [var copy];
-    }
-}
-
-- (void)setQuartzFile:(NSString*)var
-{
-    if(quartzFile != var)
-    {
-        [quartzFile release];
-        quartzFile = [var copy];
-    }
-}
-
-- (void)setFontName:(NSString*)var
-{
-    if(fontName != var)
-    {
-        [fontName release];
-        fontName = [var copy];
-    }
-}
-
-- (void)setFontSize:(float)var
-{
-    fontSize = var;
-}
-
-- (void)setGroup:(NSString*)var
-{
-    if(group != var)
-    {
-        [group release];
-        group = [var copy];
-    }
-}
-
-- (void)setHide:(BOOL)var
-{
-    hide=var;
-}
-
-- (void)setImageFit:(int)var
-{
-    imageFit=var;
-}
-
-- (void)setImageURL:(NSString*)var
-{
-    if(imageURL != var)
-    {
-        [imageURL release];
-        imageURL = [var copy];
-    }
-}
-
-- (void)setName:(NSString*)var
-{
-    if(name != var)
-    {
-        [name release];
-        name = [var copy];
-    }
-}
-
-- (void)setPictureAlignment:(int)var
-{
-    pictureAlignment=var;
-}
-
-- (void)setRefresh:(int)var
-{
-    refresh=var;
-}
-
-- (void)setShadowText:(BOOL)var
-{
-    shadowText=var;
-}
-
-- (void)setShadowWindow:(BOOL)var
-{
-    shadowWindow=var;
-}
-
-- (void)setTextColor:(NSData*)var
-{
-    if(textColor != var)
-    {
-        [textColor release];
-        textColor = [var copy];
-    }
-}
-
-- (void)setTransparency:(float)var
-{
-    transparency=var;
-    //if (windowController)
-    //   [[windowController window] setAlphaValue: aTransparency];
-}
-
-- (void)setType:(int)var
-{
-    type=var;
-}
-
-- (void)setAlwaysOnTop:(BOOL)var
-{
-    alwaysOnTop=var;
-}
-
-- (void)setWrap:(BOOL)var
-{
-    wrap=var;
-}
-
-- (void)setX:(float)var
-{
-    x=var;
-}
-
-- (void)setY:(float)var
-{
-    y=var;
-}
-
-- (void)setW:(float)var
-{
-    w=var;
-}
-
-- (void)setH:(float)var
-{
-    h=var;
 }
 
 #pragma mark -
@@ -1034,11 +655,20 @@
         arguments = nil;
     }
 }
-
-- (void)dealloc
+ */
+#pragma mark Coding
+- (id)initWithCoder:(NSCoder *)coder
 {
-    [self terminate];
-    [super dealloc];
+    if (self = [super init])
+    {
+        [self setProperties:[coder decodeObjectForKey:@"properties"]];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [coder encodeObject:properties forKey:@"properties"];
 }
 
 @end

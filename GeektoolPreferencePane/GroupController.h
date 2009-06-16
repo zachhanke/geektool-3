@@ -10,12 +10,16 @@
 #import "GTLog.h"
 #import "GeekToolPrefs.h"
 
-@interface GroupController : NSArrayController {
+@interface GroupController : NSArrayController
+{
     IBOutlet id logController;
     IBOutlet id preferencesController;
+    IBOutlet id groupsSheet;
     
     NSString *groupBeforeEdit;
 }
+- (IBAction)groupsSheetClose:(id)sender;
+- (IBAction)showGroupsCustomization:(id)sender;
 #pragma mark Methods
 - (IBAction)addGroup:(id)sender;
 - (IBAction)duplicateSelectedGroup:(id)sender;

@@ -9,76 +9,43 @@
 #import <Carbon/Carbon.h>
 #import "GeekToolPrefs.h"
 #import "LogController.h"
+#import "NTGroup.h"
 #import "defines.h"
 
 @implementation GeekToolPrefs
 
-+ (void)initialize
+- (id)init
 {
-    // Setting up our defaults here
-    NSDictionary *defaults;
-    defaults = [NSDictionary dictionaryWithObjectsAndKeys: 
-                // General
-                [NSArchiver archivedDataWithRootObject:[[NSColor alternateSelectedControlColor] colorWithAlphaComponent:0.3]], @"selectionColor",
-
-                // Sparkle (auto updater)
-                //[NSNumber numberWithInt:2], @"SUUpdate", // the selected tag in the popup box. SUScheduledCheckInterval derived from this value
-                //[NSNumber numberWithLong:86400], @"SUScheduledCheckInterval", // daily
-                
-                nil];
-    [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+    if (self = [super init])
+    {
+        groups = [[NSMutableArray alloc] init];
+    }
+    return self;
 }
 
-- (void)mainViewDidLoad
+- (void)awakeFromNib
 {
-    // Register for some notifications
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(applyAndNotifyNotification:)
-                                                 name: NSControlTextDidEndEditingNotification
-                                               object: nil];
-    
-    [[NSDistributedNotificationCenter defaultCenter] addObserver: self
-                                                        selector: @selector(geekToolLaunched:)
-                                                            name: @"GTLaunched"
-                                                          object: @"GeekTool"
-                                              suspensionBehavior: NSNotificationSuspensionBehaviorDeliverImmediately];
-    [[NSDistributedNotificationCenter defaultCenter] addObserver: self
-                                                        selector: @selector(geekToolQuit:)
-                                                            name: @"GTQuitOK"
-                                                          object: @"GeekTool"
-                                              suspensionBehavior: NSNotificationSuspensionBehaviorDeliverImmediately];
-    [[NSDistributedNotificationCenter defaultCenter] addObserver: self
-                                                        selector: @selector(geekToolWindowChanged:)
-                                                            name: @"GTWindowChanged"
-                                                          object: @"GeekTool"
-                                              suspensionBehavior: NSNotificationSuspensionBehaviorCoalesce];
-    [[NSDistributedNotificationCenter defaultCenter] addObserver: self
-                                                        selector: @selector(applyNotification:)
-                                                            name: @"GTApply"
-                                                          object: @"GeekTool"
-                                              suspensionBehavior: NSNotificationSuspensionBehaviorDeliverImmediately];
+    [self loadDataFromDisk];
     
     g_logs = nil;
-    [[NSDistributedNotificationCenter defaultCenter] setSuspended:NO];
-    [self refreshLogsArray];
-    [self refreshGroupsArray];
-    
+    [[NSDistributedNotificationCenter defaultCenter] setSuspended:NO];    
     // Yes, we need transparency
     [[NSColorPanel sharedColorPanel] setShowsAlpha: YES];
     
     NSNumber *en = [[NSUserDefaults standardUserDefaults] objectForKey: @"enableMenu"];
     if ([en boolValue]) [self loadMenu];    
-
+    
     // load selection color data
     NSData *selectionColorData = [[NSUserDefaults standardUserDefaults] objectForKey: @"selectionColor"];
     if (!selectionColorData) selectionColorData = [NSArchiver archivedDataWithRootObject:[[NSColor alternateSelectedControlColor] colorWithAlphaComponent:0.3]];
     [self setSelectionColor:selectionColorData];
-    
-    [self initGroupsMenu];
-    [self saveNotifications];
-    //[self updatePanel];
 }
-                        
+
+- (void)applicationWillTerminate:(NSNotification *)note
+{
+    [self saveDataToDisk];
+}
+
 - (void)refreshLogsArray
 {
     // this fn puts all logs into the structure below.
@@ -248,6 +215,20 @@
     return g_logs;
 }
 
+- (void)setGroups:(NSArray *)newGroups
+{
+    if (groups != newGroups)
+    {
+        [groups autorelease];
+        groups = [[NSMutableArray alloc] initWithArray:newGroups];
+    }
+}
+
+- (NSMutableArray *)groups
+{
+    return groups;
+}
+
 #pragma mark -
 #pragma mark UI management
 
@@ -279,14 +260,6 @@
 {
     if (returnCode == NSAlertDefaultReturn)
         [sheet close];
-}
-
-- (IBAction)groupsSheetClose:(id)sender
-{
-    // close the sheet and refresh our menu
-    // note that -initGroupsMenu takes care of the "customize groups..." selection
-    [NSApp stopModal];
-    [self initGroupsMenu];
 }
 
 -(IBAction)gChooseFont:(id)sender
@@ -370,7 +343,7 @@
         [groupSelection insertItemWithTitle:groupString atIndex:0];
         [currentGroup insertItemWithTitle:groupString atIndex:0];
     }
-    
+         
     // get everything selected right (don't want nil selections)
     NSString *currentGroupString = [[NSUserDefaults standardUserDefaults] objectForKey: @"currentGroup"];
     [currentGroup selectItemWithTitle:currentGroupString];
@@ -383,19 +356,6 @@
     [[NSDistributedNotificationCenter defaultCenter] setSuspended:YES];
     [logManager setContent:[g_logs objectForKey:[groupSelection titleOfSelectedItem]]];
     [[NSDistributedNotificationCenter defaultCenter] setSuspended:NO];
-}
-
-- (void)showGroupsCustomization
-{
-    [NSApp beginSheet: groupsSheet
-       modalForWindow: [[self mainView] window]
-        modalDelegate: nil
-       didEndSelector: nil
-          contextInfo: nil];
-    [NSApp runModalForWindow: [[self mainView] window]];
-    // Sheet is up here.
-    [NSApp endSheet: groupsSheet];
-    [groupsSheet orderOut: self];
 }
 
 #pragma mark -
@@ -482,6 +442,56 @@
 
 #pragma mark -
 #pragma mark Preferences handling
+
+#pragma mark Saving
+- (NSString *)pathForDataFile
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSString *folder = @"~/Library/Application Support/NerdTool/";
+    folder = [folder stringByExpandingTildeInPath];
+    
+    if ([fileManager fileExistsAtPath:folder] == NO)
+    {
+        [fileManager createDirectoryAtPath:folder attributes:nil];
+    }
+    
+    NSString *fileName = @"LogData.ntdata";
+    return [folder stringByAppendingPathComponent:fileName];    
+}
+
+- (void)saveDataToDisk
+{
+    NSString *path = [self pathForDataFile];
+    
+    NSMutableDictionary *rootObject;
+    rootObject = [NSMutableDictionary dictionary];
+    
+    [rootObject setValue:[self groups] forKey:@"groups"];
+    [NSKeyedArchiver archiveRootObject:rootObject toFile:path];
+}
+
+- (void)loadDataFromDisk
+{
+    NSString *path = [self pathForDataFile];
+    NSDictionary *rootObject;
+    
+    rootObject = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+    
+    NSArray *groupArray = [rootObject valueForKey:@"groups"];
+    
+    // put in a default group
+    /*
+    if ([groupArray count] == 0)
+    {
+        NTGroup *defaultGroup = [[NTGroup alloc]init];
+        if (groupArray) [groupArray release];
+        groupArray = [NSArray arrayWithObject:defaultGroup];
+    }
+    */
+    [self setGroups:groupArray];
+}
+
 - (void)g_logsUpdate
 {
     NSArray *updatedLogs = [logManager content];
@@ -592,4 +602,5 @@
                                                        deliverImmediately: YES];
     [[[NSFontManager sharedFontManager] fontPanel: NO] close];
 }
+
 @end
