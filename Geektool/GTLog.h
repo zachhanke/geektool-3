@@ -17,6 +17,8 @@
     
     NSMutableDictionary *properties;
     
+    NSFont *font;
+    
     NSArray *arguments;
     NSDictionary *attributes;
     NSMutableDictionary *logDictionary;
@@ -66,4 +68,9 @@
 #pragma mark Misc
 - (NSRect)screenToRect:(NSRect)var;
 
+@end
+
+@interface NSDictionary (intBoolValues)
+- (int)integerForKey:(NSString *)key;
+- (BOOL)boolForKey:(NSString *)key;
 @end

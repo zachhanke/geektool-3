@@ -30,8 +30,6 @@ NSString *CopiedRowsType = @"GTLog_Copied_Item";
 	[super awakeFromNib];
 }
 
-// thank you mr mmalc, you fixed my setClearsFilterPredicateOnInsertion: problem
-
 #pragma mark Methods
 - (IBAction)duplicateLog:(id)sender
 {
@@ -56,17 +54,6 @@ NSString *CopiedRowsType = @"GTLog_Copied_Item";
             [copyLog release];
         }
     }
-}
-
-- (IBAction)addLog:(id)sender
-{
-    NSString *currentGroupString = [currentActiveGroup titleOfSelectedItem];
-    GTLog *toAdd = [[GTLog alloc]init];
-    [toAdd setGroup:currentGroupString];
-    
-    [self addObject:toAdd];
-    [toAdd release];
-    [preferencesController savePrefs];
 }
 
 
@@ -130,13 +117,12 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 {
     BOOL result = NO;
     
-    // we need to suspend our saving for a little bit because moveObjectInArrangedObjectsFromIndexes:toIndex: hits it when it removes/adds objects
-    [[NSDistributedNotificationCenter defaultCenter] setSuspended:YES];
     if (row < 0) {
 		row = 0;
 	}
 	// if drag source is self, it's a move unless the Option key is pressed
-    if ([info draggingSource] == tableView) {
+    if ([info draggingSource] == tableView)
+    {
         NSData *rowsData = [[info draggingPasteboard] dataForType:MovedRowsType];
         NSIndexSet *indexSet = [NSKeyedUnarchiver unarchiveObjectWithData:rowsData];
         
@@ -144,18 +130,9 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
         // set selected rows to those that were just moved
         [self setSelectionIndexes:destinationIndexes];
         
-        NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-                                   rowsData,@"indexSet",
-                                   [NSNumber numberWithInt: row],@"row",
-                                   nil];
-        [preferencesController logReorder:userInfo];
-        
         result = YES;
     }
-    
-    [[NSDistributedNotificationCenter defaultCenter] setSuspended:NO];
-    [preferencesController savePrefs];
-    
+        
     return result;
 }
 
@@ -186,3 +163,31 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 }
 
 @end
+
+@implementation NSIndexSet (CountOfIndexesInRange)
+
+-(unsigned int)countOfIndexesInRange:(NSRange)range
+{
+	unsigned int start, end, count;
+	
+	if ((start == 0) && (range.length == 0))
+	{
+		return 0;	
+	}
+	
+	start	= range.location;
+	end		= start + range.length;
+	count	= 0;
+	
+	unsigned int currentIndex = [self indexGreaterThanOrEqualToIndex:start];
+	
+	while ((currentIndex != NSNotFound) && (currentIndex < end))
+	{
+		count++;
+		currentIndex = [self indexGreaterThanIndex:currentIndex];
+	}
+	
+	return count;
+}
+@end
+

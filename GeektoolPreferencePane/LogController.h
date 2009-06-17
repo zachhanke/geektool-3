@@ -18,7 +18,6 @@
 }
 #pragma mark Methods
 - (IBAction)duplicateLog:(id)sender;
-- (IBAction)addLog:(id)sender;
 // table view drag and drop support
 - (BOOL)tableView:(NSTableView *)aTableView
 writeRowsWithIndexes:(NSIndexSet *)rowIndexes

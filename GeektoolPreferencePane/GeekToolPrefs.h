@@ -32,65 +32,32 @@
 
     int numberOfItemsInPoolMenu;
     
-    //NSConnection *theConnection;
-    //id RemoteGeekTool;
 }
-
-// Saving
-- (NSString *)pathForDataFile;
-- (void)saveDataToDisk;
-- (void)loadDataFromDisk;
-
+- (id)init;
+- (void)awakeFromNib;
+- (void)applicationWillTerminate:(NSNotification *)note;
+#pragma mark KVC
 - (void)setGroups:(NSArray *)newGroups;
 - (NSMutableArray *)groups;
-
 - (void)setSelectionColor:(NSData *)var;
 - (NSData*)selectionColor;
-
-- (id)initWithBundle:(NSBundle *)bundle;
-- (void)mainViewDidLoad;
-- (void)refreshLogsArray;
-- (void)refreshGroupsArray;
-- (void)saveNotifications;
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context;
-- (NSMutableDictionary*)g_logs;
-- (void)g_logsAddLog:(GTLog*)log;
 #pragma mark -
 #pragma mark UI management
 - (IBAction)fileChoose:(id)sender;
 - (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo;
 - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
-- (IBAction)groupsSheetClose:(id)sender;
 - (IBAction)gChooseFont:(id)sender;
-- (IBAction)selectedGroupChanged:(id)sender;
-- (IBAction)currentGroupChanged:(id)sender;
-#pragma mark -
-#pragma mark Group Management
-- (void)initGroupsMenu;
-- (void)showGroupsCustomization;
 #pragma mark -
 #pragma mark Daemon interaction
 - (void)didSelect;
-- (void)geekToolWindowChanged:(NSNotification*)aNotification;
+- (void)didUnselect;
 - (void)geekToolLaunched:(NSNotification*)aNotification;
-- (void)geekToolQuit:(NSNotification*)aNotification;
-- (IBAction)toggleEnable:(id)sender;
-- (void)updateWindows;
-- (void)logReorder:(NSDictionary*)userInfo;
-- (void)notifyHighlight;
-- (void)applyNotification:(NSNotification*)aNotification;
-- (void)applyAndNotifyNotification:(NSNotification*)aNotification;
-- (void)reorder:(int)from to:(int)to;
-#pragma mark -
-#pragma mark Preferences handling
-- (void)g_logsUpdate;
-- (void)savePrefs;
-- (void)applyChanges;
-- (IBAction)menuCheckBoxChanged:(id)sender;
-- (void)loadMenu;
-- (void)unloadMenu;
+#pragma mark Saving
+- (NSString *)pathForDataFile;
+- (void)saveDataToDisk;
+- (void)loadDataFromDisk;
+- (void)loadPreferences;
 #pragma mark -
 #pragma mark Misc
 - (NSRect)screenRect:(NSRect)oldRect;
-- (void)didUnselect;
 @end

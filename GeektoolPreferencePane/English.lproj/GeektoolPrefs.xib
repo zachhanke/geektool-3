@@ -8,7 +8,6 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="296"/>
 			<integer value="588"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -617,6 +616,7 @@
 																		</object>
 																		<string key="NSFrame">{{1, 1}, {107, 134}}</string>
 																		<reference key="NSSuperview" ref="27412833"/>
+																		<reference key="NSNextKeyView" ref="582001018"/>
 																		<reference key="NSDocView" ref="582001018"/>
 																		<reference key="NSBGColor" ref="822804351"/>
 																		<int key="NScvFlags">4</int>
@@ -643,6 +643,7 @@
 																</object>
 																<string key="NSFrame">{{20, 85}, {109, 136}}</string>
 																<reference key="NSSuperview" ref="900676867"/>
+																<reference key="NSNextKeyView" ref="371488661"/>
 																<int key="NSsFlags">514</int>
 																<reference key="NSVScroller" ref="608254130"/>
 																<reference key="NSHScroller" ref="827825947"/>
@@ -2991,7 +2992,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{213, 107}</string>
 				<object class="NSView" key="NSWindowView" id="731146825">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3213,7 +3214,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<string key="NSFrameSize">{360, 140}</string>
-					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMinSize">{213, 129}</string>
@@ -3232,8 +3232,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>properties.name</string>
 					<string>logs</string>
-					<string>arrangedObjects.properties.name</string>
-					<string>properties.key</string>
+					<string>properties.activeGroup</string>
 				</object>
 				<string key="NSObjectClassName">NTGroup</string>
 				<bool key="NSEditable">YES</bool>
@@ -3281,6 +3280,10 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<bool key="NSAutomaticallyRearrangesObjects">YES</bool>
 			</object>
 			<object class="NSUserDefaultsController" id="891492244">
+				<object class="NSMutableArray" key="NSDeclaredKeys">
+					<bool key="EncodedWithXMLCoder">YES</bool>
+					<string>activeGroup</string>
+				</object>
 				<bool key="NSSharedInstance">YES</bool>
 			</object>
 			<object class="NSMenu" id="995747881">
@@ -4583,14 +4586,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<int key="connectionID">2391</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">selectedGroupChanged:</string>
-						<reference key="source" ref="267745022"/>
-						<reference key="destination" ref="240958057"/>
-					</object>
-					<int key="connectionID">2519</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">contentArray: selection.groups</string>
 						<reference key="source" ref="278634913"/>
@@ -5415,6 +5410,69 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<int key="connectionID">2664</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">content: arrangedObjects.properties.name</string>
+						<reference key="source" ref="240958057"/>
+						<reference key="destination" ref="278634913"/>
+						<object class="NSNibBindingConnector" key="connector" id="914168566">
+							<reference key="NSSource" ref="240958057"/>
+							<reference key="NSDestination" ref="278634913"/>
+							<string key="NSLabel">content: arrangedObjects.properties.name</string>
+							<string key="NSBinding">content</string>
+							<string key="NSKeyPath">arrangedObjects.properties.name</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2666</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">contentObjects: arrangedObjects.properties.name</string>
+						<reference key="source" ref="240958057"/>
+						<reference key="destination" ref="278634913"/>
+						<object class="NSNibBindingConnector" key="connector" id="716749480">
+							<reference key="NSSource" ref="240958057"/>
+							<reference key="NSDestination" ref="278634913"/>
+							<string key="NSLabel">contentObjects: arrangedObjects.properties.name</string>
+							<string key="NSBinding">contentObjects</string>
+							<string key="NSKeyPath">arrangedObjects.properties.name</string>
+							<reference key="NSPreviousConnector" ref="914168566"/>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2669</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">selectedObject: values.activeGroup</string>
+						<reference key="source" ref="240958057"/>
+						<reference key="destination" ref="891492244"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="240958057"/>
+							<reference key="NSDestination" ref="891492244"/>
+							<string key="NSLabel">selectedObject: values.activeGroup</string>
+							<string key="NSBinding">selectedObject</string>
+							<string key="NSKeyPath">values.activeGroup</string>
+							<object class="NSDictionary" key="NSOptions">
+								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="NSMutableArray" key="dict.sortedKeys">
+									<bool key="EncodedWithXMLCoder">YES</bool>
+									<string>NSConditionallySetsEnabled</string>
+									<string>NSValidatesImmediately</string>
+								</object>
+								<object class="NSMutableArray" key="dict.values">
+									<bool key="EncodedWithXMLCoder">YES</bool>
+									<reference ref="6"/>
+									<boolean value="YES" id="5"/>
+								</object>
+							</object>
+							<reference key="NSPreviousConnector" ref="716749480"/>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2684</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -8957,10 +9015,10 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{379, 307}, {682, 488}}</string>
-					<string>{{379, 307}, {682, 488}}</string>
+					<string>{{313, 307}, {682, 488}}</string>
+					<string>{{313, 307}, {682, 488}}</string>
 					<reference ref="9"/>
-					<boolean value="YES"/>
+					<reference ref="5"/>
 					<string>{{319, 177}, {682, 488}}</string>
 					<reference ref="6"/>
 					<reference ref="9"/>
@@ -9644,7 +9702,7 @@ Lg</string>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2664</int>
+			<int key="maxID">2684</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -9664,21 +9722,11 @@ Lg</string>
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>currentGroupChanged:</string>
 							<string>fileChoose:</string>
 							<string>gChooseFont:</string>
-							<string>groupsSheetClose:</string>
-							<string>menuCheckBoxChanged:</string>
-							<string>selectedGroupChanged:</string>
-							<string>toggleEnable:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 						</object>
@@ -9769,17 +9817,8 @@ Lg</string>
 					<string key="className">LogController</string>
 					<string key="superclassName">NSArrayController</string>
 					<object class="NSMutableDictionary" key="actions">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSMutableArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>addLog:</string>
-							<string>duplicateLog:</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
-						</object>
+						<string key="NS.key.0">duplicateLog:</string>
+						<string key="NS.object.0">id</string>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<bool key="EncodedWithXMLCoder">YES</bool>
