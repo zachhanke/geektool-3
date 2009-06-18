@@ -160,9 +160,7 @@
     
     unsigned int i = 0;
     
-    NSEnumerator *e = [logs objectEnumerator];
-    NSDictionary *logD;
-    while (logD = [e nextObject])
+    for (NSDictionary *logD in logs)
     {
         // make sure to load only windows that are in the active group
         if (![[logD valueForKey: @"group"] isEqual: currentGroup])
@@ -215,11 +213,9 @@
         xGuides = [[NSMutableArray array] retain];
         yGuides = [[NSMutableArray array] retain];
         NSArray *screens = [NSScreen screens];
-        NSEnumerator *e = [screens objectEnumerator];
-        NSScreen *screen;
         
         [yGuides addObject: [NSNumber numberWithFloat: [[NSScreen mainScreen] frame].size.height - 22]];
-        while (screen = [e nextObject])
+        for (NSScreen *screen in screens)
         {
             [xGuides addObject: [NSNumber numberWithFloat: [screen frame].origin.x]];
             [xGuides addObject: [NSNumber numberWithFloat: [screen frame].origin.x + [screen frame].size.width]];
@@ -257,10 +253,8 @@
 // Cleanup
 - (void)applicationWillTerminate:(NSNotification*)aNotification
 {
-    NSEnumerator *e = [g_logs objectEnumerator];
-    GTLog *log;
     
-    while (log = [e nextObject])
+    for (GTLog *log in g_logs)
         [log terminate];
 }
 

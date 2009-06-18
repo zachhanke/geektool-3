@@ -136,9 +136,7 @@
 - (IBAction)updateLogs:(id)sender
 {
     NSMutableArray *groupsList = [NSMutableArray array];
-    NSEnumerator *e = [groups objectEnumerator];
-    NTGroup *tmp = nil;
-    while (tmp = [e nextObject]) [groupsList addObject:
+    for (NTGroup *tmp in groups) [groupsList addObject:
                                   [[tmp properties] objectForKey:@"name"]];    
 }
 
@@ -219,9 +217,7 @@
     [self setGroups:groupArray];
     
     // find active group
-    NSEnumerator *e = [groups objectEnumerator];
-    NTGroup *tmp = nil;
-    while (tmp = [e nextObject])
+    for (NTGroup *tmp in groups)
         if ([[tmp properties] objectForKey:@"active"]) [self setActiveGroup:tmp];  
 }
 

@@ -38,13 +38,11 @@ NSString *CopiedRowsType = @"GTLog_Copied_Item";
     {
         // get our selection (potentially multiple items)
         NSArray *selectedObjects = [self selectedObjects];
-        NSEnumerator *e = [selectedObjects objectEnumerator];
         
-        GTLog *currentLog = nil;
         GTLog *copyLog = nil;
         
         // loop for however many items in the set
-        while (currentLog = [e nextObject])
+        for (GTLog *currentLog in selectedObjects)
         {
             copyLog = [currentLog copy];
             // TODO: localize
