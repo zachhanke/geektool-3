@@ -19,6 +19,7 @@
         // just in case we wanted to add more stuff later on
         properties = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                @"Default", @"name",
+                               [NSNumber numberWithBool:NO], @"active",
                                nil];
         logs = [[NSMutableArray alloc] init];
     }
@@ -79,4 +80,26 @@
     [coder encodeObject:logs forKey:@"logs"];
 }
 
+#pragma mark Copying/Misc
+- (id)copyWithZone:(NSZone *)zone
+{
+    id result = [[[self class] allocWithZone:zone] init];
+    
+    [result setProperties:[self properties]];
+    [result setLogs:[self logs]];
+    
+    return result;
+}
+
+- (id)mutableCopyWithZone:(NSZone *)zone
+{
+    return [self copyWithZone: zone];
+}
+
+- (BOOL)equals:(NTGroup*)comp
+{
+    if ([[self properties] isEqualTo: [comp properties]] &&
+        [[self logs] isEqualTo: [comp logs]]) return YES;
+    else return NO;
+}
 @end

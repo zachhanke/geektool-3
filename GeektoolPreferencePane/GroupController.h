@@ -26,10 +26,7 @@
 - (IBAction)removeSelectedGroup:(id)sender;
 #pragma mark Checks
 - (BOOL)groupExists:(NSString*)myGroupName;
-- (NSMutableDictionary*)duplicateCheck:(NSString*)myGroupName;
-#pragma mark Table Delegate Methods
-- (BOOL)control:(NSControl *)control textShouldBeginEditing:(NSText *)textObject;
-- (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)textObject;
+- (NSString*)duplicateCheck:(NSString*)myGroupName;
 #pragma mark Convience
 - (id)selectedObject;
 @end

@@ -26,6 +26,9 @@
 
 - (IBAction)groupsSheetClose:(id)sender
 {
+    // select only the first object in the list so we don't screw up making objects
+    [self setSelectionIndex:[self selectionIndex]];
+    
     // close the sheet and refresh our menu
     [NSApp stopModal];
 }
@@ -36,72 +39,51 @@
     // just in case this gets called with nothing selected...
     if ([self selectionIndex] != NSNotFound)
     {
-        // get our selection (potentially multiple items)
-        NSArray *selectedObjects = [self selectedObjects];
-        NSEnumerator *e = [selectedObjects objectEnumerator];
-       
-        NSDictionary *currentGroup = nil;
-        NSString *currentGroupString = nil;
-        NSDictionary *newGroup = nil;
-        NSString *newGroupString = nil;
-        
-        // loop for however many items in the set
-        while (currentGroup = [e nextObject])
-        {
-            // grab the logs from g_logs
-            currentGroupString = [currentGroup valueForKey:@"group"];
-            
-            // make our new objects for the duplicate object
-            newGroup = [self duplicateCheck:currentGroupString];
-            newGroupString = [newGroup valueForKey:@"group"];
-            
-            // all the logs we intend to duplicate
-            NSMutableArray *origGroup = [[preferencesController g_logs]objectForKey:currentGroupString];
-            NSEnumerator *f = [origGroup objectEnumerator];
-            NSMutableArray *copyGroup = [NSMutableArray array];
-            GTLog *origLog = nil;
-            GTLog *copyLog = nil;
+        // copy the selection (potentially multiple items)
+        NSArray *copyGroups = [[NSArray alloc]initWithArray:[self selectedObjects] copyItems:YES];
 
-            // loop through all logs we wish to duplicate
-            while (origLog = [f nextObject])
-            {
-                copyLog = [[GTLog alloc]initWithDictionary:[origLog dictionary]];
-                [copyGroup addObject:copyLog];
-            }
-            
-            // on that copy, change the groups of the logs
-            [copyGroup makeObjectsPerformSelector:@selector(setGroup:) withObject:newGroupString];
-            
-            // put the array of objects back into g_logs under the duplicate name
-            [[preferencesController g_logs] setObject:copyGroup forKey:newGroupString];
-            
-            // let us know about the new group too
-            [self addObject:newGroup];
+        NSMutableDictionary *tmpDictionary = nil;
+        
+        for (NTGroup *tmpGroup in copyGroups)
+        {
+            tmpDictionary = [tmpGroup properties];
+            [[tmpGroup properties] setObject:[self duplicateCheck:[tmpDictionary objectForKey:@"name"]]
+                                      forKey: @"name"];
         }
+        
+        // add our duplicate groups to the controller
+        [self addObjects:copyGroups];
+        
+        [copyGroups release];
     }
 }
 
 #pragma mark Checks
-- (BOOL)groupExists:(NSString*)myGroupName
-{
-    return [[self content] containsObject:[NSDictionary dictionaryWithObject:myGroupName forKey:@"group"]];
-}
-
-// TODO: make more sophisticated like how finder does it
-// folder -> folder copy -> folder copy 2 -> folder copy 3 -> ...
-- (NSMutableDictionary*)duplicateCheck:(NSString*)myGroupName
+- (NSString*)duplicateCheck:(NSString*)myGroupName
 {
     // add a new group, but don't allow duplicates
     NSString *newGroupName = [NSString stringWithString: myGroupName];
-    if ([self groupExists: myGroupName])
+    NSArray *splitName = [newGroupName componentsSeparatedByString:@" "];
+    NSMutableArray *mutableSplitName = [splitName mutableCopy];
+    
+    BOOL needsCopy = YES;
+    
+    for (NSString *tmpString in mutableSplitName)
+        if([tmpString isEqualToString: @"copy"]) needsCopy = NO;
+    
+    if (needsCopy) [mutableSplitName addObject:@"copy"];
+    else
     {
-        int i = 2;
-        while ([self groupExists: [NSString stringWithFormat: @"%@ %i", myGroupName,i]])
-            i++;
-        newGroupName = [NSString stringWithFormat: @"%@ %i", myGroupName,i];
+        NSInteger count = [[mutableSplitName lastObject]integerValue];
+        if (count != 0) [mutableSplitName removeLastObject];
+        count++;
+        [mutableSplitName addObject:[NSString stringWithFormat:@"%i",count]];
     }
-    //[[self content] addObject: [NSDictionary dictionaryWithObject:newGroupName forKey:@"group"]];
-    return [NSMutableDictionary dictionaryWithObject:newGroupName forKey:@"group"];
+    
+    NSString *returnString = [mutableSplitName componentsJoinedByString:@" "]; 
+    [mutableSplitName release];
+    
+    return returnString;
 }
 
 #pragma mark Convience

@@ -54,6 +54,21 @@
     return groups;
 }
 
+- (void)setActiveGroup:(NTGroup *)newActiveGroup
+{
+    if (activeGroup != newActiveGroup)
+    {
+        [[activeGroup properties] setObject:[NSNumber numberWithBool:NO] forKey:@"active"];
+        [[newActiveGroup properties] setObject:[NSNumber numberWithBool:YES] forKey:@"active"];
+        activeGroup = newActiveGroup;
+    }
+}
+
+- (NTGroup *)activeGroup
+{
+    return activeGroup;
+}
+
 - (void)setSelectionColor:(NSData *)var
 {
     if(selectionColor != var)
@@ -79,7 +94,7 @@
     [openPanel beginSheetForDirectory: @"/var/log/"
                                  file: @"system.log"
                                 types: nil
-                       modalForWindow: [[self mainView] window]
+                       modalForWindow: [NSApp mainWindow]
                         modalDelegate: self
                        didEndSelector: @selector(openPanelDidEnd:returnCode:contextInfo:)
                           contextInfo: nil];
@@ -116,6 +131,15 @@
      }
      [[NSFontManager sharedFontManager] orderFrontFontPanel: self];
      */
+}
+
+- (IBAction)updateLogs:(id)sender
+{
+    NSMutableArray *groupsList = [NSMutableArray array];
+    NSEnumerator *e = [groups objectEnumerator];
+    NTGroup *tmp = nil;
+    while (tmp = [e nextObject]) [groupsList addObject:
+                                  [[tmp properties] objectForKey:@"name"]];    
 }
 
 #pragma mark -
@@ -172,6 +196,7 @@
     rootObject = [NSMutableDictionary dictionary];
     
     [rootObject setValue:[self groups] forKey:@"groups"];
+    [rootObject setValue:[self activeGroup] forKey:@"activeGroup"];
     [NSKeyedArchiver archiveRootObject:rootObject toFile:path];
 }
 
@@ -190,8 +215,14 @@
         NTGroup *defaultGroup = [[NTGroup alloc]init];
         groupArray = [NSArray arrayWithObject:defaultGroup];
     }
-
+    
     [self setGroups:groupArray];
+    
+    // find active group
+    NSEnumerator *e = [groups objectEnumerator];
+    NTGroup *tmp = nil;
+    while (tmp = [e nextObject])
+        if ([[tmp properties] objectForKey:@"active"]) [self setActiveGroup:tmp];  
 }
 
 - (void)loadPreferences
@@ -200,21 +231,6 @@
     NSData *selectionColorData = [[NSUserDefaults standardUserDefaults] objectForKey: @"selectionColor"];
     if (!selectionColorData) selectionColorData = [NSArchiver archivedDataWithRootObject:[[NSColor alternateSelectedControlColor] colorWithAlphaComponent:0.3]];
     [self setSelectionColor:selectionColorData];
-    
-    NSString *activeGroup = [[NSUserDefaults standardUserDefaults] objectForKey:@"activeGroup"];
-    if (activeGroup)
-    {
-        NSMutableArray *groupsList = [NSMutableArray array];
-        NSEnumerator *e = [groups objectEnumerator];
-        NTGroup *tmp = nil;
-        while (tmp = [e nextObject]) [groupsList addObject:
-                                      [[tmp properties] objectForKey:@"name"]];
-        
-        if (![groupsList containsObject:activeGroup]) activeGroup = nil;
-    }
-    if (!activeGroup) activeGroup = [[[groups lastObject] properties] objectForKey:@"name"];
-    [[NSUserDefaults standardUserDefaults] setObject:activeGroup forKey:@"activeGroup"];
-    
 }
 
 

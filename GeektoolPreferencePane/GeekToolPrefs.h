@@ -10,28 +10,16 @@
 #import <Cocoa/Cocoa.h>
 
 #import "GTLog.h"
+#import "NTGroup.h"
 
 //NSMutableDictionary *g_logs;
 @interface GeekToolPrefs : NSObject 
-{
-    CFStringRef appID;
-    
-    IBOutlet id logManager;
-    IBOutlet id groupManager;
-    IBOutlet id currentGroup;
-    IBOutlet id groupSelection;
-    IBOutlet id groupsSheet;
-    
-    NSMutableDictionary *g_logs;
-    NSMutableArray *groups;
-    NSString *editingGroup;
-        
-    BOOL isAddingLog;
-    NSString *guiPool;
-    NSData *selectionColor;
+{    
+    IBOutlet id activeGroupButton;
 
-    int numberOfItemsInPoolMenu;
-    
+    NSMutableArray *groups;
+    NTGroup *activeGroup;
+    NSData *selectionColor;    
 }
 - (id)init;
 - (void)awakeFromNib;
@@ -41,6 +29,8 @@
 - (NSMutableArray *)groups;
 - (void)setSelectionColor:(NSData *)var;
 - (NSData*)selectionColor;
+- (void)setActiveGroup:(NTGroup *)newActiveGroup;
+- (NTGroup *)activeGroup;
 #pragma mark -
 #pragma mark UI management
 - (IBAction)fileChoose:(id)sender;

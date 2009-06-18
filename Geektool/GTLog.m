@@ -617,25 +617,28 @@
 }
 
 #pragma mark -
-#pragma mark Standard object methods
 
+#pragma mark Copying
 - (id)copyWithZone:(NSZone *)zone
 {
-    GTLog *copy = [[[self class] allocWithZone: zone]
-                   initWithDictionary:[self dictionary]];
+    id result = [[[self class] allocWithZone:zone] init];
     
-    return copy;
-}
-
-- (bool)equals:(GTLog*)comp
-{
-    if ([[self dictionary] isEqualTo: [comp dictionary]]) return YES;
-    else return NO;
+    [result setProperties:[self properties]];
+    
+    return result;
 }
 
 - (id)mutableCopyWithZone:(NSZone *)zone
 {
     return [self copyWithZone: zone];
+}
+
+#pragma mark Standard object methods
+
+- (BOOL)equals:(GTLog*)comp
+{
+    if ([[self dictionary] isEqualTo: [comp dictionary]]) return YES;
+    else return NO;
 }
 
 - (NSString*)description
