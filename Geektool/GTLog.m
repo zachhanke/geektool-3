@@ -7,6 +7,7 @@
 //
 
 #import "GTLog.h"
+#import "LogController.h"
 #import "defines.h"
 
 // GTLog is a class that is responsible for storing and handling all information
@@ -17,71 +18,163 @@
 
 // initialize the log with defaults
 - (id)init
-{
-	if (!(self = [super init])) return nil;
-    
+{    
     NSData *textColorData = [NSArchiver archivedDataWithRootObject: [NSColor blackColor]];
     NSData *backgroundColorData = [NSArchiver archivedDataWithRootObject: [NSColor clearColor]]; 
     
-    properties = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                              @"New log", @"name",
-                              [NSNumber numberWithInt:TYPE_SHELL], @"type",
-                              [NSNumber numberWithBool:YES], @"enabled",
-                              @"Default", @"group",
-                              
-                              @"Monaco", @"fontName",
-                              [NSNumber numberWithInt:12], @"fontSize",
-                              
-                              @"", @"file",
-                              @"", @"quartzFile",
-                              
-                              @"", @"command",
-                              [NSNumber numberWithInt:10], @"refresh",
-                              
-                              textColorData, @"textColor",
-                              backgroundColorData, @"backgroundColor",
-                              [NSNumber numberWithBool:NO], @"wrap",
-                              [NSNumber numberWithBool:NO], @"shadowText",
-                              [NSNumber numberWithBool:NO], @"shadowWindow",
-                              [NSNumber numberWithBool:NO], @"alignment",
-                  
-                              [NSNumber numberWithInt:-1], @"windowLevel",
-                                                            
-                              [NSNumber numberWithInt:TOP_LEFT], @"pictureAlignment",
-                              @"", @"imageURL",
-                              [NSNumber numberWithInt:100], @"transparency",
-                              [NSNumber numberWithInt:PROPORTIONALLY], @"imageFit",
-                              
-                              [NSNumber numberWithInt:0], @"x",
-                              [NSNumber numberWithInt:0], @"y",
-                              [NSNumber numberWithInt:150], @"w",
-                              [NSNumber numberWithInt:150], @"h",
-                              
-                              [NSNumber numberWithBool:NO], @"alwaysOnTop",
-                              nil];
+    NSMutableDictionary *defaultProperties = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                                              @"New log", @"name",
+                                              [NSNumber numberWithInt:TYPE_SHELL], @"type",
+                                              [NSNumber numberWithBool:YES], @"enabled",
+                                              @"Default", @"group",
+                                              
+                                              @"Monaco", @"fontName",
+                                              [NSNumber numberWithInt:12], @"fontSize",
+                                              
+                                              @"", @"file",
+                                              @"", @"quartzFile",
+                                              
+                                              @"", @"command",
+                                              [NSNumber numberWithInt:10], @"refresh",
+                                              
+                                              textColorData, @"textColor",
+                                              backgroundColorData, @"backgroundColor",
+                                              [NSNumber numberWithBool:NO], @"wrap",
+                                              [NSNumber numberWithBool:NO], @"shadowText",
+                                              [NSNumber numberWithBool:NO], @"shadowWindow",
+                                              [NSNumber numberWithBool:NO], @"alignment",
+                                              
+                                              [NSNumber numberWithInt:-1], @"windowLevel",
+                                              
+                                              [NSNumber numberWithInt:TOP_LEFT], @"pictureAlignment",
+                                              @"", @"imageURL",
+                                              [NSNumber numberWithInt:100], @"transparency",
+                                              [NSNumber numberWithInt:PROPORTIONALLY], @"imageFit",
+                                              
+                                              [NSNumber numberWithInt:0], @"x",
+                                              [NSNumber numberWithInt:0], @"y",
+                                              [NSNumber numberWithInt:150], @"w",
+                                              [NSNumber numberWithInt:150], @"h",
+                                              
+                                              [NSNumber numberWithBool:NO], @"alwaysOnTop",
+                                              nil];
+    
+    return [self initWithProperties:defaultProperties];
+}
+
+- (id)initWithProperties:(NSDictionary*)newProperties
+{
+	if (!(self = [super init])) return nil;
+    
+    canDisplay = FALSE;
+    
+    [self setProperties:[NSMutableDictionary dictionaryWithDictionary:newProperties]];
     
     NSString *appSupp = [[NSString stringWithString: @"~/Library/Application Support/NerdTool/"] stringByExpandingTildeInPath];
-    NSMutableDictionary *tempEnv = [NSMutableDictionary dictionaryWithDictionary:
-                                    [[NSProcessInfo processInfo] environment]];
+    NSMutableDictionary *tempEnv = [NSMutableDictionary dictionaryWithDictionary: [[NSProcessInfo processInfo] environment]];
     NSString *path = [tempEnv objectForKey: @"PATH"];
     [tempEnv setObject: [NSString stringWithFormat: @"%@:%@",appSupp,path] forKey: @"PATH"];
     
-    env =  [tempEnv copy];
+    env = [tempEnv copy];
     
+    canDisplay = TRUE;
+    [self setupObservers];
     return self;
+}
+
+- (void)setupObservers
+{
+    // watch all these variables and run the observeValueForKeyPath function below each time any change
+    [self addObserver:self forKeyPath:@"properties.name" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.type" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.enabled" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.group" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.fontName" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.fontSize" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.file" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.quartzFile" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.command" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.refresh" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.textColor" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.backgroundColor" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.wrap" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.shadowText" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.shadowWindow" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.alignment" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.windowLevel" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.pictureAlignment" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.imageURL" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.transparency" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.imageFit" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.x" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.y" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.w" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.h" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.alwaysOnTop" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    // if the selection changes, highlight
+    // anything else, just save
+    if (([keyPath isEqualToString:@"shadowWindow"] ||
+        [keyPath isEqualToString:@"file"] ||
+        [keyPath isEqualToString:@"command"] ||
+        [keyPath isEqualToString:@"type"] ||
+        [keyPath isEqualToString:@"enabled"] &&
+        ![[change objectForKey:@"old"] isEqual: [change objectForKey:@"new"]]) ||
+        !windowController)
+    {
+        
+        [self terminate];
+        [self createWindow];
+    }
+    else
+    {
+        keepTimers = YES;
+        [self updateWindow];
+    }
+    
+    // for some reason, this makes an error occur...
+    //[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
 - (void)dealloc
 {
     [properties release];
-    //TODO: uncomment this //[self terminate];
+    [env release];
+    [self terminate];
     [super dealloc];
 }
 
+- (void)terminate
+{
+    if (task)
+    {
+        [task terminate];
+        [task release];
+    }
+    
+    if (windowController)
+    {
+        [[windowController window] close];
+        [windowController release];
+    }
+    
+    if (timer)
+    {
+        [timer invalidate];
+        [timer release];
+    }
+    
+    if (arguments)
+    {
+        [arguments release];
+    }
+}
 
 #pragma mark -
-#pragma mark Binding
-
+#pragma mark KVC
 - (void)setProperties:(NSDictionary *)newProperties
 {
     if (properties != newProperties)
@@ -96,56 +189,18 @@
     return properties;
 }
 
-
-- (id)initWithDictionary:(NSDictionary*)dictionary;
-{
-	if (!(self = [super init])) return nil;
-
-    properties = [NSMutableDictionary dictionaryWithDictionary:dictionary];
-    
-    NSString *appSupp = [[NSString stringWithString: @"~/Library/Application Support/NerdTool/"] stringByExpandingTildeInPath];
-    NSMutableDictionary *tempEnv = [NSMutableDictionary dictionaryWithDictionary:
-                                    [[NSProcessInfo processInfo] environment]];
-    NSString *path = [tempEnv objectForKey: @"PATH"];
-    [tempEnv setObject: [NSString stringWithFormat: @"%@:%@",appSupp,path] forKey: @"PATH"];
-    
-    env =  [tempEnv copy];
-
-    return self;
-}
-
-// set the dictionary, but do so as efficiently as possible
-- (void)updateWithProperties:(NSDictionary*)aDictionary
-{
-    // terminate/recreate the log window only if we have to
-    // so this if statement will contain all information that requires a reset of the window
-    BOOL close = NO;
-    if (([aDictionary integerForKey: @"shadowWindow"] != [properties integerForKey:@"shadowWindow"])
-        || (![[aDictionary objectForKey: @"file"] isEqual: [properties objectForKey:@"file"]])
-        || ([aDictionary objectForKey: @"command"] != [properties objectForKey:@"command"])
-        || ([aDictionary integerForKey: @"type"] != [properties integerForKey:@"type"])
-        || ([aDictionary boolForKey: @"enabled"] != [properties boolForKey:@"enabled"]))
-        close = YES;
-    
-    [self setProperties:aDictionary];
-    
-    if (close)
-    {
-        [self terminate];
-        [self openWindow];
-    }
-    else
-    {
-        keepTimers = YES;
-        [self updateWindow];
-    }
-}
-
 #pragma mark -
 #pragma mark Convience Accessors
 - (NSRect)realRect
 {
     return [self screenToRect: [self rect]];
+}
+
+- (NSRect)screenToRect:(NSRect)var
+{
+    //  NSLog(@"%f,%f",rect.origin.y,rect.size.height);
+    NSRect screenSize = [[NSScreen mainScreen] frame];
+    return NSMakeRect(var.origin.x, (-var.origin.y + screenSize.size.height) - var.size.height, var.size.width,var.size.height);
 }
 
 - (NSRect)rect
@@ -252,8 +307,10 @@
     [windowController setSticky: flag];
 }
 
+#pragma mark Window Creation/Management
 // Gets called when initializing a log for viewing
-- (void)openWindow
+// All initialization for all log types should occur here
+- (void)createWindow
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSPipe *pipe;
@@ -267,85 +324,173 @@
         windowController = [[LogWindowController alloc] initWithWindowNibName: @"logWindow"];
         [windowController setType: [properties integerForKey:@"type"]];
         
+        // we have to do this here instead of in the nib because we get an "invalid drawable"
+        // error if its done via the nib
+        [[windowController quartzView] setHidden:TRUE];
+                
         [windowController showWindow: self];
         [[windowController window] setAutodisplay: YES];
+        [windowController setHasShadow: [properties boolForKey:@"shadowWindow"]];
         
-        // we need some way to bridge our GTLog and AIQuartzView.
-        // LogWindowController is going to help through this `ident'
-        [windowController setIdent:[properties integerForKey:@"refresh"]];
-        
-        // set the quartz view to be hidden at the moment
-        [[windowController quartzView] setHidden:TRUE];
-        
-        // If the type is FILE, we need to do some things to get it set up
-        // Specifically, it sets up a pipe to watch the output of a file,
-        // however, I don't see it as too useful, as you would probably want to
-        // pipe the information somewhere else before displaying it.
-        // nevertheless, it does have it's uses
-        //
-        // more importantly, we do this initialization here because we only need
-        // to do this once, and this function is the only one that gets executed
-        // once when the window is created. Otherwise, we would be recreating
-        // this command when we are updating (a la SHELL)
-        if ([properties integerForKey:@"type"] == TYPE_FILE)
+        switch ([properties integerForKey:@"type"])
         {
-            // if no file is specified, don't do anything
-            if ([[properties objectForKey:@"file"] isEqual: @""])
-                return;
-            
-            // The following NSTask reads the command file (to 50 lines?)
-            // The -F file makes sure the file keeps getting read even if it
-            // hits the EOF or the file name is changed
-            task = [[NSTask alloc] init];
-            
-            [task setLaunchPath: @"/usr/bin/tail"];
-            [task setArguments: [NSArray arrayWithObjects:
-                                 @"-n",@"50",
-                                 @"-F", [properties objectForKey:@"file"],
-                                 nil]];
-            [task setEnvironment: env];
-            
-            pipe = [NSPipe pipe];
-            [task setStandardOutput: pipe];
-            
-            // We set up observers here to handle constant reading of the
-            // file, esp. that file is modified in any way
-            [[NSNotificationCenter defaultCenter] addObserver: self
-                                                     selector: @selector(newLines:)
-                                                         name: @"NSFileHandleReadCompletionNotification"
-                                                       object: [pipe fileHandleForReading]];
-
-            [[NSNotificationCenter defaultCenter] addObserver: self
-                                                     selector: @selector(newLines:)
-                                                         name: @"NSFileHandleDataAvailableNotification"
-                                                       object: [pipe fileHandleForReading]];
-            
-            // I'm guessing this just means we do the notifications above
-            [[pipe fileHandleForReading] waitForDataInBackgroundAndNotify];
-            
-            // Be sure to tell whoever wants to know when we are done with our task
-            [[NSNotificationCenter defaultCenter] addObserver: self
-                                                     selector: @selector(taskEnd:)
-                                                         name: @"NSTaskDidTerminateNotification"
-                                                       object: task];         
-            
-            // Get the ball rolling
-            [task launch];
+                // If the type is FILE, we need to do some things to get it set up
+                // Specifically, it sets up a pipe to watch the output of a file,
+                // however, I don't see it as too useful, as you would probably want to
+                // pipe the information somewhere else before displaying it.
+                // nevertheless, it does have it's uses
+                //
+                // more importantly, we do this initialization here because we only need
+                // to do this once, and this function is the only one that gets executed
+                // once when the window is created. Otherwise, we would be recreating
+                // this command when we are updating (a la SHELL)                
+            case TYPE_FILE:
+                // if no file is specified, don't do anything
+                if ([[properties objectForKey:@"file"] isEqual: @""])
+                    return;
+                
+                // The following NSTask reads the command file (to 50 lines?)
+                // The -F file makes sure the file keeps getting read even if it
+                // hits the EOF or the file name is changed
+                task = [[NSTask alloc] init];
+                
+                [task setLaunchPath: @"/usr/bin/tail"];
+                [task setArguments: [NSArray arrayWithObjects:
+                                     @"-n",@"50",
+                                     @"-F", [properties objectForKey:@"file"],
+                                     nil]];
+                [task setEnvironment: env];
+                
+                pipe = [NSPipe pipe];
+                [task setStandardOutput: pipe];
+                
+                // We set up observers here to handle constant reading of the
+                // file, esp. that file is modified in any way
+                [[NSNotificationCenter defaultCenter] addObserver: self
+                                                         selector: @selector(newLines:)
+                                                             name: @"NSFileHandleReadCompletionNotification"
+                                                           object: [pipe fileHandleForReading]];
+                
+                [[NSNotificationCenter defaultCenter] addObserver: self
+                                                         selector: @selector(newLines:)
+                                                             name: @"NSFileHandleDataAvailableNotification"
+                                                           object: [pipe fileHandleForReading]];
+                
+                // I'm guessing this just means we do the notifications above
+                [[pipe fileHandleForReading] waitForDataInBackgroundAndNotify];
+                
+                // Be sure to tell whoever wants to know when we are done with our task
+                [[NSNotificationCenter defaultCenter] addObserver: self
+                                                         selector: @selector(taskEnd:)
+                                                             name: @"NSTaskDidTerminateNotification"
+                                                           object: task];         
+                
+                // Get the ball rolling
+                [task launch];
+                
+                break;
+                
+            case TYPE_QUARTZ:
+                // we need some way to bridge our GTLog and AIQuartzView.
+                // LogWindowController is going to help through this `ident'
+                [windowController setIdent:[properties integerForKey:@"refresh"]];
+                
+                [[windowController quartzView] setHidden:FALSE];
+                
+                // load the quartz comp if possible and start rendering
+                if (![[properties objectForKey:@"quartzFile"] isEqual: @""] && 
+                    [[windowController quartzView] loadCompositionFromFile:[properties objectForKey:@"quartzFile"]])
+                    [[windowController quartzView] setAutostartsRendering:TRUE];                
+                break;
+                
+            default:
+                break;
         }
-        else if ([properties integerForKey:@"type"] == TYPE_QUARTZ)
-        {
-            [[windowController quartzView] setHidden:FALSE];
-            if (![[properties objectForKey:@"quartzFile"] isEqual: @""] && 
-                [[windowController quartzView] loadCompositionFromFile:[properties objectForKey:@"quartzFile"]])
-                [[windowController quartzView] setAutostartsRendering:TRUE];
-        }
-
+        
         [self updateWindow];
     }
     else if (![properties boolForKey:@"enabled"] && windowController)
         [self terminate];
-
+    
     [pool release];
+}
+
+// This function just updates the window. It really isn't as hot as I once 
+// thought. updateCommand on the other hand...
+// Called after a window is created or a log's dictionary is changed (some
+// aspect is changed, like the command or size)
+- (void)updateWindow
+{
+    //==Pre-init==
+    NSWindow *window = [windowController window];
+    
+    // set a few attributes pertaining to how the window appears
+    [windowController setLevel: [properties integerForKey:@"windowLevel"]];
+    [self setSticky: [properties integerForKey:@"windowLevel"] == kCGDesktopWindowLevel];
+    [windowController setPictureAlignment: [self NSPictureAlignment]];
+    
+    // make it's size and make it unclickable
+    [[windowController window] setFrame: [self realRect] display: NO];
+    [(LogWindow*)window setClickThrough: YES];
+    
+    // commit our rect. rememeber, this is with respect to the log window, hence
+    // why our x,y are going to be like 0,0. a bounds rect, if you will
+    NSRect tmpRect = [self rect];
+    tmpRect.origin.x = 0;
+    tmpRect.origin.y = 0;
+    [windowController setTextRect: tmpRect]; 
+
+    //==Init==
+    // set up stuff specific to the type of log
+    switch ([properties integerForKey:@"type"])
+    {
+        case TYPE_FILE:
+            [self updateTextAttributes];
+            
+            // scroll the text so we stay fresh in the output
+            [windowController scrollEnd];
+            break;
+            
+        case TYPE_SHELL:
+            [self updateTextAttributes];
+            
+            // if we need new timers
+            if (!keepTimers)
+            {
+                arguments = [[NSArray alloc] initWithObjects: @"-c",[properties objectForKey:@"command"], nil];
+                NSString *tmp = @"";
+                
+                [windowController addText: tmp clear: YES];
+                [self updateTimer];
+            }
+            
+            // scroll the text so we stay fresh in the output
+            [windowController scrollEnd];
+            break;
+            
+        case TYPE_IMAGE:
+            // make a nice environment for the image
+            [windowController setTextBackgroundColor: [NSColor clearColor]];
+            // TODO: Transparency may be flipped (ie its opacity)
+            [[windowController window] setAlphaValue: ([properties integerForKey:@"transparency"])];
+            [windowController setFit: [properties integerForKey:@"imageFit"]];
+            if (!keepTimers) [self updateTimer];
+            break;
+            
+        case TYPE_QUARTZ:
+            if (!keepTimers) [self updateTimer];
+            break;
+            
+        default:
+            break;
+    }
+    
+    //==Post-Init==
+    // display window (though autodisplay should take care of this)
+    [windowController display];
+    
+    // default this back to 0, so we always update our timers
+    keepTimers = NO;
 }
 
 // every timer hits this fn every X seconds. make it lean and mean
@@ -356,23 +501,21 @@
     BOOL free = YES;
     NSPipe *pipe;
     
-    
     switch ([properties integerForKey:@"type"])
-    {
+    {            
         case TYPE_SHELL:
             // if the task is still running, don't try to read from it
             // (ie the output is indeterminable)
             if ([task isRunning]) free = NO;
             
             // if we have a controller and the command is done launching...
-            if (windowController != nil && free)
+            if (windowController && free)
             {
                 // make another task! hah! you thought you were done?!
                 task = [[NSTask alloc] init];
                 [task setLaunchPath: @"/bin/sh"];
                 [task setArguments: arguments];
                 [task setEnvironment: env];
-                clear = YES;
                 
                 pipe = [[NSPipe alloc] init];
                 
@@ -398,153 +541,91 @@
             }
             break;
             
-        // if its an image, concern yourself only with looking at the itemage
+            // if its an image, concern yourself only with looking at the itemage
         case TYPE_IMAGE:
             [NSThread detachNewThreadSelector: @selector(setImage:)
                                      toTarget: self
                                    withObject: [properties objectForKey:@"imageURL"]];            
             break;
             
-        // if its quartz, we just tell AIQuartzView we want a render. notice that
-        // we must send information about ourself so we can render a specific log
-        // (instead of rendering them all)
+            // if its quartz, we just tell AIQuartzView we want a render. notice that
+            // we must send information about ourself so we can render a specific log
+            // (instead of rendering all quartz objects)
         case TYPE_QUARTZ:
             /*
-            [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTLogUpdate"
-                                                                           object: @"GeekTool"
-                                                                         userInfo: [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:[properties objectForKey:@"refresh"]]
-                                                                                                               forKey:@"ident"]
-                                                               deliverImmediately: NO];
+             [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTLogUpdate"
+             object: @"GeekTool"
+             userInfo: [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:[properties objectForKey:@"refresh"]]
+             forKey:@"ident"]
+             deliverImmediately: NO];
              */
             break;
-        // notice we don't have a case for FILE because it does not need to be
-        // updated
+            // notice we don't have a case for FILE because it does not need to be
+            // updated
     }
     [pool release];
 }
 
-// This function just updates the window. It really isn't as hot as I once 
-// thought. updateCommand on the other hand...
-// Called after a window is created or a log's dictionary is changed (some
-// aspect is changed, like the command or size)
-- (void)updateWindow
+#pragma mark Convenience Helpers
+// updates look and formatting of text
+- (void)updateTextAttributes
 {
-    NSWindow *window = [windowController window];
+    // get the colors right
+    [windowController setTextBackgroundColor: [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"backgroundColor"]]];
+    [windowController setShadowText: [properties boolForKey:@"shadowText"]];
     
-    // set a few attributes pertaining to how the window appears
-    [windowController setHasShadow: [properties boolForKey:@"shadowWindow"]];
-    [windowController setLevel: [properties integerForKey:@"windowLevel"]];
-    [self setSticky: [properties integerForKey:@"windowLevel"] == kCGDesktopWindowLevel];
-    [windowController setPictureAlignment: [self NSPictureAlignment]];
-    
-    // make it's size and make it unclickable
-    [[windowController window] setFrame: [self realRect] display: NO];
-    [(LogWindow*)window setClickThrough: YES];
-    
-    // continue only for file and shell
-    if ([properties integerForKey:@"type"] == TYPE_FILE ||
-        [properties integerForKey:@"type"] == TYPE_SHELL)
+    // Paragraph style
+    NSMutableParagraphStyle *myParagraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    switch ([properties integerForKey:@"alignment"])
     {
-        // get the colors right
-        [windowController setTextBackgroundColor: [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"backgroundColor"]]];
-        [windowController setShadowText: [properties boolForKey:@"shadowText"]];
-        
-        // Paragraph style
-        NSMutableParagraphStyle *myParagraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-        switch ([properties integerForKey:@"alignment"])
-        {
-            case ALIGN_LEFT:
-                [myParagraphStyle setAlignment: NSLeftTextAlignment];
-                break;
-            case ALIGN_CENTER:
-                [myParagraphStyle setAlignment: NSCenterTextAlignment];
-                break;
-            case ALIGN_RIGHT:
-                [myParagraphStyle setAlignment: NSRightTextAlignment];
-                break;
-            case ALIGN_JUSTIFIED:
-                [myParagraphStyle setAlignment: NSJustifiedTextAlignment];
-                break;
-        }
-        if ([properties boolForKey:@"wrap"])
-            [myParagraphStyle setLineBreakMode: NSLineBreakByCharWrapping];
-        else
-            [myParagraphStyle setLineBreakMode: NSLineBreakByClipping];
-        
-        if (attributes)
-            [attributes release];
-        
-        // here is where we override the scheme of the text. if you wanted
-        // to keep colors through the shell, here is where you would check for it
-        attributes = [[NSDictionary dictionaryWithObjectsAndKeys:
-                       myParagraphStyle, NSParagraphStyleAttributeName,
-                       [self font],      NSFontAttributeName,
-                       [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"textColor"]], NSForegroundColorAttributeName,nil] retain];
-        [myParagraphStyle release];
-        [windowController setAttributes: attributes];
+        case ALIGN_LEFT:
+            [myParagraphStyle setAlignment: NSLeftTextAlignment];
+            break;
+        case ALIGN_CENTER:
+            [myParagraphStyle setAlignment: NSCenterTextAlignment];
+            break;
+        case ALIGN_RIGHT:
+            [myParagraphStyle setAlignment: NSRightTextAlignment];
+            break;
+        case ALIGN_JUSTIFIED:
+            [myParagraphStyle setAlignment: NSJustifiedTextAlignment];
+            break;
     }
+    if ([properties boolForKey:@"wrap"])
+        [myParagraphStyle setLineBreakMode: NSLineBreakByCharWrapping];
+    else
+        [myParagraphStyle setLineBreakMode: NSLineBreakByClipping];
+    
+    if (attributes)
+        [attributes release];
+    
+    // here is where we override the scheme of the text. if you wanted
+    // to keep colors through the shell, here is where you would check for it
+    attributes = [[NSDictionary dictionaryWithObjectsAndKeys:
+                   myParagraphStyle, NSParagraphStyleAttributeName,
+                   [self font],      NSFontAttributeName,
+                   [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"textColor"]], NSForegroundColorAttributeName,nil] retain];
+    [myParagraphStyle release];
+    [windowController setAttributes: attributes];    
+}
 
-    
-    // commit our rect. rememeber, this is with respect to the log window, hence
-    // why our x,y are going to be like 0,0. a bounds rect, if you will
-    NSRect tmpRect = [self rect];
-    tmpRect.origin.x = 0;
-    tmpRect.origin.y = 0;
-    [windowController setTextRect: tmpRect]; 
-    
-    // sometimes, we just wanted to update the way the window looks, and not
-    // destroy our precious timers. this logic will do just that
-    if(!([properties integerForKey:@"type"] == TYPE_SHELL && keepTimers))
+// recreate the timer by destroying the old one (you must make checks to `keepTimers' yourself)
+- (void)updateTimer
+{
+    // if we have a timer, kill it
+    if (timer)
     {
-        // setup some timer stuff
-        if ([properties integerForKey:@"type"] == TYPE_SHELL ||
-            [properties integerForKey:@"type"] == TYPE_IMAGE ||
-            [properties integerForKey:@"type"] == TYPE_QUARTZ)
-        {
-            if ([properties integerForKey:@"type"] == TYPE_SHELL)
-            {
-                arguments = [[NSArray alloc] initWithObjects: @"-c",[properties objectForKey:@"command"], nil];
-                clear = YES;
-                NSString *tmp = @"";
-
-                [windowController addText: tmp clear: YES];
-            }
-            else if ([properties integerForKey:@"type"] == TYPE_IMAGE)
-            {
-                // make a nice environment for the image
-                [windowController setTextBackgroundColor: [NSColor clearColor]];
-                // TODO: Transparency may be flipped (ie its opacity)
-                [[windowController window] setAlphaValue: ([properties integerForKey:@"transparency"])];
-                [windowController setFit: [properties integerForKey:@"imageFit"]];
-            }
-            
-            // if we have a timer, kill it
-            if (timer)
-            {
-                [timer invalidate];
-                [timer release];
-                timer = nil;
-            }
-            
-            timer = [[NSTimer scheduledTimerWithTimeInterval: [properties integerForKey:@"refresh"]
-                                                      target: self
-                                                    selector: @selector(updateCommand:)
-                                                    userInfo: nil
-                                                     repeats: YES] retain];
-            
-            [timer fire];
-        }
+        [timer invalidate];
+        [timer release];
     }
-    // scroll the text so we stay fresh in the output
-    if (([properties integerForKey:@"type"] == TYPE_FILE) || 
-        ([properties integerForKey:@"type"] == TYPE_SHELL))
-        [windowController scrollEnd];
     
-    // display our badass window
-    [windowController display];
+    timer = [[NSTimer scheduledTimerWithTimeInterval: [properties integerForKey:@"refresh"]
+                                              target: self
+                                            selector: @selector(updateCommand:)
+                                            userInfo: nil
+                                             repeats: YES] retain];
     
-    // default this back to 0, so we always update our timers
-    keepTimers = NO;
+    [timer fire];
 }
 
 #pragma mark -
@@ -584,7 +665,7 @@
         //[windowController setFont: [self font]];
         [windowController setAttributes: attributes];
     }
-    clear = NO;
+
     [windowController display];
     [newLinesString release];
     [pool release];
@@ -599,7 +680,7 @@
     {
         [self terminate];
     }
-
+    
     //[windowController display];
     [task release];
     task = nil;
@@ -608,16 +689,18 @@
 
 #pragma mark -
 #pragma mark Misc
-
-- (NSRect)screenToRect:(NSRect)var
+- (BOOL)equals:(GTLog*)comp
 {
-    //  NSLog(@"%f,%f",rect.origin.y,rect.size.height);
-    NSRect screenSize = [[NSScreen mainScreen] frame];
-    return NSMakeRect(var.origin.x, (-var.origin.y + screenSize.size.height) - var.size.height, var.size.width,var.size.height);
+    if ([[self properties] isEqualTo: [comp properties]]) return YES;
+    else return NO;
+}
+
+- (NSString*)description
+{
+    return [NSString stringWithFormat: @"%@",[self properties]];
 }
 
 #pragma mark -
-
 #pragma mark Copying
 - (id)copyWithZone:(NSZone *)zone
 {
@@ -633,58 +716,10 @@
     return [self copyWithZone: zone];
 }
 
-#pragma mark Standard object methods
-
-- (BOOL)equals:(GTLog*)comp
-{
-    if ([[self dictionary] isEqualTo: [comp dictionary]]) return YES;
-    else return NO;
-}
-
-- (NSString*)description
-{
-    return [NSString stringWithFormat: @"%@",[self dictionary]];
-}
-
-
-- (void)terminate
-{
-    [[NSNotificationCenter defaultCenter] removeObserver: self];
-    if (task)
-    {
-        [task terminate];
-        [task release];
-        //[pipe release];
-        task = nil;
-    }
-    
-    if (windowController)
-    {
-        [[windowController window] close];
-        windowController=nil;
-    }
-    
-    if (timer)
-    {
-        [timer invalidate];
-        [timer release];
-        timer=nil;
-    }
-    if (arguments)
-    {
-        [arguments release];
-        arguments = nil;
-    }
-}
-
 #pragma mark Coding
 - (id)initWithCoder:(NSCoder *)coder
 {
-    if (self = [super init])
-    {
-        [self setProperties:[coder decodeObjectForKey:@"properties"]];
-    }
-    return self;
+    return [self initWithProperties:[coder decodeObjectForKey:@"properties"]];
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder
@@ -693,6 +728,7 @@
 }
 
 @end
+#pragma mark 
 
 @implementation NSDictionary (intBoolValues)
 - (int)integerForKey:(NSString *)key

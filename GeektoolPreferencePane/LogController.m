@@ -9,15 +9,16 @@
 #import "LogController.h"
 #import "GeekToolPrefs.h"
 #import "GeekTool.h"
-
-NSString *MovedRowsType = @"GTLog_Moved_Item";
-NSString *CopiedRowsType = @"GTLog_Copied_Item";
-
+#import "NSIndexSet+CountOfIndexesInRange.h"
+#import "NSArrayController+Duplicate.h"
 
 @implementation LogController
 
 - (void)awakeFromNib
 {
+    MovedRowsType = @"GTLog_Moved_Item";
+    CopiedRowsType = @"GTLog_Copied_Item";
+
     // register for drag and drop
     
 	[tableView setDraggingSourceOperationMask:NSDragOperationLink forLocal:NO];
@@ -30,30 +31,10 @@ NSString *CopiedRowsType = @"GTLog_Copied_Item";
 	[super awakeFromNib];
 }
 
-#pragma mark Methods
-- (IBAction)duplicateLog:(id)sender
+- (id)sharedLogController
 {
-    // just in case this gets called with nothing selected...
-    if ([self selectionIndex] != NSNotFound)
-    {
-        // get our selection (potentially multiple items)
-        NSArray *selectedObjects = [self selectedObjects];
-        
-        GTLog *copyLog = nil;
-        
-        // loop for however many items in the set
-        for (GTLog *currentLog in selectedObjects)
-        {
-            copyLog = [currentLog copy];
-            // TODO: localize
-            // TODO: make the renaming algo more fluid (like how Finder handles duplicate names)
-            [copyLog setName:[NSString stringWithFormat: @"%@ %@", [copyLog name],@"copy"]];
-            [self addObject:copyLog];
-            [copyLog release];
-        }
-    }
+    return self;
 }
-
 
 #pragma mark Drag n' Drop Stuff
 // thanks to mmalc for figuring most of this stuff out for me (and just being amazing)
@@ -151,41 +132,4 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 	return destinationIndexes;
 }
 
-- (id)selectedObject
-{
-    int selectionIndex = [self selectionIndex];       
-    if (selectionIndex != NSNotFound)
-        return [[self selectedObjects] objectAtIndex:0];
-    else
-        return nil;
-}
-
 @end
-
-@implementation NSIndexSet (CountOfIndexesInRange)
-
--(unsigned int)countOfIndexesInRange:(NSRange)range
-{
-	unsigned int start, end, count;
-	
-	if ((start == 0) && (range.length == 0))
-	{
-		return 0;	
-	}
-	
-	start	= range.location;
-	end		= start + range.length;
-	count	= 0;
-	
-	unsigned int currentIndex = [self indexGreaterThanOrEqualToIndex:start];
-	
-	while ((currentIndex != NSNotFound) && (currentIndex < end))
-	{
-		count++;
-		currentIndex = [self indexGreaterThanIndex:currentIndex];
-	}
-	
-	return count;
-}
-@end
-

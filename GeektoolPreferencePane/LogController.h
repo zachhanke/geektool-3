@@ -9,15 +9,19 @@
 #import <Cocoa/Cocoa.h>
 #import "GTLog.h"
 
-@interface LogController : NSArrayController {
+@interface LogController : NSArrayController
+{
+    NSString *MovedRowsType;
+    NSString *CopiedRowsType;
+    
     IBOutlet id currentActiveGroup;
     IBOutlet id tableView;
     id newObject;
     IBOutlet id preferencesController;
-
 }
 #pragma mark Methods
-- (IBAction)duplicateLog:(id)sender;
+
+- (id)sharedLogController;
 // table view drag and drop support
 - (BOOL)tableView:(NSTableView *)aTableView
 writeRowsWithIndexes:(NSIndexSet *)rowIndexes
@@ -27,5 +31,4 @@ toPasteboard:(NSPasteboard *)pboard;
 // utility methods
 -(NSIndexSet *) moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)fromIndexSet
 toIndex:(unsigned int)insertIndex;
-- (id)selectedObject;
 @end

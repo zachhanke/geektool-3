@@ -10,7 +10,7 @@
 #import <Cocoa/Cocoa.h>
 #import "LogWindowController.h"
 
-@interface GTLog : NSObject <NSCopying,NSCoding>
+@interface GTLog : NSObject <NSMutableCopying, NSCopying, NSCoding>
 {
     IBOutlet id logWindowController;
     LogWindowController *windowController;
@@ -25,51 +25,62 @@
     NSDictionary *env;
     NSTask *task;
     NSTimer *timer;
-    bool clear;
-    bool empty;
-    bool running;
     bool keepTimers;
-    int i;
-    int windowLevel;
+    
+    BOOL canDisplay;
 }
-
-- (id)initWithDictionary:(NSDictionary*)aDictionary;
-- (NSDictionary*)dictionary;
-- (void)setDictionary:(NSDictionary*)aDictionary force:(BOOL)force;
-- (void)setDictionary:(NSDictionary*)dictionary;
-
-- (NSMutableDictionary *)properties;
-- (void)setProperties:(NSDictionary *)newProperties;
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context;
+- (id)init;
+- (id)initWithProperties:(NSDictionary*)newProperties;
+- (void)dealloc;
+- (void)terminate;
 #pragma mark -
+#pragma mark KVC
+- (void)setProperties:(NSDictionary *)newProperties;
+- (NSMutableDictionary *)properties;
+#pragma mark -
+- (BOOL)updateAgainstProperties:(NSDictionary*)aDictionary;
 #pragma mark Convience Accessors
 - (NSRect)realRect;
+- (NSRect)screenToRect:(NSRect)var;
 - (NSRect)rect;
 - (int)NSImageFit;
 - (int)NSPictureAlignment;
 - (NSFont*)font;
 #pragma mark -
-#pragma mark Convience Mutators
-
-#pragma mark -
-#pragma mark Logs operations
-- (id)copyWithZone:(NSZone *)zone;
-- (bool)equals:(GTLog*)comp;
+#pragma mark Window operations
 - (void)front;
-- (id)mutableCopyWithZone:(NSZone *)zone;
-- (void)newLines:(NSNotification*)aNotification;
-- (void)openWindow;
+- (void)setImage:(NSString*)urlStr;
 - (void)setHighlighted:(BOOL)myHighlight;
 - (void)setSticky:(BOOL)flag;
-- (void)taskEnd:(NSNotification*)aNotification;
-- (void)terminate;
-- (void)updateCommand:(NSTimer*)timer;
+#pragma mark Window Creation/Management
+- (void)createWindow;
 - (void)updateWindow;
+- (void)updateCommand:(NSTimer*)timer;
+#pragma mark Convenience Helpers
+- (void)updateTextAttributes;
+- (void)updateTimer;
+#pragma mark -
+#pragma mark Window notifications
+- (void)newLines:(NSNotification*)aNotification;
+- (void)taskEnd:(NSNotification*)aNotification;
 #pragma mark -
 #pragma mark Misc
-- (NSRect)screenToRect:(NSRect)var;
-
+- (BOOL)equals:(GTLog*)comp;
+- (NSString*)description;
+#pragma mark -
+#pragma mark Copying
+- (id)copyWithZone:(NSZone *)zone;
+- (id)mutableCopyWithZone:(NSZone *)zone;
+#pragma mark Coding
+- (id)initWithCoder:(NSCoder *)coder;
+- (void)encodeWithCoder:(NSCoder *)coder;
 @end
 
+#pragma mark 
 @interface NSDictionary (intBoolValues)
 - (int)integerForKey:(NSString *)key;
 - (BOOL)boolForKey:(NSString *)key;

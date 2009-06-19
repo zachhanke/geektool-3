@@ -22,6 +22,7 @@
     //[self setHighlighted:0];
 }
 
+#pragma mark View Attributes
 - (BOOL)acceptsFirstMouse:(NSEvent *)theEvent;
 {
     // lets us so user can move window immediately, instead of clicking on it
@@ -29,6 +30,37 @@
     return YES;
 }
 
+// dont push logs up to the top
+- (BOOL)shouldDelayWindowOrderingForEvent:(NSEvent *)theEvent
+{
+    if ([theEvent type] == NSLeftMouseDragged) return NO;
+    else return YES;
+}
+
+// have our window accept commands when its highlighted. when its not, don't
+// allow any direct user interaction
+- (BOOL)acceptsFirstResponder
+{
+    if (highlighted)
+        return YES;
+    return NO;
+}
+
+- (BOOL)resignFirstResponder
+{
+    if (highlighted)
+        return YES;
+    return NO;
+}
+
+- (BOOL)becomeFirstResponder
+{
+    if (highlighted)
+        return YES;
+    return NO;
+}
+
+#pragma mark View Drawing
 - (void)drawRect:(NSRect)rect
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -65,6 +97,7 @@
     [pool release];
 }
 
+#pragma mark Mouse Handling
 - (void)mouseDragged:(NSEvent *)theEvent;
 {
     // only handle clicks (drags) if the window is highlighted
@@ -185,13 +218,7 @@
     [self sendPosition];
 }
 
-// dont push logs up to the top
-- (BOOL)shouldDelayWindowOrderingForEvent:(NSEvent *)theEvent
-{
-    if ([theEvent type] == NSLeftMouseDragged) return NO;
-    else return YES;
-}
-
+#pragma mark Misc Actions
 - (void)setHighlighted:(BOOL)flag;
 {
     highlighted = flag;
@@ -219,29 +246,6 @@
                                                                               [NSNumber numberWithInt: currentFrame.size.height], @"h",
                                                                               nil]
                                                          deliverImmediately: NO];
-}
-
-// have our window accept commands when its highlighted. when its not, don't
-// allow any direct user interaction
-- (BOOL)acceptsFirstResponder
-{
-    if (highlighted)
-        return YES;
-    return NO;
-}
-
-- (BOOL)resignFirstResponder
-{
-    if (highlighted)
-        return YES;
-    return NO;
-}
-
-- (BOOL)becomeFirstResponder
-{
-    if (highlighted)
-        return YES;
-    return NO;
 }
 
 @end

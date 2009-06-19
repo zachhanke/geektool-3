@@ -12,6 +12,10 @@
 
 @interface GroupController : NSArrayController
 {
+    NSString *MovedRowsType;
+    NSString *CopiedRowsType;
+    
+    IBOutlet id tableView;
     IBOutlet id logController;
     IBOutlet id preferencesController;
     IBOutlet id groupsSheet;
@@ -20,13 +24,14 @@
 }
 - (IBAction)groupsSheetClose:(id)sender;
 - (IBAction)showGroupsCustomization:(id)sender;
-#pragma mark Methods
-- (IBAction)addGroup:(id)sender;
-- (IBAction)duplicateSelectedGroup:(id)sender;
-- (IBAction)removeSelectedGroup:(id)sender;
-#pragma mark Checks
-- (BOOL)groupExists:(NSString*)myGroupName;
-- (NSString*)duplicateCheck:(NSString*)myGroupName;
-#pragma mark Convience
-- (id)selectedObject;
+
+// table view drag and drop support
+- (BOOL)tableView:(NSTableView *)aTableView
+writeRowsWithIndexes:(NSIndexSet *)rowIndexes
+     toPasteboard:(NSPasteboard *)pboard;
+- (NSDragOperation)tableView:(NSTableView*)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)op;
+- (BOOL)tableView:(NSTableView*)tv acceptDrop:(id <NSDraggingInfo>)info row:(int)row dropOperation:(NSTableViewDropOperation)op;
+// utility methods
+-(NSIndexSet *) moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)fromIndexSet
+                                                toIndex:(unsigned int)insertIndex;
 @end

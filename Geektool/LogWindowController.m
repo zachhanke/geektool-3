@@ -13,6 +13,12 @@
     //float tmp = [quartzView maxRenderingFrameRate];
 }
 
+- (void)windowWillClose:(NSNotification *)aNotification
+{
+    [self autorelease];
+}
+
+#pragma mark KVC
 - (void)setIdent:(int)value
 {
     ident = value;
@@ -23,11 +29,31 @@
     return ident;
 }
 
+- (void)setType:(int)anInt
+{
+    type = anInt;
+}
+
+- (int)type
+{
+    return type;
+}
+
+#pragma mark Only Accessors
+
 - (id)quartzView
 {
     return quartzView;
 }
 
+- (id)logView
+{
+    return logView;
+}
+#pragma mark -
+
+#pragma mark Setters/Actions
+#pragma mark Text Attributes
 - (void)setFont:(NSFont*)font
 {
     [text setFont: font];
@@ -67,55 +93,43 @@
             break;
     }
     //[self display];
-
 }
 
-- (id)logView
+- (void)setWrap:(BOOL)wrap
 {
-    return logView;
+    if ([[text string] length] == 0 )
+        [text setString: @" "];
+    NSRange range=NSMakeRange(0,[[text string] length]);
+    NSTextStorage *textStorage=[text textStorage];
+    NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle
+                                                defaultParagraphStyle] mutableCopy];
+    if (wrap)
+        [paragraphStyle setLineBreakMode:NSLineBreakByCharWrapping];
+    else
+        [paragraphStyle setLineBreakMode:NSLineBreakByClipping];
+    [textStorage addAttribute:NSParagraphStyleAttributeName
+                        value:paragraphStyle range:range];
+    //[self display];
 }
 
-- (void)setFrame:(NSRect)logWindowRect display:(bool)flag
+- (void)setTextRect:(NSRect)rect
 {
-    [[self window] setFrame:logWindowRect display:flag];
+    //[text setFrame: rect];
+    //[text display];
+    [scrollView setFrame: rect];
+    [scrollView display];
 }
 
-- (void)setHasShadow:(bool)flag
+- (void)setAttributes:(NSDictionary*)attributes
 {
-    [[self window] setHasShadow:flag];
+    // NSLog(@"%@",attributes);
+    //    [[text textStorage] beginEditing];
+    [[text textStorage] setAttributes: attributes range: NSMakeRange(0,[[text string] length])];
+    //    [[text textStorage] endEditing];
+    //[self display];
 }
 
-- (void)setOpaque:(bool)flag
-{
-    [[self window] setOpaque:flag];
-}
-
-- (void)setAutodisplay:(BOOL)value
-{
-    [[self window] setAutodisplay:value];
-}
-
-- (void)setLevel:(int)level
-{
-    [[self window] setLevel:level];
-}
-
-- (void)makeKeyAndOrderFront:(id)sender
-{
-    [[self window] makeKeyAndOrderFront:sender];
-}
-
-- (void)display
-{
-    //[[self window] display];
-    [text display];
-}
-
-- (void)windowWillClose:(NSNotification *)aNotification
-{
-    [self autorelease];
-}
-
+#pragma mark Text Actions
 - (void)addText:(NSString*)newText clear:(BOOL)clear
 {
     // TODO: I think here would be the place to add in colors
@@ -129,7 +143,7 @@
     {
         [theText deleteCharactersInRange: r];
     }
-     
+    
     if (clear)
         [text setString: theText];
     else
@@ -145,74 +159,36 @@
     [text scrollRangeToVisible: range];
 }
 
-- (void)setHighlighted:(BOOL)flag;
+#pragma mark Window Attributes
+- (void)setFrame:(NSRect)logWindowRect display:(bool)flag
+{
+    [[self window] setFrame:logWindowRect display:flag];
+}
+
+- (void)setHighlighted:(BOOL)flag
 {
     [(LogWindow*)[self window] setHighlighted: flag];
     [self display];
 }
 
-- (void)setWrap:(BOOL)wrap
+- (void)setAutodisplay:(BOOL)value
 {
-    if ([[text string] length] == 0 )
-        [text setString: @" "];
-    NSRange range=NSMakeRange(0,[[text string] length]);
-    NSTextStorage *textStorage=[text textStorage];
-    NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle
-        defaultParagraphStyle] mutableCopy];
-    if (wrap)
-        [paragraphStyle setLineBreakMode:NSLineBreakByCharWrapping];
-    else
-        [paragraphStyle setLineBreakMode:NSLineBreakByClipping];
-    [textStorage addAttribute:NSParagraphStyleAttributeName
-                        value:paragraphStyle range:range];
-    //[self display];
+    [[self window] setAutodisplay:value];
 }
 
--(void)setFit:(int)fit;
+- (void)setHasShadow:(bool)flag
 {
-    [picture setImageScaling: fit];
+    [[self window] setHasShadow:flag];
 }
 
--(void)setCrop:(BOOL)crop;
+- (void)setOpaque:(bool)flag
 {
-    [logView setCrop: crop];
+    [[self window] setOpaque:flag];
 }
 
--(void)setPictureAlignment:(int)alignment
+- (void)setLevel:(int)level
 {
-    [picture setImageAlignment: alignment];
-}
-
-- (void)setTextRect:(NSRect)rect
-{
-    //[text setFrame: rect];
-    //[text display];
-    [scrollView setFrame: rect];
-    [scrollView display];
-}
-
-- (void)setImage:(NSImage*)anImage
-{
-    [picture setImage: anImage];
-}
-
-- (void)setType:(int)anInt
-{
-    type = anInt;
-}
-
-- (int)type
-{
-    return type;
-}
-
-- (void)setAttributes:(NSDictionary*)attributes
-{
-   // NSLog(@"%@",attributes);
-//    [[text textStorage] beginEditing];
-    [[text textStorage] setAttributes: attributes range: NSMakeRange(0,[[text string] length])];
-//    [[text textStorage] endEditing];
-    //[self display];
+    [[self window] setLevel:level];
 }
 
 -(void)setSticky:(BOOL)flag 
@@ -220,22 +196,57 @@
     CGSConnection cid;
     CGSWindow wid;
     SInt32 vers; 
-
+    
     Gestalt(gestaltSystemVersion,&vers); 
     if (vers < 0x1030)
-	return;
+        return;
     wid = [[self window] windowNumber];
     cid = _CGSDefaultConnection();
     int tags[2];
     tags[0] = tags[1] = 0;
     OSStatus retVal = CGSGetWindowTags(cid, wid, tags, 32);
     if(!retVal) {
-	if (flag)
-	    tags[0] = tags[0] | 0x00000800;
-	else
-	    tags[0] = tags[0] & 0x00000800;
-
-	retVal = CGSSetWindowTags(cid, wid, tags, 32);
+        if (flag)
+            tags[0] = tags[0] | 0x00000800;
+        else
+            tags[0] = tags[0] & 0x00000800;
+        
+        retVal = CGSSetWindowTags(cid, wid, tags, 32);
     }
+}
+
+#pragma mark Window Actions
+- (void)makeKeyAndOrderFront:(id)sender
+{
+    [[self window] makeKeyAndOrderFront:sender];
+}
+
+- (void)display
+{
+    //[[self window] display];
+    [text display];
+}
+
+#pragma mark Picture Attributes
+-(void)setPictureAlignment:(int)alignment
+{
+    [picture setImageAlignment: alignment];
+}
+
+-(void)setFit:(int)fit
+{
+    [picture setImageScaling: fit];
+}
+
+- (void)setImage:(NSImage*)anImage
+{
+    [picture setImage: anImage];
+}
+
+#pragma mark Misc Functions
+
+-(void)setCrop:(BOOL)crop
+{
+    [logView setCrop: crop];
 }
 @end

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0A2AEC310FE6DDB000097DCA /* NTGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2AEC300FE6DDB000097DCA /* NTGroup.m */; };
+		0A439D970FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A439D960FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.m */; };
+		0A439F1B0FE9EAEE00BB8B6A /* NSArrayController+Duplicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A439F1A0FE9EAEE00BB8B6A /* NSArrayController+Duplicate.m */; };
 		0A7D37260FD8028D0070D678 /* GeekToolPrefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37210FD8028D0070D678 /* GeekToolPrefs.m */; };
 		0A7D37270FD8028D0070D678 /* GroupController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37230FD8028D0070D678 /* GroupController.m */; };
 		0A7D37280FD8028D0070D678 /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37250FD8028D0070D678 /* LogController.m */; };
@@ -41,6 +43,10 @@
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0A2AEC2F0FE6DDB000097DCA /* NTGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTGroup.h; sourceTree = "<group>"; };
 		0A2AEC300FE6DDB000097DCA /* NTGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTGroup.m; sourceTree = "<group>"; };
+		0A439D950FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexSet+CountOfIndexesInRange.h"; sourceTree = "<group>"; };
+		0A439D960FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexSet+CountOfIndexesInRange.m"; sourceTree = "<group>"; };
+		0A439F190FE9EAEE00BB8B6A /* NSArrayController+Duplicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArrayController+Duplicate.h"; sourceTree = "<group>"; };
+		0A439F1A0FE9EAEE00BB8B6A /* NSArrayController+Duplicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArrayController+Duplicate.m"; sourceTree = "<group>"; };
 		0A7D37200FD8028D0070D678 /* GeekToolPrefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeekToolPrefs.h; path = ../GeektoolPreferencePane/GeekToolPrefs.h; sourceTree = SOURCE_ROOT; };
 		0A7D37210FD8028D0070D678 /* GeekToolPrefs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeekToolPrefs.m; path = ../GeektoolPreferencePane/GeekToolPrefs.m; sourceTree = SOURCE_ROOT; };
 		0A7D37220FD8028D0070D678 /* GroupController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupController.h; path = ../GeektoolPreferencePane/GroupController.h; sourceTree = SOURCE_ROOT; };
@@ -122,6 +128,17 @@
 			name = Classes;
 			sourceTree = "<group>";
 		};
+		0A439DA00FE9D29D00BB8B6A /* Class Additions */ = {
+			isa = PBXGroup;
+			children = (
+				0A439D950FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.h */,
+				0A439D960FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.m */,
+				0A439F190FE9EAEE00BB8B6A /* NSArrayController+Duplicate.h */,
+				0A439F1A0FE9EAEE00BB8B6A /* NSArrayController+Duplicate.m */,
+			);
+			name = "Class Additions";
+			sourceTree = "<group>";
+		};
 		0A7D372A0FD802B10070D678 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -168,6 +185,7 @@
 		29B97314FDCFA39411CA2CEA /* NerdTool */ = {
 			isa = PBXGroup;
 			children = (
+				0A439DA00FE9D29D00BB8B6A /* Class Additions */,
 				0A7D372A0FD802B10070D678 /* Controllers */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -297,6 +315,8 @@
 				0A7D37500FD803980070D678 /* LogTextField.m in Sources */,
 				0A7D37530FD803AD0070D678 /* AIQuartzView.m in Sources */,
 				0A2AEC310FE6DDB000097DCA /* NTGroup.m in Sources */,
+				0A439D970FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.m in Sources */,
+				0A439F1B0FE9EAEE00BB8B6A /* NSArrayController+Duplicate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

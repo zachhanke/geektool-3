@@ -27,6 +27,3 @@
 - (NSMutableArray*)yGuides;
 - (BOOL)magn;
 @end
-@interface NSIndexSet (CountOfIndexesInRange)
--(unsigned int)countOfIndexesInRange:(NSRange)range;
-@end

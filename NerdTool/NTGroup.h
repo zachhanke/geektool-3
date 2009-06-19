@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface NTGroup : NSObject <NSCoding>
+@interface NTGroup : NSObject <NSCoding, NSCopying, NSMutableCopying>
 {
     NSMutableDictionary *properties;
     NSMutableArray *logs;

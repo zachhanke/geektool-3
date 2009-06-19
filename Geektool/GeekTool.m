@@ -178,7 +178,7 @@
         {
             GTLog *log = [[GTLog alloc] initWithDictionary: logD];
             [g_logs addObject: log];
-            [log openWindow];
+            [log createWindow];
             [log release];
         }
         i++;        
