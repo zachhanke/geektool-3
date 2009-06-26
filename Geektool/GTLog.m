@@ -709,7 +709,10 @@
 
 - (NSString*)description
 {
-    return [NSString stringWithFormat: @"%@",[self properties]];
+    return [NSString stringWithFormat: @"Log:%@\nEnabled:%@",
+            [[self properties]objectForKey:@"name"],
+            [[self properties]objectForKey:@"enabled"]
+    ];
 }
 
 #pragma mark -

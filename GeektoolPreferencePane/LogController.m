@@ -29,7 +29,9 @@
     [NSArray arrayWithObjects:CopiedRowsType, MovedRowsType, nil]];
     [tableView setAllowsMultipleSelection:YES];
     
-    oldSelectionIndex = [self selectionIndex];
+    [self addObserver:self forKeyPath:@"selectedObjects" options:0 context:nil];
+    
+    //oldSelectedLog = [[self selectedObjects]objectAtIndex:0];
 }
 
 - (id)sharedLogController
@@ -37,7 +39,25 @@
     return self;
 }
 
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    // when a selection is changed
+    if([keyPath isEqualToString:@"selectedObjects"])
+    {
+        // deselect old log if we can
+        if (oldSelectedLog) [oldSelectedLog setHighlighted:NO];
+        
+        // if an object is selected update our old selected log and select it
+        if ([[self selectedObjects]count])
+        {
+            oldSelectedLog = [[self selectedObjects]objectAtIndex:0];
+            [oldSelectedLog setHighlighted:YES];
+        }
+    }    
+}
+
 // need to handle no selection
+/*
 - (NSIndexSet *)tableView:(NSTableView *)tableView selectionIndexesForProposedSelection:(NSIndexSet *)proposedSelectionIndexes
 {
     oldSelectionIndex = [self selectionIndex];
@@ -50,7 +70,7 @@
     
     return proposedSelectionIndexes;
 }
-
+*/
 #pragma mark Drag n' Drop Stuff
 // thanks to mmalc for figuring most of this stuff out for me (and just being amazing)
 - (BOOL)tableView:(NSTableView *)aTableView
@@ -117,7 +137,7 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 	// if drag source is self, it's a move unless the Option key is pressed
     if ([info draggingSource] == tableView)
     {
-        [[[self content] objectAtIndex:oldSelectionIndex]setHighlighted:NO];
+        //[[[self content] objectAtIndex:oldSelectionIndex]setHighlighted:NO];
         NSData *rowsData = [[info draggingPasteboard] dataForType:MovedRowsType];
         NSIndexSet *indexSet = [NSKeyedUnarchiver unarchiveObjectWithData:rowsData];
         
