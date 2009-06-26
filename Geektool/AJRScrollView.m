@@ -1,38 +1,30 @@
 #import "AJRScrollView.h"
 #import "LogTextField.h"
+
+/*
+ Holds our text view
+ Turns out this class was taken from some Cocoa mailing list to work around a
+ problem with displaying semi-transparency for scroll views pre-Jaguar.
+ Background colors are now displayed through NSTextField instead of NSScroll/ClipView
+ */
+
 @implementation AJRScrollView
-// This is necessary
 - (BOOL)isOpaque
 {
     return NO;
 }
 
-// This isn't really necessary
-
-- (void)drawRect:(NSRect)rect
-{
-    /*
-    if ([self borderType] == NSLineBorder) {
-        NSRect    bounds = [self bounds];
-
-        [[NSColor colorWithCalibratedWhite:0.68 alpha:1.0] set];
-        NSFrameRect(bounds);
-    }
-     */
-}
-
 // This first line is necessary, the remainder isn't...
 - (void)awakeFromNib
 {
-    //[ self setContentView: textView ];
-    [self setDocumentView: textView];
+    [self setDocumentView:textView];
     [[self contentView] setCopiesOnScroll:NO];
-    
-    if ([[self documentView] isKindOfClass:[LogTextField class]])
-    {
-        [[self documentView] setBackgroundColor:[NSColor clearColor]];
-        [[self documentView] setDrawsBackground:NO];
-    }
+    [[self contentView] setDrawsBackground:NO];
+}
+
+- (void)setBackgroundColor:(NSColor *)aColor
+{
+    [[self documentView] setBackgroundColor:aColor];
 }
 
 @end

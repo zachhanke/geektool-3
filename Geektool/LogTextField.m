@@ -8,20 +8,51 @@
 
 #import "LogTextField.h"
 
-
 @implementation LogTextField
-// Shadow
+- (void)awakeFromNib
+{
+    [self setEditable:NO];
+    [self setSelectable:NO];
+}
 
-- (void) drawRect: (NSRect) rect {
+#pragma mark Attributes
+- (BOOL)isOpaque
+{
+    return NO;
+}
+
+- (BOOL)shouldDrawInsertionPoint
+{
+    return NO;
+}
+
+- (BOOL)acceptsFirstResponder
+{
+    return NO;
+}
+
+- (BOOL)resignFirstResponder
+{
+    return NO;
+}
+
+- (BOOL)becomeFirstResponder
+{
+    return NO;
+}
+
+#pragma mark Shadow
+- (void)drawRect: (NSRect) rect
+{
     if (shadowText)
         [self showShadowHeight: 2 radius: 3 azimuth: 135 ka: 0 ];
 
-    [ super drawRect: rect ];
     if (shadowText)
         [self hideShadow];
+    [super drawRect: rect];
 }
 
-- (void) showShadowHeight: (int) height
+- (void)showShadowHeight: (int) height
                    radius: (int) radius
                   azimuth: (int) azimuth
                        ka: (float) ka
@@ -40,30 +71,16 @@
     CGSSetGStateAttribute(graphicsPort, CGSUniqueCString("Style"), shadowValues);
 }
 
-- (void) hideShadow
+- (void)hideShadow
 {
     extern void *CGSReleaseGenericObj(void*);
     [NSGraphicsContext restoreGraphicsState];
     CGSReleaseGenericObj(shadowValues);
 }
 
-- (BOOL)acceptsFirstResponder
-{
-    return NO;
-}
-
-- (BOOL)resignFirstResponder
-{
-    return NO;
-}
-
-- (BOOL)becomeFirstResponder
-{
-    return NO;
-}
-
 - (void)setShadowText:(bool)theShadow
 {
     shadowText = theShadow;
 }
+
 @end

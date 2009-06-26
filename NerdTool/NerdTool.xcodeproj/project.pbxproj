@@ -119,12 +119,12 @@
 				0A7D37340FD802EC0070D678 /* LogWindowController.m */,
 				0A7D374B0FD803980070D678 /* NSLogView.h */,
 				0A7D374C0FD803980070D678 /* NSLogView.m */,
-				0A7D374D0FD803980070D678 /* LogTextField.h */,
-				0A7D374E0FD803980070D678 /* LogTextField.m */,
 				0A7D37510FD803AD0070D678 /* AIQuartzView.h */,
 				0A7D37520FD803AD0070D678 /* AIQuartzView.m */,
 				0A43A1160FEC0B9F00BB8B6A /* AJRScrollView.h */,
 				0A43A1170FEC0B9F00BB8B6A /* AJRScrollView.m */,
+				0A7D374D0FD803980070D678 /* LogTextField.h */,
+				0A7D374E0FD803980070D678 /* LogTextField.m */,
 			);
 			name = "UI Classes";
 			sourceTree = "<group>";

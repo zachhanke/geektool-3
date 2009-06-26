@@ -14,7 +14,6 @@
         [self setBackgroundColor:[NSColor clearColor]];
         [text setEnabled: NO];
         [self setReleasedWhenClosed:YES];
-        highlighted = YES;
     }
     return self;
 }

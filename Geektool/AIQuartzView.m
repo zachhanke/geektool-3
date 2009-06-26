@@ -39,7 +39,7 @@
     }
 }
 
-- (BOOL) renderAtTime:(NSTimeInterval)time arguments:(NSDictionary*)arguments
+- (BOOL)renderAtTime:(NSTimeInterval)time arguments:(NSDictionary*)arguments
 {
     // render ONCE and only once
     BOOL success = FALSE;

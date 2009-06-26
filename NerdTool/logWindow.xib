@@ -324,9 +324,9 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="129380996"/>
 							<reference ref="557164643"/>
-							<reference ref="66047436"/>
 							<reference ref="62534435"/>
 							<reference ref="485539159"/>
+							<reference ref="66047436"/>
 						</object>
 						<reference key="parent" ref="394099586"/>
 					</object>
@@ -345,20 +345,6 @@
 						<reference key="parent" ref="461287312"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">108</int>
-						<reference key="object" ref="66047436"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="344874084"/>
-						</object>
-						<reference key="parent" ref="461287312"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">109</int>
-						<reference key="object" ref="344874084"/>
-						<reference key="parent" ref="66047436"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">186</int>
 						<reference key="object" ref="62534435"/>
 						<reference key="parent" ref="461287312"/>
@@ -371,7 +357,24 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">60</int>
 						<reference key="object" ref="485539159"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
 						<reference key="parent" ref="461287312"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">108</int>
+						<reference key="object" ref="66047436"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="344874084"/>
+						</object>
+						<reference key="parent" ref="461287312"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">109</int>
+						<reference key="object" ref="344874084"/>
+						<reference key="parent" ref="66047436"/>
 					</object>
 				</object>
 			</object>
@@ -417,8 +420,8 @@
 					<string>com.apple.QuartzComposerIBPlugin</string>
 					<reference ref="5"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{395, 744}, {420, 101}}</string>
-					<string>{{395, 744}, {420, 101}}</string>
+					<string>{{421, 649}, {420, 101}}</string>
+					<string>{{421, 649}, {420, 101}}</string>
 					<reference ref="5"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="5"/>
