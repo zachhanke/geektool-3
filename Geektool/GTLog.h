@@ -14,7 +14,7 @@
 {
     IBOutlet id logWindowController;
     LogWindowController *windowController;
-    
+        
     NSMutableDictionary *properties;
     
     NSFont *font;

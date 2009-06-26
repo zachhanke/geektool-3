@@ -1,5 +1,3 @@
-#import "AJRInstallScrollView.h"
-
 #import "AJRScrollView.h"
 #import "LogTextField.h"
 @implementation AJRScrollView
@@ -26,22 +24,15 @@
 // This first line is necessary, the remainder isn't...
 - (void)awakeFromNib
 {
-    backgroundColor = [[ NSColor clearColor ] retain ];;
     //[ self setContentView: textView ];
-    [ self setDocumentView: textView ];
+    [self setDocumentView: textView];
     [[self contentView] setCopiesOnScroll:NO];
-    if ([[self documentView] isKindOfClass:[LogTextField class]]) {
-	[[self documentView] setBackgroundColor: backgroundColor ];
+    
+    if ([[self documentView] isKindOfClass:[LogTextField class]])
+    {
+        [[self documentView] setBackgroundColor:[NSColor clearColor]];
         [[self documentView] setDrawsBackground:NO];
     }
 }
-- (NSColor*)backgroundColor;
-{
-    return backgroundColor;
-}
-- (void)setBackgroundColor:(NSColor*)color;
-{
-    [ backgroundColor release ];
-    backgroundColor = [ color retain ];
-}
+
 @end

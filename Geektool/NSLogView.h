@@ -6,6 +6,7 @@
 {
     NSPoint mouseLoc;
     NSRect windowFrame;
+    
     IBOutlet id corner;
     IBOutlet id logWindowController;
     int dragType;
@@ -15,7 +16,7 @@
     BOOL crop;
     NSRect cropRect;
     IBOutlet id text;
-
+    
     BOOL magn;
     NSMutableArray *xGuides;
     NSMutableArray *yGuides;

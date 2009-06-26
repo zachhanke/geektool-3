@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="5"/>
+			<integer value="6"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -39,7 +39,7 @@
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
 				<string key="NSWindowRect">{{221, 456}, {420, 101}}</string>
-				<int key="NSWTFlags">1886912512</int>
+				<int key="NSWTFlags">1886913536</int>
 				<string key="NSWindowTitle">Window</string>
 				<string key="NSWindowClass">LogWindow</string>
 				<object class="NSMutableString" key="NSViewClass">
@@ -85,12 +85,12 @@
 						</object>
 						<object class="NSCustomView" id="66047436">
 							<reference key="NSNextResponder" ref="461287312"/>
-							<int key="NSvFlags">282</int>
+							<int key="NSvFlags">274</int>
 							<object class="NSMutableArray" key="NSSubviews">
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSCustomView" id="344874084">
 									<reference key="NSNextResponder" ref="66047436"/>
-									<int key="NSvFlags">274</int>
+									<int key="NSvFlags">256</int>
 									<string key="NSFrameSize">{420, 101}</string>
 									<reference key="NSSuperview" ref="66047436"/>
 									<string key="NSClassName">LogTextField</string>
@@ -322,18 +322,13 @@
 						<reference key="object" ref="461287312"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="485539159"/>
 							<reference ref="129380996"/>
 							<reference ref="557164643"/>
 							<reference ref="66047436"/>
 							<reference ref="62534435"/>
+							<reference ref="485539159"/>
 						</object>
 						<reference key="parent" ref="394099586"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">60</int>
-						<reference key="object" ref="485539159"/>
-						<reference key="parent" ref="461287312"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">66</int>
@@ -372,6 +367,11 @@
 						<int key="objectID">195</int>
 						<reference key="object" ref="928389122"/>
 						<reference key="parent" ref="129380996"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">60</int>
+						<reference key="object" ref="485539159"/>
+						<reference key="parent" ref="461287312"/>
 					</object>
 				</object>
 			</object>
@@ -450,7 +450,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">195</int>
+			<int key="maxID">199</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -473,6 +473,18 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">AJRScrollView</string>
+					<string key="superclassName">NSScrollView</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">textView</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../Geektool/AJRScrollView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

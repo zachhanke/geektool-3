@@ -10,6 +10,7 @@
 		0A2AEC310FE6DDB000097DCA /* NTGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2AEC300FE6DDB000097DCA /* NTGroup.m */; };
 		0A439D970FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A439D960FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.m */; };
 		0A439F1B0FE9EAEE00BB8B6A /* NSArrayController+Duplicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A439F1A0FE9EAEE00BB8B6A /* NSArrayController+Duplicate.m */; };
+		0A43A1180FEC0B9F00BB8B6A /* AJRScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A43A1170FEC0B9F00BB8B6A /* AJRScrollView.m */; };
 		0A7D37260FD8028D0070D678 /* GeekToolPrefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37210FD8028D0070D678 /* GeekToolPrefs.m */; };
 		0A7D37270FD8028D0070D678 /* GroupController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37230FD8028D0070D678 /* GroupController.m */; };
 		0A7D37280FD8028D0070D678 /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37250FD8028D0070D678 /* LogController.m */; };
@@ -47,6 +48,8 @@
 		0A439D960FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexSet+CountOfIndexesInRange.m"; sourceTree = "<group>"; };
 		0A439F190FE9EAEE00BB8B6A /* NSArrayController+Duplicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArrayController+Duplicate.h"; sourceTree = "<group>"; };
 		0A439F1A0FE9EAEE00BB8B6A /* NSArrayController+Duplicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArrayController+Duplicate.m"; sourceTree = "<group>"; };
+		0A43A1160FEC0B9F00BB8B6A /* AJRScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AJRScrollView.h; path = ../Geektool/AJRScrollView.h; sourceTree = SOURCE_ROOT; };
+		0A43A1170FEC0B9F00BB8B6A /* AJRScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AJRScrollView.m; path = ../Geektool/AJRScrollView.m; sourceTree = SOURCE_ROOT; };
 		0A7D37200FD8028D0070D678 /* GeekToolPrefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeekToolPrefs.h; path = ../GeektoolPreferencePane/GeekToolPrefs.h; sourceTree = SOURCE_ROOT; };
 		0A7D37210FD8028D0070D678 /* GeekToolPrefs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeekToolPrefs.m; path = ../GeektoolPreferencePane/GeekToolPrefs.m; sourceTree = SOURCE_ROOT; };
 		0A7D37220FD8028D0070D678 /* GroupController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupController.h; path = ../GeektoolPreferencePane/GroupController.h; sourceTree = SOURCE_ROOT; };
@@ -107,13 +110,9 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		080E96DDFE201D6D7F000001 /* Classes */ = {
+		080E96DDFE201D6D7F000001 /* UI Classes */ = {
 			isa = PBXGroup;
 			children = (
-				0A7D372D0FD802E30070D678 /* GTLog.h */,
-				0A7D372E0FD802E30070D678 /* GTLog.m */,
-				0A2AEC2F0FE6DDB000097DCA /* NTGroup.h */,
-				0A2AEC300FE6DDB000097DCA /* NTGroup.m */,
 				0A7D372F0FD802E30070D678 /* LogWindow.h */,
 				0A7D37300FD802E30070D678 /* LogWindow.m */,
 				0A7D37330FD802EC0070D678 /* LogWindowController.h */,
@@ -124,11 +123,24 @@
 				0A7D374E0FD803980070D678 /* LogTextField.m */,
 				0A7D37510FD803AD0070D678 /* AIQuartzView.h */,
 				0A7D37520FD803AD0070D678 /* AIQuartzView.m */,
+				0A43A1160FEC0B9F00BB8B6A /* AJRScrollView.h */,
+				0A43A1170FEC0B9F00BB8B6A /* AJRScrollView.m */,
 			);
-			name = Classes;
+			name = "UI Classes";
 			sourceTree = "<group>";
 		};
-		0A439DA00FE9D29D00BB8B6A /* Class Additions */ = {
+		0A194D8C0FED967C0062EA84 /* Data Classes */ = {
+			isa = PBXGroup;
+			children = (
+				0A7D372D0FD802E30070D678 /* GTLog.h */,
+				0A7D372E0FD802E30070D678 /* GTLog.m */,
+				0A2AEC2F0FE6DDB000097DCA /* NTGroup.h */,
+				0A2AEC300FE6DDB000097DCA /* NTGroup.m */,
+			);
+			name = "Data Classes";
+			sourceTree = "<group>";
+		};
+		0A439DA00FE9D29D00BB8B6A /* Categories */ = {
 			isa = PBXGroup;
 			children = (
 				0A439D950FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.h */,
@@ -136,7 +148,7 @@
 				0A439F190FE9EAEE00BB8B6A /* NSArrayController+Duplicate.h */,
 				0A439F1A0FE9EAEE00BB8B6A /* NSArrayController+Duplicate.m */,
 			);
-			name = "Class Additions";
+			name = Categories;
 			sourceTree = "<group>";
 		};
 		0A7D372A0FD802B10070D678 /* Controllers */ = {
@@ -185,9 +197,10 @@
 		29B97314FDCFA39411CA2CEA /* NerdTool */ = {
 			isa = PBXGroup;
 			children = (
-				0A439DA00FE9D29D00BB8B6A /* Class Additions */,
+				0A439DA00FE9D29D00BB8B6A /* Categories */,
 				0A7D372A0FD802B10070D678 /* Controllers */,
-				080E96DDFE201D6D7F000001 /* Classes */,
+				0A194D8C0FED967C0062EA84 /* Data Classes */,
+				080E96DDFE201D6D7F000001 /* UI Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -317,6 +330,7 @@
 				0A2AEC310FE6DDB000097DCA /* NTGroup.m in Sources */,
 				0A439D970FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.m in Sources */,
 				0A439F1B0FE9EAEE00BB8B6A /* NSArrayController+Duplicate.m in Sources */,
+				0A43A1180FEC0B9F00BB8B6A /* AJRScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

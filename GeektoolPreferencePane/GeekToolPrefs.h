@@ -27,8 +27,6 @@
 #pragma mark KVC
 - (void)setGroups:(NSArray *)newGroups;
 - (NSMutableArray *)groups;
-- (void)setSelectionColor:(NSData *)var;
-- (NSData*)selectionColor;
 - (void)setActiveGroup:(NTGroup *)newActiveGroup;
 - (NTGroup *)activeGroup;
 #pragma mark -

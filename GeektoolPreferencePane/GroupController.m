@@ -23,10 +23,22 @@
 	[tableView registerForDraggedTypes:
     [NSArray arrayWithObjects:CopiedRowsType, MovedRowsType, nil]];
     [tableView setAllowsMultipleSelection:YES];
-	
+	[self addObserver:self forKeyPath:@"selectionIndex" options:NSKeyValueObservingOptionNew context:NULL];
+
 	[super awakeFromNib];
     
 }
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (1)
+    {
+        NSNumber *obj1 = [change valueForKey:NSKeyValueChangeNewKey];// setHighlighted:FALSE];
+        [obj1 class];
+        //[[change valueForKey:NSKeyValueChangeOldKey] setHighlighted:TRUE];
+    }
+}
+
 
 #pragma mark UI
 - (IBAction)showGroupsCustomization:(id)sender

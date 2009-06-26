@@ -79,6 +79,7 @@
     
     canDisplay = TRUE;
     [self setupObservers];
+    [self createWindow];
     return self;
 }
 
@@ -115,13 +116,14 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
+    
     // if the selection changes, highlight
     // anything else, just save
-    if (([keyPath isEqualToString:@"shadowWindow"] ||
-        [keyPath isEqualToString:@"file"] ||
-        [keyPath isEqualToString:@"command"] ||
-        [keyPath isEqualToString:@"type"] ||
-        [keyPath isEqualToString:@"enabled"] &&
+    if (([keyPath isEqualToString:@"properties.shadowWindow"] ||
+        [keyPath isEqualToString:@"properties.file"] ||
+        [keyPath isEqualToString:@"properties.command"] ||
+        [keyPath isEqualToString:@"properties.type"] ||
+        [keyPath isEqualToString:@"properties.enabled"] &&
         ![[change objectForKey:@"old"] isEqual: [change objectForKey:@"new"]]) ||
         !windowController)
     {
@@ -155,16 +157,18 @@
         [task release];
     }
     
+    /*
     if (windowController)
     {
         [[windowController window] close];
         [windowController release];
     }
-    
+    */
     if (timer)
     {
         [timer invalidate];
         [timer release];
+        timer = nil;
     }
     
     if (arguments)
@@ -198,7 +202,11 @@
 
 - (NSRect)screenToRect:(NSRect)var
 {
-    //  NSLog(@"%f,%f",rect.origin.y,rect.size.height);
+    // remember, our coordinates are with respect to the
+    // top left corner (both window and screen), but
+    // the actual OS takes them with respect to the
+    // bottom left (both window and screen), so we must convert between these
+    // NSLog(@"%f,%f",rect.origin.y,rect.size.height);
     NSRect screenSize = [[NSScreen mainScreen] frame];
     return NSMakeRect(var.origin.x, (-var.origin.y + screenSize.size.height) - var.size.height, var.size.width,var.size.height);
 }
@@ -318,18 +326,18 @@
     // we will be executing functions to get an output soon work only if our
     // window controller doesn't exist(?) and enabled 
     // looks like one window per window controller
-    if ([properties boolForKey:@"enabled"] && !windowController)
+    if ([properties boolForKey:@"enabled"])
     {
         // initialize our window controller
-        windowController = [[LogWindowController alloc] initWithWindowNibName: @"logWindow"];
+        if (windowController == nil)
+            windowController = [[LogWindowController alloc] initWithWindowNibName: @"logWindow"];
         [windowController setType: [properties integerForKey:@"type"]];
-        
+                
         // we have to do this here instead of in the nib because we get an "invalid drawable"
         // error if its done via the nib
         [[windowController quartzView] setHidden:TRUE];
                 
-        [windowController showWindow: self];
-        [[windowController window] setAutodisplay: YES];
+        //[[windowController window] setAutodisplay: YES];
         [windowController setHasShadow: [properties boolForKey:@"shadowWindow"]];
         
         switch ([properties integerForKey:@"type"])
@@ -408,8 +416,9 @@
         }
         
         [self updateWindow];
+        [windowController showWindow: self];
     }
-    else if (![properties boolForKey:@"enabled"] && windowController)
+    else if (![properties boolForKey:@"enabled"])
         [self terminate];
     
     [pool release];
@@ -430,7 +439,9 @@
     [windowController setPictureAlignment: [self NSPictureAlignment]];
     
     // make it's size and make it unclickable
-    [[windowController window] setFrame: [self realRect] display: NO];
+    [window setFrame: [self realRect] display: NO];
+    //[window setFrame: [self rect] display: NO];
+
     [(LogWindow*)window setClickThrough: YES];
     
     // commit our rect. rememeber, this is with respect to the log window, hence
@@ -617,13 +628,14 @@
     {
         [timer invalidate];
         [timer release];
+        timer = nil;
     }
     
     timer = [[NSTimer scheduledTimerWithTimeInterval: [properties integerForKey:@"refresh"]
                                               target: self
                                             selector: @selector(updateCommand:)
                                             userInfo: nil
-                                             repeats: YES] retain];
+                                             repeats: YES]retain];
     
     [timer fire];
 }

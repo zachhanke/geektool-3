@@ -9,6 +9,7 @@
 #import "LogController.h"
 #import "GeekToolPrefs.h"
 #import "GeekTool.h"
+#import "GTLog.h"
 #import "NSIndexSet+CountOfIndexesInRange.h"
 #import "NSArrayController+Duplicate.h"
 
@@ -27,13 +28,27 @@
 	[tableView registerForDraggedTypes:
     [NSArray arrayWithObjects:CopiedRowsType, MovedRowsType, nil]];
     [tableView setAllowsMultipleSelection:YES];
-	
-	[super awakeFromNib];
+    
+    oldSelectionIndex = [self selectionIndex];
 }
 
 - (id)sharedLogController
 {
     return self;
+}
+
+// need to handle no selection
+- (NSIndexSet *)tableView:(NSTableView *)tableView selectionIndexesForProposedSelection:(NSIndexSet *)proposedSelectionIndexes
+{
+    oldSelectionIndex = [self selectionIndex];
+    newSelectionIndex = [proposedSelectionIndexes firstIndex];
+    if (oldSelectionIndex != newSelectionIndex)
+    {
+        [[[self content] objectAtIndex:oldSelectionIndex]setHighlighted:NO];
+        [[[self content] objectAtIndex:newSelectionIndex]setHighlighted:YES];
+    }
+    
+    return proposedSelectionIndexes;
 }
 
 #pragma mark Drag n' Drop Stuff
@@ -102,6 +117,7 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 	// if drag source is self, it's a move unless the Option key is pressed
     if ([info draggingSource] == tableView)
     {
+        [[[self content] objectAtIndex:oldSelectionIndex]setHighlighted:NO];
         NSData *rowsData = [[info draggingPasteboard] dataForType:MovedRowsType];
         NSIndexSet *indexSet = [NSKeyedUnarchiver unarchiveObjectWithData:rowsData];
         

@@ -14,6 +14,9 @@
     NSString *MovedRowsType;
     NSString *CopiedRowsType;
     
+    NSUInteger oldSelectionIndex;
+    NSUInteger newSelectionIndex;
+    
     IBOutlet id currentActiveGroup;
     IBOutlet id tableView;
     id newObject;

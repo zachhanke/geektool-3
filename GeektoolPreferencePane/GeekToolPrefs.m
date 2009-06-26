@@ -34,6 +34,17 @@
     NSNumber *en = [[NSUserDefaults standardUserDefaults] objectForKey: @"enableMenu"];
 }
 
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (1)
+    {
+        int obj1 = [change valueForKey:NSKeyValueChangeNewKey];// setHighlighted:FALSE];
+        [obj1 class];
+        //[[change valueForKey:NSKeyValueChangeOldKey] setHighlighted:TRUE];
+    }
+}
+
+
 - (void)applicationWillTerminate:(NSNotification *)note
 {
     [self saveDataToDisk];
@@ -67,20 +78,6 @@
 - (NTGroup *)activeGroup
 {
     return activeGroup;
-}
-
-- (void)setSelectionColor:(NSData *)var
-{
-    if(selectionColor != var)
-    {
-        [selectionColor release];
-        selectionColor = [var copy];
-    }
-}
-
-- (NSData*)selectionColor
-{
-    return selectionColor;
 }
 
 #pragma mark -
@@ -226,7 +223,7 @@
     // load selection color data
     NSData *selectionColorData = [[NSUserDefaults standardUserDefaults] objectForKey: @"selectionColor"];
     if (!selectionColorData) selectionColorData = [NSArchiver archivedDataWithRootObject:[[NSColor alternateSelectedControlColor] colorWithAlphaComponent:0.3]];
-    [self setSelectionColor:selectionColorData];
+    [[NSUserDefaults standardUserDefaults] setObject:selectionColorData forKey:@"selectionColor"];
 }
 
 
