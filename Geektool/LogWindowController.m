@@ -39,6 +39,15 @@
     return type;
 }
 
+- (void)setDelegate:(id)newDelegate
+{
+    delegate = newDelegate;
+}
+
+- (id)delegate
+{
+    return delegate;
+}
 #pragma mark Only Accessors
 
 - (id)quartzView

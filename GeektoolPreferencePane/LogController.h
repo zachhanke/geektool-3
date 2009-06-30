@@ -11,20 +11,15 @@
 
 @interface LogController : NSArrayController
 {
+    // drag n drop
     NSString *MovedRowsType;
     NSString *CopiedRowsType;
-    
-    GTLog *oldSelectedLog;
-    GTLog *newSelectedLog;
-    
-    IBOutlet id currentActiveGroup;
     IBOutlet id tableView;
-    id newObject;
-    IBOutlet id preferencesController;
+
+    // observing
+    GTLog *oldSelectedLog;
 }
 #pragma mark Methods
-
-- (id)sharedLogController;
 // table view drag and drop support
 - (BOOL)tableView:(NSTableView *)aTableView
 writeRowsWithIndexes:(NSIndexSet *)rowIndexes

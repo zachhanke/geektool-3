@@ -5,8 +5,7 @@
 @implementation GeekTool
 - (void)awakeFromNib
 {
-    // notice here, we are going to use NSUserDefaults instead of the carbon crap
-    // this is because this module is not a prefpane, and hence, easy to work with
+    // notice here, we are going to use NSUserDefaults instead of the carbon crap this is because this module is not a prefpane, and hence, easy to work with
     
     // This array will store the tunnels descriptions and windows/tasks references
     g_logs = [[NSMutableArray alloc] init];
@@ -154,9 +153,7 @@
     
     if (logs == nil ) logs = [NSArray array];
     
-    // We parse all logs to see if something changed.
-    // We add log entries if there are new, and we delete some that could have been
-    // deleted in prefs
+    // We parse all logs to see if something changed.  We add log entries if there are new, and we delete some that could have been deleted in prefs
     
     unsigned int i = 0;
     
@@ -183,8 +180,7 @@
         }
         i++;        
     }  
-    // Remove all logs upon the count in preferences
-    // (those have been deleted)
+    // Remove all logs upon the count in preferences (those have been deleted)
     while ([g_logs count] > i)
     {
         [[g_logs lastObject] terminate];

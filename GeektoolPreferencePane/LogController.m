@@ -7,9 +7,6 @@
 //
 
 #import "LogController.h"
-#import "GeekToolPrefs.h"
-#import "GeekTool.h"
-#import "GTLog.h"
 #import "NSIndexSet+CountOfIndexesInRange.h"
 #import "NSArrayController+Duplicate.h"
 
@@ -21,24 +18,23 @@
     CopiedRowsType = @"GTLog_Copied_Item";
 
     // register for drag and drop
-    
 	[tableView setDraggingSourceOperationMask:NSDragOperationLink forLocal:NO];
 	[tableView setDraggingSourceOperationMask:(NSDragOperationCopy | NSDragOperationMove) forLocal:YES];
 	
-	[tableView registerForDraggedTypes:
-    [NSArray arrayWithObjects:CopiedRowsType, MovedRowsType, nil]];
+	[tableView registerForDraggedTypes:[NSArray arrayWithObjects:CopiedRowsType, MovedRowsType, nil]];
     [tableView setAllowsMultipleSelection:YES];
     
     [self addObserver:self forKeyPath:@"selectedObjects" options:0 context:nil];
-    
-    //oldSelectedLog = [[self selectedObjects]objectAtIndex:0];
 }
 
-- (id)sharedLogController
+- (void)dealloc
 {
-    return self;
+    [self removeObserver:self forKeyPath:@"selectedObjects"];
+    [super dealloc];
 }
 
+#pragma mark Observing
+// based on selection, highlight/dehighlight the log window
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     // when a selection is changed
@@ -53,24 +49,9 @@
             oldSelectedLog = [[self selectedObjects]objectAtIndex:0];
             [oldSelectedLog setHighlighted:YES];
         }
-    }    
+    }
 }
 
-// need to handle no selection
-/*
-- (NSIndexSet *)tableView:(NSTableView *)tableView selectionIndexesForProposedSelection:(NSIndexSet *)proposedSelectionIndexes
-{
-    oldSelectionIndex = [self selectionIndex];
-    newSelectionIndex = [proposedSelectionIndexes firstIndex];
-    if (oldSelectionIndex != newSelectionIndex)
-    {
-        [[[self content] objectAtIndex:oldSelectionIndex]setHighlighted:NO];
-        [[[self content] objectAtIndex:newSelectionIndex]setHighlighted:YES];
-    }
-    
-    return proposedSelectionIndexes;
-}
-*/
 #pragma mark Drag n' Drop Stuff
 // thanks to mmalc for figuring most of this stuff out for me (and just being amazing)
 - (BOOL)tableView:(NSTableView *)aTableView
@@ -86,8 +67,7 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 	NSData *rowIndexesArchive = [NSKeyedArchiver archivedDataWithRootObject:rowIndexes];
     [pboard setData:rowIndexesArchive forType:MovedRowsType];
 	
-	// create new array of selected rows for remote drop
-    // could do deferred provision, but keep it direct for clarity
+	// create new array of selected rows for remote drop could do deferred provision, but keep it direct for clarity
 	NSMutableArray *rowCopies = [NSMutableArray arrayWithCapacity:[rowIndexes count]];
 	
     unsigned int currentIndex = [rowIndexes firstIndex];
@@ -97,8 +77,7 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
         currentIndex = [rowIndexes indexGreaterThanIndex: currentIndex];
     }
 	
-	// setPropertyList works here because we're using dictionaries, strings,
-	// and dates; otherwise, archive collection to NSData...
+	// setPropertyList works here because we're using dictionaries, strings, and dates; otherwise, archive collection to NSData...
 	[pboard setPropertyList:rowCopies forType:CopiedRowsType];
 	
     return YES;
@@ -117,8 +96,7 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
     if ([info draggingSource] == tableView) {
 			dragOp =  NSDragOperationMove;
     }
-    // we want to put the object at, not over,
-    // the current row (contrast NSTableViewDropOn) 
+    // we want to put the object at, not over, the current row (contrast NSTableViewDropOn) 
     [tv setDropRow:row dropOperation:NSTableViewDropAbove];
 	
     return dragOp;
@@ -154,8 +132,7 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 -(NSIndexSet *) moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)fromIndexSet
 												toIndex:(unsigned int)insertIndex
 {	
-	// If any of the removed objects come before the insertion index,
-	// we need to decrement the index appropriately
+	// If any of the removed objects come before the insertion index, we need to decrement the index appropriately
 	unsigned int adjustedInsertIndex =
 	insertIndex - [fromIndexSet countOfIndexesInRange:(NSRange){0, insertIndex}];
 	NSRange destinationRange = NSMakeRange(adjustedInsertIndex, [fromIndexSet count]);

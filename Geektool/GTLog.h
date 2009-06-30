@@ -12,23 +12,31 @@
 
 @interface GTLog : NSObject <NSMutableCopying, NSCopying, NSCoding>
 {
-    IBOutlet id logWindowController;
-    LogWindowController *windowController;
-        
-    NSMutableDictionary *properties;
-    
-    NSFont *font;
-    
-    NSArray *arguments;
-    NSDictionary *attributes;
-    NSMutableDictionary *logDictionary;
-    NSDictionary *env;
-    NSTask *task;
+    // KVC
     NSTimer *timer;
-    bool keepTimers;
     
-    BOOL canDisplay;
+    bool isBeingDragged;
+    
+    // Synthesized
+    LogWindowController *windowController;
+    NSMutableDictionary *properties;
+    NSTask *task;
+    BOOL active;
+    BOOL keepTimers;
+    NSDictionary *env;
+    NSDictionary *attributes;
+    NSArray *arguments;
 }
+@property (retain) LogWindowController *windowController;
+@property (copy) NSDictionary* properties;
+@property (retain) NSTask *task;
+@property (assign) BOOL active;
+@property (assign) BOOL keepTimers;
+@property (copy) NSDictionary *env;
+@property (copy) NSDictionary *attributes;
+@property (copy) NSArray *arguments;
+@property (retain) NSTimer *timer;
+
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
@@ -37,13 +45,21 @@
 - (id)initWithProperties:(NSDictionary*)newProperties;
 - (void)dealloc;
 - (void)terminate;
+
+#pragma mark Observing
+- (void)setupObservers;
+- (void)removeObservers;
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context;
 #pragma mark -
 #pragma mark KVC
-- (void)setProperties:(NSDictionary *)newProperties;
-- (NSMutableDictionary *)properties;
+- (void)setTimer:(NSTimer*)newTimer;
+- (NSTimer*)timer;
+- (void)setIsBeingDragged:(BOOL)var;
+- (bool)isBeingDragged;
 #pragma mark -
 - (BOOL)updateAgainstProperties:(NSDictionary*)aDictionary;
 #pragma mark Convience Accessors
+- (void)setCoords:(NSRect)newCoords;
 - (NSRect)realRect;
 - (NSRect)screenToRect:(NSRect)var;
 - (NSRect)rect;

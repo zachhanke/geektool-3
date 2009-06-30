@@ -7,20 +7,20 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "GTLog.h"
-#import "GeekToolPrefs.h"
+#import "NTGroup.h"
 
 @interface GroupController : NSArrayController
 {
+    // used with drag and drop
     NSString *MovedRowsType;
     NSString *CopiedRowsType;
-    
     IBOutlet id tableView;
-    IBOutlet id logController;
-    IBOutlet id preferencesController;
-    IBOutlet id groupsSheet;
+
+    // used for observing
+    NTGroup *oldSelectedGroup;
     
-    NSString *groupBeforeEdit;
+    // UI
+    IBOutlet id groupsSheet;
 }
 - (IBAction)groupsSheetClose:(id)sender;
 - (IBAction)showGroupsCustomization:(id)sender;

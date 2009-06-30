@@ -9,17 +9,11 @@
 #import <CoreFoundation/CoreFoundation.h>
 #import <Cocoa/Cocoa.h>
 
-#import "GTLog.h"
-#import "NTGroup.h"
-
-//NSMutableDictionary *g_logs;
 @interface GeekToolPrefs : NSObject 
-{    
-    IBOutlet id activeGroupButton;
+{        
+    IBOutlet id groupController;
 
     NSMutableArray *groups;
-    NTGroup *activeGroup;
-    NSData *selectionColor;    
 }
 - (id)init;
 - (void)awakeFromNib;
@@ -27,19 +21,14 @@
 #pragma mark KVC
 - (void)setGroups:(NSArray *)newGroups;
 - (NSMutableArray *)groups;
-- (void)setActiveGroup:(NTGroup *)newActiveGroup;
-- (NTGroup *)activeGroup;
 #pragma mark -
 #pragma mark UI management
+/*
 - (IBAction)fileChoose:(id)sender;
 - (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo;
 - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (IBAction)gChooseFont:(id)sender;
-#pragma mark -
-#pragma mark Daemon interaction
-- (void)didSelect;
-- (void)didUnselect;
-- (void)geekToolLaunched:(NSNotification*)aNotification;
+ */
 #pragma mark Saving
 - (NSString *)pathForDataFile;
 - (void)saveDataToDisk;

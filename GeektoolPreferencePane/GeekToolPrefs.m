@@ -8,7 +8,6 @@
 
 #import <Carbon/Carbon.h>
 #import "GeekToolPrefs.h"
-#import "LogController.h"
 #import "NTGroup.h"
 #import "defines.h"
 
@@ -30,20 +29,7 @@
     
     // Yes, we need transparency
     [[NSColorPanel sharedColorPanel] setShowsAlpha: YES];
-    
-    NSNumber *en = [[NSUserDefaults standardUserDefaults] objectForKey: @"enableMenu"];
 }
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if (1)
-    {
-        int obj1 = [change valueForKey:NSKeyValueChangeNewKey];// setHighlighted:FALSE];
-        [obj1 class];
-        //[[change valueForKey:NSKeyValueChangeOldKey] setHighlighted:TRUE];
-    }
-}
-
 
 - (void)applicationWillTerminate:(NSNotification *)note
 {
@@ -65,24 +51,9 @@
     return groups;
 }
 
-- (void)setActiveGroup:(NTGroup *)newActiveGroup
-{
-    if (activeGroup != newActiveGroup)
-    {
-        [[activeGroup properties] setObject:[NSNumber numberWithBool:NO] forKey:@"active"];
-        [[newActiveGroup properties] setObject:[NSNumber numberWithBool:YES] forKey:@"active"];
-        activeGroup = newActiveGroup;
-    }
-}
-
-- (NTGroup *)activeGroup
-{
-    return activeGroup;
-}
-
 #pragma mark -
 #pragma mark UI management
-
+/*
 - (IBAction)fileChoose:(id)sender
 {
     NSOpenPanel *openPanel = [NSOpenPanel openPanel];
@@ -116,7 +87,6 @@
 -(IBAction)gChooseFont:(id)sender
 {
     // TODO: bindings maybe?
-    /*
      switch ([self logType])
      {
      case 0:
@@ -127,43 +97,13 @@
      break;
      }
      [[NSFontManager sharedFontManager] orderFrontFontPanel: self];
-     */
 }
-
+*/
 - (IBAction)updateLogs:(id)sender
 {
     NSMutableArray *groupsList = [NSMutableArray array];
     for (NTGroup *tmp in groups) [groupsList addObject:
                                   [[tmp properties] objectForKey:@"name"]];    
-}
-
-#pragma mark -
-#pragma mark Daemon interaction
-- (void)didSelect
-{
-    [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTPrefsLaunched"
-                                                                   object: @"GeekToolPrefs"
-                                                                 userInfo: nil
-                                                       deliverImmediately: YES];
-    
-}
-
-- (void)didUnselect
-{
-    [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTPrefsQuit"
-                                                                   object: @"GeekToolPrefs"
-                                                                 userInfo: nil
-                                                       deliverImmediately: YES];
-    [[[NSFontManager sharedFontManager] fontPanel: NO] close];
-}
-
-- (void)geekToolLaunched:(NSNotification*)aNotification
-{
-    /*
-     [gEnable setState: YES];
-     */
-     [self notifyHighlight];
-
 }
 
 #pragma mark Saving
@@ -191,7 +131,6 @@
     rootObject = [NSMutableDictionary dictionary];
     
     [rootObject setValue:[self groups] forKey:@"groups"];
-    [rootObject setValue:[self activeGroup] forKey:@"activeGroup"];
     [NSKeyedArchiver archiveRootObject:rootObject toFile:path];
 }
 
@@ -215,7 +154,7 @@
     
     // find active group
     for (NTGroup *tmp in groups)
-        if ([[tmp properties] objectForKey:@"active"]) [self setActiveGroup:tmp];  
+        if ([[tmp properties] objectForKey:@"active"]) [groupController setSelectedObjects:[NSArray arrayWithObject:tmp]];  
 }
 
 - (void)loadPreferences

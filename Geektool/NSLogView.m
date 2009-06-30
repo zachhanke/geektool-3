@@ -4,15 +4,10 @@
 #import "LogWindow.h"
 #import "LogWindowController.h"
 
-// its magnetic windows!
-#define MAGN 10
-
 #define MoveDragType 2
 #define ResizeDragType 1
 
-// this class exists so we can move/resize our borderless window
-// unfortunately, these common functions are unavailable to us because
-// we are using an NSBorderlessWindow, so we must recreate them manually ourselves
+// this class exists so we can move/resize our borderless window unfortunately, these common functions are unavailable to us because we are using an NSBorderlessWindow, so we must recreate them manually ourselves
 @implementation NSLogView
 
 - (void)awakeFromNib
@@ -24,8 +19,7 @@
 #pragma mark View Attributes
 - (BOOL)acceptsFirstMouse:(NSEvent *)theEvent
 {
-    // lets us so user can move window immediately, instead of clicking on it
-    // to make it "active" and then again to actually move it
+    // lets us so user can move window immediately, instead of clicking on it to make it "active" and then again to actually move it
     return YES;
 }
 
@@ -36,8 +30,7 @@
     else return YES;
 }
 
-// have our window accept commands when its highlighted. when its not, don't
-// allow any direct user interaction
+// have our window accept commands when its highlighted. when its not, don't allow any direct user interaction
 - (BOOL)acceptsFirstResponder
 {
     if (highlighted)
@@ -74,8 +67,7 @@
     mouseLoc = [window convertBaseToScreen:[theEvent locationInWindow]];
     windowFrame = [window frame];
     
-    // figure out where we are clicking
-    // either on the resize handle or not
+    // figure out where we are clicking either on the resize handle or not
     if (NSMouseInRect(mouseLoc,NSMakeRect(NSMaxX(windowFrame) - 10,NSMaxY(windowFrame) - NSHeight(windowFrame),10,10),NO))
         dragType = ResizeDragType;
     else
@@ -86,6 +78,9 @@
         [(LogWindowController*)logWindowController scrollEnd];
     [self display];
      */
+    
+    // tell our GTLog that we are going to be screwing with the coords
+    [[logWindowController delegate] setIsBeingDragged:TRUE];
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent
@@ -189,15 +184,20 @@
         [window setFrameOrigin:newWindowFrame.origin];
         [[NSNotificationCenter defaultCenter] postNotificationName:NSWindowDidMoveNotification object:window];		
     }
+    // update our GTLog coords
+    NSRect coords = [self convertToNTCoords:[[self window] frame]];
+    [[logWindowController delegate] setCoords:coords];
 }
 
 - (void)mouseUp:(NSEvent *)theEvent;
 {
-     //NSLog(@"frame: %@",[[ logWindowController window ] stringWithSavedFrame]);
-     if ([(LogWindowController*)logWindowController type] == TYPE_SHELL)
-     [logWindowController scrollEnd];
-     [text display];
-     
+    //NSLog(@"frame: %@",[[ logWindowController window ] stringWithSavedFrame]);
+    if ([(LogWindowController*)logWindowController type] == TYPE_SHELL)
+        [logWindowController scrollEnd];
+    [text display];
+    
+
+    [[logWindowController delegate] setIsBeingDragged:FALSE];
 }
 
 #pragma mark View Drawing
@@ -220,8 +220,7 @@
         // fill rect with this color
         [bp fill];
         
-        // set the corner image to the resize handle (fun fact: "coin" means
-        // "corner" in french)
+        // set the corner image to the resize handle (fun fact: "coin" means "corner" in french)
         [corner setImage: [NSImage imageNamed: @"coin"]];
     }
     else
@@ -249,6 +248,15 @@
 - (void)setCrop:(BOOL)aBool
 {
     crop = aBool;
+}
+
+- (NSRect)convertToNTCoords:(NSRect)appleCoordRect
+{
+    NSRect screenSize = [[NSScreen mainScreen] frame];
+    return NSMakeRect(appleCoordRect.origin.x,
+                      (screenSize.size.height - appleCoordRect.origin.y - appleCoordRect.size.height),
+                      appleCoordRect.size.width,
+                      appleCoordRect.size.height);
 }
 
 @end

@@ -14,15 +14,25 @@
 
 - (id)init
 {
-    if (self = [super init])
-    {
-        // just in case we wanted to add more stuff later on
-        properties = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                               @"Default", @"name",
-                               [NSNumber numberWithBool:NO], @"active",
-                               nil];
-        logs = [[NSMutableArray alloc] init];
-    }
+    // just in case we wanted to add more stuff later on
+    NSDictionary *defaultProperties = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                                       @"Default", @"name",
+                                       [NSNumber numberWithBool:NO], @"active",
+                                       nil];
+    NSArray *defaultLogs = [[NSMutableArray alloc] init];
+    
+    return [self initWithProperties:defaultProperties andLogs:defaultLogs];
+}
+
+- (id)initWithProperties:(NSDictionary*)initProperties andLogs:(NSArray*)initLogs
+{
+    if (!(self = [super init])) return nil;
+    
+    // just in case we wanted to add more stuff later on
+    [self setProperties:initProperties];
+    [self setLogs:initLogs];
+    [self addObserver:self forKeyPath:@"properties.active" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
+    
     return self;
 }
 
@@ -30,8 +40,27 @@
 {
     [properties release];
     [logs release];
+    [self removeObserver:self forKeyPath:@"properties.active"]; 
     
     [super dealloc];
+}
+
+#pragma mark Observing
+// properties.active is changed by GroupController update children of their active status
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"properties.active"] &&
+        ([[change valueForKey:NSKeyValueChangeOldKey]boolValue] != [[change valueForKey:NSKeyValueChangeNewKey]boolValue]))
+    {
+        [self updateChildrenActiveStatusTo:[[change valueForKey:NSKeyValueChangeNewKey]boolValue]];
+    }
+}
+
+#pragma mark Log Operations
+- (void)updateChildrenActiveStatusTo:(BOOL)newStatus
+{
+    if ([logs count])
+        [logs makeObjectsPerformSelector:@selector(setActive:) withObject:newStatus];
 }
 
 #pragma mark KVC
@@ -66,12 +95,7 @@
 #pragma mark Coding
 - (id)initWithCoder:(NSCoder *)coder
 {
-    if (self = [super init])
-    {
-        [self setProperties:[coder decodeObjectForKey:@"properties"]];
-        [self setLogs: [coder decodeObjectForKey:@"logs"]];
-    }
-    return self;
+    return [self initWithProperties:[coder decodeObjectForKey:@"properties"] andLogs:[coder decodeObjectForKey:@"logs"]];
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder

@@ -29,9 +29,7 @@
 
 - (void)flagUpdate:(NSNotification*)aNotification
 {
-    // check to see if our log sent the notification
-    // the ident is simply the refresh, as if two logs have the same refresh,
-    // they are going to be refreshing at the same time.
+    // check to see if our log sent the notification the ident is simply the refresh, as if two logs have the same refresh, they are going to be refreshing at the same time.
     if ([owner ident] == [[[aNotification userInfo]objectForKey:@"ident"]intValue])
     {
         render = TRUE;

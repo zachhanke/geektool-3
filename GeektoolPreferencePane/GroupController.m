@@ -15,30 +15,39 @@
 {
     MovedRowsType = @"NTGroup_Moved_Item";
     CopiedRowsType = @"NTGroup_Copied_Item";
-    // register for drag and drop
     
+    // register for drag and drop
 	[tableView setDraggingSourceOperationMask:NSDragOperationLink forLocal:NO];
 	[tableView setDraggingSourceOperationMask:(NSDragOperationCopy | NSDragOperationMove) forLocal:YES];
 	
-	[tableView registerForDraggedTypes:
-    [NSArray arrayWithObjects:CopiedRowsType, MovedRowsType, nil]];
+	[tableView registerForDraggedTypes:[NSArray arrayWithObjects:CopiedRowsType, MovedRowsType, nil]];
     [tableView setAllowsMultipleSelection:YES];
-	[self addObserver:self forKeyPath:@"selectionIndex" options:NSKeyValueObservingOptionNew context:NULL];
-
-	[super awakeFromNib];
-    
+	[self addObserver:self forKeyPath:@"selectedObjects" options:0 context:NULL];
 }
 
+- (void)dealloc
+{
+    [self removeObserver:self forKeyPath:@"selectedObjects"];
+    [super dealloc];
+}
+
+#pragma mark Observing
+// based on selection, set the group to be active/inactive
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if (1)
+    // when a selection is changed
+    if([keyPath isEqualToString:@"selectedObjects"])
     {
-        NSNumber *obj1 = [change valueForKey:NSKeyValueChangeNewKey];// setHighlighted:FALSE];
-        [obj1 class];
-        //[[change valueForKey:NSKeyValueChangeOldKey] setHighlighted:TRUE];
-    }
+        if (oldSelectedGroup) [[oldSelectedGroup properties] setValue:[NSNumber numberWithBool:NO] forKey:@"active"];
+        
+        if ([[self selectedObjects]count])
+        {
+            oldSelectedGroup = [[self selectedObjects]objectAtIndex:0];
+            [[oldSelectedGroup properties] setValue:[NSNumber numberWithBool:YES] forKey:@"active"];
+        }
+    }    
+    
 }
-
 
 #pragma mark UI
 - (IBAction)showGroupsCustomization:(id)sender
@@ -77,8 +86,7 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 	NSData *rowIndexesArchive = [NSKeyedArchiver archivedDataWithRootObject:rowIndexes];
     [pboard setData:rowIndexesArchive forType:MovedRowsType];
 	
-	// create new array of selected rows for remote drop
-    // could do deferred provision, but keep it direct for clarity
+	// create new array of selected rows for remote drop could do deferred provision, but keep it direct for clarity
 	NSMutableArray *rowCopies = [NSMutableArray arrayWithCapacity:[rowIndexes count]];
 	
     unsigned int currentIndex = [rowIndexes firstIndex];
@@ -88,8 +96,7 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
         currentIndex = [rowIndexes indexGreaterThanIndex: currentIndex];
     }
 	
-	// setPropertyList works here because we're using dictionaries, strings,
-	// and dates; otherwise, archive collection to NSData...
+	// setPropertyList works here because we're using dictionaries, strings, and dates; otherwise, archive collection to NSData...
 	[pboard setPropertyList:rowCopies forType:CopiedRowsType];
 	
     return YES;
@@ -107,8 +114,7 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
     if ([info draggingSource] == tableView) {
         dragOp =  NSDragOperationMove;
     }
-    // we want to put the object at, not over,
-    // the current row (contrast NSTableViewDropOn) 
+    // we want to put the object at, not over, the current row (contrast NSTableViewDropOn) 
     [tv setDropRow:row dropOperation:NSTableViewDropAbove];
 	
     return dragOp;
@@ -143,8 +149,7 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 -(NSIndexSet *)moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)fromIndexSet
 												toIndex:(unsigned int)insertIndex
 {	
-	// If any of the removed objects come before the insertion index,
-	// we need to decrement the index appropriately
+	// If any of the removed objects come before the insertion index, we need to decrement the index appropriately
 	unsigned int adjustedInsertIndex =
 	insertIndex - [fromIndexSet countOfIndexesInRange:(NSRange){0, insertIndex}];
 	NSRange destinationRange = NSMakeRange(adjustedInsertIndex, [fromIndexSet count]);

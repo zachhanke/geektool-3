@@ -13,7 +13,7 @@
     IBOutlet id quartzView;
     int	type;
     int ident;
-    //bool rc = NO;
+    id delegate;
 }
 - (void)awakeFromNib;
 - (void)windowWillClose:(NSNotification *)aNotification;
@@ -22,6 +22,8 @@
 - (int)ident;
 - (void)setType:(int)anInt;
 - (int)type;
+- (void)setDelegate:(id)newDelegate;
+- (id)delegate;
 #pragma mark Only Accessors
 - (id)quartzView;
 - (id)logView;
@@ -46,7 +48,7 @@
 - (void)setHasShadow:(bool)flag;
 - (void)setOpaque:(bool)flag;
 - (void)setLevel:(int)level;
--(void)setSticky:(BOOL)flag ;
+- (void)setSticky:(BOOL)flag ;
 #pragma mark Window Actions
 - (void)makeKeyAndOrderFront:(id)sender;
 - (void)display;
@@ -56,4 +58,5 @@
 - (void)setImage:(NSImage*)anImage;
 #pragma mark Misc Functions
 - (void)setCrop:(BOOL)crop;
+
 @end

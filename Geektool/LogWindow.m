@@ -9,19 +9,17 @@
     self = [super initWithContentRect:contentRect styleMask:NSBorderlessWindowMask backing:backingType defer:NO];
     if (self != nil)
     {
-        [self setHasShadow: NO];
-        [self setOpaque: NO];
+        [self setHasShadow:NO];
+        [self setOpaque:NO];
         [self setBackgroundColor:[NSColor clearColor]];
-        [text setEnabled: NO];
+        [text setEnabled:NO];
         [self setReleasedWhenClosed:YES];
     }
     return self;
 }
 
-/*
- Custom windows that use the NSBorderlessWindowMask can't become key by default.
- Override this method so that controls in this window will be enabled.
- */
+
+// Custom windows that use the NSBorderlessWindowMask can't become key by default. Override this method so that controls in this window will be enabled.
 - (BOOL)canBecomeKeyWindow
 {
     return YES;
