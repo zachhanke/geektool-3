@@ -1,11 +1,14 @@
 #import "LogWindowController.h"
 #import "CGSPrivate.h"
+#import "LogWindow.h"
 #import "defines.h"
 
 #define ZeroRange NSMakeRange(NSNotFound, 0)
 
 // controls each individual log
 @implementation LogWindowController
+
+@synthesize parentLog;
 
 - (void)awakeFromNib
 {
@@ -39,15 +42,6 @@
     return type;
 }
 
-- (void)setDelegate:(id)newDelegate
-{
-    delegate = newDelegate;
-}
-
-- (id)delegate
-{
-    return delegate;
-}
 #pragma mark Only Accessors
 
 - (id)quartzView

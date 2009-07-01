@@ -2,7 +2,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <Quartz/Quartz.h>
-#import "LogWindow.h"
+@class GTLog;
 
 @interface LogWindowController : NSWindowController
 {
@@ -13,8 +13,10 @@
     IBOutlet id quartzView;
     int	type;
     int ident;
-    id delegate;
+    GTLog *parentLog;
 }
+@property (assign) GTLog *parentLog;
+
 - (void)awakeFromNib;
 - (void)windowWillClose:(NSNotification *)aNotification;
 #pragma mark KVC
@@ -22,8 +24,6 @@
 - (int)ident;
 - (void)setType:(int)anInt;
 - (int)type;
-- (void)setDelegate:(id)newDelegate;
-- (id)delegate;
 #pragma mark Only Accessors
 - (id)quartzView;
 - (id)logView;

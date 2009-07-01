@@ -79,8 +79,7 @@
     [self display];
      */
     
-    // tell our GTLog that we are going to be screwing with the coords
-    [[logWindowController delegate] setIsBeingDragged:TRUE];
+    [[logWindowController parentLog]setIsBeingDragged:TRUE];
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent
@@ -94,8 +93,7 @@
         // Get the mouse location in window coordinates.    
         NSPoint currentMouseLoc = [NSEvent mouseLocation];
         
-        NSPoint delta = NSMakePoint(currentMouseLoc.x - mouseLoc.x,
-                                    currentMouseLoc.y - mouseLoc.y);
+        NSPoint delta = NSMakePoint(currentMouseLoc.x - mouseLoc.x,currentMouseLoc.y - mouseLoc.y);
         
         newWindowFrame.size.width += delta.x;
         newWindowFrame.size.height -= delta.y;
@@ -184,9 +182,8 @@
         [window setFrameOrigin:newWindowFrame.origin];
         [[NSNotificationCenter defaultCenter] postNotificationName:NSWindowDidMoveNotification object:window];		
     }
-    // update our GTLog coords
-    NSRect coords = [self convertToNTCoords:[[self window] frame]];
-    [[logWindowController delegate] setCoords:coords];
+    
+    [[logWindowController parentLog] setCoords:[self convertToNTCoords:[[self window] frame]]];
 }
 
 - (void)mouseUp:(NSEvent *)theEvent;
@@ -197,22 +194,20 @@
     [text display];
     
 
-    [[logWindowController delegate] setIsBeingDragged:FALSE];
+    [[logWindowController parentLog]setIsBeingDragged:FALSE];
 }
 
 #pragma mark View Drawing
 - (void)drawRect:(NSRect)rect
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [super drawRect: rect];
-    NSBezierPath *bp = [NSBezierPath bezierPathWithRect: [self bounds]];
+    NSBezierPath *bp = [NSBezierPath bezierPathWithRect:[self bounds]];
     NSColor *color;
     
     // if we want this window to be highlighted
     if (highlighted)
     {
-        color = [NSUnarchiver unarchiveObjectWithData:
-                 [[NSUserDefaults standardUserDefaults] objectForKey:@"selectionColor"]];
+        color = [NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] objectForKey:@"selectionColor"]];
         
         // further drawing will be done with this color
         [color set];
@@ -220,8 +215,7 @@
         // fill rect with this color
         [bp fill];
         
-        // set the corner image to the resize handle (fun fact: "coin" means "corner" in french)
-        [corner setImage: [NSImage imageNamed: @"coin"]];
+        [corner setImage:[NSImage imageNamed:@"coin"]];
     }
     else
     {
@@ -233,7 +227,6 @@
         // get rid of the corner handler, since we won't be needing it
         [corner setImage: nil];
     }
-    [pool release];
 }
 
 #pragma mark Misc Actions
@@ -253,10 +246,7 @@
 - (NSRect)convertToNTCoords:(NSRect)appleCoordRect
 {
     NSRect screenSize = [[NSScreen mainScreen] frame];
-    return NSMakeRect(appleCoordRect.origin.x,
-                      (screenSize.size.height - appleCoordRect.origin.y - appleCoordRect.size.height),
-                      appleCoordRect.size.width,
-                      appleCoordRect.size.height);
+    return NSMakeRect(appleCoordRect.origin.x,(screenSize.size.height - appleCoordRect.origin.y - appleCoordRect.size.height),appleCoordRect.size.width,appleCoordRect.size.height);
 }
 
 @end

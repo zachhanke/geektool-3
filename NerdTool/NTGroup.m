@@ -12,18 +12,6 @@
 
 @implementation NTGroup
 
-- (id)init
-{
-    // just in case we wanted to add more stuff later on
-    NSDictionary *defaultProperties = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       @"Default", @"name",
-                                       [NSNumber numberWithBool:NO], @"active",
-                                       nil];
-    NSArray *defaultLogs = [[NSMutableArray alloc] init];
-    
-    return [self initWithProperties:defaultProperties andLogs:defaultLogs];
-}
-
 - (id)initWithProperties:(NSDictionary*)initProperties andLogs:(NSArray*)initLogs
 {
     if (!(self = [super init])) return nil;
@@ -36,31 +24,35 @@
     return self;
 }
 
+- (id)init
+{
+    // just in case we wanted to add more stuff later on
+    NSDictionary *defaultProperties = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                                       @"Default", @"name",
+                                       [NSNumber numberWithBool:NO], @"active",
+                                       nil];
+    NSArray *defaultLogs = [[NSMutableArray alloc] init];
+    
+    return [self initWithProperties:defaultProperties andLogs:defaultLogs];
+}
+
 - (void)dealloc
 {
     [properties release];
     [logs release];
     [self removeObserver:self forKeyPath:@"properties.active"]; 
-    
     [super dealloc];
 }
 
 #pragma mark Observing
-// properties.active is changed by GroupController update children of their active status
+// properties.active is changed by GroupController
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([keyPath isEqualToString:@"properties.active"] &&
-        ([[change valueForKey:NSKeyValueChangeOldKey]boolValue] != [[change valueForKey:NSKeyValueChangeNewKey]boolValue]))
+    if ([keyPath isEqualToString:@"properties.active"])
     {
-        [self updateChildrenActiveStatusTo:[[change valueForKey:NSKeyValueChangeNewKey]boolValue]];
+        if ([change valueForKey:NSKeyValueChangeOldKey] != [change valueForKey:NSKeyValueChangeNewKey]) return;
+        if ([logs count]) [logs makeObjectsPerformSelector:@selector(setActive:) withObject:[NSNumber numberWithBool:[[change valueForKey:NSKeyValueChangeNewKey]boolValue]]];
     }
-}
-
-#pragma mark Log Operations
-- (void)updateChildrenActiveStatusTo:(BOOL)newStatus
-{
-    if ([logs count])
-        [logs makeObjectsPerformSelector:@selector(setActive:) withObject:newStatus];
 }
 
 #pragma mark KVC
@@ -74,7 +66,7 @@
     if (properties != newProperties)
     {
         [properties autorelease];
-        properties = [[NSMutableDictionary alloc] initWithDictionary:newProperties];
+        properties = [[NSMutableDictionary alloc]initWithDictionary:newProperties];
     }
 }
 
@@ -88,7 +80,7 @@
     if (logs != newLogs)
     {
         [logs autorelease];
-        logs = [[NSMutableArray alloc] initWithArray:newLogs];
+        logs = [[NSMutableArray alloc]initWithArray:newLogs];
     }
 }
 

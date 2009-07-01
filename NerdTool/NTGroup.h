@@ -8,16 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 
-
 @interface NTGroup : NSObject <NSCoding, NSCopying, NSMutableCopying>
 {
     NSMutableDictionary *properties;
     NSMutableArray *logs;
 }
 - (id)initWithProperties:(NSDictionary*)initProperties andLogs:(NSArray*)initLogs;
-
-// Useful
-- (void)updateChildrenActiveStatusTo:(BOOL)newStatus;
 
 // KVC
 - (NSMutableDictionary *)properties;

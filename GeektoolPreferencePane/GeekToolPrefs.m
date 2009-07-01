@@ -17,7 +17,7 @@
 {
     if (self = [super init])
     {
-        groups = [[NSMutableArray alloc] init];
+        groups = [[NSMutableArray alloc]init];
     }
     return self;
 }
@@ -27,8 +27,7 @@
     [self loadDataFromDisk];
     [self loadPreferences];
     
-    // Yes, we need transparency
-    [[NSColorPanel sharedColorPanel] setShowsAlpha: YES];
+    [[NSColorPanel sharedColorPanel]setShowsAlpha:YES];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)note
@@ -42,7 +41,7 @@
     if (groups != newGroups)
     {
         [groups autorelease];
-        groups = [[NSMutableArray alloc] initWithArray:newGroups];
+        groups = [[NSMutableArray alloc]initWithArray:newGroups];
     }
 }
 
@@ -99,28 +98,16 @@
      [[NSFontManager sharedFontManager] orderFrontFontPanel: self];
 }
 */
-- (IBAction)updateLogs:(id)sender
-{
-    NSMutableArray *groupsList = [NSMutableArray array];
-    for (NTGroup *tmp in groups) [groupsList addObject:
-                                  [[tmp properties] objectForKey:@"name"]];    
-}
 
 #pragma mark Saving
 - (NSString *)pathForDataFile
 {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *appSupportDir = [[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,NSUserDomainMask,YES) objectAtIndex:0]stringByAppendingPathComponent:[[NSProcessInfo processInfo]processName]];
     
-    NSString *folder = @"~/Library/Application Support/NerdTool/";
-    folder = [folder stringByExpandingTildeInPath];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:appSupportDir] == NO)
+        [[NSFileManager defaultManager] createDirectoryAtPath:appSupportDir attributes:nil];
     
-    if ([fileManager fileExistsAtPath:folder] == NO)
-    {
-        [fileManager createDirectoryAtPath:folder attributes:nil];
-    }
-    
-    NSString *fileName = @"LogData.ntdata";
-    return [folder stringByAppendingPathComponent:fileName];    
+    return [appSupportDir stringByAppendingPathComponent:@"LogData.ntdata"];    
 }
 
 - (void)saveDataToDisk
@@ -137,9 +124,8 @@
 - (void)loadDataFromDisk
 {
     NSString *path = [self pathForDataFile];
-    NSDictionary *rootObject;
     
-    rootObject = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+    NSDictionary *rootObject = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     
     NSArray *groupArray = [rootObject valueForKey:@"groups"];
     
@@ -152,14 +138,12 @@
     
     [self setGroups:groupArray];
     
-    // find active group
     for (NTGroup *tmp in groups)
         if ([[tmp properties] objectForKey:@"active"]) [groupController setSelectedObjects:[NSArray arrayWithObject:tmp]];  
 }
 
 - (void)loadPreferences
 {
-    // load selection color data
     NSData *selectionColorData = [[NSUserDefaults standardUserDefaults] objectForKey: @"selectionColor"];
     if (!selectionColorData) selectionColorData = [NSArchiver archivedDataWithRootObject:[[NSColor alternateSelectedControlColor] colorWithAlphaComponent:0.3]];
     [[NSUserDefaults standardUserDefaults] setObject:selectionColorData forKey:@"selectionColor"];

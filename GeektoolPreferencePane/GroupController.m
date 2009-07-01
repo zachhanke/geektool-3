@@ -7,6 +7,7 @@
 //
 
 #import "GroupController.h"
+#import "NTGroup.h"
 #import "NSArrayController+Duplicate.h"
 
 @implementation GroupController
@@ -22,6 +23,7 @@
 	
 	[tableView registerForDraggedTypes:[NSArray arrayWithObjects:CopiedRowsType, MovedRowsType, nil]];
     [tableView setAllowsMultipleSelection:YES];
+    
 	[self addObserver:self forKeyPath:@"selectedObjects" options:0 context:NULL];
 }
 
@@ -38,12 +40,12 @@
     // when a selection is changed
     if([keyPath isEqualToString:@"selectedObjects"])
     {
-        if (oldSelectedGroup) [[oldSelectedGroup properties] setValue:[NSNumber numberWithBool:NO] forKey:@"active"];
+        if (oldSelectedGroup) [[oldSelectedGroup properties]setValue:[NSNumber numberWithBool:NO] forKey:@"active"];
         
         if ([[self selectedObjects]count])
         {
             oldSelectedGroup = [[self selectedObjects]objectAtIndex:0];
-            [[oldSelectedGroup properties] setValue:[NSNumber numberWithBool:YES] forKey:@"active"];
+            [[oldSelectedGroup properties]setValue:[NSNumber numberWithBool:YES] forKey:@"active"];
         }
     }    
     
@@ -52,12 +54,8 @@
 #pragma mark UI
 - (IBAction)showGroupsCustomization:(id)sender
 {
-    [NSApp beginSheet: groupsSheet
-       modalForWindow: [NSApp mainWindow]
-        modalDelegate: nil
-       didEndSelector: nil
-          contextInfo: nil];
-    [NSApp runModalForWindow: [NSApp mainWindow]];
+    [NSApp beginSheet:groupsSheet modalForWindow:[NSApp mainWindow] modalDelegate:nil didEndSelector:nil contextInfo:nil];
+    [NSApp runModalForWindow:[NSApp mainWindow]];
     // Sheet is up here
     [NSApp endSheet: groupsSheet];
     [groupsSheet orderOut: self];
@@ -73,9 +71,7 @@
 }
 #pragma mark Drag n' Drop Stuff
 // thanks to mmalc for figuring most of this stuff out for me (and just being amazing)
-- (BOOL)tableView:(NSTableView *)aTableView
-writeRowsWithIndexes:(NSIndexSet *)rowIndexes
-	 toPasteboard:(NSPasteboard *)pboard
+- (BOOL)tableView:(NSTableView *)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
 {
 	// declare our own pasteboard types
     NSArray *typesArray = [NSArray arrayWithObjects:MovedRowsType, nil];
@@ -102,34 +98,28 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
     return YES;
 }
 
-- (NSDragOperation)tableView:(NSTableView*)tv
-				validateDrop:(id <NSDraggingInfo>)info
-				 proposedRow:(int)row
-	   proposedDropOperation:(NSTableViewDropOperation)op
+- (NSDragOperation)tableView:(NSTableView*)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)op
 {
     
     NSDragOperation dragOp = NSDragOperationCopy;
     
     // if drag source is self, it's a move unless the Option key is pressed
-    if ([info draggingSource] == tableView) {
-        dragOp =  NSDragOperationMove;
-    }
+    if ([info draggingSource] == tableView)
+        dragOp = NSDragOperationMove;
+    
     // we want to put the object at, not over, the current row (contrast NSTableViewDropOn) 
     [tv setDropRow:row dropOperation:NSTableViewDropAbove];
 	
     return dragOp;
 }
 
-- (BOOL)tableView:(NSTableView*)tv
-	   acceptDrop:(id <NSDraggingInfo>)info
-			  row:(int)row
-	dropOperation:(NSTableViewDropOperation)op
+- (BOOL)tableView:(NSTableView*)tv acceptDrop:(id <NSDraggingInfo>)info row:(int)row dropOperation:(NSTableViewDropOperation)op
 {
     BOOL result = NO;
     
-    if (row < 0) {
+    if (row < 0)
 		row = 0;
-	}
+    
 	// if drag source is self, it's a move unless the Option key is pressed
     if ([info draggingSource] == tableView)
     {
@@ -146,12 +136,10 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
     return result;
 }
 
--(NSIndexSet *)moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)fromIndexSet
-												toIndex:(unsigned int)insertIndex
+-(NSIndexSet *)moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)fromIndexSet toIndex:(unsigned int)insertIndex
 {	
 	// If any of the removed objects come before the insertion index, we need to decrement the index appropriately
-	unsigned int adjustedInsertIndex =
-	insertIndex - [fromIndexSet countOfIndexesInRange:(NSRange){0, insertIndex}];
+	unsigned int adjustedInsertIndex = insertIndex - [fromIndexSet countOfIndexesInRange:(NSRange){0, insertIndex}];
 	NSRange destinationRange = NSMakeRange(adjustedInsertIndex, [fromIndexSet count]);
 	NSIndexSet *destinationIndexes = [NSIndexSet indexSetWithIndexesInRange:destinationRange];
 	

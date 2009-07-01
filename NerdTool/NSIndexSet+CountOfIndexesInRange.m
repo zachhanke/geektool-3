@@ -8,7 +8,6 @@
 
 #import "NSIndexSet+CountOfIndexesInRange.h"
 
-
 @implementation NSIndexSet (CountOfIndexesInRange)
 
 -(unsigned int)countOfIndexesInRange:(NSRange)range
