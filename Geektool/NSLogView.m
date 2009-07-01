@@ -1,8 +1,8 @@
 #import "NSLogView.h"
-#import "defines.h"
-#import "GeekTool.h"
 #import "LogWindow.h"
-#import "LogWindowController.h"
+#import "GTLog.h"
+#import "LogTextField.h"
+#import "defines.h"
 
 #define MoveDragType 2
 #define ResizeDragType 1
@@ -16,9 +16,9 @@
 }
 
 #pragma mark View Attributes
+    // lets us so user can move window immediately, instead of clicking on it to make it "active" and then again to actually move it
 - (BOOL)acceptsFirstMouse:(NSEvent *)theEvent
 {
-    // lets us so user can move window immediately, instead of clicking on it to make it "active" and then again to actually move it
     return YES;
 }
 
@@ -74,7 +74,7 @@
     [self display];
      */
     
-    [[logWindowController parentLog]setIsBeingDragged:TRUE];
+    [[(LogWindow*)[logWindowController window]parentLog]setIsBeingDragged:TRUE];
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent
@@ -131,7 +131,7 @@
          */
         
         [window setFrame:newWindowFrame display:YES animate:NO];
-        [[NSNotificationCenter defaultCenter] postNotificationName:NSWindowDidResizeNotification object:window];
+        [[NSNotificationCenter defaultCenter]postNotificationName:NSWindowDidResizeNotification object:window];
     }
     // we are moving the window, not resizing it
     else
@@ -173,23 +173,22 @@
          */
         
         // Move the window to the new location
-        [[NSNotificationCenter defaultCenter] postNotificationName:NSWindowWillMoveNotification object:window];
+        [[NSNotificationCenter defaultCenter]postNotificationName:NSWindowWillMoveNotification object:window];
         [window setFrameOrigin:newWindowFrame.origin];
-        [[NSNotificationCenter defaultCenter] postNotificationName:NSWindowDidMoveNotification object:window];		
+        [[NSNotificationCenter defaultCenter]postNotificationName:NSWindowDidMoveNotification object:window];		
     }
     
-    [[logWindowController parentLog] setCoords:[self convertToNTCoords:[[self window] frame]]];
+    [[(LogWindow*)[logWindowController window]parentLog] setCoords:[self convertToNTCoords:[[self window] frame]]];
 }
 
 - (void)mouseUp:(NSEvent *)theEvent;
 {
-    //NSLog(@"frame: %@",[[ logWindowController window ] stringWithSavedFrame]);
-    if ([(LogWindowController*)logWindowController type] == TYPE_SHELL)
-        [logWindowController scrollEnd];
+    if ([[[(LogWindow*)[logWindowController window]parentLog]properties]valueForKey:@"type"] == TYPE_SHELL)
+        [[(LogWindow*)[logWindowController window]textView]scrollEnd];
     [text display];
     
 
-    [[logWindowController parentLog]setIsBeingDragged:FALSE];
+    [[(LogWindow*)[logWindowController window]parentLog]setIsBeingDragged:FALSE];
 }
 
 #pragma mark View Drawing
@@ -231,11 +230,6 @@
     if (highlighted)
         [[self window] makeKeyWindow];
     [self setNeedsDisplay:YES];
-}
-
-- (void)setCrop:(BOOL)aBool
-{
-    crop = aBool;
 }
 
 - (NSRect)convertToNTCoords:(NSRect)appleCoordRect

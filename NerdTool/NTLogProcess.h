@@ -9,11 +9,13 @@
 #import <Cocoa/Cocoa.h>
 
 @class GTLog;
-@class LogWindowController;
+@class LogWindow;
 
 @interface NTLogProcess : NSObject
 {
-    LogWindowController *windowController;
+    NSWindowController *windowController;
+    LogWindow *window;
+    
     NSDictionary *env;
     NSTask *task;
     NSTimer *timer;
@@ -24,7 +26,7 @@
     NSArray *arguments;
     BOOL timerNeedsUpdate;
 }
-@property (assign) LogWindowController *windowController;
+@property (assign) NSWindowController *windowController;
 @property (assign) GTLog *parentLog;
 @property (assign) NSDictionary *parentProperties;
 @property (copy) NSDictionary *attributes;
@@ -54,6 +56,6 @@
 - (NSDictionary*)parentProperties;
 - (NSRect)screenToRect:(NSRect)var;
 - (NSRect)rect;
-- (int)NSImageFit;
-- (int)NSPictureAlignment;
+- (int)imageFit;
+- (int)imageAlignment;
 @end

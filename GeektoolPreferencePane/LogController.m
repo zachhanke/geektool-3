@@ -8,6 +8,7 @@
 
 #import "LogController.h"
 #import "GTLog.h"
+#import "LogWindow.h"
 #import "NSIndexSet+CountOfIndexesInRange.h"
 #import "NSArrayController+Duplicate.h"
 
@@ -43,13 +44,13 @@
     if([keyPath isEqualToString:@"selectedObjects"])
     {
         // deselect old log if we can
-        if (oldSelectedLog) [[[oldSelectedLog logProcess]windowController] setHighlighted:NO];
+        if (oldSelectedLog) [(LogWindow*)[[[oldSelectedLog logProcess]windowController]window]setHighlighted:NO];
         
         // if an object is selected update our old selected log and select it
         if ([[self selectedObjects]count])
         {
             oldSelectedLog = [[self selectedObjects]objectAtIndex:0];
-            [[[oldSelectedLog logProcess]windowController] setHighlighted:YES];
+            [(LogWindow*)[[[oldSelectedLog logProcess]windowController]window]setHighlighted:YES];
         }
     }
     else [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

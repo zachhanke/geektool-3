@@ -75,8 +75,7 @@
 
 - (void)dealloc
 {
-    // NSTimer screws with the retain count
-    [logProcess dealloc];
+    [logProcess release];
     [properties release];
     [self removeObservers];
     [super dealloc];
@@ -151,7 +150,11 @@
     // open/close windows if at all possible
     if ([keyPath isEqualToString:@"properties.enabled"] || [keyPath isEqualToString:@"active"])
     {
-        if (logProcess) [logProcess dealloc]; // see this classes dealloc for more info
+        if (logProcess)
+        {
+            [logProcess release];
+            logProcess = nil;
+        }
         if (![[self active]boolValue] || ![properties boolForKey:@"enabled"]) return;
         
         self.logProcess = [[NTLogProcess alloc]initWithParentLog:self];
@@ -160,6 +163,11 @@
     else if ([keyPath isEqualToString:@"properties.shadowWindow"] || [keyPath isEqualToString:@"properties.file"] || [keyPath isEqualToString:@"properties.command"] || [keyPath isEqualToString:@"properties.type"])
     {
         [logProcess setupLogWindowAndDisplay];
+    }
+    else if ([keyPath isEqualToString:@"properties.refresh"])
+    {
+        [logProcess setTimerNeedsUpdate:YES];
+        [logProcess updateWindow];
     }
     else
     {

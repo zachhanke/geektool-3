@@ -8,7 +8,8 @@
 
 #import "NTLogProcess.h"
 #import "LogWindow.h"
-#import "LogWindowController.h"
+#import "LogTextField.h"
+#import "AIQuartzView.h"
 #import "NSDictionary+IntAndBoolAccessors.h"
 #import "defines.h"
 
@@ -24,16 +25,17 @@
 - (id)initWithParentLog:(id)parent
 {
     if (!(self = [super init])) return nil;
-    windowController = [[LogWindowController alloc]initWithWindowNibName:@"logWindow"];
-    [self setParentLog:parent];
+    windowController = [[NSWindowController alloc]initWithWindowNibName:@"logWindow"];
+    window = (LogWindow*)[windowController window];
     task = nil;
-    
+        
     // append app support folder to shell PATH
     NSMutableDictionary *tmpEnv = [NSMutableDictionary dictionaryWithDictionary:[[NSProcessInfo processInfo]environment]];
     NSString *appendedPath = [NSString stringWithFormat:@"%@:%@",[[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,NSUserDomainMask,YES) objectAtIndex:0]stringByAppendingPathComponent:[[NSProcessInfo processInfo]processName]],[tmpEnv objectForKey:@"PATH"]];
     [tmpEnv setObject:appendedPath forKey:@"PATH"];  
     env = [tmpEnv copy];
     
+    [self setParentLog:parent];
     return self;
     
 }
@@ -45,9 +47,11 @@
 
 - (void)dealloc
 {
+    [windowController close];
     [windowController release];
     [env release];
     [task release];
+    [self retain];
     [timer invalidate];
     [timer release];
     [super dealloc];
@@ -57,7 +61,7 @@
 {
     parentLog = log;
     [self setParentProperties:[parentLog properties]];
-    [windowController setParentLog:parentLog];
+    [window setParentLog:parentLog];
 }
 
 #pragma mark Window Creation/Management
@@ -73,8 +77,8 @@
 - (void)createWindow
 {        
     // we have to do this here instead of in the nib because we get an "invalid drawable" error if its done via the nib
-    [[windowController quartzView]setHidden:TRUE];
-    [windowController setHasShadow:[parentProperties boolForKey:@"shadowWindow"]];
+    [[window quartzView]setHidden:TRUE];
+    [window setHasShadow:[parentProperties boolForKey:@"shadowWindow"]];
     
     switch ([parentProperties integerForKey:@"type"])
     {
@@ -99,30 +103,28 @@
             break;
             
         case TYPE_QUARTZ:
-            [[windowController quartzView]setHidden:FALSE];
+            [[window quartzView]setHidden:FALSE];
             
             if (![[parentProperties objectForKey:@"quartzFile"]isEqual:@""]) break;
-            if ([[windowController quartzView]loadCompositionFromFile:[parentProperties objectForKey:@"quartzFile"]]) [[windowController quartzView]setAutostartsRendering:TRUE];                
+            if ([[window quartzView]loadCompositionFromFile:[parentProperties objectForKey:@"quartzFile"]]) [[window quartzView]setAutostartsRendering:TRUE];                
             break;
     }
 }
 
 - (void)updateWindow
 {
-    //==Pre-init==
-    NSWindow *window = [windowController window];
-    
+    //==Pre-init==    
     [window setFrame:[self screenToRect:[self rect]] display:NO];
     
     NSRect tmpRect = [self rect];
     tmpRect.origin.x = 0;
     tmpRect.origin.y = 0;
-    [windowController setTextRect:tmpRect]; 
+    [window setTextRect:tmpRect]; 
     
-    [(LogWindow*)window setClickThrough:YES];
+    [window setClickThrough:YES];
     [window setLevel:(([parentProperties integerForKey:@"alwaysOnTop"])?[parentProperties integerForKey:@"alwaysOnTop"]:kCGDesktopWindowLevel)];
-    [windowController setSticky:(![parentProperties boolForKey:@"alwaysOnTop"])];
-    [windowController setPictureAlignment:[self NSPictureAlignment]];
+    [window setSticky:(![parentProperties boolForKey:@"alwaysOnTop"])];
+    [[window imageView] setImageAlignment:[self imageAlignment]];
     
     //==Init==
     switch ([parentProperties integerForKey:@"type"])
@@ -130,7 +132,7 @@
         case TYPE_FILE:
             [self updateTextAttributes];
             
-            [windowController scrollEnd];
+            [[window textView]scrollEnd];
             break;
             
         case TYPE_SHELL:
@@ -141,18 +143,18 @@
             {
                 [self setArguments:[[[NSArray alloc]initWithObjects:@"-c",[parentProperties objectForKey:@"command"],nil]autorelease]];
                 
-                [windowController addText:@"" clear:YES];
+                [[window textView]addText:@"" clear:YES];
                 [self updateTimer];
             }
             
-            [windowController scrollEnd];
+            [[window textView]scrollEnd];
             break;
             
         case TYPE_IMAGE:
             // make a nice environment for the image
-            [windowController setTextBackgroundColor:[NSColor clearColor]];
-            [[windowController window]setAlphaValue:([parentProperties integerForKey:@"transparency"])];
-            [windowController setFit:[parentProperties integerForKey:@"imageFit"]];
+            [window setTextBackgroundColor:[NSColor clearColor]];
+            [window setAlphaValue:([parentProperties integerForKey:@"transparency"])];
+            [[window imageView]setImageScaling:[self imageFit]];
             if (timerNeedsUpdate) [self updateTimer];
             break;
             
@@ -162,16 +164,14 @@
     }
     
     //==Post-Init==
-    [windowController display];
+    [window display];
     
     timerNeedsUpdate = NO;
 }
 
 #pragma mark Task
 - (void)updateCommand:(NSTimer*)timer
-{
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-    
+{    
     switch ([parentProperties integerForKey:@"type"])
     {            
         case TYPE_SHELL:
@@ -206,7 +206,6 @@
             break;
             // notice we don't have a case for FILE because it does not need to be updated
     }
-    [pool release];
 }
 
 - (void)processNewDataFromTask:(NSNotification*)aNotification
@@ -225,17 +224,17 @@
     
     if (![newString isEqualTo:@""] || [parentProperties integerForKey:@"type"] == TYPE_FILE)
     {
-        [windowController addText:newString clear:([parentProperties integerForKey:@"type"] != TYPE_IMAGE)];
+        [[window textView]addText:newString clear:([parentProperties integerForKey:@"type"] != TYPE_IMAGE)];
         
         if ([parentProperties integerForKey:@"type"] == TYPE_SHELL)
         {
-            [windowController scrollEnd];
+            [[window textView]scrollEnd];
             [[aNotification object]waitForDataInBackgroundAndNotify];
         }
-        [windowController setAttributes:attributes];
+        [[window textView] setAttributes:attributes];
     }
     
-    [windowController display];
+    [window display];
     [newString release];
 }
 
@@ -244,18 +243,21 @@
 {
     if (timer)
     {
+        [self retain];
         [timer invalidate];
         [timer release];
     }
     timer = [[NSTimer scheduledTimerWithTimeInterval:[parentProperties integerForKey:@"refresh"]target:self selector:@selector(updateCommand:) userInfo:nil repeats:YES]retain];
     [timer fire];
+    
+    [self release]; // when the timer is added to the runloop, we are retained. we don't want to be.
 }
 
 - (void)updateTextAttributes
 {
     // get the colors right
-    [windowController setTextBackgroundColor:[NSUnarchiver unarchiveObjectWithData:[parentProperties objectForKey:@"backgroundColor"]]];
-    [windowController setShadowText:[parentProperties boolForKey:@"shadowText"]];
+    [window setTextBackgroundColor:[NSUnarchiver unarchiveObjectWithData:[parentProperties objectForKey:@"backgroundColor"]]];
+    [[window textView] setShadowText:[parentProperties boolForKey:@"shadowText"]];
     
     // Paragraph style
     NSMutableParagraphStyle *myParagraphStyle = [[NSMutableParagraphStyle alloc]init];
@@ -282,19 +284,19 @@
                                    nil];
     
     [self setAttributes:tmpAttributes];
-    [windowController setAttributes: attributes];
+    [[window textView]setAttributes:attributes];
 }
 #pragma mark -
 #pragma mark Window operations
 - (void)front
 {
-    [[windowController window] orderFront: self];
+    [window orderFront: self];
 }
 
 - (void)setImage:(NSString*)urlStr
 {    
     NSImage *myImage = [[NSImage alloc]initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr]]];
-    [windowController setImage: myImage];
+    [[window imageView] setImage:myImage];
     [myImage release];
 }
 
@@ -315,7 +317,7 @@
                       [parentProperties integerForKey:@"h"]);
 }
 
-- (int)NSImageFit
+- (int)imageFit
 {
     switch ([parentProperties integerForKey:@"imageFit"])
     {
@@ -332,7 +334,7 @@
     return NSScaleNone;
 }
 
-- (int)NSPictureAlignment
+- (int)imageAlignment
 {
     switch ([parentProperties integerForKey:@"pictureAlignment"])
     {

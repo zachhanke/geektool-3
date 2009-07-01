@@ -1,6 +1,5 @@
 #import "GeekTool.h"
 #import "LogWindow.h"
-#import "LogWindowController.h"
 
 @implementation GeekTool
 - (void)awakeFromNib

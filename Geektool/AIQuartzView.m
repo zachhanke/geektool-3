@@ -7,7 +7,7 @@
 //
 
 #import "AIQuartzView.h"
-#import "LogWindowController.h"
+#import "LogWindow.h"
 
 
 @implementation AIQuartzView

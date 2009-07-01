@@ -10,24 +10,25 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface LogTextField : NSTextView {
+@interface LogTextField : NSTextView
+{    
     void *shadowValues;
-    bool shadowText;
+    BOOL shadowText;
 }
-// This method will enlarge the view's frame by offset in all directions, thus preventing the shadow from being clipped by the view's bounding rect. The offset variable should be roughly the sum of height and radius passed to the next method. Drawing should be offset by this amount. (Perhaps a coordinate transform would be in order?)
-- (void) enlargeFrame: (int) offset;
+@property (assign) BOOL shadowText;
 
-    // Causes all drawing to be done using a drop shadow. Each call to this method must be followed by a call to hideShadow.
-- (void) showShadowHeight: (int) height // the offset of the drop shadow from what is drawn
-                   radius: (int) radius // how much the shadow is blurred
-                  azimuth: (int) azimuth // the angle that the light appears to come from
-                       ka: (float) ka; // 0.0 is a black shadow, 1.0 is no shadow
-
-    // Turns off the drop shadow.
-    // Must be called after calling the above method.
-- (void) hideShadow;
+- (void)awakeFromNib;
+- (void)setTextAlignment:(int)alignment;
+- (void)setAttributes:(NSDictionary*)attributes;
+- (void)setWrap:(BOOL)wrap;
+- (void)scrollEnd;
+- (void)addText:(NSString*)newText clear:(BOOL)clear;
+- (void)drawRect:(NSRect)rect;
+- (void)showShadowHeight:(int)height radius:(int)radius azimuth:(int)azimuth ka:(float)ka;
+- (void)hideShadow;
+- (BOOL)isOpaque;
+- (BOOL)shouldDrawInsertionPoint;
 - (BOOL)acceptsFirstResponder;
 - (BOOL)resignFirstResponder;
 - (BOOL)becomeFirstResponder;
-- (void)setShadowText:(bool)shadow;
 @end
