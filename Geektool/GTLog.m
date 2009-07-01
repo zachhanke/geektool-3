@@ -56,16 +56,14 @@
                                               [NSNumber numberWithBool:NO],@"shadowText",
                                               [NSNumber numberWithBool:NO],@"shadowWindow",
                                               [NSNumber numberWithBool:NO],@"alignment",
-                                            
-                                              [NSNumber numberWithInt:-1],@"windowLevel",
-                                              
+                                                                                          
                                               [NSNumber numberWithInt:TOP_LEFT],@"pictureAlignment",
                                               @"",@"imageURL",
                                               [NSNumber numberWithInt:100],@"transparency",
                                               [NSNumber numberWithInt:PROPORTIONALLY],@"imageFit",
                                               
                                               [NSNumber numberWithInt:0],@"x",
-                                              [NSNumber numberWithInt:0],@"y",
+                                              [NSNumber numberWithInt:20],@"y",
                                               [NSNumber numberWithInt:150],@"w",
                                               [NSNumber numberWithInt:150],@"h",
                                               
@@ -77,7 +75,8 @@
 
 - (void)dealloc
 {
-    [logProcess release];
+    // NSTimer screws with the retain count
+    [logProcess dealloc];
     [properties release];
     [self removeObservers];
     [super dealloc];
@@ -105,7 +104,6 @@
     [self addObserver:self forKeyPath:@"properties.shadowText" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
     [self addObserver:self forKeyPath:@"properties.shadowWindow" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
     [self addObserver:self forKeyPath:@"properties.alignment" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
-    [self addObserver:self forKeyPath:@"properties.windowLevel" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
     [self addObserver:self forKeyPath:@"properties.pictureAlignment" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
     [self addObserver:self forKeyPath:@"properties.imageURL" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
     [self addObserver:self forKeyPath:@"properties.transparency" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
@@ -137,7 +135,6 @@
     [self removeObserver:self forKeyPath:@"properties.shadowText"];
     [self removeObserver:self forKeyPath:@"properties.shadowWindow"];
     [self removeObserver:self forKeyPath:@"properties.alignment"];
-    [self removeObserver:self forKeyPath:@"properties.windowLevel"];
     [self removeObserver:self forKeyPath:@"properties.pictureAlignment"];
     [self removeObserver:self forKeyPath:@"properties.imageURL"];
     [self removeObserver:self forKeyPath:@"properties.transparency"];
@@ -154,25 +151,18 @@
     // open/close windows if at all possible
     if ([keyPath isEqualToString:@"properties.enabled"] || [keyPath isEqualToString:@"active"])
     {
-        if (logProcess) [logProcess release];
+        if (logProcess) [logProcess dealloc]; // see this classes dealloc for more info
         if (![[self active]boolValue] || ![properties boolForKey:@"enabled"]) return;
         
-        self.logProcess = [[[NTLogProcess alloc]initWithParentLog:self]autorelease];
+        self.logProcess = [[NTLogProcess alloc]initWithParentLog:self];
         [logProcess setupLogWindowAndDisplay];
     }
     else if ([keyPath isEqualToString:@"properties.shadowWindow"] || [keyPath isEqualToString:@"properties.file"] || [keyPath isEqualToString:@"properties.command"] || [keyPath isEqualToString:@"properties.type"])
     {
-        if (!logProcess)
-        
-        self.logProcess = [[[NTLogProcess alloc]initWithParentLog:self]autorelease];
         [logProcess setupLogWindowAndDisplay];
     }
     else
     {
-        if (!logProcess)
-
-        
-        self.logProcess = [[[NTLogProcess alloc]initWithParentLog:self]autorelease];
         [logProcess setTimerNeedsUpdate:NO];
         [logProcess updateWindow];
     }

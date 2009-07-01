@@ -13,7 +13,6 @@
 - (void)awakeFromNib
 {
     [self setNextResponder: [NSApplication sharedApplication]];
-    //[self setAutoresizesSubviews:NO];
 }
 
 #pragma mark View Attributes
@@ -30,7 +29,6 @@
     else return YES;
 }
 
-// have our window accept commands when its highlighted. when its not, don't allow any direct user interaction
 - (BOOL)acceptsFirstResponder
 {
     if (highlighted)
@@ -53,9 +51,6 @@
 }
 
 #pragma mark Mouse Handling
-/*
- Start tracking a potential drag operation here when the user first clicks the mouse, to establish the initial location.
- */
 - (void)mouseDown:(NSEvent *)theEvent
 {
     NSWindow *window = [self window];
@@ -233,8 +228,8 @@
 - (void)setHighlighted:(BOOL)flag
 {
     highlighted = flag;
-    //if (highlighted)
-        //[[self window] makeKeyWindow];
+    if (highlighted)
+        [[self window] makeKeyWindow];
     [self setNeedsDisplay:YES];
 }
 

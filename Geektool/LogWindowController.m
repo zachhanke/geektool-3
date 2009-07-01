@@ -2,6 +2,7 @@
 #import "CGSPrivate.h"
 #import "LogWindow.h"
 #import "defines.h"
+#import <Carbon/Carbon.h>
 
 #define ZeroRange NSMakeRange(NSNotFound, 0)
 
@@ -14,11 +15,6 @@
 {
     //[quartzView setMaxRenderingFrameRate:0.1];
     //float tmp = [quartzView maxRenderingFrameRate];
-}
-
-- (void)windowWillClose:(NSNotification *)aNotification
-{
-    [self autorelease];
 }
 
 #pragma mark KVC
@@ -69,8 +65,8 @@
 
 - (void)setTextBackgroundColor:(NSColor*)color
 {
-    [scrollView setBackgroundColor: color];
-    [[self window] setBackgroundColor: [NSColor clearColor]];
+    [scrollView setBackgroundColor:color];
+    [[self window]setBackgroundColor:[NSColor clearColor]];
 }
 
 - (void)setTextColor:(NSColor*)color
@@ -117,19 +113,13 @@
 
 - (void)setTextRect:(NSRect)rect
 {
-    //[text setFrame: rect];
-    //[text display];
-    [scrollView setFrame: rect];
+    [scrollView setFrame:rect];
     [scrollView display];
 }
 
 - (void)setAttributes:(NSDictionary*)attributes
 {
-    // NSLog(@"%@",attributes);
-    //    [[text textStorage] beginEditing];
-    [[text textStorage] setAttributes: attributes range: NSMakeRange(0,[[text string] length])];
-    //    [[text textStorage] endEditing];
-    //[self display];
+    [[text textStorage]setAttributes:attributes range:NSMakeRange(0,[[text string]length])];
 }
 
 #pragma mark Text Actions
@@ -165,91 +155,89 @@
 #pragma mark Window Attributes
 - (void)setFrame:(NSRect)logWindowRect display:(bool)flag
 {
-    [[self window] setFrame:logWindowRect display:flag];
+    [[self window]setFrame:logWindowRect display:flag];
 }
 
 - (void)setHighlighted:(BOOL)flag
 {
-    [(LogWindow*)[self window] setHighlighted: flag];
+    [(LogWindow*)[self window]setHighlighted:flag];
     [self display];
 }
 
 - (void)setAutodisplay:(BOOL)value
 {
-    [[self window] setAutodisplay:value];
+    [[self window]setAutodisplay:value];
 }
 
 - (void)setHasShadow:(bool)flag
 {
-    [[self window] setHasShadow:flag];
+    [[self window]setHasShadow:flag];
 }
 
 - (void)setOpaque:(bool)flag
 {
-    [[self window] setOpaque:flag];
+    [[self window]setOpaque:flag];
 }
 
 - (void)setLevel:(int)level
 {
-    [[self window] setLevel:level];
+    [[self window]setLevel:level];
 }
 
+// sticky in that the window will stay put during expose
 -(void)setSticky:(BOOL)flag 
 {
     CGSConnection cid;
     CGSWindow wid;
     SInt32 vers; 
     
-    Gestalt(gestaltSystemVersion,&vers); 
-    if (vers < 0x1030)
-        return;
     wid = [[self window] windowNumber];
     cid = _CGSDefaultConnection();
-    int tags[2];
-    tags[0] = tags[1] = 0;
-    OSStatus retVal = CGSGetWindowTags(cid, wid, tags, 32);
-    if(!retVal) {
+    int tags[2] = {0,0};   
+    
+    if(!CGSGetWindowTags(cid,wid,tags,32))
+    {
         if (flag)
             tags[0] = tags[0] | 0x00000800;
         else
-            tags[0] = tags[0] & 0x00000800;
+            tags[0] = tags[0] & ~0x00000800;
         
-        retVal = CGSSetWindowTags(cid, wid, tags, 32);
+        CGSSetWindowTags(cid, wid, tags, 32);
     }
 }
 
 #pragma mark Window Actions
 - (void)makeKeyAndOrderFront:(id)sender
 {
-    [[self window] makeKeyAndOrderFront:sender];
+    [[self window]makeKeyAndOrderFront:sender];
 }
 
 - (void)display
 {
-    //[[self window] display];
+    //[[self window]display];
     [text display];
 }
 
 #pragma mark Picture Attributes
 -(void)setPictureAlignment:(int)alignment
 {
-    [picture setImageAlignment: alignment];
+    [picture setImageAlignment:alignment];
 }
 
 -(void)setFit:(int)fit
 {
-    [picture setImageScaling: fit];
+    [picture setImageScaling:fit];
 }
 
 - (void)setImage:(NSImage*)anImage
 {
-    [picture setImage: anImage];
+    [picture setImage:anImage];
 }
 
 #pragma mark Misc Functions
 
 -(void)setCrop:(BOOL)crop
 {
-    [logView setCrop: crop];
+    [logView setCrop:crop];
 }
 @end

@@ -124,9 +124,7 @@
 - (void)loadDataFromDisk
 {
     NSString *path = [self pathForDataFile];
-    
     NSDictionary *rootObject = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
-    
     NSArray *groupArray = [rootObject valueForKey:@"groups"];
     
     if (!groupArray)
@@ -138,8 +136,15 @@
     
     [self setGroups:groupArray];
     
+    BOOL activeGroupFound = NO;
     for (NTGroup *tmp in groups)
-        if ([[tmp properties] objectForKey:@"active"]) [groupController setSelectedObjects:[NSArray arrayWithObject:tmp]];  
+        if ([[tmp properties] objectForKey:@"active"])
+        {
+            [groupController setSelectedObjects:[NSArray arrayWithObject:tmp]];
+            activeGroupFound = YES;
+            break;
+        }
+    if (!activeGroupFound) [groupController setSelectedObjects:[NSArray arrayWithObject:[groups objectAtIndex:0]]];
 }
 
 - (void)loadPreferences

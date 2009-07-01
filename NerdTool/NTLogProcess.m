@@ -120,8 +120,8 @@
     [windowController setTextRect:tmpRect]; 
     
     [(LogWindow*)window setClickThrough:YES];
-    [windowController setLevel:[parentProperties integerForKey:@"windowLevel"]];
-    [windowController setSticky:[parentProperties integerForKey:@"windowLevel"] == kCGDesktopWindowLevel];
+    [window setLevel:(([parentProperties integerForKey:@"alwaysOnTop"])?[parentProperties integerForKey:@"alwaysOnTop"]:kCGDesktopWindowLevel)];
+    [windowController setSticky:(![parentProperties boolForKey:@"alwaysOnTop"])];
     [windowController setPictureAlignment:[self NSPictureAlignment]];
     
     //==Init==

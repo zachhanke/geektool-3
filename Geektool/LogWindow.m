@@ -28,11 +28,7 @@
 #pragma mark -
 - (void)setHighlighted:(BOOL)flag;
 {
-    if (flag)
-        [self setClickThrough: NO];
-    else
-        [self setClickThrough: YES];
-    
+    [self setClickThrough:!flag];
     [logView setHighlighted: flag];
 }
 
@@ -41,9 +37,9 @@
     /* carbon */
     void *ref = [self windowRef];
     if (clickThrough)
-        ChangeWindowAttributes(ref, kWindowIgnoreClicksAttribute,kWindowNoAttributes);
+        ChangeWindowAttributes(ref,kWindowIgnoreClicksAttribute,kWindowNoAttributes);
     else
-        ChangeWindowAttributes(ref, kWindowNoAttributes, kWindowIgnoreClicksAttribute);
+        ChangeWindowAttributes(ref,kWindowNoAttributes,kWindowIgnoreClicksAttribute);
     /* cocoa */
     [self setIgnoresMouseEvents:clickThrough];
 }

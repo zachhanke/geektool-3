@@ -17,7 +17,7 @@
     BOOL isBeingDragged;
     NSNumber *active;
 }
-@property (retain) NTLogProcess *logProcess;
+@property (assign) NTLogProcess *logProcess;
 @property (retain) NSMutableDictionary *properties;
 @property (copy) NSNumber *active;
 
