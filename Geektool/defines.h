@@ -32,3 +32,7 @@
 #define ALIGN_CENTER 1
 #define ALIGN_RIGHT 2
 #define ALIGN_JUSTIFIED 3
+
+// misc
+#define EXPOSE_WIDTH 16
+#define MENU_BAR_HEIGHT 22

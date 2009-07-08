@@ -15,6 +15,7 @@
 // GTLog is a class that is responsible for storing and handling all information pertaining to the log displayed on the screen. It sets up and interacts with other objects such as NSViews to display, update, and manage its graphical representation
 @implementation GTLog
 
+@synthesize parentGroup;
 @synthesize logProcess;
 @synthesize properties;
 @synthesize active;
@@ -26,6 +27,11 @@
     [self setProperties:[NSMutableDictionary dictionaryWithDictionary:newProperties]];
     
     logProcess = nil;
+    highlightSender = nil;
+    parentGroup = nil;
+    needCoordObservers = NO;
+    postActivationRequest = NO;
+    
     [self setupObservers];
     return self;
 }
@@ -47,7 +53,7 @@
                                               @"",@"file",
                                               @"",@"quartzFile",
                                               
-                                              @"",@"command",
+                                              @"date",@"command",
                                               [NSNumber numberWithInt:10],@"refresh",
                                               
                                               textColorData,@"textColor",
@@ -174,27 +180,34 @@
         [logProcess setTimerNeedsUpdate:NO];
         [logProcess updateWindow];
     }
+    
+    if (postActivationRequest)
+    {
+        postActivationRequest = NO;
+        [highlightSender observeValueForKeyPath:@"selectedObjects" ofObject:self change:nil context:nil];
+    }
 }
 
 #pragma mark -
 #pragma mark KVC
-
 - (void)setIsBeingDragged:(BOOL)var
 {
     isBeingDragged = var;
-    if (isBeingDragged)
+    if (isBeingDragged && !needCoordObservers)
     {
         [self removeObserver:self forKeyPath:@"properties.x"];
         [self removeObserver:self forKeyPath:@"properties.y"];
         [self removeObserver:self forKeyPath:@"properties.w"];
         [self removeObserver:self forKeyPath:@"properties.h"];
+        needCoordObservers = YES;
     }
-    else 
+    else if (needCoordObservers)
     {
         [self addObserver:self forKeyPath:@"properties.x" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
         [self addObserver:self forKeyPath:@"properties.y" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
         [self addObserver:self forKeyPath:@"properties.w" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
-        [self addObserver:self forKeyPath:@"properties.h" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];        
+        [self addObserver:self forKeyPath:@"properties.h" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+        needCoordObservers = NO;
     }
 }
 
@@ -204,7 +217,7 @@
 }
 
 #pragma mark -
-#pragma mark Convience Methods
+#pragma mark Misc
 - (void)setCoords:(NSRect)newCoords
 {
     [[self properties]setValue:[NSNumber numberWithInt:newCoords.origin.x] forKey:@"x"];
@@ -213,33 +226,35 @@
     [[self properties]setValue:[NSNumber numberWithInt:newCoords.size.height] forKey:@"h"];
 }
 
-#pragma mark -
-#pragma mark Misc
+- (void)setHighlighted:(BOOL)val from:(id)sender
+{
+    highlightSender = sender;
+    
+    if (logProcess) [(LogWindow*)[[[self logProcess]windowController]window]setHighlighted:val];
+    else postActivationRequest = YES;
+}
+
 - (BOOL)equals:(GTLog*)comp
 {
-    if ([[self properties] isEqualTo: [comp properties]]) return YES;
+    if ([[self properties]isEqualTo:[comp properties]]) return YES;
     else return NO;
 }
 
 - (NSString*)description
 {
-    return [NSString stringWithFormat: @"Log:%@\nEnabled:%@",[[self properties]objectForKey:@"name"],[[self properties]objectForKey:@"enabled"]];
+    return [NSString stringWithFormat: @"Log:[%@]%@",[[[self properties]objectForKey:@"enabled"]boolValue]?@"X":@" ",[[self properties]objectForKey:@"name"]];
 }
 
 #pragma mark -
 #pragma mark Copying
 - (id)copyWithZone:(NSZone *)zone
 {
-    id result = [[[self class] allocWithZone:zone] init];
-    
-    [result setProperties:[self properties]];
-    
-    return result;
+    return [[[self class] allocWithZone:zone] initWithProperties:[self properties]];
 }
 
 - (id)mutableCopyWithZone:(NSZone *)zone
 {
-    return [self copyWithZone: zone];
+    return [self copyWithZone:zone];
 }
 
 #pragma mark Coding

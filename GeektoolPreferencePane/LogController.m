@@ -7,8 +7,11 @@
 //
 
 #import "LogController.h"
+#import "GroupController.h"
+#import "NTGroup.h"
 #import "GTLog.h"
 #import "LogWindow.h"
+
 #import "NSIndexSet+CountOfIndexesInRange.h"
 #import "NSArrayController+Duplicate.h"
 
@@ -19,11 +22,13 @@
     MovedRowsType = @"GTLog_Moved_Item";
     CopiedRowsType = @"GTLog_Copied_Item";
     
+    userInsert = NO;
+    
     // register for drag and drop
 	[tableView setDraggingSourceOperationMask:NSDragOperationLink forLocal:NO];
 	[tableView setDraggingSourceOperationMask:(NSDragOperationCopy | NSDragOperationMove) forLocal:YES];
 	
-	[tableView registerForDraggedTypes:[NSArray arrayWithObjects:CopiedRowsType, MovedRowsType, nil]];
+	[tableView registerForDraggedTypes:[NSArray arrayWithObjects:CopiedRowsType,MovedRowsType,nil]];
     [tableView setAllowsMultipleSelection:YES];
     
     [self addObserver:self forKeyPath:@"selectedObjects" options:0 context:nil];
@@ -35,23 +40,41 @@
     [super dealloc];
 }
 
-#pragma mark Observing
+- (void)insert:(id)sender
+{
+    userInsert = YES;
+    [super insert:sender];
+}
 
+- (void)insertObject:(id)object atArrangedObjectIndex:(NSUInteger)index
+{
+    NTGroup *parentGroup = [[groupController selectedObjects]objectAtIndex:0];
+    
+    if (userInsert)
+    {
+        [object setActive:[NSNumber numberWithBool:YES]];
+        [object setParentGroup:parentGroup];
+        userInsert = NO;
+    }
+    
+    [super insertObject:object atArrangedObjectIndex:index];
+    
+    [parentGroup reorder];
+}
+
+#pragma mark Observing
 // based on selection, highlight/dehighlight the log window
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     // when a selection is changed
     if([keyPath isEqualToString:@"selectedObjects"])
     {
-        // deselect old log if we can
-        if (oldSelectedLog) [(LogWindow*)[[[oldSelectedLog logProcess]windowController]window]setHighlighted:NO];
+        if (oldSelectedLog) [oldSelectedLog setHighlighted:NO from:self];
         
-        // if an object is selected update our old selected log and select it
-        if ([[self selectedObjects]count])
-        {
-            oldSelectedLog = [[self selectedObjects]objectAtIndex:0];
-            [(LogWindow*)[[[oldSelectedLog logProcess]windowController]window]setHighlighted:YES];
-        }
+        if (![[self selectedObjects]count]) return;
+        
+        oldSelectedLog = [[self selectedObjects]objectAtIndex:0];
+        [oldSelectedLog setHighlighted:YES from:self];
     }
     else [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
@@ -61,7 +84,7 @@
 - (BOOL)tableView:(NSTableView *)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
 {
 	// declare our own pasteboard types
-    NSArray *typesArray = [NSArray arrayWithObjects:MovedRowsType, nil];
+    NSArray *typesArray = [NSArray arrayWithObjects:MovedRowsType,nil];
     
     [pboard declareTypes:typesArray owner:self];
 	
@@ -75,7 +98,7 @@
     unsigned int currentIndex = [rowIndexes firstIndex];
     while (currentIndex != NSNotFound)
     {
-		[rowCopies addObject:[[self arrangedObjects] objectAtIndex:currentIndex]];
+		[rowCopies addObject:[[self arrangedObjects]objectAtIndex:currentIndex]];
         currentIndex = [rowIndexes indexGreaterThanIndex: currentIndex];
     }
 	
@@ -105,20 +128,18 @@
 {
     BOOL result = NO;
     
-    if (row < 0)
-		row = 0;
+    if (row < 0) row = 0;
 	
 	// if drag source is self, it's a move unless the Option key is pressed
     if ([info draggingSource] == tableView)
     {
-        //[[[self content] objectAtIndex:oldSelectionIndex]setHighlighted:NO];
         NSData *rowsData = [[info draggingPasteboard] dataForType:MovedRowsType];
         NSIndexSet *indexSet = [NSKeyedUnarchiver unarchiveObjectWithData:rowsData];
         
         NSIndexSet *destinationIndexes = [self moveObjectsInArrangedObjectsFromIndexes:indexSet toIndex:row];
         // set selected rows to those that were just moved
         [self setSelectionIndexes:destinationIndexes];
-        
+
         result = YES;
     }
     

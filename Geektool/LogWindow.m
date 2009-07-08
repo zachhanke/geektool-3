@@ -12,6 +12,7 @@
     self = [super initWithContentRect:contentRect styleMask:NSBorderlessWindowMask backing:backingType defer:NO];
     if (self != nil)
     {
+        [self setHighlighted:NO];
         [self setHasShadow:NO];
         [self setOpaque:NO];
         [self setBackgroundColor:[NSColor clearColor]];
@@ -58,7 +59,7 @@
     {
         if (flag) tags[0] = tags[0] | 0x00000800;
         else tags[0] = tags[0] & ~0x00000800;
-        CGSSetWindowTags(cid, wid, tags, 32);
+        CGSSetWindowTags(cid,wid,tags,32);
     }
 }
 

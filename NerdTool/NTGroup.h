@@ -13,12 +13,11 @@
     NSMutableDictionary *properties;
     NSMutableArray *logs;
 }
-- (id)initWithProperties:(NSDictionary*)initProperties andLogs:(NSArray*)initLogs;
+@property (retain) NSMutableDictionary *properties;
+@property (retain) NSMutableArray *logs;
 
-// KVC
-- (NSMutableDictionary *)properties;
-- (void)setProperties:(NSDictionary *)newProperties;
-- (NSMutableArray *)logs;
-- (void)setLogs:(NSArray *)newLogs;
+- (id)initWithProperties:(NSDictionary*)initProperties andLogs:(NSArray*)initLogs;
+- (void)reorder;
+- (NSArray*)createUniqueRectCache;
 
 @end

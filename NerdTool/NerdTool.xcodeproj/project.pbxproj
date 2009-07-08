@@ -26,15 +26,15 @@
 		0A7D37430FD8030E0070D678 /* GeekToolPrefs.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D373B0FD8030E0070D678 /* GeekToolPrefs.tiff */; };
 		0A7D37440FD8030E0070D678 /* delete.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D373C0FD8030E0070D678 /* delete.tif */; };
 		0A7D37450FD8030E0070D678 /* defaultSuccess.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D373D0FD8030E0070D678 /* defaultSuccess.png */; };
-		0A7D374A0FD803800070D678 /* GeekTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37490FD803800070D678 /* GeekTool.m */; };
 		0A7D374F0FD803980070D678 /* NSLogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D374C0FD803980070D678 /* NSLogView.m */; };
 		0A7D37500FD803980070D678 /* LogTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D374E0FD803980070D678 /* LogTextField.m */; };
 		0A7D37530FD803AD0070D678 /* AIQuartzView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37520FD803AD0070D678 /* AIQuartzView.m */; };
-		0A7D37560FD803C70070D678 /* coin.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37540FD803C70070D678 /* coin.tif */; };
+		0A7D37560FD803C70070D678 /* corner.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37540FD803C70070D678 /* corner.tif */; };
 		0A7D37650FD804270070D678 /* GeektoolPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37630FD804270070D678 /* GeektoolPrefs.xib */; };
 		0A7D37680FD804690070D678 /* logWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37670FD804690070D678 /* logWindow.xib */; };
 		0A7D38890FD805FA0070D678 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7D38870FD805FA0070D678 /* Quartz.framework */; };
 		0A7D388A0FD805FA0070D678 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7D38880FD805FA0070D678 /* Carbon.framework */; };
+		0ABB3F8D100401000000E788 /* NTExposeBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ABB3F8C100401000000E788 /* NTExposeBorder.m */; };
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -75,19 +75,19 @@
 		0A7D373B0FD8030E0070D678 /* GeekToolPrefs.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = GeekToolPrefs.tiff; path = ../GeektoolPreferencePane/GeekToolPrefs.tiff; sourceTree = SOURCE_ROOT; };
 		0A7D373C0FD8030E0070D678 /* delete.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = delete.tif; path = ../GeektoolPreferencePane/delete.tif; sourceTree = SOURCE_ROOT; };
 		0A7D373D0FD8030E0070D678 /* defaultSuccess.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = defaultSuccess.png; path = ../GeektoolPreferencePane/defaultSuccess.png; sourceTree = SOURCE_ROOT; };
-		0A7D37480FD803800070D678 /* GeekTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeekTool.h; path = ../Geektool/GeekTool.h; sourceTree = SOURCE_ROOT; };
-		0A7D37490FD803800070D678 /* GeekTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeekTool.m; path = ../Geektool/GeekTool.m; sourceTree = SOURCE_ROOT; };
 		0A7D374B0FD803980070D678 /* NSLogView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSLogView.h; path = ../Geektool/NSLogView.h; sourceTree = SOURCE_ROOT; };
 		0A7D374C0FD803980070D678 /* NSLogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSLogView.m; path = ../Geektool/NSLogView.m; sourceTree = SOURCE_ROOT; };
 		0A7D374D0FD803980070D678 /* LogTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogTextField.h; path = ../Geektool/LogTextField.h; sourceTree = SOURCE_ROOT; };
 		0A7D374E0FD803980070D678 /* LogTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogTextField.m; path = ../Geektool/LogTextField.m; sourceTree = SOURCE_ROOT; };
 		0A7D37510FD803AD0070D678 /* AIQuartzView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AIQuartzView.h; path = ../Geektool/AIQuartzView.h; sourceTree = SOURCE_ROOT; };
 		0A7D37520FD803AD0070D678 /* AIQuartzView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AIQuartzView.m; path = ../Geektool/AIQuartzView.m; sourceTree = SOURCE_ROOT; };
-		0A7D37540FD803C70070D678 /* coin.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = coin.tif; path = ../Geektool/coin.tif; sourceTree = SOURCE_ROOT; };
+		0A7D37540FD803C70070D678 /* corner.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = corner.tif; path = ../Geektool/corner.tif; sourceTree = SOURCE_ROOT; };
 		0A7D37640FD804270070D678 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = ../GeektoolPreferencePane/English.lproj/GeektoolPrefs.xib; sourceTree = SOURCE_ROOT; };
 		0A7D37670FD804690070D678 /* logWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = logWindow.xib; sourceTree = "<group>"; };
 		0A7D38870FD805FA0070D678 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		0A7D38880FD805FA0070D678 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		0ABB3F8B100401000000E788 /* NTExposeBorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTExposeBorder.h; sourceTree = "<group>"; };
+		0ABB3F8C100401000000E788 /* NTExposeBorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTExposeBorder.m; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -116,6 +116,8 @@
 		080E96DDFE201D6D7F000001 /* UI Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0ABB3F8B100401000000E788 /* NTExposeBorder.h */,
+				0ABB3F8C100401000000E788 /* NTExposeBorder.m */,
 				0A7D372F0FD802E30070D678 /* LogWindow.h */,
 				0A7D37300FD802E30070D678 /* LogWindow.m */,
 				0A7D374B0FD803980070D678 /* NSLogView.h */,
@@ -133,12 +135,12 @@
 		0A194D8C0FED967C0062EA84 /* Data Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0A2AEC2F0FE6DDB000097DCA /* NTGroup.h */,
+				0A2AEC300FE6DDB000097DCA /* NTGroup.m */,
 				0A7D372D0FD802E30070D678 /* GTLog.h */,
 				0A7D372E0FD802E30070D678 /* GTLog.m */,
 				0A74770D0FF9C562005C7DD3 /* NTLogProcess.h */,
 				0A74770E0FF9C562005C7DD3 /* NTLogProcess.m */,
-				0A2AEC2F0FE6DDB000097DCA /* NTGroup.h */,
-				0A2AEC300FE6DDB000097DCA /* NTGroup.m */,
 			);
 			name = "Data Classes";
 			sourceTree = "<group>";
@@ -159,8 +161,6 @@
 		0A7D372A0FD802B10070D678 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				0A7D37480FD803800070D678 /* GeekTool.h */,
-				0A7D37490FD803800070D678 /* GeekTool.m */,
 				0A7D37200FD8028D0070D678 /* GeekToolPrefs.h */,
 				0A7D37210FD8028D0070D678 /* GeekToolPrefs.m */,
 				0A7D37220FD8028D0070D678 /* GroupController.h */,
@@ -239,7 +239,7 @@
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
-				0A7D37540FD803C70070D678 /* coin.tif */,
+				0A7D37540FD803C70070D678 /* corner.tif */,
 				0A7D37630FD804270070D678 /* GeektoolPrefs.xib */,
 				0A7D37670FD804690070D678 /* logWindow.xib */,
 			);
@@ -308,7 +308,7 @@
 				0A7D37430FD8030E0070D678 /* GeekToolPrefs.tiff in Resources */,
 				0A7D37440FD8030E0070D678 /* delete.tif in Resources */,
 				0A7D37450FD8030E0070D678 /* defaultSuccess.png in Resources */,
-				0A7D37560FD803C70070D678 /* coin.tif in Resources */,
+				0A7D37560FD803C70070D678 /* corner.tif in Resources */,
 				0A7D37650FD804270070D678 /* GeektoolPrefs.xib in Resources */,
 				0A7D37680FD804690070D678 /* logWindow.xib in Resources */,
 			);
@@ -327,7 +327,6 @@
 				0A7D37280FD8028D0070D678 /* LogController.m in Sources */,
 				0A7D37310FD802E30070D678 /* GTLog.m in Sources */,
 				0A7D37320FD802E30070D678 /* LogWindow.m in Sources */,
-				0A7D374A0FD803800070D678 /* GeekTool.m in Sources */,
 				0A7D374F0FD803980070D678 /* NSLogView.m in Sources */,
 				0A7D37500FD803980070D678 /* LogTextField.m in Sources */,
 				0A7D37530FD803AD0070D678 /* AIQuartzView.m in Sources */,
@@ -337,6 +336,7 @@
 				0A43A1180FEC0B9F00BB8B6A /* AJRScrollView.m in Sources */,
 				0A74770F0FF9C562005C7DD3 /* NTLogProcess.m in Sources */,
 				0A7477280FFAB19D005C7DD3 /* NSDictionary+IntAndBoolAccessors.m in Sources */,
+				0ABB3F8D100401000000E788 /* NTExposeBorder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

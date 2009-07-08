@@ -37,7 +37,6 @@
     
     [self setParentLog:parent];
     return self;
-    
 }
 
 - (id)init
@@ -51,9 +50,7 @@
     [windowController release];
     [env release];
     [task release];
-    [self retain];
-    [timer invalidate];
-    [timer release];
+    [self killTimer];
     [super dealloc];
 }
 #pragma mark KVC
@@ -70,7 +67,6 @@
     timerNeedsUpdate = YES;
     [self createWindow];
     [self updateWindow];
-    [windowController showWindow:self];
 }
 
 // Gets called when initializing a log for viewing. All initialization for all log types should occur here
@@ -94,18 +90,20 @@
             [task setArguments:[NSArray arrayWithObjects:@"-n",@"50",@"-F",[parentProperties objectForKey:@"file"],nil]];
             [task setEnvironment:env];
             [task setStandardOutput:pipe];
-            [[pipe fileHandleForReading]waitForDataInBackgroundAndNotify];
 
             [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:@"NSFileHandleReadCompletionNotification" object:[pipe fileHandleForReading]];
             [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:@"NSFileHandleDataAvailableNotification" object:[pipe fileHandleForReading]];
+                        
+            [[pipe fileHandleForReading]waitForDataInBackgroundAndNotify];
             
             [task launch];
             break;
             
         case TYPE_QUARTZ:
+            [[window textView]setHidden:YES];
             [[window quartzView]setHidden:FALSE];
             
-            if (![[parentProperties objectForKey:@"quartzFile"]isEqual:@""]) break;
+            if ([[parentProperties objectForKey:@"quartzFile"]isEqual:@""]) break;
             if ([[window quartzView]loadCompositionFromFile:[parentProperties objectForKey:@"quartzFile"]]) [[window quartzView]setAutostartsRendering:TRUE];                
             break;
     }
@@ -121,24 +119,23 @@
     tmpRect.origin.y = 0;
     [window setTextRect:tmpRect]; 
     
-    [window setClickThrough:YES];
     [window setLevel:(([parentProperties integerForKey:@"alwaysOnTop"])?[parentProperties integerForKey:@"alwaysOnTop"]:kCGDesktopWindowLevel)];
     [window setSticky:(![parentProperties boolForKey:@"alwaysOnTop"])];
-    [[window imageView] setImageAlignment:[self imageAlignment]];
     
     //==Init==
     switch ([parentProperties integerForKey:@"type"])
     {
         case TYPE_FILE:
-            [self updateTextAttributes];
+            [[window textView]setHidden:NO];
             
+            [self updateTextAttributes];
             [[window textView]scrollEnd];
             break;
             
         case TYPE_SHELL:
-            [self updateTextAttributes];
+            [[window textView]setHidden:NO];
             
-            // if we need new timers
+            [self updateTextAttributes];
             if (timerNeedsUpdate)
             {
                 [self setArguments:[[[NSArray alloc]initWithObjects:@"-c",[parentProperties objectForKey:@"command"],nil]autorelease]];
@@ -146,14 +143,15 @@
                 [[window textView]addText:@"" clear:YES];
                 [self updateTimer];
             }
-            
             [[window textView]scrollEnd];
             break;
             
         case TYPE_IMAGE:
-            // make a nice environment for the image
+            [[window textView]addText:@"" clear:YES];
+            [[window textView]setHidden:YES];
             [window setTextBackgroundColor:[NSColor clearColor]];
-            [window setAlphaValue:([parentProperties integerForKey:@"transparency"])];
+            
+            [[window imageView]setImageAlignment:[self imageAlignment]];
             [[window imageView]setImageScaling:[self imageFit]];
             if (timerNeedsUpdate) [self updateTimer];
             break;
@@ -162,7 +160,6 @@
             if (timerNeedsUpdate) [self updateTimer];
             break;
     }
-    
     //==Post-Init==
     [window display];
     
@@ -195,14 +192,12 @@
             break;
             
         case TYPE_IMAGE:
-            [NSThread detachNewThreadSelector:@selector(setImage:)
-                                     toTarget:self
-                                   withObject:[parentProperties objectForKey:@"imageURL"]];            
+            [NSThread detachNewThreadSelector:@selector(setImage:) toTarget:self withObject:[parentProperties objectForKey:@"imageURL"]];            
             break;
             
             // if its quartz, we just tell AIQuartzView we want a render. notice that we must send information about ourself so we can render a specific log (instead of rendering all quartz objects)
         case TYPE_QUARTZ:
-             //[[NSDistributedNotificationCenter defaultCenter]postNotificationName:@"GTLogUpdate" object:@"GeekTool" userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:[properties objectForKey:@"refresh"]]forKey:@"ident"]deliverImmediately:NO];
+            [[window quartzView]requestRender];
             break;
             // notice we don't have a case for FILE because it does not need to be updated
     }
@@ -241,16 +236,25 @@
 #pragma mark Update
 - (void)updateTimer
 {
-    if (timer)
-    {
-        [self retain];
-        [timer invalidate];
-        [timer release];
-    }
-    timer = [[NSTimer scheduledTimerWithTimeInterval:[parentProperties integerForKey:@"refresh"]target:self selector:@selector(updateCommand:) userInfo:nil repeats:YES]retain];
+    [self killTimer];
+    int refresh = [parentProperties integerForKey:@"refresh"];
+    timerRepeats = refresh?YES:NO;
+    
+    timer = [[NSTimer scheduledTimerWithTimeInterval:refresh target:self selector:@selector(updateCommand:) userInfo:nil repeats:timerRepeats]retain];
     [timer fire];
     
-    [self release]; // when the timer is added to the runloop, we are retained. we don't want to be.
+    if (timerRepeats) [self release]; // when the timer is added to the runloop, we are retained. we don't want to be.
+    else [timer release];
+}
+
+- (void)killTimer
+{
+    if (!timer) return;
+    if (!timerRepeats) return;
+        
+    [self retain];
+    [timer invalidate];
+    [timer release];
 }
 
 - (void)updateTextAttributes
@@ -286,17 +290,18 @@
     [self setAttributes:tmpAttributes];
     [[window textView]setAttributes:attributes];
 }
+
 #pragma mark -
 #pragma mark Window operations
 - (void)front
 {
-    [window orderFront: self];
+    [window orderFront:self];
 }
 
 - (void)setImage:(NSString*)urlStr
 {    
-    NSImage *myImage = [[NSImage alloc]initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr]]];
-    [[window imageView] setImage:myImage];
+    NSImage *myImage = [[NSImage alloc]initByReferencingURL:[NSURL URLWithString:urlStr]];
+    [[window imageView]setImage:myImage];
     [myImage release];
 }
 

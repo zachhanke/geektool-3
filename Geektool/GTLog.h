@@ -9,14 +9,23 @@
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 @class NTLogProcess;
+@class NTGroup;
 
 @interface GTLog : NSObject <NSMutableCopying, NSCopying, NSCoding>
 {
+    id highlightSender;
+    NTGroup *parentGroup;
+    
     NTLogProcess *logProcess;
     NSMutableDictionary *properties;
-    BOOL isBeingDragged;
+    
     NSNumber *active;
+    BOOL postActivationRequest;
+    BOOL isBeingDragged;
+    BOOL needCoordObservers;
+    
 }
+@property (assign) NTGroup *parentGroup;
 @property (assign) NTLogProcess *logProcess;
 @property (retain) NSMutableDictionary *properties;
 @property (copy) NSNumber *active;
@@ -33,9 +42,10 @@
 // kvc
 - (void)setIsBeingDragged:(BOOL)var;
 - (BOOL)isBeingDragged;
-- (void)setCoords:(NSRect)newCoords;
 
 // misc
+- (void)setCoords:(NSRect)newCoords;
+- (void)setHighlighted:(BOOL)val from:(id)sender;
 - (BOOL)equals:(GTLog*)comp;
 - (NSString*)description;
 

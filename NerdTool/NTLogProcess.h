@@ -16,6 +16,8 @@
     NSWindowController *windowController;
     LogWindow *window;
     
+    BOOL timerRepeats;
+    
     NSDictionary *env;
     NSTask *task;
     NSTimer *timer;
@@ -32,6 +34,7 @@
 @property (copy) NSDictionary *attributes;
 @property (copy) NSArray *arguments;
 @property (assign) BOOL timerNeedsUpdate;
+@property (assign) LogWindow *window;
 
 - (id)initWithParentLog:(id)parent;
 
@@ -39,6 +42,7 @@
 - (void)setupLogWindowAndDisplay;
 - (void)createWindow;
 - (void)updateWindow;
+- (void)killTimer;
 
 // task
 - (void)updateCommand:(NSTimer*)timer;

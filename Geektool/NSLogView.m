@@ -1,17 +1,23 @@
 #import "NSLogView.h"
-#import "LogWindow.h"
+#import "NTGroup.h"
 #import "GTLog.h"
+#import "LogWindow.h"
 #import "LogTextField.h"
 #import "defines.h"
 
 #define MoveDragType 2
 #define ResizeDragType 1
 
+#define MIN_W 40
+#define MIN_H 50
+
 // this class exists so we can move/resize our borderless window unfortunately, these common functions are unavailable to us because we are using an NSBorderlessWindow, so we must recreate them manually ourselves
 @implementation NSLogView
 
 - (void)awakeFromNib
 {
+    highlighted = NO;
+    rectCache = nil;
     [self setNextResponder: [NSApplication sharedApplication]];
 }
 
@@ -54,6 +60,7 @@
 - (void)mouseDown:(NSEvent *)theEvent
 {
     NSWindow *window = [self window];
+    dragType = 0;
     
     // dont accept clicks if the view is not highlighted
     if (!highlighted)
@@ -67,6 +74,11 @@
         dragType = ResizeDragType;
     else
         dragType = MoveDragType;
+    
+    if ([[NSUserDefaults standardUserDefaults]boolForKey:@"lockSize"]) dragType = MoveDragType;
+    
+    if ([[NSUserDefaults standardUserDefaults]boolForKey:@"blockMode"]) [self fetchRects];
+
     
     /*
     if ([(LogWindowController*)logWindowController type] == TYPE_SHELL)
@@ -96,14 +108,17 @@
         //X coord does not change
         //windowFrame.origin.x;
         
-        /*
-         // don't let the window be resized smaller than 20x20
-         if (windowFrame.size.width < 20)
-         windowFrame.size.width = 20;
-         
-         if (windowFrame.size.height < 20)
-         windowFrame.size.height = 20;
-         */
+        
+        // don't let the window be resized smaller than 20x20
+        if (newWindowFrame.size.width < MIN_W)
+            newWindowFrame.size.width = MIN_W;
+        
+        if (newWindowFrame.size.height < MIN_H)
+        {
+            newWindowFrame.origin.y -= MIN_H - newWindowFrame.size.height;
+            newWindowFrame.size.height = MIN_H;
+        }
+        
         /*
          // snap to edges of window
          if ([(GeekTool*)[NSApplication sharedApplication] magn])
@@ -137,12 +152,64 @@
     else
     {
         NSPoint newOrigin = windowFrame.origin;
+        NSSize newSize = windowFrame.size;
         NSPoint currentMouseLoc = [NSEvent mouseLocation];
-
+        
         // Update the origin with the difference between the new mouse location and the old mouse location.
         newOrigin.x += (currentMouseLoc.x - mouseLoc.x);
         newOrigin.y += currentMouseLoc.y - mouseLoc.y;
         
+        NSRect screen = [[NSScreen mainScreen]frame];
+        
+        if ([[NSUserDefaults standardUserDefaults]boolForKey:@"expose"])
+        {
+            // bound by expose border
+            if (newOrigin.x < EXPOSE_WIDTH) newOrigin.x = EXPOSE_WIDTH;
+            if (newOrigin.x + newSize.width > screen.size.width - EXPOSE_WIDTH) newOrigin.x = newSize.width - newSize.width - EXPOSE_WIDTH;
+            if (newOrigin.y < EXPOSE_WIDTH) newOrigin.y = EXPOSE_WIDTH;
+            if (newOrigin.y + newSize.height > screen.size.height - EXPOSE_WIDTH - MENU_BAR_HEIGHT) newOrigin.y = screen.size.height - newSize.height - EXPOSE_WIDTH - MENU_BAR_HEIGHT;
+        }
+        
+        newWindowFrame.origin = newOrigin;
+        
+        if ([[NSUserDefaults standardUserDefaults]boolForKey:@"blockMode"])
+        {
+            NSRect foreignRect;
+            NSRect intersectionRect;
+            
+            for (NSValue *tmpVal in rectCache)
+            {
+                foreignRect = [tmpVal rectValue];
+                intersectionRect = NSIntersectionRect(newWindowFrame,foreignRect);
+                
+                // hit left/right edge
+                if (intersectionRect.size.width > intersectionRect.size.height)
+                {
+                    NSPoint tmpOrigin = newOrigin;
+                    tmpOrigin.x -= 1;
+                    
+                    // right edge hit
+                    if (NSPointInRect(tmpOrigin,newWindowFrame))
+                        newOrigin.x -= intersectionRect.size.width;
+                    // left edge hit
+                    else
+                        newOrigin.x += intersectionRect.size.width;
+                }
+                // hit top/bottom edge
+                else
+                {
+                    NSPoint tmpOrigin = newOrigin;
+                    tmpOrigin.y -= 1;
+                    
+                    // top edge hit
+                    if (NSPointInRect(tmpOrigin,newWindowFrame))
+                        newOrigin.y -= intersectionRect.size.height;
+                    // bottom edge hit
+                    else
+                        newOrigin.y += intersectionRect.size.height;
+                }
+            }
+        }
         newWindowFrame.origin = newOrigin;
         
         /*
@@ -178,7 +245,7 @@
         [[NSNotificationCenter defaultCenter]postNotificationName:NSWindowDidMoveNotification object:window];		
     }
     
-    [[(LogWindow*)[logWindowController window]parentLog] setCoords:[self convertToNTCoords:[[self window] frame]]];
+    [[(LogWindow*)[logWindowController window]parentLog]setCoords:[self convertToNTCoords:[[self window]frame]]];
 }
 
 - (void)mouseUp:(NSEvent *)theEvent;
@@ -194,14 +261,14 @@
 #pragma mark View Drawing
 - (void)drawRect:(NSRect)rect
 {
-    [super drawRect: rect];
+    [super drawRect:rect];
     NSBezierPath *bp = [NSBezierPath bezierPathWithRect:[self bounds]];
     NSColor *color;
     
     // if we want this window to be highlighted
     if (highlighted)
     {
-        color = [NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] objectForKey:@"selectionColor"]];
+        color = [NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults]objectForKey:@"selectionColor"]];
         
         // further drawing will be done with this color
         [color set];
@@ -209,7 +276,9 @@
         // fill rect with this color
         [bp fill];
         
-        [corner setImage:[NSImage imageNamed:@"coin"]];
+        NSImage *corner = [NSImage imageNamed:@"corner"];
+        
+        [corner drawInRect:(NSRect){{[self bounds].size.width - 11,0},{11,11}} fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
     }
     else
     {
@@ -217,18 +286,25 @@
         color = [NSColor clearColor];
         [color set];
         [bp fill];
-        
-        // get rid of the corner handler, since we won't be needing it
-        [corner setImage: nil];
+
+        NSRectFillUsingOperation((NSRect){{[self bounds].size.width - 11,0},{11,11}},NSCompositeSourceOver);
     }
 }
 
 #pragma mark Misc Actions
+- (void)fetchRects
+{
+    NSMutableArray *tmpArray = [NSMutableArray arrayWithArray:[[[(LogWindow*)[logWindowController window]parentLog]parentGroup]createUniqueRectCache]];
+    
+    [tmpArray removeObject:[NSValue valueWithRect:[self frame]]];
+    
+    rectCache = [NSArray arrayWithArray:tmpArray];
+}
+
 - (void)setHighlighted:(BOOL)flag
 {
     highlighted = flag;
-    if (highlighted)
-        [[self window] makeKeyWindow];
+    //if (highlighted) [[self window] makeKeyWindow];
     [self setNeedsDisplay:YES];
 }
 

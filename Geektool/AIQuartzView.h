@@ -13,7 +13,8 @@
 @interface AIQuartzView : QCView
 {
     IBOutlet id owner;
-    bool render;
+    BOOL render;
 }
 
+- (void)requestRender;
 @end

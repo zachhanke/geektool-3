@@ -13,16 +13,20 @@
 {        
     IBOutlet id groupController;
 
+    NSWindowController *windowController;
+    NSWindow *exposeBorder;    
+    
     NSMutableArray *groups;
 }
+@property (retain) NSMutableArray *groups;
+
 - (id)init;
 - (void)awakeFromNib;
 - (void)applicationWillTerminate:(NSNotification *)note;
-#pragma mark KVC
-- (void)setGroups:(NSArray *)newGroups;
-- (NSMutableArray *)groups;
 #pragma mark -
 #pragma mark UI management
+- (IBAction)showExpose:(id)sender;
+- (void)exposeBorder;
 /*
 - (IBAction)fileChoose:(id)sender;
 - (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo;

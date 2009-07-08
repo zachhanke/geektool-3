@@ -12,13 +12,13 @@
 - (void)awakeFromNib
 {
     [self setDocumentView:textView];
-    [[self contentView] setCopiesOnScroll:NO];
-    [[self contentView] setDrawsBackground:NO];
+    [[self contentView]setCopiesOnScroll:NO];
+    [[self contentView]setDrawsBackground:NO];
 }
 
 - (void)setBackgroundColor:(NSColor *)aColor
 {
-    [[self documentView] setBackgroundColor:aColor];
+    [[self documentView]setBackgroundColor:aColor];
 }
 
 @end

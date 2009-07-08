@@ -10,14 +10,21 @@
 #import "GeekToolPrefs.h"
 #import "NTGroup.h"
 #import "defines.h"
+#import "LogWindow.h"
+#import "NTExposeBorder.h"
+#import "CGSPrivate.h"
 
 @implementation GeekToolPrefs
+
+@synthesize groups;
 
 - (id)init
 {
     if (self = [super init])
     {
         groups = [[NSMutableArray alloc]init];
+        exposeBorder = nil;
+        windowController = nil;
     }
     return self;
 }
@@ -35,23 +42,73 @@
     [self saveDataToDisk];
 }  
 
-#pragma mark KVC
-- (void)setGroups:(NSArray *)newGroups
+- (void)dealloc
 {
-    if (groups != newGroups)
-    {
-        [groups autorelease];
-        groups = [[NSMutableArray alloc]initWithArray:newGroups];
-    }
+    if (exposeBorder) [exposeBorder release];
+    if (windowController) [windowController release];
+    [super dealloc];
 }
 
-- (NSMutableArray *)groups
-{
-    return groups;
-}
 
 #pragma mark -
 #pragma mark UI management
+- (IBAction)showExpose:(id)sender
+{
+    if ([[NSUserDefaults standardUserDefaults]boolForKey:@"expose"]) [self exposeBorder];
+    else
+    {
+        if (exposeBorder)
+        {
+            [exposeBorder release];
+            exposeBorder = nil;
+        }
+        
+        if (windowController)
+        {
+            [windowController release];
+            windowController = nil;
+        }
+    }
+}
+
+- (void)exposeBorder
+{
+    if (!exposeBorder)
+    {
+        NSRect visibleFrame = [[NSScreen mainScreen]frame];
+        visibleFrame.size.height -= MENU_BAR_HEIGHT;
+        
+        exposeBorder = [[NSWindow alloc]initWithContentRect:visibleFrame styleMask:NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:NO screen:[NSScreen mainScreen]];
+        [exposeBorder setDelegate:self];
+        [exposeBorder setOpaque:NO];
+        [exposeBorder setLevel:kCGDesktopWindowLevel];
+        [exposeBorder setBackgroundColor:[NSColor clearColor]];
+        
+        CGSWindow wid = [exposeBorder windowNumber];
+        CGSConnection cid = _CGSDefaultConnection();
+        int tags[2] = {0,0};   
+        
+        if(!CGSGetWindowTags(cid,wid,tags,32))
+        {
+            tags[0] = tags[0] | 0x00000800;
+            CGSSetWindowTags(cid,wid,tags,32);
+        }    
+        
+        NTExposeBorder *view = [[NTExposeBorder alloc]initWithFrame:visibleFrame];
+        [exposeBorder setContentView:view];
+        [view setNeedsDisplay:YES];
+        [view release];
+    }
+    
+    if (!windowController)
+    {
+        windowController = [[NSWindowController alloc]initWithWindow:exposeBorder];
+        [windowController setWindow:exposeBorder];
+    }
+    
+    [windowController showWindow:self];
+}
+
 /*
 - (IBAction)fileChoose:(id)sender
 {
@@ -104,8 +161,8 @@
 {
     NSString *appSupportDir = [[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,NSUserDomainMask,YES) objectAtIndex:0]stringByAppendingPathComponent:[[NSProcessInfo processInfo]processName]];
     
-    if ([[NSFileManager defaultManager] fileExistsAtPath:appSupportDir] == NO)
-        [[NSFileManager defaultManager] createDirectoryAtPath:appSupportDir attributes:nil];
+    if ([[NSFileManager defaultManager]fileExistsAtPath:appSupportDir] == NO)
+        [[NSFileManager defaultManager]createDirectoryAtPath:appSupportDir attributes:nil];
     
     return [appSupportDir stringByAppendingPathComponent:@"LogData.ntdata"];    
 }
@@ -114,8 +171,7 @@
 {
     NSString *path = [self pathForDataFile];
     
-    NSMutableDictionary *rootObject;
-    rootObject = [NSMutableDictionary dictionary];
+    NSMutableDictionary *rootObject = [NSMutableDictionary dictionary];
     
     [rootObject setValue:[self groups] forKey:@"groups"];
     [NSKeyedArchiver archiveRootObject:rootObject toFile:path];
@@ -126,7 +182,7 @@
     NSString *path = [self pathForDataFile];
     NSDictionary *rootObject = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     NSArray *groupArray = [rootObject valueForKey:@"groups"];
-    
+        
     if (!groupArray)
     {
         [groupArray release];
@@ -134,35 +190,37 @@
         groupArray = [NSArray arrayWithObject:defaultGroup];
     }
     
-    [self setGroups:groupArray];
+    // to protect group 'active' property
+    [self setGroups:(NSMutableArray*)groupArray];
     
     BOOL activeGroupFound = NO;
     for (NTGroup *tmp in groups)
-        if ([[tmp properties] objectForKey:@"active"])
+        if ([[[tmp properties] objectForKey:@"active"]boolValue])
         {
             [groupController setSelectedObjects:[NSArray arrayWithObject:tmp]];
             activeGroupFound = YES;
             break;
         }
     if (!activeGroupFound) [groupController setSelectedObjects:[NSArray arrayWithObject:[groups objectAtIndex:0]]];
+    
+    // update groupController in case it hasn't awoken yet
+    [groupController observeValueForKeyPath:@"selectedObjects" ofObject:self change:nil context:nil];
 }
 
 - (void)loadPreferences
 {
-    NSData *selectionColorData = [[NSUserDefaults standardUserDefaults] objectForKey: @"selectionColor"];
-    if (!selectionColorData) selectionColorData = [NSArchiver archivedDataWithRootObject:[[NSColor alternateSelectedControlColor] colorWithAlphaComponent:0.3]];
-    [[NSUserDefaults standardUserDefaults] setObject:selectionColorData forKey:@"selectionColor"];
+    NSData *selectionColorData = [[NSUserDefaults standardUserDefaults]objectForKey:@"selectionColor"];
+    if (!selectionColorData) selectionColorData = [NSArchiver archivedDataWithRootObject:[[NSColor alternateSelectedControlColor]colorWithAlphaComponent:0.3]];
+    [[NSUserDefaults standardUserDefaults]setObject:selectionColorData forKey:@"selectionColor"];
 }
-
 
 #pragma mark -
 #pragma mark Misc
-
 - (NSRect)screenRect:(NSRect)oldRect
 {
-    NSRect screenSize = [[NSScreen mainScreen] frame];
+    NSRect screenSize = [[NSScreen mainScreen]frame];
     int screenY = screenSize.size.height - oldRect.origin.y - oldRect.size.height;
-    return NSMakeRect(oldRect.origin.x, screenY, oldRect.size.width, oldRect.size.height);
+    return NSMakeRect(oldRect.origin.x,screenY,oldRect.size.width,oldRect.size.height);
 }
 
 @end

@@ -8,6 +8,9 @@
 
 #import "GroupController.h"
 #import "NTGroup.h"
+#import "GTLog.h"
+#import "NTLogProcess.h"
+
 #import "NSArrayController+Duplicate.h"
 
 @implementation GroupController
@@ -23,8 +26,7 @@
 	
 	[tableView registerForDraggedTypes:[NSArray arrayWithObjects:CopiedRowsType, MovedRowsType, nil]];
     [tableView setAllowsMultipleSelection:YES];
-    
-	[self addObserver:self forKeyPath:@"selectedObjects" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"selectedObjects" options:0 context:NULL];
 }
 
 - (void)dealloc
@@ -37,16 +39,15 @@
 // based on selection, set the group to be active/inactive
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    // when a selection is changed
     if([keyPath isEqualToString:@"selectedObjects"])
     {
         if (oldSelectedGroup) [[oldSelectedGroup properties]setValue:[NSNumber numberWithBool:NO] forKey:@"active"];
         
-        if ([[self selectedObjects]count])
-        {
-            oldSelectedGroup = [[self selectedObjects]objectAtIndex:0];
-            [[oldSelectedGroup properties]setValue:[NSNumber numberWithBool:YES] forKey:@"active"];
-        }
+        if (![[self selectedObjects]count]) return;
+        if (oldSelectedGroup == [[self selectedObjects]objectAtIndex:0]) return;
+        
+        oldSelectedGroup = [[self selectedObjects]objectAtIndex:0];
+        [[oldSelectedGroup properties]setValue:[NSNumber numberWithBool:YES] forKey:@"active"];
     }    
     
 }
@@ -58,7 +59,7 @@
     [NSApp runModalForWindow:[NSApp mainWindow]];
     // Sheet is up here
     [NSApp endSheet: groupsSheet];
-    [groupsSheet orderOut: self];
+    [groupsSheet orderOut:self];
 }
 
 - (IBAction)groupsSheetClose:(id)sender
@@ -117,18 +118,18 @@
 {
     BOOL result = NO;
     
-    if (row < 0)
-		row = 0;
+    if (row < 0) row = 0;
     
 	// if drag source is self, it's a move unless the Option key is pressed
     if ([info draggingSource] == tableView)
     {
-        NSData *rowsData = [[info draggingPasteboard] dataForType:MovedRowsType];
+        NSData *rowsData = [[info draggingPasteboard]dataForType:MovedRowsType];
         NSIndexSet *indexSet = [NSKeyedUnarchiver unarchiveObjectWithData:rowsData];
         
         NSIndexSet *destinationIndexes = [self moveObjectsInArrangedObjectsFromIndexes:indexSet toIndex:row];
         // set selected rows to those that were just moved
         [self setSelectionIndexes:destinationIndexes];
+        
         
         result = YES;
     }

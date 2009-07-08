@@ -102,34 +102,6 @@
 							<string key="NSClassName">AJRScrollView</string>
 							<string key="NSExtension">NSScrollView</string>
 						</object>
-						<object class="NSImageView" id="129380996">
-							<reference key="NSNextResponder" ref="461287312"/>
-							<int key="NSvFlags">289</int>
-							<object class="NSMutableSet" key="NSDragTypes">
-								<bool key="EncodedWithXMLCoder">YES</bool>
-								<object class="NSMutableArray" key="set.sortedObjects">
-									<bool key="EncodedWithXMLCoder">YES</bool>
-									<string>Apple PDF pasteboard type</string>
-									<string>Apple PICT pasteboard type</string>
-									<string>Apple PNG pasteboard type</string>
-									<string>NSFilenamesPboardType</string>
-									<string>NeXT Encapsulated PostScript v1.2 pasteboard type</string>
-									<string>NeXT TIFF v4.0 pasteboard type</string>
-								</object>
-							</object>
-							<string key="NSFrame">{{402, 0}, {18, 17}}</string>
-							<reference key="NSSuperview" ref="461287312"/>
-							<bool key="NSEnabled">YES</bool>
-							<object class="NSImageCell" key="NSCell" id="928389122">
-								<int key="NSCellFlags">130560</int>
-								<int key="NSCellFlags2">33554432</int>
-								<int key="NSAlign">7</int>
-								<int key="NSScale">2</int>
-								<int key="NSStyle">0</int>
-								<bool key="NSAnimates">NO</bool>
-							</object>
-							<bool key="NSEditable">YES</bool>
-						</object>
 						<object class="NSCustomView" id="485539159">
 							<reference key="NSNextResponder" ref="461287312"/>
 							<int key="NSvFlags">274</int>
@@ -172,14 +144,6 @@
 						<reference key="destination" ref="485539159"/>
 					</object>
 					<int key="connectionID">62</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">corner</string>
-						<reference key="source" ref="485539159"/>
-						<reference key="destination" ref="129380996"/>
-					</object>
-					<int key="connectionID">67</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -239,14 +203,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">imageView</string>
-						<reference key="source" ref="394099586"/>
-						<reference key="destination" ref="129380996"/>
-					</object>
-					<int key="connectionID">203</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">owner</string>
 						<reference key="source" ref="62534435"/>
 						<reference key="destination" ref="394099586"/>
@@ -260,6 +216,14 @@
 						<reference key="destination" ref="394099586"/>
 					</object>
 					<int key="connectionID">205</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">imageView</string>
+						<reference key="source" ref="394099586"/>
+						<reference key="destination" ref="557164643"/>
+					</object>
+					<int key="connectionID">206</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -306,22 +270,12 @@
 						<reference key="object" ref="461287312"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="129380996"/>
+							<reference ref="485539159"/>
 							<reference ref="557164643"/>
 							<reference ref="62534435"/>
-							<reference ref="485539159"/>
 							<reference ref="66047436"/>
 						</object>
 						<reference key="parent" ref="394099586"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">66</int>
-						<reference key="object" ref="129380996"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="928389122"/>
-						</object>
-						<reference key="parent" ref="461287312"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">94</int>
@@ -332,11 +286,6 @@
 						<int key="objectID">186</int>
 						<reference key="object" ref="62534435"/>
 						<reference key="parent" ref="461287312"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">195</int>
-						<reference key="object" ref="928389122"/>
-						<reference key="parent" ref="129380996"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">60</int>
@@ -377,7 +326,6 @@
 					<string>186.CustomClassName</string>
 					<string>186.IBPluginDependency</string>
 					<string>186.ImportedFromIB2</string>
-					<string>195.IBPluginDependency</string>
 					<string>5.IBEditorWindowLastContentRect</string>
 					<string>5.IBWindowTemplateEditedContentRect</string>
 					<string>5.ImportedFromIB2</string>
@@ -385,8 +333,6 @@
 					<string>6.ImportedFromIB2</string>
 					<string>60.IBPluginDependency</string>
 					<string>60.ImportedFromIB2</string>
-					<string>66.IBPluginDependency</string>
-					<string>66.ImportedFromIB2</string>
 					<string>94.IBPluginDependency</string>
 					<string>94.ImportedFromIB2</string>
 				</object>
@@ -403,11 +349,8 @@
 					<string>AIQuartzView</string>
 					<string>com.apple.QuartzComposerIBPlugin</string>
 					<reference ref="5"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{405, 338}, {420, 101}}</string>
 					<string>{{405, 338}, {420, 101}}</string>
-					<reference ref="5"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="5"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="5"/>
@@ -437,7 +380,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">205</int>
+			<int key="maxID">206</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -548,14 +491,12 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>corner</string>
 							<string>logWindowController</string>
 							<string>picture</string>
 							<string>text</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>

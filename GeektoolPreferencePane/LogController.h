@@ -11,6 +11,9 @@
 
 @interface LogController : NSArrayController
 {
+    IBOutlet id groupController;
+    BOOL userInsert;
+    
     // drag n drop
     NSString *MovedRowsType;
     NSString *CopiedRowsType;
