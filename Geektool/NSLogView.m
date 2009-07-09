@@ -8,6 +8,8 @@
 #define MoveDragType 2
 #define ResizeDragType 1
 
+#define SNAP_TOLERANCE 10.0
+
 #define MIN_W 40
 #define MIN_H 50
 
@@ -17,12 +19,11 @@
 - (void)awakeFromNib
 {
     highlighted = NO;
-    rectCache = nil;
     [self setNextResponder: [NSApplication sharedApplication]];
 }
 
 #pragma mark View Attributes
-    // lets us so user can move window immediately, instead of clicking on it to make it "active" and then again to actually move it
+// lets us so user can move window immediately, instead of clicking on it to make it "active" and then again to actually move it
 - (BOOL)acceptsFirstMouse:(NSEvent *)theEvent
 {
     return YES;
@@ -77,15 +78,6 @@
     
     if ([[NSUserDefaults standardUserDefaults]boolForKey:@"lockSize"]) dragType = MoveDragType;
     
-    if ([[NSUserDefaults standardUserDefaults]boolForKey:@"blockMode"]) [self fetchRects];
-
-    
-    /*
-    if ([(LogWindowController*)logWindowController type] == TYPE_SHELL)
-        [(LogWindowController*)logWindowController scrollEnd];
-    [self display];
-     */
-    
     [[(LogWindow*)[logWindowController window]parentLog]setIsBeingDragged:TRUE];
 }
 
@@ -118,126 +110,50 @@
             newWindowFrame.origin.y -= MIN_H - newWindowFrame.size.height;
             newWindowFrame.size.height = MIN_H;
         }
-        
-        /*
-         // snap to edges of window
-         if ([(GeekTool*)[NSApplication sharedApplication] magn])
-         {
-         NSEnumerator *e = [[(GeekTool*)[NSApplication sharedApplication] xGuides] objectEnumerator];
-         NSEnumerator *f = [[(GeekTool*)[NSApplication sharedApplication] yGuides] objectEnumerator];
-         NSNumber *xn, *yn;
-         
-         while (xn = [e nextObject])
-         {
-         float x = [xn floatValue];
-         if ((x - MAGN <= newX + newW) && (newX + newW <= x + MAGN))
-         newW = x - newX;
-         }
-         while (yn = [f nextObject])
-         {
-         float y = [yn  floatValue];
-         if ((y - MAGN <= newY) && (newY <= y + MAGN))
-         {
-         newH = newH + ( newY - y);
-         newY = y;
-         }
-         }
-         }
-         */
-        
+                
         [window setFrame:newWindowFrame display:YES animate:NO];
         [[NSNotificationCenter defaultCenter]postNotificationName:NSWindowDidResizeNotification object:window];
     }
     // we are moving the window, not resizing it
     else
     {
-        NSPoint newOrigin = windowFrame.origin;
-        NSSize newSize = windowFrame.size;
         NSPoint currentMouseLoc = [NSEvent mouseLocation];
         
         // Update the origin with the difference between the new mouse location and the old mouse location.
-        newOrigin.x += (currentMouseLoc.x - mouseLoc.x);
-        newOrigin.y += currentMouseLoc.y - mouseLoc.y;
+        newWindowFrame.origin.x += (currentMouseLoc.x - mouseLoc.x);
+        newWindowFrame.origin.y += currentMouseLoc.y - mouseLoc.y;
         
         NSRect screen = [[NSScreen mainScreen]frame];
         
         if ([[NSUserDefaults standardUserDefaults]boolForKey:@"expose"])
         {
             // bound by expose border
-            if (newOrigin.x < EXPOSE_WIDTH) newOrigin.x = EXPOSE_WIDTH;
-            if (newOrigin.x + newSize.width > screen.size.width - EXPOSE_WIDTH) newOrigin.x = newSize.width - newSize.width - EXPOSE_WIDTH;
-            if (newOrigin.y < EXPOSE_WIDTH) newOrigin.y = EXPOSE_WIDTH;
-            if (newOrigin.y + newSize.height > screen.size.height - EXPOSE_WIDTH - MENU_BAR_HEIGHT) newOrigin.y = screen.size.height - newSize.height - EXPOSE_WIDTH - MENU_BAR_HEIGHT;
+            if (NSMinX(newWindowFrame) < EXPOSE_WIDTH) newWindowFrame.origin.x = EXPOSE_WIDTH;
+            if (NSMaxX(newWindowFrame) > NSWidth(screen) - EXPOSE_WIDTH) newWindowFrame.origin.x = screen.size.width - EXPOSE_WIDTH - NSWidth(newWindowFrame);
+            if (NSMinY(newWindowFrame) < EXPOSE_WIDTH) newWindowFrame.origin.y = EXPOSE_WIDTH;
+            if (NSMaxY(newWindowFrame) > NSHeight(screen) - MENU_BAR_HEIGHT - EXPOSE_WIDTH) newWindowFrame.origin.y = NSHeight(screen) - MENU_BAR_HEIGHT - EXPOSE_WIDTH - NSHeight(newWindowFrame);
         }
         
-        newWindowFrame.origin = newOrigin;
-        
-        if ([[NSUserDefaults standardUserDefaults]boolForKey:@"blockMode"])
+        if ([[NSUserDefaults standardUserDefaults]boolForKey:@"magneticWindows"])
         {
-            NSRect foreignRect;
-            NSRect intersectionRect;
-            
-            for (NSValue *tmpVal in rectCache)
+            for (NSWindow *tmpWindow in [NSApp windows])
             {
-                foreignRect = [tmpVal rectValue];
-                intersectionRect = NSIntersectionRect(newWindowFrame,foreignRect);
+                if ([tmpWindow class] != [LogWindow class] || [self window] == tmpWindow) continue;
+                NSRect frame = [tmpWindow frame];                
                 
-                // hit left/right edge
-                if (intersectionRect.size.width > intersectionRect.size.height)
-                {
-                    NSPoint tmpOrigin = newOrigin;
-                    tmpOrigin.x -= 1;
-                    
-                    // right edge hit
-                    if (NSPointInRect(tmpOrigin,newWindowFrame))
-                        newOrigin.x -= intersectionRect.size.width;
-                    // left edge hit
-                    else
-                        newOrigin.x += intersectionRect.size.width;
-                }
-                // hit top/bottom edge
-                else
-                {
-                    NSPoint tmpOrigin = newOrigin;
-                    tmpOrigin.y -= 1;
-                    
-                    // top edge hit
-                    if (NSPointInRect(tmpOrigin,newWindowFrame))
-                        newOrigin.y -= intersectionRect.size.height;
-                    // bottom edge hit
-                    else
-                        newOrigin.y += intersectionRect.size.height;
-                }
+                // horizontal magnet
+                if (fabs(NSMinX(frame) - NSMinX(newWindowFrame)) <= SNAP_TOLERANCE) newWindowFrame.origin.x = frame.origin.x;
+                if (fabs(NSMinX(frame) - NSMaxX(newWindowFrame)) <= SNAP_TOLERANCE) newWindowFrame.origin.x += NSMinX(frame) - NSMaxX(newWindowFrame);
+                if (fabs(NSMaxX(frame) - NSMinX(newWindowFrame)) <= SNAP_TOLERANCE) newWindowFrame.origin.x = NSMaxX(frame);
+                if (fabs(NSMaxX(frame) - NSMaxX(newWindowFrame)) <= SNAP_TOLERANCE) newWindowFrame.origin.x += NSMaxX(frame) - NSMaxX(newWindowFrame);
+                
+                // vertical magnet
+                if (fabs(NSMinY(frame) - NSMinY(newWindowFrame)) <= SNAP_TOLERANCE) newWindowFrame.origin.y = frame.origin.y;
+                if (fabs(NSMinY(frame) - NSMaxY(newWindowFrame)) <= SNAP_TOLERANCE) newWindowFrame.origin.y += NSMinY(frame) - NSMaxY(newWindowFrame);
+                if (fabs(NSMaxY(frame) - NSMinY(newWindowFrame)) <= SNAP_TOLERANCE) newWindowFrame.origin.y = NSMaxY(frame);
+                if (fabs(NSMaxY(frame) - NSMaxY(newWindowFrame)) <= SNAP_TOLERANCE) newWindowFrame.origin.y += NSMaxY(frame) - NSMaxY(newWindowFrame);
             }
         }
-        newWindowFrame.origin = newOrigin;
-        
-        /*
-         // snap to edges of screen if close enough
-         if ([(GeekTool*)[NSApplication sharedApplication] magn])
-         {
-         NSEnumerator *e = [[(GeekTool*)[NSApplication sharedApplication] xGuides] objectEnumerator];
-         NSEnumerator *f = [[(GeekTool*)[NSApplication sharedApplication] yGuides] objectEnumerator];
-         NSNumber *xn, *yn;
-         
-         while (xn = [e nextObject])
-         {
-         float x = [xn floatValue];
-         if (x - MAGN <= newX && newX <= x + MAGN)
-         newX = x;
-         if (x - MAGN <= newX + newW && newX + newW <= x + MAGN)
-         newX = x - newW;
-         }
-         while (yn = [f nextObject])
-         {
-         float y = [yn  floatValue];
-         if (y - MAGN <= newY && newY <= y + MAGN)
-         newY = y;
-         if (y - MAGN <= newY + newH && newY + newH <= y + MAGN)
-         newY = y - newH;
-         }
-         }
-         */
         
         // Move the window to the new location
         [[NSNotificationCenter defaultCenter]postNotificationName:NSWindowWillMoveNotification object:window];
@@ -292,15 +208,6 @@
 }
 
 #pragma mark Misc Actions
-- (void)fetchRects
-{
-    NSMutableArray *tmpArray = [NSMutableArray arrayWithArray:[[[(LogWindow*)[logWindowController window]parentLog]parentGroup]createUniqueRectCache]];
-    
-    [tmpArray removeObject:[NSValue valueWithRect:[self frame]]];
-    
-    rectCache = [NSArray arrayWithArray:tmpArray];
-}
-
 - (void)setHighlighted:(BOOL)flag
 {
     highlighted = flag;

@@ -116,8 +116,6 @@
 		080E96DDFE201D6D7F000001 /* UI Classes */ = {
 			isa = PBXGroup;
 			children = (
-				0ABB3F8B100401000000E788 /* NTExposeBorder.h */,
-				0ABB3F8C100401000000E788 /* NTExposeBorder.m */,
 				0A7D372F0FD802E30070D678 /* LogWindow.h */,
 				0A7D37300FD802E30070D678 /* LogWindow.m */,
 				0A7D374B0FD803980070D678 /* NSLogView.h */,
@@ -128,6 +126,8 @@
 				0A43A1170FEC0B9F00BB8B6A /* AJRScrollView.m */,
 				0A7D374D0FD803980070D678 /* LogTextField.h */,
 				0A7D374E0FD803980070D678 /* LogTextField.m */,
+				0ABB3F8B100401000000E788 /* NTExposeBorder.h */,
+				0ABB3F8C100401000000E788 /* NTExposeBorder.m */,
 			);
 			name = "UI Classes";
 			sourceTree = "<group>";

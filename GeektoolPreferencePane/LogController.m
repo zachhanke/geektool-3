@@ -19,12 +19,12 @@
 
 - (void)awakeFromNib
 {
+    oldSelectedLog = nil;
+    userInsert = NO;
+
     MovedRowsType = @"GTLog_Moved_Item";
     CopiedRowsType = @"GTLog_Copied_Item";
-    
-    userInsert = NO;
-    
-    // register for drag and drop
+
 	[tableView setDraggingSourceOperationMask:NSDragOperationLink forLocal:NO];
 	[tableView setDraggingSourceOperationMask:(NSDragOperationCopy | NSDragOperationMove) forLocal:YES];
 	
@@ -32,6 +32,7 @@
     [tableView setAllowsMultipleSelection:YES];
     
     [self addObserver:self forKeyPath:@"selectedObjects" options:0 context:nil];
+    [self observeValueForKeyPath:@"selectedObjects" ofObject:self change:nil context:nil];
 }
 
 - (void)dealloc
@@ -40,6 +41,7 @@
     [super dealloc];
 }
 
+#pragma mark UI
 - (void)insert:(id)sender
 {
     userInsert = YES;

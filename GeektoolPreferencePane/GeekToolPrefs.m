@@ -9,9 +9,10 @@
 #import <Carbon/Carbon.h>
 #import "GeekToolPrefs.h"
 #import "NTGroup.h"
-#import "defines.h"
 #import "LogWindow.h"
 #import "NTExposeBorder.h"
+
+#import "defines.h"
 #import "CGSPrivate.h"
 
 @implementation GeekToolPrefs
@@ -23,8 +24,8 @@
     if (self = [super init])
     {
         groups = [[NSMutableArray alloc]init];
-        exposeBorder = nil;
-        windowController = nil;
+        exposeBorderWindowArray = [[NSMutableArray alloc]init];
+        windowControllerArray = [[NSMutableArray alloc]init];
     }
     return self;
 }
@@ -44,47 +45,44 @@
 
 - (void)dealloc
 {
-    if (exposeBorder) [exposeBorder release];
-    if (windowController) [windowController release];
+    [groups release];
+    [exposeBorderWindowArray release];
+    [windowControllerArray release];
     [super dealloc];
 }
-
 
 #pragma mark -
 #pragma mark UI management
 - (IBAction)showExpose:(id)sender
 {
     if ([[NSUserDefaults standardUserDefaults]boolForKey:@"expose"]) [self exposeBorder];
-    else
+    else 
     {
-        if (exposeBorder)
-        {
-            [exposeBorder release];
-            exposeBorder = nil;
-        }
-        
-        if (windowController)
-        {
-            [windowController release];
-            windowController = nil;
-        }
+        [exposeBorderWindowArray removeAllObjects];
+        [windowControllerArray removeAllObjects];
     }
 }
 
 - (void)exposeBorder
 {
-    if (!exposeBorder)
+    if ([exposeBorderWindowArray count]) [exposeBorderWindowArray removeAllObjects];
+    if ([windowControllerArray count]) [windowControllerArray removeAllObjects];
+    
+    NSMutableArray *screens = [NSMutableArray arrayWithArray:[NSScreen screens]];
+    
+    for (int i = 0; i < [screens count]; i++)
     {
-        NSRect visibleFrame = [[NSScreen mainScreen]frame];
-        visibleFrame.size.height -= MENU_BAR_HEIGHT;
+        NSRect visibleFrame = [[screens objectAtIndex:i]frame];
         
-        exposeBorder = [[NSWindow alloc]initWithContentRect:visibleFrame styleMask:NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:NO screen:[NSScreen mainScreen]];
-        [exposeBorder setDelegate:self];
-        [exposeBorder setOpaque:NO];
-        [exposeBorder setLevel:kCGDesktopWindowLevel];
-        [exposeBorder setBackgroundColor:[NSColor clearColor]];
+        if (i == 0) visibleFrame.size.height -= [NSMenuView menuBarHeight];
         
-        CGSWindow wid = [exposeBorder windowNumber];
+        NSWindow *exposeBorderWindow = [[NSWindow alloc]initWithContentRect:visibleFrame styleMask:NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:NO screen:[screens objectAtIndex:0]];
+        [exposeBorderWindow setDelegate:self];
+        [exposeBorderWindow setOpaque:NO];
+        [exposeBorderWindow setLevel:kCGDesktopWindowLevel];
+        [exposeBorderWindow setBackgroundColor:[NSColor clearColor]];
+        
+        CGSWindow wid = [exposeBorderWindow windowNumber];
         CGSConnection cid = _CGSDefaultConnection();
         int tags[2] = {0,0};   
         
@@ -95,18 +93,20 @@
         }    
         
         NTExposeBorder *view = [[NTExposeBorder alloc]initWithFrame:visibleFrame];
-        [exposeBorder setContentView:view];
+        [exposeBorderWindow setContentView:view];
         [view setNeedsDisplay:YES];
         [view release];
-    }
-    
-    if (!windowController)
-    {
-        windowController = [[NSWindowController alloc]initWithWindow:exposeBorder];
-        [windowController setWindow:exposeBorder];
-    }
-    
-    [windowController showWindow:self];
+        
+        NSWindowController *windowController = [[NSWindowController alloc]initWithWindow:exposeBorderWindow];
+        [windowController setWindow:exposeBorderWindow];
+        [windowController showWindow:self];
+        
+        [exposeBorderWindowArray addObject:exposeBorderWindow];
+        [windowControllerArray addObject:windowController];
+        
+        [exposeBorderWindow release];
+        [windowController release];
+    }    
 }
 
 /*
@@ -181,30 +181,28 @@
 {
     NSString *path = [self pathForDataFile];
     NSDictionary *rootObject = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
-    NSArray *groupArray = [rootObject valueForKey:@"groups"];
+    NSMutableArray *groupArray = [NSMutableArray arrayWithArray:[rootObject valueForKey:@"groups"]];
         
-    if (!groupArray)
+    if (![groupArray count])
     {
-        [groupArray release];
         NTGroup *defaultGroup = [[NTGroup alloc]init];
-        groupArray = [NSArray arrayWithObject:defaultGroup];
+        [groupArray addObject:defaultGroup];
     }
+
+    [self setGroups:[NSMutableArray arrayWithArray:groupArray]];
     
-    // to protect group 'active' property
-    [self setGroups:(NSMutableArray*)groupArray];
-    
-    BOOL activeGroupFound = NO;
-    for (NTGroup *tmp in groups)
-        if ([[[tmp properties] objectForKey:@"active"]boolValue])
+    for (NTGroup *tmp in groupArray)
+        if ([[[tmp properties]objectForKey:@"active"]boolValue])
         {
             [groupController setSelectedObjects:[NSArray arrayWithObject:tmp]];
-            activeGroupFound = YES;
+            /*
+            [groupArray removeObject:tmp];
+            [groupArray insertObject:tmp atIndex:0];
+             */
             break;
         }
-    if (!activeGroupFound) [groupController setSelectedObjects:[NSArray arrayWithObject:[groups objectAtIndex:0]]];
     
-    // update groupController in case it hasn't awoken yet
-    [groupController observeValueForKeyPath:@"selectedObjects" ofObject:self change:nil context:nil];
+    //[self setGroups:[NSMutableArray arrayWithArray:groupArray]];
 }
 
 - (void)loadPreferences
@@ -212,6 +210,8 @@
     NSData *selectionColorData = [[NSUserDefaults standardUserDefaults]objectForKey:@"selectionColor"];
     if (!selectionColorData) selectionColorData = [NSArchiver archivedDataWithRootObject:[[NSColor alternateSelectedControlColor]colorWithAlphaComponent:0.3]];
     [[NSUserDefaults standardUserDefaults]setObject:selectionColorData forKey:@"selectionColor"];
+    
+    [self showExpose:nil];
 }
 
 #pragma mark -

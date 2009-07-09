@@ -13,16 +13,13 @@
 {        
     IBOutlet id groupController;
 
-    NSWindowController *windowController;
-    NSWindow *exposeBorder;    
+    NSMutableArray *windowControllerArray;
+    NSMutableArray *exposeBorderWindowArray;    
     
     NSMutableArray *groups;
 }
 @property (retain) NSMutableArray *groups;
 
-- (id)init;
-- (void)awakeFromNib;
-- (void)applicationWillTerminate:(NSNotification *)note;
 #pragma mark -
 #pragma mark UI management
 - (IBAction)showExpose:(id)sender;

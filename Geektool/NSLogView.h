@@ -14,17 +14,10 @@
     int highlighted;
     int dragType;
     NSTimer *timer;
-    
-    BOOL magn;
-    NSMutableArray *xGuides;
-    NSMutableArray *yGuides;
-    
-    NSArray *rectCache;
 }
 - (void)mouseDown:(NSEvent *)theEvent;
 - (void)mouseUp:(NSEvent *)theEvent;
 - (void)mouseDragged:(NSEvent *)theEvent;
-- (void)fetchRects;
 - (void)setHighlighted:(BOOL)flag;
 - (NSRect)convertToNTCoords:(NSRect)appleCoordRect;
 @end

@@ -16,17 +16,20 @@
 @implementation GroupController
 
 - (void)awakeFromNib
-{
+{        
+    oldSelectedGroup = nil;
     MovedRowsType = @"NTGroup_Moved_Item";
     CopiedRowsType = @"NTGroup_Copied_Item";
-    
+
     // register for drag and drop
 	[tableView setDraggingSourceOperationMask:NSDragOperationLink forLocal:NO];
 	[tableView setDraggingSourceOperationMask:(NSDragOperationCopy | NSDragOperationMove) forLocal:YES];
 	
 	[tableView registerForDraggedTypes:[NSArray arrayWithObjects:CopiedRowsType, MovedRowsType, nil]];
     [tableView setAllowsMultipleSelection:YES];
-    [self addObserver:self forKeyPath:@"selectedObjects" options:0 context:NULL];
+    
+    [self addObserver:self forKeyPath:@"selectedObjects" options:0 context:nil];
+    [self observeValueForKeyPath:@"selectedObjects" ofObject:self change:nil context:nil];
 }
 
 - (void)dealloc
@@ -58,16 +61,12 @@
     [NSApp beginSheet:groupsSheet modalForWindow:[NSApp mainWindow] modalDelegate:nil didEndSelector:nil contextInfo:nil];
     [NSApp runModalForWindow:[NSApp mainWindow]];
     // Sheet is up here
-    [NSApp endSheet: groupsSheet];
+    [NSApp endSheet:groupsSheet];
     [groupsSheet orderOut:self];
 }
 
 - (IBAction)groupsSheetClose:(id)sender
-{
-    // select only the first object in the list so we don't screw up making objects
-    [self setSelectionIndex:[self selectionIndex]];
-    
-    // close the sheet and refresh our menu
+{    
     [NSApp stopModal];
 }
 #pragma mark Drag n' Drop Stuff
@@ -75,7 +74,7 @@
 - (BOOL)tableView:(NSTableView *)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
 {
 	// declare our own pasteboard types
-    NSArray *typesArray = [NSArray arrayWithObjects:MovedRowsType, nil];
+    NSArray *typesArray = [NSArray arrayWithObjects:MovedRowsType,nil];
     
     [pboard declareTypes:typesArray owner:self];
 	
@@ -137,7 +136,7 @@
     return result;
 }
 
--(NSIndexSet *)moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)fromIndexSet toIndex:(unsigned int)insertIndex
+- (NSIndexSet *)moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)fromIndexSet toIndex:(unsigned int)insertIndex
 {	
 	// If any of the removed objects come before the insertion index, we need to decrement the index appropriately
 	unsigned int adjustedInsertIndex = insertIndex - [fromIndexSet countOfIndexesInRange:(NSRange){0, insertIndex}];

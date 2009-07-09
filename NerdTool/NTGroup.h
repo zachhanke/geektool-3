@@ -18,6 +18,5 @@
 
 - (id)initWithProperties:(NSDictionary*)initProperties andLogs:(NSArray*)initLogs;
 - (void)reorder;
-- (NSArray*)createUniqueRectCache;
 
 @end

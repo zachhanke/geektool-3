@@ -68,9 +68,9 @@
                                               [NSNumber numberWithInt:100],@"transparency",
                                               [NSNumber numberWithInt:PROPORTIONALLY],@"imageFit",
                                               
-                                              [NSNumber numberWithInt:0],@"x",
-                                              [NSNumber numberWithInt:20],@"y",
-                                              [NSNumber numberWithInt:150],@"w",
+                                              [NSNumber numberWithInt:16],@"x",
+                                              [NSNumber numberWithInt:38],@"y",
+                                              [NSNumber numberWithInt:280],@"w",
                                               [NSNumber numberWithInt:150],@"h",
                                               
                                               [NSNumber numberWithBool:NO],@"alwaysOnTop",
@@ -81,9 +81,9 @@
 
 - (void)dealloc
 {
+    [self removeObservers];
     [logProcess release];
     [properties release];
-    [self removeObservers];
     [super dealloc];
 }
 

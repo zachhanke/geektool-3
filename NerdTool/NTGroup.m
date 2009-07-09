@@ -45,9 +45,9 @@
 
 - (void)dealloc
 {
+    [self removeObserver:self forKeyPath:@"properties.active"]; 
     [properties release];
     [logs release];
-    [self removeObserver:self forKeyPath:@"properties.active"]; 
     [super dealloc];
 }
 
@@ -55,17 +55,6 @@
 {
     NSEnumerator *e = [[self logs]reverseObjectEnumerator];
     for (GTLog *log in e) [[log logProcess]front];
-}
-
-- (NSArray*)createUniqueRectCache
-{
-    NSMutableArray *tmpArray = [NSMutableArray array];
-    for (GTLog *log in [self logs])
-    {
-        NSValue *tmpRect = [NSValue valueWithRect:[[[log logProcess]window]frame]];
-        if (![tmpArray containsObject:tmpRect]) [tmpArray addObject:tmpRect];
-    }
-    return [[tmpArray copy]autorelease];
 }
 
 #pragma mark Observing

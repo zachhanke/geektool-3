@@ -22,14 +22,8 @@
     // observing
     GTLog *oldSelectedLog;
 }
-#pragma mark Methods
-// table view drag and drop support
-- (BOOL)tableView:(NSTableView *)aTableView
-writeRowsWithIndexes:(NSIndexSet *)rowIndexes
-toPasteboard:(NSPasteboard *)pboard;
+- (BOOL)tableView:(NSTableView *)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard;
 - (NSDragOperation)tableView:(NSTableView*)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)op;
 - (BOOL)tableView:(NSTableView*)tv acceptDrop:(id <NSDraggingInfo>)info row:(int)row dropOperation:(NSTableViewDropOperation)op;
-// utility methods
--(NSIndexSet *)moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)fromIndexSet
-toIndex:(unsigned int)insertIndex;
+-(NSIndexSet *)moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)fromIndexSet toIndex:(unsigned int)insertIndex;
 @end
