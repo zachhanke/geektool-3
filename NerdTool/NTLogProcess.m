@@ -8,6 +8,7 @@
 
 #import "NTLogProcess.h"
 #import "LogWindow.h"
+#import "GTLog.h"
 #import "LogTextField.h"
 #import "AIQuartzView.h"
 #import "NSDictionary+IntAndBoolAccessors.h"
@@ -16,6 +17,7 @@
 @implementation NTLogProcess
 
 @synthesize windowController;
+@synthesize window;
 @synthesize parentLog;
 @synthesize parentProperties;
 @synthesize attributes;
@@ -25,6 +27,7 @@
 - (id)initWithParentLog:(id)parent
 {
     if (!(self = [super init])) return nil;
+    
     windowController = [[NSWindowController alloc]initWithWindowNibName:@"logWindow"];
     window = (LogWindow*)[windowController window];
     task = nil;
@@ -36,6 +39,8 @@
     env = [tmpEnv copy];
     
     [self setParentLog:parent];
+    [self setupObservers];
+    
     return self;
 }
 
@@ -46,6 +51,7 @@
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
     [windowController close];
     [windowController release];
     [env release];
@@ -53,6 +59,34 @@
     [self killTimer];
     [super dealloc];
 }
+
+#pragma mark Observing
+- (void)setupObservers
+{
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationHandler:) name:@"NSLogViewMouseDown" object:window];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationHandler:) name:NSWindowDidResizeNotification object:window];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationHandler:) name:NSWindowDidMoveNotification object:window];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationHandler:) name:@"NSLogViewMouseUp" object:window];
+}
+
+- (void)notificationHandler:(NSNotification *)notification
+{
+    if (([[notification name]isEqualToString:NSWindowDidResizeNotification] || [[notification name]isEqualToString:NSWindowDidMoveNotification]))
+    {
+        // this happens on init, which screws things up
+        if (![parentLog isBeingDragged]) return;
+        NSRect newCoords = [self screenToRect:[[notification object]frame]];
+        [parentProperties setValue:[NSNumber numberWithInt:NSMinX(newCoords)] forKey:@"x"];
+        [parentProperties setValue:[NSNumber numberWithInt:NSMinY(newCoords)] forKey:@"y"];
+        [parentProperties setValue:[NSNumber numberWithInt:NSWidth(newCoords)] forKey:@"w"];
+        [parentProperties setValue:[NSNumber numberWithInt:NSHeight(newCoords)] forKey:@"h"];
+    }
+    else if ([[notification name]isEqualToString:@"NSLogViewMouseDown"])
+        [parentLog setIsBeingDragged:YES];
+    else if ([[notification name]isEqualToString:@"NSLogViewMouseUp"])
+        [parentLog setIsBeingDragged:NO];
+}
+
 #pragma mark KVC
 - (void)setParentLog:(GTLog*)log;
 {
@@ -73,8 +107,12 @@
 - (void)createWindow
 {        
     // we have to do this here instead of in the nib because we get an "invalid drawable" error if its done via the nib
+    // it would actually turns out that the window MUST be drawn before doing anything with anything that pertains to OpenGL, which includes the custom quartz window
+    [windowController showWindow:nil];
     [[window quartzView]setHidden:TRUE];
     [window setHasShadow:[parentProperties boolForKey:@"shadowWindow"]];
+    
+    if (task) [task release];
     
     switch ([parentProperties integerForKey:@"type"])
     {
@@ -82,7 +120,6 @@
             if ([[parentProperties objectForKey:@"file"]isEqual:@""]) return;
             
             // Read file to 50 lines. The -F file makes sure the file keeps getting read even if it hits the EOF or the file name is changed
-            if (task) [task release];
             task = [[NSTask alloc]init];
             NSPipe *pipe = [NSPipe pipe];
             
@@ -91,8 +128,8 @@
             [task setEnvironment:env];
             [task setStandardOutput:pipe];
 
-            [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:@"NSFileHandleReadCompletionNotification" object:[pipe fileHandleForReading]];
-            [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:@"NSFileHandleDataAvailableNotification" object:[pipe fileHandleForReading]];
+            [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleReadCompletionNotification object:[pipe fileHandleForReading]];
+            [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleDataAvailableNotification object:[pipe fileHandleForReading]];
                         
             [[pipe fileHandleForReading]waitForDataInBackgroundAndNotify];
             
@@ -168,7 +205,8 @@
 
 #pragma mark Task
 - (void)updateCommand:(NSTimer*)timer
-{    
+{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
     switch ([parentProperties integerForKey:@"type"])
     {            
         case TYPE_SHELL:
@@ -183,7 +221,7 @@
             [task setEnvironment:env];
             [task setStandardOutput:pipe];
             
-            [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:@"NSFileHandleReadToEndOfFileCompletionNotification" object:[pipe fileHandleForReading]];
+            [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleReadToEndOfFileCompletionNotification object:[pipe fileHandleForReading]];
             [[pipe fileHandleForReading]readToEndOfFileInBackgroundAndNotify];
 
             [task launch];
@@ -195,21 +233,20 @@
             [NSThread detachNewThreadSelector:@selector(setImage:) toTarget:self withObject:[parentProperties objectForKey:@"imageURL"]];            
             break;
             
-            // if its quartz, we just tell AIQuartzView we want a render. notice that we must send information about ourself so we can render a specific log (instead of rendering all quartz objects)
         case TYPE_QUARTZ:
             [[window quartzView]requestRender];
             break;
-            // notice we don't have a case for FILE because it does not need to be updated
     }
+    [pool release];
 }
 
 - (void)processNewDataFromTask:(NSNotification*)aNotification
 {
     NSData *newData;
     
-    if ([[aNotification name]isEqual:@"NSFileHandleReadToEndOfFileCompletionNotification"])
+    if ([[aNotification name]isEqual:NSFileHandleReadToEndOfFileCompletionNotification])
     {
-        newData = [[aNotification userInfo]objectForKey:@"NSFileHandleNotificationDataItem"];
+        newData = [[aNotification userInfo]objectForKey:NSFileHandleNotificationDataItem];
         [[NSNotificationCenter defaultCenter]removeObserver:self name:[aNotification name] object:nil];        
     }
     else
@@ -226,7 +263,7 @@
             [[window textView]scrollEnd];
             [[aNotification object]waitForDataInBackgroundAndNotify];
         }
-        [[window textView] setAttributes:attributes];
+        [[window textView]setAttributes:attributes];
     }
     
     [window display];
@@ -300,18 +337,19 @@
 
 - (void)setImage:(NSString*)urlStr
 {    
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
     NSImage *myImage = [[NSImage alloc]initByReferencingURL:[NSURL URLWithString:urlStr]];
     [[window imageView]setImage:myImage];
     [myImage release];
+    [pool release];
 }
 
 #pragma mark Accessors
-
-- (NSRect)screenToRect:(NSRect)var
+- (NSRect)screenToRect:(NSRect)appleCoordRect
 {
     // remember, the coordinates we use are with respect to the top left corner (both window and screen), but the actual OS takes them with respect to the bottom left (both window and screen), so we must convert between these
     NSRect screenSize = [[NSScreen mainScreen] frame];
-    return NSMakeRect(var.origin.x,(screenSize.size.height - var.origin.y) - var.size.height,var.size.width,var.size.height);
+    return NSMakeRect(appleCoordRect.origin.x,(screenSize.size.height - appleCoordRect.origin.y - appleCoordRect.size.height),appleCoordRect.size.width,appleCoordRect.size.height);
 }
 
 - (NSRect)rect

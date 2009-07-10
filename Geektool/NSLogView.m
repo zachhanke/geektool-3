@@ -64,8 +64,7 @@
     dragType = 0;
     
     // dont accept clicks if the view is not highlighted
-    if (!highlighted)
-        return;
+    if (!highlighted) return;
     
     mouseLoc = [window convertBaseToScreen:[theEvent locationInWindow]];
     windowFrame = [window frame];
@@ -78,7 +77,7 @@
     
     if ([[NSUserDefaults standardUserDefaults]boolForKey:@"lockSize"]) dragType = MoveDragType;
     
-    [[(LogWindow*)[logWindowController window]parentLog]setIsBeingDragged:TRUE];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"NSLogViewMouseDown" object:window];
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent
@@ -86,7 +85,6 @@
     NSWindow *window = [self window];
     NSRect newWindowFrame = windowFrame;
     
-    // check to see if we are resizing
     if (dragType == ResizeDragType)
     {                
         // Get the mouse location in window coordinates.    
@@ -102,19 +100,18 @@
         
         
         // don't let the window be resized smaller than 20x20
-        if (newWindowFrame.size.width < MIN_W)
+        if (NSWidth(newWindowFrame) < MIN_W)
             newWindowFrame.size.width = MIN_W;
         
-        if (newWindowFrame.size.height < MIN_H)
+        if (NSHeight(newWindowFrame) < MIN_H)
         {
-            newWindowFrame.origin.y -= MIN_H - newWindowFrame.size.height;
+            newWindowFrame.origin.y -= MIN_H - NSHeight(newWindowFrame);
             newWindowFrame.size.height = MIN_H;
         }
                 
         [window setFrame:newWindowFrame display:YES animate:NO];
         [[NSNotificationCenter defaultCenter]postNotificationName:NSWindowDidResizeNotification object:window];
     }
-    // we are moving the window, not resizing it
     else
     {
         NSPoint currentMouseLoc = [NSEvent mouseLocation];
@@ -160,18 +157,14 @@
         [window setFrameOrigin:newWindowFrame.origin];
         [[NSNotificationCenter defaultCenter]postNotificationName:NSWindowDidMoveNotification object:window];		
     }
-    
-    [[(LogWindow*)[logWindowController window]parentLog]setCoords:[self convertToNTCoords:[[self window]frame]]];
 }
 
 - (void)mouseUp:(NSEvent *)theEvent;
 {
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"NSLogViewMouseUp" object:[self window]];
     if ([[[(LogWindow*)[logWindowController window]parentLog]properties]valueForKey:@"type"] == TYPE_SHELL)
         [[(LogWindow*)[logWindowController window]textView]scrollEnd];
     [text display];
-    
-
-    [[(LogWindow*)[logWindowController window]parentLog]setIsBeingDragged:FALSE];
 }
 
 #pragma mark View Drawing
@@ -181,20 +174,13 @@
     NSBezierPath *bp = [NSBezierPath bezierPathWithRect:[self bounds]];
     NSColor *color;
     
-    // if we want this window to be highlighted
     if (highlighted)
     {
         color = [NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults]objectForKey:@"selectionColor"]];
-        
-        // further drawing will be done with this color
         [color set];
-        
-        // fill rect with this color
         [bp fill];
         
-        NSImage *corner = [NSImage imageNamed:@"corner"];
-        
-        [corner drawInRect:(NSRect){{[self bounds].size.width - 11,0},{11,11}} fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
+        [[NSImage imageNamed:@"corner"] drawInRect:(NSRect){{[self bounds].size.width - 11,0},{11,11}} fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
     }
     else
     {
@@ -214,11 +200,4 @@
     //if (highlighted) [[self window] makeKeyWindow];
     [self setNeedsDisplay:YES];
 }
-
-- (NSRect)convertToNTCoords:(NSRect)appleCoordRect
-{
-    NSRect screenSize = [[NSScreen mainScreen] frame];
-    return NSMakeRect(appleCoordRect.origin.x,(screenSize.size.height - appleCoordRect.origin.y - appleCoordRect.size.height),appleCoordRect.size.width,appleCoordRect.size.height);
-}
-
 @end

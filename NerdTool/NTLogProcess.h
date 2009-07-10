@@ -37,6 +37,7 @@
 @property (assign) LogWindow *window;
 
 - (id)initWithParentLog:(id)parent;
+- (void)setupObservers;
 
 // window management
 - (void)setupLogWindowAndDisplay;
@@ -58,7 +59,7 @@
 
 // accessors
 - (NSDictionary*)parentProperties;
-- (NSRect)screenToRect:(NSRect)var;
+- (NSRect)screenToRect:(NSRect)appleCoordRect;
 - (NSRect)rect;
 - (int)imageFit;
 - (int)imageAlignment;

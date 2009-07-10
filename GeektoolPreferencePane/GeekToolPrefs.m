@@ -195,14 +195,8 @@
         if ([[[tmp properties]objectForKey:@"active"]boolValue])
         {
             [groupController setSelectedObjects:[NSArray arrayWithObject:tmp]];
-            /*
-            [groupArray removeObject:tmp];
-            [groupArray insertObject:tmp atIndex:0];
-             */
             break;
         }
-    
-    //[self setGroups:[NSMutableArray arrayWithArray:groupArray]];
 }
 
 - (void)loadPreferences

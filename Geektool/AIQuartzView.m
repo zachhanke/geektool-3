@@ -19,6 +19,9 @@
     
     // set this low because we don't want to spend too much time on the clock
     [self setMaxRenderingFrameRate:MAX_FRAMERATE];
+    
+    // redraw view if window is resized
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(requestRender) name:NSWindowDidResizeNotification object:parentWindow];
 }
 
 - (void)requestRender

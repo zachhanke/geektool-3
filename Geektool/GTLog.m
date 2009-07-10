@@ -166,7 +166,7 @@
         self.logProcess = [[NTLogProcess alloc]initWithParentLog:self];
         [logProcess setupLogWindowAndDisplay];
     }
-    else if ([keyPath isEqualToString:@"properties.shadowWindow"] || [keyPath isEqualToString:@"properties.file"] || [keyPath isEqualToString:@"properties.command"] || [keyPath isEqualToString:@"properties.type"])
+    else if ([keyPath isEqualToString:@"properties.shadowWindow"] || [keyPath isEqualToString:@"properties.file"] || [keyPath isEqualToString:@"properties.command"] || [keyPath isEqualToString:@"properties.type"] || [keyPath isEqualToString:@"properties.quartzFile"])
     {
         [logProcess setupLogWindowAndDisplay];
     }
@@ -218,14 +218,6 @@
 
 #pragma mark -
 #pragma mark Misc
-- (void)setCoords:(NSRect)newCoords
-{
-    [[self properties]setValue:[NSNumber numberWithInt:newCoords.origin.x] forKey:@"x"];
-    [[self properties]setValue:[NSNumber numberWithInt:newCoords.origin.y] forKey:@"y"];
-    [[self properties]setValue:[NSNumber numberWithInt:newCoords.size.width] forKey:@"w"];
-    [[self properties]setValue:[NSNumber numberWithInt:newCoords.size.height] forKey:@"h"];
-}
-
 - (void)setHighlighted:(BOOL)val from:(id)sender
 {
     highlightSender = sender;

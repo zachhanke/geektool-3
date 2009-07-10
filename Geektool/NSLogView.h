@@ -19,5 +19,4 @@
 - (void)mouseUp:(NSEvent *)theEvent;
 - (void)mouseDragged:(NSEvent *)theEvent;
 - (void)setHighlighted:(BOOL)flag;
-- (NSRect)convertToNTCoords:(NSRect)appleCoordRect;
 @end

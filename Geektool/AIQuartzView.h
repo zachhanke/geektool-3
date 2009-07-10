@@ -12,7 +12,7 @@
 
 @interface AIQuartzView : QCView
 {
-    IBOutlet id owner;
+    IBOutlet id parentWindow;
     BOOL render;
 }
 
