@@ -25,9 +25,6 @@
 - (IBAction)showExpose:(id)sender;
 - (void)exposeBorder;
 /*
-- (IBAction)fileChoose:(id)sender;
-- (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo;
-- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (IBAction)gChooseFont:(id)sender;
  */
 #pragma mark Saving

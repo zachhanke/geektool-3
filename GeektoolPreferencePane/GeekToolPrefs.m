@@ -108,54 +108,22 @@
         [windowController release];
     }    
 }
-
 /*
-- (IBAction)fileChoose:(id)sender
-{
-    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
-    [openPanel setAllowsMultipleSelection: NO];
-    [openPanel setCanChooseFiles: YES];
-    [openPanel beginSheetForDirectory: @"/var/log/"
-                                 file: @"system.log"
-                                types: nil
-                       modalForWindow: [NSApp mainWindow]
-                        modalDelegate: self
-                       didEndSelector: @selector(openPanelDidEnd:returnCode:contextInfo:)
-                          contextInfo: nil];
-}
-
-- (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo
-{
-    [NSApp endSheet: sheet];
-    if (returnCode == NSOKButton) {
-        NSArray *filesToOpen = [sheet filenames];
-        // TODO: write to path dictionary directly. bindings should take care of
-        // this 
-    }
-}
-
-- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
-{
-    if (returnCode == NSAlertDefaultReturn)
-        [sheet close];
-}
-
 -(IBAction)gChooseFont:(id)sender
 {
     // TODO: bindings maybe?
      switch ([self logType])
      {
      case 0:
-     [[[self mainView] window] makeFirstResponder: cf1FontTextField];
+     [[[self mainView]window]makeFirstResponder:cf1FontTextField];
      break;
      case 1:
-     [[[self mainView] window] makeFirstResponder: cf2FontTextField];
+     [[[self mainView]window]makeFirstResponder:cf2FontTextField];
      break;
      }
      [[NSFontManager sharedFontManager] orderFrontFontPanel: self];
 }
 */
-
 #pragma mark Saving
 - (NSString *)pathForDataFile
 {

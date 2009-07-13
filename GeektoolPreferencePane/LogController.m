@@ -12,6 +12,7 @@
 #import "GTLog.h"
 #import "LogWindow.h"
 
+#import "defines.h"
 #import "NSIndexSet+CountOfIndexesInRange.h"
 #import "NSArrayController+Duplicate.h"
 
@@ -62,6 +63,48 @@
     [super insertObject:object atArrangedObjectIndex:index];
     
     [parentGroup reorder];
+}
+
+- (IBAction)fileChoose:(id)sender
+{
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+    [openPanel setAllowsMultipleSelection:NO];
+    [openPanel setCanChooseFiles:YES];
+    
+    int selectedLogType = [[[[[self selectedObjects]objectAtIndex:0]properties]objectForKey:@"type"]intValue];
+    if (selectedLogType == TYPE_FILE)
+        [openPanel beginSheetForDirectory:@"/var/log/" file:@"system.log" types:nil modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+    else if (selectedLogType == TYPE_IMAGE)
+        [openPanel beginSheetForDirectory:[[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,NSUserDomainMask,YES) objectAtIndex:0]stringByAppendingPathComponent:[[NSProcessInfo processInfo]processName]] file:nil types:nil modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+    else if (selectedLogType == TYPE_QUARTZ)
+        [openPanel beginSheetForDirectory:[[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,NSUserDomainMask,YES) objectAtIndex:0]stringByAppendingPathComponent:[[NSProcessInfo processInfo]processName]] file:nil types:[NSArray arrayWithObjects:@"qtz",nil] modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+
+}
+
+- (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo
+{
+    [NSApp endSheet:sheet];
+    if (returnCode == NSOKButton)
+    {
+        if (![[sheet filenames]count]) return;
+        NSString *fileToOpen = [[sheet filenames]objectAtIndex:0];
+        
+        GTLog *selectedLog = [[self selectedObjects]objectAtIndex:0];
+        int selectedLogType = [[[[[self selectedObjects]objectAtIndex:0]properties]objectForKey:@"type"]intValue];
+
+        if (selectedLogType == TYPE_FILE)
+            [[selectedLog properties]setObject:fileToOpen forKey:@"file"];
+        else if (selectedLogType == TYPE_IMAGE)
+            [[selectedLog properties]setObject:[[[sheet URLs]objectAtIndex:0]absoluteString] forKey:@"imageURL"];
+        else if (selectedLogType == TYPE_QUARTZ)
+            [[selectedLog properties]setObject:fileToOpen forKey:@"quartzFile"];
+
+    }
+}
+
+- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+{
+    if (returnCode == NSAlertDefaultReturn) [sheet close];
 }
 
 #pragma mark Observing
