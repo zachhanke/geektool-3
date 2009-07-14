@@ -90,7 +90,7 @@
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSCustomView" id="344874084">
 									<reference key="NSNextResponder" ref="66047436"/>
-									<int key="NSvFlags">256</int>
+									<int key="NSvFlags">274</int>
 									<string key="NSFrameSize">{420, 101}</string>
 									<reference key="NSSuperview" ref="66047436"/>
 									<string key="NSClassName">LogTextField</string>

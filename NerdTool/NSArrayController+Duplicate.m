@@ -11,7 +11,7 @@
 
 @implementation NSArrayController (Duplicate)
 
-- (IBAction)duplicateSelection:(id)sender
+- (void)duplicateSelection
 {
     // just in case this gets called with nothing selected...
     if ([self selectionIndex] != NSNotFound)
@@ -24,12 +24,11 @@
         for (id tmpObject in copyObjects)
         {
             tmpDictionary = [tmpObject properties];
-            [[tmpObject properties] setObject:[self duplicateCheck:[tmpDictionary objectForKey:@"name"]]
-                                       forKey: @"name"];
+            [[tmpObject properties]setObject:[self duplicateCheck:[tmpDictionary objectForKey:@"name"]] forKey:@"name"];
         }
         
         // add our duplicate groups to the controller
-        [self addObjects:copyObjects];
+        [self insertObjects:copyObjects atArrangedObjectIndexes:[NSIndexSet indexSetWithIndex:[self selectionIndex]]];
         
         [copyObjects release];
     }

@@ -49,6 +49,12 @@
     [super insert:sender];
 }
 
+- (IBAction)duplicate:(id)sender
+{
+    userInsert = YES;
+    [self duplicateSelection];
+}
+
 - (void)insertObject:(id)object atArrangedObjectIndex:(NSUInteger)index
 {
     NTGroup *parentGroup = [[groupController selectedObjects]objectAtIndex:0];
@@ -114,7 +120,7 @@
     // when a selection is changed
     if([keyPath isEqualToString:@"selectedObjects"])
     {
-        if (oldSelectedLog) [oldSelectedLog setHighlighted:NO from:self];
+        if (oldSelectedLog != nil) [oldSelectedLog setHighlighted:NO from:self];
         
         if (![[self selectedObjects]count]) return;
         

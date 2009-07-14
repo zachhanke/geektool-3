@@ -34,6 +34,8 @@
 		0A7D37680FD804690070D678 /* logWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37670FD804690070D678 /* logWindow.xib */; };
 		0A7D38890FD805FA0070D678 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7D38870FD805FA0070D678 /* Quartz.framework */; };
 		0A7D388A0FD805FA0070D678 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7D38880FD805FA0070D678 /* Carbon.framework */; };
+		0A94847A100C21350071EFF9 /* NTFontDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A948479100C21350071EFF9 /* NTFontDisplay.m */; };
+		0A94851B100C3E5E0071EFF9 /* logo.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0A94851A100C3E5E0071EFF9 /* logo.icns */; };
 		0ABB3F8D100401000000E788 /* NTExposeBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ABB3F8C100401000000E788 /* NTExposeBorder.m */; };
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
@@ -86,6 +88,9 @@
 		0A7D37670FD804690070D678 /* logWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = logWindow.xib; sourceTree = "<group>"; };
 		0A7D38870FD805FA0070D678 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		0A7D38880FD805FA0070D678 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		0A948478100C21350071EFF9 /* NTFontDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTFontDisplay.h; sourceTree = "<group>"; };
+		0A948479100C21350071EFF9 /* NTFontDisplay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTFontDisplay.m; sourceTree = "<group>"; };
+		0A94851A100C3E5E0071EFF9 /* logo.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = logo.icns; path = logo/logo.icns; sourceTree = "<group>"; };
 		0ABB3F8B100401000000E788 /* NTExposeBorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTExposeBorder.h; sourceTree = "<group>"; };
 		0ABB3F8C100401000000E788 /* NTExposeBorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTExposeBorder.m; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -113,7 +118,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		080E96DDFE201D6D7F000001 /* UI Classes */ = {
+		080E96DDFE201D6D7F000001 /* Log UI Classes */ = {
 			isa = PBXGroup;
 			children = (
 				0A7D372F0FD802E30070D678 /* LogWindow.h */,
@@ -126,10 +131,8 @@
 				0A43A1170FEC0B9F00BB8B6A /* AJRScrollView.m */,
 				0A7D374D0FD803980070D678 /* LogTextField.h */,
 				0A7D374E0FD803980070D678 /* LogTextField.m */,
-				0ABB3F8B100401000000E788 /* NTExposeBorder.h */,
-				0ABB3F8C100401000000E788 /* NTExposeBorder.m */,
 			);
-			name = "UI Classes";
+			name = "Log UI Classes";
 			sourceTree = "<group>";
 		};
 		0A194D8C0FED967C0062EA84 /* Data Classes */ = {
@@ -171,6 +174,17 @@
 			name = Controllers;
 			sourceTree = "<group>";
 		};
+		0A94855E100C45BA0071EFF9 /* Preferences UI Classes */ = {
+			isa = PBXGroup;
+			children = (
+				0A948478100C21350071EFF9 /* NTFontDisplay.h */,
+				0A948479100C21350071EFF9 /* NTFontDisplay.m */,
+				0ABB3F8B100401000000E788 /* NTExposeBorder.h */,
+				0ABB3F8C100401000000E788 /* NTExposeBorder.m */,
+			);
+			name = "Preferences UI Classes";
+			sourceTree = "<group>";
+		};
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -205,7 +219,8 @@
 				0A439DA00FE9D29D00BB8B6A /* Categories */,
 				0A7D372A0FD802B10070D678 /* Controllers */,
 				0A194D8C0FED967C0062EA84 /* Data Classes */,
-				080E96DDFE201D6D7F000001 /* UI Classes */,
+				0A94855E100C45BA0071EFF9 /* Preferences UI Classes */,
+				080E96DDFE201D6D7F000001 /* Log UI Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -228,6 +243,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0A94851A100C3E5E0071EFF9 /* logo.icns */,
 				0A7D37360FD8030E0070D678 /* left.png */,
 				0A7D37370FD8030E0070D678 /* center.png */,
 				0A7D37380FD8030E0070D678 /* defaultFailure.png */,
@@ -311,6 +327,7 @@
 				0A7D37560FD803C70070D678 /* corner.tif in Resources */,
 				0A7D37650FD804270070D678 /* GeektoolPrefs.xib in Resources */,
 				0A7D37680FD804690070D678 /* logWindow.xib in Resources */,
+				0A94851B100C3E5E0071EFF9 /* logo.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,6 +354,7 @@
 				0A74770F0FF9C562005C7DD3 /* NTLogProcess.m in Sources */,
 				0A7477280FFAB19D005C7DD3 /* NSDictionary+IntAndBoolAccessors.m in Sources */,
 				0ABB3F8D100401000000E788 /* NTExposeBorder.m in Sources */,
+				0A94847A100C21350071EFF9 /* NTFontDisplay.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

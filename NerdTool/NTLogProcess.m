@@ -108,18 +108,18 @@
 {        
     // we have to do this here instead of in the nib because we get an "invalid drawable" error if its done via the nib
     // it would actually turns out that the window MUST be drawn before doing anything with anything that pertains to OpenGL, which includes the custom quartz window
-    [windowController showWindow:nil];
+    // should this error become fatal, you know what to do (uncomment the line below). I just don't want the app displaying windows like a moron.
+    //[windowController showWindow:nil];
     [[window quartzView]setHidden:TRUE];
     [window setHasShadow:[parentProperties boolForKey:@"shadowWindow"]];
-    
-    if (task) [task release];
-    
+        
     switch ([parentProperties integerForKey:@"type"])
     {
         case TYPE_FILE:
             if ([[parentProperties objectForKey:@"file"]isEqual:@""]) return;
             
             // Read file to 50 lines. The -F file makes sure the file keeps getting read even if it hits the EOF or the file name is changed
+            if (task) [task release];
             task = [[NSTask alloc]init];
             NSPipe *pipe = [NSPipe pipe];
             

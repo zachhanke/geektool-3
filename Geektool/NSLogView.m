@@ -11,7 +11,7 @@
 #define SNAP_TOLERANCE 10.0
 
 #define MIN_W 40
-#define MIN_H 50
+#define MIN_H 10
 
 // this class exists so we can move/resize our borderless window unfortunately, these common functions are unavailable to us because we are using an NSBorderlessWindow, so we must recreate them manually ourselves
 @implementation NSLogView
@@ -155,7 +155,7 @@
         // Move the window to the new location
         [[NSNotificationCenter defaultCenter]postNotificationName:NSWindowWillMoveNotification object:window];
         [window setFrameOrigin:newWindowFrame.origin];
-        [[NSNotificationCenter defaultCenter]postNotificationName:NSWindowDidMoveNotification object:window];		
+        [[NSNotificationCenter defaultCenter]postNotificationName:NSWindowDidMoveNotification object:window];
     }
 }
 

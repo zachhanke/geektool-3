@@ -88,7 +88,7 @@
     unsigned int currentIndex = [rowIndexes firstIndex];
     while (currentIndex != NSNotFound)
     {
-		[rowCopies addObject:[[self arrangedObjects] objectAtIndex:currentIndex]];
+		[rowCopies addObject:[[self arrangedObjects]objectAtIndex:currentIndex]];
         currentIndex = [rowIndexes indexGreaterThanIndex: currentIndex];
     }
 	

@@ -10,6 +10,6 @@
 
 
 @interface NSArrayController (Duplicate)
-- (IBAction)duplicateSelection:(id)sender;
+- (void)duplicateSelection;
 - (NSString*)duplicateCheck:(NSString*)myObjectName;
 @end

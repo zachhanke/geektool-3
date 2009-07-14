@@ -108,22 +108,7 @@
         [windowController release];
     }    
 }
-/*
--(IBAction)gChooseFont:(id)sender
-{
-    // TODO: bindings maybe?
-     switch ([self logType])
-     {
-     case 0:
-     [[[self mainView]window]makeFirstResponder:cf1FontTextField];
-     break;
-     case 1:
-     [[[self mainView]window]makeFirstResponder:cf2FontTextField];
-     break;
-     }
-     [[NSFontManager sharedFontManager] orderFrontFontPanel: self];
-}
-*/
+
 #pragma mark Saving
 - (NSString *)pathForDataFile
 {

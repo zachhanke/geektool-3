@@ -48,7 +48,7 @@
                                               @"Default",@"group",
                                               
                                               @"Monaco",@"fontName",
-                                              [NSNumber numberWithInt:12],@"fontSize",
+                                              [NSNumber numberWithFloat:12],@"fontSize",
                                               
                                               @"",@"file",
                                               @"",@"quartzFile",
@@ -84,6 +84,7 @@
     [self removeObservers];
     [logProcess release];
     [properties release];
+    [active release];
     [super dealloc];
 }
 

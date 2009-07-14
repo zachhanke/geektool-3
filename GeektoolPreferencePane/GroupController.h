@@ -22,6 +22,7 @@
     // UI
     IBOutlet id groupsSheet;
 }
+
 - (IBAction)groupsSheetClose:(id)sender;
 - (IBAction)showGroupsCustomization:(id)sender;
 

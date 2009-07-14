@@ -24,9 +24,6 @@
 #pragma mark UI management
 - (IBAction)showExpose:(id)sender;
 - (void)exposeBorder;
-/*
-- (IBAction)gChooseFont:(id)sender;
- */
 #pragma mark Saving
 - (NSString *)pathForDataFile;
 - (void)saveDataToDisk;
