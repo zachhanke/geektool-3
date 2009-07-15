@@ -7,101 +7,103 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0A2AEC310FE6DDB000097DCA /* NTGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2AEC300FE6DDB000097DCA /* NTGroup.m */; };
-		0A439D970FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A439D960FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.m */; };
-		0A439F1B0FE9EAEE00BB8B6A /* NSArrayController+Duplicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A439F1A0FE9EAEE00BB8B6A /* NSArrayController+Duplicate.m */; };
-		0A43A1180FEC0B9F00BB8B6A /* AJRScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A43A1170FEC0B9F00BB8B6A /* AJRScrollView.m */; };
-		0A74770F0FF9C562005C7DD3 /* NTLogProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A74770E0FF9C562005C7DD3 /* NTLogProcess.m */; };
-		0A7477280FFAB19D005C7DD3 /* NSDictionary+IntAndBoolAccessors.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7477270FFAB19D005C7DD3 /* NSDictionary+IntAndBoolAccessors.m */; };
-		0A7D37260FD8028D0070D678 /* GeekToolPrefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37210FD8028D0070D678 /* GeekToolPrefs.m */; };
-		0A7D37270FD8028D0070D678 /* GroupController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37230FD8028D0070D678 /* GroupController.m */; };
-		0A7D37280FD8028D0070D678 /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37250FD8028D0070D678 /* LogController.m */; };
-		0A7D37310FD802E30070D678 /* GTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D372E0FD802E30070D678 /* GTLog.m */; };
-		0A7D37320FD802E30070D678 /* LogWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37300FD802E30070D678 /* LogWindow.m */; };
-		0A7D373E0FD8030E0070D678 /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37360FD8030E0070D678 /* left.png */; };
-		0A7D373F0FD8030E0070D678 /* center.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37370FD8030E0070D678 /* center.png */; };
-		0A7D37400FD8030E0070D678 /* defaultFailure.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37380FD8030E0070D678 /* defaultFailure.png */; };
-		0A7D37410FD8030E0070D678 /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37390FD8030E0070D678 /* right.png */; };
-		0A7D37420FD8030E0070D678 /* justified.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D373A0FD8030E0070D678 /* justified.png */; };
-		0A7D37430FD8030E0070D678 /* GeekToolPrefs.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D373B0FD8030E0070D678 /* GeekToolPrefs.tiff */; };
-		0A7D37440FD8030E0070D678 /* delete.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D373C0FD8030E0070D678 /* delete.tif */; };
-		0A7D37450FD8030E0070D678 /* defaultSuccess.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D373D0FD8030E0070D678 /* defaultSuccess.png */; };
-		0A7D374F0FD803980070D678 /* NSLogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D374C0FD803980070D678 /* NSLogView.m */; };
-		0A7D37500FD803980070D678 /* LogTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D374E0FD803980070D678 /* LogTextField.m */; };
-		0A7D37530FD803AD0070D678 /* AIQuartzView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D37520FD803AD0070D678 /* AIQuartzView.m */; };
-		0A7D37560FD803C70070D678 /* corner.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37540FD803C70070D678 /* corner.tif */; };
-		0A7D37650FD804270070D678 /* GeektoolPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37630FD804270070D678 /* GeektoolPrefs.xib */; };
-		0A7D37680FD804690070D678 /* logWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A7D37670FD804690070D678 /* logWindow.xib */; };
 		0A7D38890FD805FA0070D678 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7D38870FD805FA0070D678 /* Quartz.framework */; };
 		0A7D388A0FD805FA0070D678 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7D38880FD805FA0070D678 /* Carbon.framework */; };
-		0A94847A100C21350071EFF9 /* NTFontDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A948479100C21350071EFF9 /* NTFontDisplay.m */; };
-		0A94851B100C3E5E0071EFF9 /* logo.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0A94851A100C3E5E0071EFF9 /* logo.icns */; };
-		0ABB3F8D100401000000E788 /* NTExposeBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ABB3F8C100401000000E788 /* NTExposeBorder.m */; };
-		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
-		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		0A904BC2100D8EAC009A2F5E /* AIQuartzView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BA0100D8EAC009A2F5E /* AIQuartzView.m */; };
+		0A904BC3100D8EAC009A2F5E /* AJRScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BA2100D8EAC009A2F5E /* AJRScrollView.m */; };
+		0A904BC4100D8EAC009A2F5E /* GeekToolPrefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BA6100D8EAC009A2F5E /* GeekToolPrefs.m */; };
+		0A904BC5100D8EAC009A2F5E /* GroupController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BA8100D8EAC009A2F5E /* GroupController.m */; };
+		0A904BC6100D8EAC009A2F5E /* GTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BAA100D8EAC009A2F5E /* GTLog.m */; };
+		0A904BC8100D8EAC009A2F5E /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BAD100D8EAC009A2F5E /* LogController.m */; };
+		0A904BC9100D8EAC009A2F5E /* LogTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BAF100D8EAC009A2F5E /* LogTextField.m */; };
+		0A904BCA100D8EAC009A2F5E /* LogWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BB1100D8EAC009A2F5E /* LogWindow.m */; };
+		0A904BCB100D8EAC009A2F5E /* NSArrayController+Duplicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BB3100D8EAC009A2F5E /* NSArrayController+Duplicate.m */; };
+		0A904BCC100D8EAC009A2F5E /* NSDictionary+IntAndBoolAccessors.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BB5100D8EAC009A2F5E /* NSDictionary+IntAndBoolAccessors.m */; };
+		0A904BCD100D8EAC009A2F5E /* NSIndexSet+CountOfIndexesInRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BB7100D8EAC009A2F5E /* NSIndexSet+CountOfIndexesInRange.m */; };
+		0A904BCE100D8EAC009A2F5E /* NSLogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BB9100D8EAC009A2F5E /* NSLogView.m */; };
+		0A904BCF100D8EAC009A2F5E /* NTExposeBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BBB100D8EAC009A2F5E /* NTExposeBorder.m */; };
+		0A904BD0100D8EAC009A2F5E /* NTFontDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BBD100D8EAC009A2F5E /* NTFontDisplay.m */; };
+		0A904BD1100D8EAC009A2F5E /* NTGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BBF100D8EAC009A2F5E /* NTGroup.m */; };
+		0A904BD2100D8EAC009A2F5E /* NTLogProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BC1100D8EAC009A2F5E /* NTLogProcess.m */; };
+		0A904BF7100D8F2B009A2F5E /* center.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BD5100D8F2B009A2F5E /* center.png */; };
+		0A904BF8100D8F2B009A2F5E /* corner.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BD6100D8F2B009A2F5E /* corner.tif */; };
+		0A904BF9100D8F2B009A2F5E /* defaultFailure.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BD7100D8F2B009A2F5E /* defaultFailure.png */; };
+		0A904BFA100D8F2B009A2F5E /* defaultSuccess.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BD8100D8F2B009A2F5E /* defaultSuccess.png */; };
+		0A904BFB100D8F2B009A2F5E /* delete.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BD9100D8F2B009A2F5E /* delete.tif */; };
+		0A904BFC100D8F2B009A2F5E /* GeektoolPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BDA100D8F2B009A2F5E /* GeektoolPrefs.xib */; };
+		0A904BFD100D8F2B009A2F5E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BDC100D8F2B009A2F5E /* InfoPlist.strings */; };
+		0A904BFE100D8F2B009A2F5E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BDE100D8F2B009A2F5E /* Localizable.strings */; };
+		0A904BFF100D8F2B009A2F5E /* logWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BE0100D8F2B009A2F5E /* logWindow.xib */; };
+		0A904C00100D8F2B009A2F5E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BE2100D8F2B009A2F5E /* MainMenu.xib */; };
+		0A904C01100D8F2B009A2F5E /* GeektoolPreferencePanePref.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BE4100D8F2B009A2F5E /* GeektoolPreferencePanePref.tiff */; };
+		0A904C02100D8F2B009A2F5E /* GeekToolPrefs.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BE5100D8F2B009A2F5E /* GeekToolPrefs.tiff */; };
+		0A904C03100D8F2B009A2F5E /* justified.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BE6100D8F2B009A2F5E /* justified.png */; };
+		0A904C04100D8F2B009A2F5E /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BE7100D8F2B009A2F5E /* left.png */; };
+		0A904C0D100D8F2B009A2F5E /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BF5100D8F2B009A2F5E /* right.png */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		0A2AEC2F0FE6DDB000097DCA /* NTGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTGroup.h; sourceTree = "<group>"; };
-		0A2AEC300FE6DDB000097DCA /* NTGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTGroup.m; sourceTree = "<group>"; };
-		0A439D950FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexSet+CountOfIndexesInRange.h"; sourceTree = "<group>"; };
-		0A439D960FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexSet+CountOfIndexesInRange.m"; sourceTree = "<group>"; };
-		0A439F190FE9EAEE00BB8B6A /* NSArrayController+Duplicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArrayController+Duplicate.h"; sourceTree = "<group>"; };
-		0A439F1A0FE9EAEE00BB8B6A /* NSArrayController+Duplicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArrayController+Duplicate.m"; sourceTree = "<group>"; };
-		0A43A1160FEC0B9F00BB8B6A /* AJRScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AJRScrollView.h; path = ../Geektool/AJRScrollView.h; sourceTree = SOURCE_ROOT; };
-		0A43A1170FEC0B9F00BB8B6A /* AJRScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AJRScrollView.m; path = ../Geektool/AJRScrollView.m; sourceTree = SOURCE_ROOT; };
-		0A74770D0FF9C562005C7DD3 /* NTLogProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTLogProcess.h; sourceTree = "<group>"; };
-		0A74770E0FF9C562005C7DD3 /* NTLogProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTLogProcess.m; sourceTree = "<group>"; };
-		0A7477260FFAB19D005C7DD3 /* NSDictionary+IntAndBoolAccessors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+IntAndBoolAccessors.h"; sourceTree = "<group>"; };
-		0A7477270FFAB19D005C7DD3 /* NSDictionary+IntAndBoolAccessors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+IntAndBoolAccessors.m"; sourceTree = "<group>"; };
-		0A7D37200FD8028D0070D678 /* GeekToolPrefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeekToolPrefs.h; path = ../GeektoolPreferencePane/GeekToolPrefs.h; sourceTree = SOURCE_ROOT; };
-		0A7D37210FD8028D0070D678 /* GeekToolPrefs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeekToolPrefs.m; path = ../GeektoolPreferencePane/GeekToolPrefs.m; sourceTree = SOURCE_ROOT; };
-		0A7D37220FD8028D0070D678 /* GroupController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupController.h; path = ../GeektoolPreferencePane/GroupController.h; sourceTree = SOURCE_ROOT; };
-		0A7D37230FD8028D0070D678 /* GroupController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupController.m; path = ../GeektoolPreferencePane/GroupController.m; sourceTree = SOURCE_ROOT; };
-		0A7D37240FD8028D0070D678 /* LogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogController.h; path = ../GeektoolPreferencePane/LogController.h; sourceTree = SOURCE_ROOT; };
-		0A7D37250FD8028D0070D678 /* LogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogController.m; path = ../GeektoolPreferencePane/LogController.m; sourceTree = SOURCE_ROOT; };
-		0A7D372B0FD802D50070D678 /* defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = defines.h; path = ../Geektool/defines.h; sourceTree = SOURCE_ROOT; };
-		0A7D372C0FD802D50070D678 /* CGSPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CGSPrivate.h; path = ../Geektool/CGSPrivate.h; sourceTree = SOURCE_ROOT; };
-		0A7D372D0FD802E30070D678 /* GTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTLog.h; path = ../Geektool/GTLog.h; sourceTree = SOURCE_ROOT; };
-		0A7D372E0FD802E30070D678 /* GTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTLog.m; path = ../Geektool/GTLog.m; sourceTree = SOURCE_ROOT; };
-		0A7D372F0FD802E30070D678 /* LogWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogWindow.h; path = ../Geektool/LogWindow.h; sourceTree = SOURCE_ROOT; };
-		0A7D37300FD802E30070D678 /* LogWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogWindow.m; path = ../Geektool/LogWindow.m; sourceTree = SOURCE_ROOT; };
-		0A7D37360FD8030E0070D678 /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = left.png; path = ../GeektoolPreferencePane/left.png; sourceTree = SOURCE_ROOT; };
-		0A7D37370FD8030E0070D678 /* center.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = center.png; path = ../GeektoolPreferencePane/center.png; sourceTree = SOURCE_ROOT; };
-		0A7D37380FD8030E0070D678 /* defaultFailure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = defaultFailure.png; path = ../GeektoolPreferencePane/defaultFailure.png; sourceTree = SOURCE_ROOT; };
-		0A7D37390FD8030E0070D678 /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = right.png; path = ../GeektoolPreferencePane/right.png; sourceTree = SOURCE_ROOT; };
-		0A7D373A0FD8030E0070D678 /* justified.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = justified.png; path = ../GeektoolPreferencePane/justified.png; sourceTree = SOURCE_ROOT; };
-		0A7D373B0FD8030E0070D678 /* GeekToolPrefs.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = GeekToolPrefs.tiff; path = ../GeektoolPreferencePane/GeekToolPrefs.tiff; sourceTree = SOURCE_ROOT; };
-		0A7D373C0FD8030E0070D678 /* delete.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = delete.tif; path = ../GeektoolPreferencePane/delete.tif; sourceTree = SOURCE_ROOT; };
-		0A7D373D0FD8030E0070D678 /* defaultSuccess.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = defaultSuccess.png; path = ../GeektoolPreferencePane/defaultSuccess.png; sourceTree = SOURCE_ROOT; };
-		0A7D374B0FD803980070D678 /* NSLogView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSLogView.h; path = ../Geektool/NSLogView.h; sourceTree = SOURCE_ROOT; };
-		0A7D374C0FD803980070D678 /* NSLogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSLogView.m; path = ../Geektool/NSLogView.m; sourceTree = SOURCE_ROOT; };
-		0A7D374D0FD803980070D678 /* LogTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogTextField.h; path = ../Geektool/LogTextField.h; sourceTree = SOURCE_ROOT; };
-		0A7D374E0FD803980070D678 /* LogTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogTextField.m; path = ../Geektool/LogTextField.m; sourceTree = SOURCE_ROOT; };
-		0A7D37510FD803AD0070D678 /* AIQuartzView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AIQuartzView.h; path = ../Geektool/AIQuartzView.h; sourceTree = SOURCE_ROOT; };
-		0A7D37520FD803AD0070D678 /* AIQuartzView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AIQuartzView.m; path = ../Geektool/AIQuartzView.m; sourceTree = SOURCE_ROOT; };
-		0A7D37540FD803C70070D678 /* corner.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = corner.tif; path = ../Geektool/corner.tif; sourceTree = SOURCE_ROOT; };
-		0A7D37640FD804270070D678 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = ../GeektoolPreferencePane/English.lproj/GeektoolPrefs.xib; sourceTree = SOURCE_ROOT; };
-		0A7D37670FD804690070D678 /* logWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = logWindow.xib; sourceTree = "<group>"; };
 		0A7D38870FD805FA0070D678 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		0A7D38880FD805FA0070D678 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
-		0A948478100C21350071EFF9 /* NTFontDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTFontDisplay.h; sourceTree = "<group>"; };
-		0A948479100C21350071EFF9 /* NTFontDisplay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTFontDisplay.m; sourceTree = "<group>"; };
-		0A94851A100C3E5E0071EFF9 /* logo.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = logo.icns; path = logo/logo.icns; sourceTree = "<group>"; };
-		0ABB3F8B100401000000E788 /* NTExposeBorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTExposeBorder.h; sourceTree = "<group>"; };
-		0ABB3F8C100401000000E788 /* NTExposeBorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTExposeBorder.m; sourceTree = "<group>"; };
+		0A904B9F100D8EAC009A2F5E /* AIQuartzView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AIQuartzView.h; path = classes/AIQuartzView.h; sourceTree = "<group>"; };
+		0A904BA0100D8EAC009A2F5E /* AIQuartzView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AIQuartzView.m; path = classes/AIQuartzView.m; sourceTree = "<group>"; };
+		0A904BA1100D8EAC009A2F5E /* AJRScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AJRScrollView.h; path = classes/AJRScrollView.h; sourceTree = "<group>"; };
+		0A904BA2100D8EAC009A2F5E /* AJRScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AJRScrollView.m; path = classes/AJRScrollView.m; sourceTree = "<group>"; };
+		0A904BA3100D8EAC009A2F5E /* CGSPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CGSPrivate.h; path = classes/CGSPrivate.h; sourceTree = "<group>"; };
+		0A904BA4100D8EAC009A2F5E /* defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = defines.h; path = classes/defines.h; sourceTree = "<group>"; };
+		0A904BA5100D8EAC009A2F5E /* GeekToolPrefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeekToolPrefs.h; path = classes/GeekToolPrefs.h; sourceTree = "<group>"; };
+		0A904BA6100D8EAC009A2F5E /* GeekToolPrefs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeekToolPrefs.m; path = classes/GeekToolPrefs.m; sourceTree = "<group>"; };
+		0A904BA7100D8EAC009A2F5E /* GroupController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupController.h; path = classes/GroupController.h; sourceTree = "<group>"; };
+		0A904BA8100D8EAC009A2F5E /* GroupController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupController.m; path = classes/GroupController.m; sourceTree = "<group>"; };
+		0A904BA9100D8EAC009A2F5E /* GTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTLog.h; path = classes/GTLog.h; sourceTree = "<group>"; };
+		0A904BAA100D8EAC009A2F5E /* GTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTLog.m; path = classes/GTLog.m; sourceTree = "<group>"; };
+		0A904BAC100D8EAC009A2F5E /* LogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogController.h; path = classes/LogController.h; sourceTree = "<group>"; };
+		0A904BAD100D8EAC009A2F5E /* LogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogController.m; path = classes/LogController.m; sourceTree = "<group>"; };
+		0A904BAE100D8EAC009A2F5E /* LogTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogTextField.h; path = classes/LogTextField.h; sourceTree = "<group>"; };
+		0A904BAF100D8EAC009A2F5E /* LogTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogTextField.m; path = classes/LogTextField.m; sourceTree = "<group>"; };
+		0A904BB0100D8EAC009A2F5E /* LogWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogWindow.h; path = classes/LogWindow.h; sourceTree = "<group>"; };
+		0A904BB1100D8EAC009A2F5E /* LogWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogWindow.m; path = classes/LogWindow.m; sourceTree = "<group>"; };
+		0A904BB2100D8EAC009A2F5E /* NSArrayController+Duplicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArrayController+Duplicate.h"; path = "classes/NSArrayController+Duplicate.h"; sourceTree = "<group>"; };
+		0A904BB3100D8EAC009A2F5E /* NSArrayController+Duplicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArrayController+Duplicate.m"; path = "classes/NSArrayController+Duplicate.m"; sourceTree = "<group>"; };
+		0A904BB4100D8EAC009A2F5E /* NSDictionary+IntAndBoolAccessors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+IntAndBoolAccessors.h"; path = "classes/NSDictionary+IntAndBoolAccessors.h"; sourceTree = "<group>"; };
+		0A904BB5100D8EAC009A2F5E /* NSDictionary+IntAndBoolAccessors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+IntAndBoolAccessors.m"; path = "classes/NSDictionary+IntAndBoolAccessors.m"; sourceTree = "<group>"; };
+		0A904BB6100D8EAC009A2F5E /* NSIndexSet+CountOfIndexesInRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSIndexSet+CountOfIndexesInRange.h"; path = "classes/NSIndexSet+CountOfIndexesInRange.h"; sourceTree = "<group>"; };
+		0A904BB7100D8EAC009A2F5E /* NSIndexSet+CountOfIndexesInRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSIndexSet+CountOfIndexesInRange.m"; path = "classes/NSIndexSet+CountOfIndexesInRange.m"; sourceTree = "<group>"; };
+		0A904BB8100D8EAC009A2F5E /* NSLogView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSLogView.h; path = classes/NSLogView.h; sourceTree = "<group>"; };
+		0A904BB9100D8EAC009A2F5E /* NSLogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSLogView.m; path = classes/NSLogView.m; sourceTree = "<group>"; };
+		0A904BBA100D8EAC009A2F5E /* NTExposeBorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTExposeBorder.h; path = classes/NTExposeBorder.h; sourceTree = "<group>"; };
+		0A904BBB100D8EAC009A2F5E /* NTExposeBorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTExposeBorder.m; path = classes/NTExposeBorder.m; sourceTree = "<group>"; };
+		0A904BBC100D8EAC009A2F5E /* NTFontDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTFontDisplay.h; path = classes/NTFontDisplay.h; sourceTree = "<group>"; };
+		0A904BBD100D8EAC009A2F5E /* NTFontDisplay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTFontDisplay.m; path = classes/NTFontDisplay.m; sourceTree = "<group>"; };
+		0A904BBE100D8EAC009A2F5E /* NTGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTGroup.h; path = classes/NTGroup.h; sourceTree = "<group>"; };
+		0A904BBF100D8EAC009A2F5E /* NTGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTGroup.m; path = classes/NTGroup.m; sourceTree = "<group>"; };
+		0A904BC0100D8EAC009A2F5E /* NTLogProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTLogProcess.h; path = classes/NTLogProcess.h; sourceTree = "<group>"; };
+		0A904BC1100D8EAC009A2F5E /* NTLogProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTLogProcess.m; path = classes/NTLogProcess.m; sourceTree = "<group>"; };
+		0A904BD5100D8F2B009A2F5E /* center.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = center.png; path = resources/center.png; sourceTree = "<group>"; };
+		0A904BD6100D8F2B009A2F5E /* corner.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = corner.tif; path = resources/corner.tif; sourceTree = "<group>"; };
+		0A904BD7100D8F2B009A2F5E /* defaultFailure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = defaultFailure.png; path = resources/defaultFailure.png; sourceTree = "<group>"; };
+		0A904BD8100D8F2B009A2F5E /* defaultSuccess.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = defaultSuccess.png; path = resources/defaultSuccess.png; sourceTree = "<group>"; };
+		0A904BD9100D8F2B009A2F5E /* delete.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = delete.tif; path = resources/delete.tif; sourceTree = "<group>"; };
+		0A904BDB100D8F2B009A2F5E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/GeektoolPrefs.xib; sourceTree = "<group>"; };
+		0A904BDD100D8F2B009A2F5E /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		0A904BDF100D8F2B009A2F5E /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		0A904BE1100D8F2B009A2F5E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/logWindow.xib; sourceTree = "<group>"; };
+		0A904BE3100D8F2B009A2F5E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		0A904BE4100D8F2B009A2F5E /* GeektoolPreferencePanePref.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = GeektoolPreferencePanePref.tiff; path = resources/GeektoolPreferencePanePref.tiff; sourceTree = "<group>"; };
+		0A904BE5100D8F2B009A2F5E /* GeekToolPrefs.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = GeekToolPrefs.tiff; path = resources/GeekToolPrefs.tiff; sourceTree = "<group>"; };
+		0A904BE6100D8F2B009A2F5E /* justified.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = justified.png; path = resources/justified.png; sourceTree = "<group>"; };
+		0A904BE7100D8F2B009A2F5E /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = left.png; path = resources/left.png; sourceTree = "<group>"; };
+		0A904BF5100D8F2B009A2F5E /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = right.png; path = resources/right.png; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
-		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* NerdTool_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NerdTool_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* NerdTool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NerdTool.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* NerdTool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = NerdTool.app; path = "/Programs/Geektool 3/NerdTool/build/Debug/NerdTool.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,16 +123,16 @@
 		080E96DDFE201D6D7F000001 /* Log UI Classes */ = {
 			isa = PBXGroup;
 			children = (
-				0A7D372F0FD802E30070D678 /* LogWindow.h */,
-				0A7D37300FD802E30070D678 /* LogWindow.m */,
-				0A7D374B0FD803980070D678 /* NSLogView.h */,
-				0A7D374C0FD803980070D678 /* NSLogView.m */,
-				0A7D37510FD803AD0070D678 /* AIQuartzView.h */,
-				0A7D37520FD803AD0070D678 /* AIQuartzView.m */,
-				0A43A1160FEC0B9F00BB8B6A /* AJRScrollView.h */,
-				0A43A1170FEC0B9F00BB8B6A /* AJRScrollView.m */,
-				0A7D374D0FD803980070D678 /* LogTextField.h */,
-				0A7D374E0FD803980070D678 /* LogTextField.m */,
+				0A904BAE100D8EAC009A2F5E /* LogTextField.h */,
+				0A904BAF100D8EAC009A2F5E /* LogTextField.m */,
+				0A904BB0100D8EAC009A2F5E /* LogWindow.h */,
+				0A904BB1100D8EAC009A2F5E /* LogWindow.m */,
+				0A904BB8100D8EAC009A2F5E /* NSLogView.h */,
+				0A904BB9100D8EAC009A2F5E /* NSLogView.m */,
+				0A904B9F100D8EAC009A2F5E /* AIQuartzView.h */,
+				0A904BA0100D8EAC009A2F5E /* AIQuartzView.m */,
+				0A904BA1100D8EAC009A2F5E /* AJRScrollView.h */,
+				0A904BA2100D8EAC009A2F5E /* AJRScrollView.m */,
 			);
 			name = "Log UI Classes";
 			sourceTree = "<group>";
@@ -138,12 +140,12 @@
 		0A194D8C0FED967C0062EA84 /* Data Classes */ = {
 			isa = PBXGroup;
 			children = (
-				0A2AEC2F0FE6DDB000097DCA /* NTGroup.h */,
-				0A2AEC300FE6DDB000097DCA /* NTGroup.m */,
-				0A7D372D0FD802E30070D678 /* GTLog.h */,
-				0A7D372E0FD802E30070D678 /* GTLog.m */,
-				0A74770D0FF9C562005C7DD3 /* NTLogProcess.h */,
-				0A74770E0FF9C562005C7DD3 /* NTLogProcess.m */,
+				0A904BA9100D8EAC009A2F5E /* GTLog.h */,
+				0A904BAA100D8EAC009A2F5E /* GTLog.m */,
+				0A904BBE100D8EAC009A2F5E /* NTGroup.h */,
+				0A904BBF100D8EAC009A2F5E /* NTGroup.m */,
+				0A904BC0100D8EAC009A2F5E /* NTLogProcess.h */,
+				0A904BC1100D8EAC009A2F5E /* NTLogProcess.m */,
 			);
 			name = "Data Classes";
 			sourceTree = "<group>";
@@ -151,12 +153,12 @@
 		0A439DA00FE9D29D00BB8B6A /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				0A439D950FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.h */,
-				0A439D960FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.m */,
-				0A439F190FE9EAEE00BB8B6A /* NSArrayController+Duplicate.h */,
-				0A439F1A0FE9EAEE00BB8B6A /* NSArrayController+Duplicate.m */,
-				0A7477260FFAB19D005C7DD3 /* NSDictionary+IntAndBoolAccessors.h */,
-				0A7477270FFAB19D005C7DD3 /* NSDictionary+IntAndBoolAccessors.m */,
+				0A904BB2100D8EAC009A2F5E /* NSArrayController+Duplicate.h */,
+				0A904BB3100D8EAC009A2F5E /* NSArrayController+Duplicate.m */,
+				0A904BB4100D8EAC009A2F5E /* NSDictionary+IntAndBoolAccessors.h */,
+				0A904BB5100D8EAC009A2F5E /* NSDictionary+IntAndBoolAccessors.m */,
+				0A904BB6100D8EAC009A2F5E /* NSIndexSet+CountOfIndexesInRange.h */,
+				0A904BB7100D8EAC009A2F5E /* NSIndexSet+CountOfIndexesInRange.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -164,12 +166,12 @@
 		0A7D372A0FD802B10070D678 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				0A7D37200FD8028D0070D678 /* GeekToolPrefs.h */,
-				0A7D37210FD8028D0070D678 /* GeekToolPrefs.m */,
-				0A7D37220FD8028D0070D678 /* GroupController.h */,
-				0A7D37230FD8028D0070D678 /* GroupController.m */,
-				0A7D37240FD8028D0070D678 /* LogController.h */,
-				0A7D37250FD8028D0070D678 /* LogController.m */,
+				0A904BA5100D8EAC009A2F5E /* GeekToolPrefs.h */,
+				0A904BA6100D8EAC009A2F5E /* GeekToolPrefs.m */,
+				0A904BA7100D8EAC009A2F5E /* GroupController.h */,
+				0A904BA8100D8EAC009A2F5E /* GroupController.m */,
+				0A904BAC100D8EAC009A2F5E /* LogController.h */,
+				0A904BAD100D8EAC009A2F5E /* LogController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -177,10 +179,10 @@
 		0A94855E100C45BA0071EFF9 /* Preferences UI Classes */ = {
 			isa = PBXGroup;
 			children = (
-				0A948478100C21350071EFF9 /* NTFontDisplay.h */,
-				0A948479100C21350071EFF9 /* NTFontDisplay.m */,
-				0ABB3F8B100401000000E788 /* NTExposeBorder.h */,
-				0ABB3F8C100401000000E788 /* NTExposeBorder.m */,
+				0A904BBA100D8EAC009A2F5E /* NTExposeBorder.h */,
+				0A904BBB100D8EAC009A2F5E /* NTExposeBorder.m */,
+				0A904BBC100D8EAC009A2F5E /* NTFontDisplay.h */,
+				0A904BBD100D8EAC009A2F5E /* NTFontDisplay.m */,
 			);
 			name = "Preferences UI Classes";
 			sourceTree = "<group>";
@@ -208,7 +210,6 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* NerdTool.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -232,8 +233,8 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				0A7D372B0FD802D50070D678 /* defines.h */,
-				0A7D372C0FD802D50070D678 /* CGSPrivate.h */,
+				0A904BA3100D8EAC009A2F5E /* CGSPrivate.h */,
+				0A904BA4100D8EAC009A2F5E /* defines.h */,
 				32CA4F630368D1EE00C91783 /* NerdTool_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
@@ -243,21 +244,22 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				0A94851A100C3E5E0071EFF9 /* logo.icns */,
-				0A7D37360FD8030E0070D678 /* left.png */,
-				0A7D37370FD8030E0070D678 /* center.png */,
-				0A7D37380FD8030E0070D678 /* defaultFailure.png */,
-				0A7D37390FD8030E0070D678 /* right.png */,
-				0A7D373A0FD8030E0070D678 /* justified.png */,
-				0A7D373B0FD8030E0070D678 /* GeekToolPrefs.tiff */,
-				0A7D373C0FD8030E0070D678 /* delete.tif */,
-				0A7D373D0FD8030E0070D678 /* defaultSuccess.png */,
+				0A904BD5100D8F2B009A2F5E /* center.png */,
+				0A904BD6100D8F2B009A2F5E /* corner.tif */,
+				0A904BD7100D8F2B009A2F5E /* defaultFailure.png */,
+				0A904BD8100D8F2B009A2F5E /* defaultSuccess.png */,
+				0A904BD9100D8F2B009A2F5E /* delete.tif */,
+				0A904BE4100D8F2B009A2F5E /* GeektoolPreferencePanePref.tiff */,
+				0A904BE5100D8F2B009A2F5E /* GeekToolPrefs.tiff */,
+				0A904BE6100D8F2B009A2F5E /* justified.png */,
+				0A904BE7100D8F2B009A2F5E /* left.png */,
+				0A904BF5100D8F2B009A2F5E /* right.png */,
 				8D1107310486CEB800E47090 /* Info.plist */,
-				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
-				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
-				0A7D37540FD803C70070D678 /* corner.tif */,
-				0A7D37630FD804270070D678 /* GeektoolPrefs.xib */,
-				0A7D37670FD804690070D678 /* logWindow.xib */,
+				0A904BDC100D8F2B009A2F5E /* InfoPlist.strings */,
+				0A904BDE100D8F2B009A2F5E /* Localizable.strings */,
+				0A904BE2100D8F2B009A2F5E /* MainMenu.xib */,
+				0A904BDA100D8F2B009A2F5E /* GeektoolPrefs.xib */,
+				0A904BE0100D8F2B009A2F5E /* logWindow.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -314,20 +316,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
-				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
-				0A7D373E0FD8030E0070D678 /* left.png in Resources */,
-				0A7D373F0FD8030E0070D678 /* center.png in Resources */,
-				0A7D37400FD8030E0070D678 /* defaultFailure.png in Resources */,
-				0A7D37410FD8030E0070D678 /* right.png in Resources */,
-				0A7D37420FD8030E0070D678 /* justified.png in Resources */,
-				0A7D37430FD8030E0070D678 /* GeekToolPrefs.tiff in Resources */,
-				0A7D37440FD8030E0070D678 /* delete.tif in Resources */,
-				0A7D37450FD8030E0070D678 /* defaultSuccess.png in Resources */,
-				0A7D37560FD803C70070D678 /* corner.tif in Resources */,
-				0A7D37650FD804270070D678 /* GeektoolPrefs.xib in Resources */,
-				0A7D37680FD804690070D678 /* logWindow.xib in Resources */,
-				0A94851B100C3E5E0071EFF9 /* logo.icns in Resources */,
+				0A904BF7100D8F2B009A2F5E /* center.png in Resources */,
+				0A904BF8100D8F2B009A2F5E /* corner.tif in Resources */,
+				0A904BF9100D8F2B009A2F5E /* defaultFailure.png in Resources */,
+				0A904BFA100D8F2B009A2F5E /* defaultSuccess.png in Resources */,
+				0A904BFB100D8F2B009A2F5E /* delete.tif in Resources */,
+				0A904BFC100D8F2B009A2F5E /* GeektoolPrefs.xib in Resources */,
+				0A904BFD100D8F2B009A2F5E /* InfoPlist.strings in Resources */,
+				0A904BFE100D8F2B009A2F5E /* Localizable.strings in Resources */,
+				0A904BFF100D8F2B009A2F5E /* logWindow.xib in Resources */,
+				0A904C00100D8F2B009A2F5E /* MainMenu.xib in Resources */,
+				0A904C01100D8F2B009A2F5E /* GeektoolPreferencePanePref.tiff in Resources */,
+				0A904C02100D8F2B009A2F5E /* GeekToolPrefs.tiff in Resources */,
+				0A904C03100D8F2B009A2F5E /* justified.png in Resources */,
+				0A904C04100D8F2B009A2F5E /* left.png in Resources */,
+				0A904C0D100D8F2B009A2F5E /* right.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,50 +342,71 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
-				0A7D37260FD8028D0070D678 /* GeekToolPrefs.m in Sources */,
-				0A7D37270FD8028D0070D678 /* GroupController.m in Sources */,
-				0A7D37280FD8028D0070D678 /* LogController.m in Sources */,
-				0A7D37310FD802E30070D678 /* GTLog.m in Sources */,
-				0A7D37320FD802E30070D678 /* LogWindow.m in Sources */,
-				0A7D374F0FD803980070D678 /* NSLogView.m in Sources */,
-				0A7D37500FD803980070D678 /* LogTextField.m in Sources */,
-				0A7D37530FD803AD0070D678 /* AIQuartzView.m in Sources */,
-				0A2AEC310FE6DDB000097DCA /* NTGroup.m in Sources */,
-				0A439D970FE9C93000BB8B6A /* NSIndexSet+CountOfIndexesInRange.m in Sources */,
-				0A439F1B0FE9EAEE00BB8B6A /* NSArrayController+Duplicate.m in Sources */,
-				0A43A1180FEC0B9F00BB8B6A /* AJRScrollView.m in Sources */,
-				0A74770F0FF9C562005C7DD3 /* NTLogProcess.m in Sources */,
-				0A7477280FFAB19D005C7DD3 /* NSDictionary+IntAndBoolAccessors.m in Sources */,
-				0ABB3F8D100401000000E788 /* NTExposeBorder.m in Sources */,
-				0A94847A100C21350071EFF9 /* NTFontDisplay.m in Sources */,
+				0A904BC2100D8EAC009A2F5E /* AIQuartzView.m in Sources */,
+				0A904BC3100D8EAC009A2F5E /* AJRScrollView.m in Sources */,
+				0A904BC4100D8EAC009A2F5E /* GeekToolPrefs.m in Sources */,
+				0A904BC5100D8EAC009A2F5E /* GroupController.m in Sources */,
+				0A904BC6100D8EAC009A2F5E /* GTLog.m in Sources */,
+				0A904BC8100D8EAC009A2F5E /* LogController.m in Sources */,
+				0A904BC9100D8EAC009A2F5E /* LogTextField.m in Sources */,
+				0A904BCA100D8EAC009A2F5E /* LogWindow.m in Sources */,
+				0A904BCB100D8EAC009A2F5E /* NSArrayController+Duplicate.m in Sources */,
+				0A904BCC100D8EAC009A2F5E /* NSDictionary+IntAndBoolAccessors.m in Sources */,
+				0A904BCD100D8EAC009A2F5E /* NSIndexSet+CountOfIndexesInRange.m in Sources */,
+				0A904BCE100D8EAC009A2F5E /* NSLogView.m in Sources */,
+				0A904BCF100D8EAC009A2F5E /* NTExposeBorder.m in Sources */,
+				0A904BD0100D8EAC009A2F5E /* NTFontDisplay.m in Sources */,
+				0A904BD1100D8EAC009A2F5E /* NTGroup.m in Sources */,
+				0A904BD2100D8EAC009A2F5E /* NTLogProcess.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+		0A904BDA100D8F2B009A2F5E /* GeektoolPrefs.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				089C165DFE840E0CC02AAC07 /* English */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		0A7D37630FD804270070D678 /* GeektoolPrefs.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0A7D37640FD804270070D678 /* English */,
+				0A904BDB100D8F2B009A2F5E /* English */,
 			);
 			name = GeektoolPrefs.xib;
+			path = resources;
 			sourceTree = "<group>";
 		};
-		1DDD58140DA1D0A300B32029 /* MainMenu.xib */ = {
+		0A904BDC100D8F2B009A2F5E /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1DDD58150DA1D0A300B32029 /* English */,
+				0A904BDD100D8F2B009A2F5E /* English */,
+			);
+			name = InfoPlist.strings;
+			path = resources;
+			sourceTree = "<group>";
+		};
+		0A904BDE100D8F2B009A2F5E /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A904BDF100D8F2B009A2F5E /* English */,
+			);
+			name = Localizable.strings;
+			path = resources;
+			sourceTree = "<group>";
+		};
+		0A904BE0100D8F2B009A2F5E /* logWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A904BE1100D8F2B009A2F5E /* English */,
+			);
+			name = logWindow.xib;
+			path = resources;
+			sourceTree = "<group>";
+		};
+		0A904BE2100D8F2B009A2F5E /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A904BE3100D8F2B009A2F5E /* English */,
 			);
 			name = MainMenu.xib;
+			path = resources;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
