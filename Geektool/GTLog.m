@@ -42,10 +42,10 @@
     NSData *backgroundColorData = [NSArchiver archivedDataWithRootObject:[NSColor clearColor]]; 
     
     NSMutableDictionary *defaultProperties = [[NSMutableDictionary alloc]initWithObjectsAndKeys:
-                                              @"New log",@"name",
+                                              NSLocalizedString(@"New log",nil),@"name",
                                               [NSNumber numberWithInt:TYPE_SHELL],@"type",
                                               [NSNumber numberWithBool:YES],@"enabled",
-                                              @"Default",@"group",
+                                              NSLocalizedString(@"Default",nil),@"group",
                                               
                                               @"Monaco",@"fontName",
                                               [NSNumber numberWithFloat:12],@"fontSize",

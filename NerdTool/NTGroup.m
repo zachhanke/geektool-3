@@ -35,7 +35,7 @@
 {
     // just in case we wanted to add more stuff later on
     NSDictionary *defaultProperties = [[NSMutableDictionary alloc]initWithObjectsAndKeys:
-                                       @"Default", @"name",
+                                       NSLocalizedString(@"Default",nil), @"name",
                                        [NSNumber numberWithBool:NO], @"active",
                                        nil];
     NSArray *defaultLogs = [[NSMutableArray alloc]init];

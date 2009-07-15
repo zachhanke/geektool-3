@@ -44,9 +44,9 @@
     BOOL needsCopy = YES;
     
     for (NSString *tmpString in mutableSplitName)
-        if([tmpString isEqualToString: @"copy"]) needsCopy = NO;
+        if([tmpString isEqualToString:NSLocalizedString(@"copy",nil)]) needsCopy = NO;
     
-    if (needsCopy) [mutableSplitName addObject:@"copy"];
+    if (needsCopy) [mutableSplitName addObject:NSLocalizedString(@"copy",nil)];
     else
     {
         NSInteger count = [[mutableSplitName lastObject]integerValue];

@@ -17,7 +17,24 @@
 
 - (void)drawRect:(NSRect)rect
 {        
-    if (![[logController selectedObjects]count]) return;
+    if (![[logController selectedObjects]count])
+    {
+        NSRect myBounds = [self bounds];
+
+        NSDrawLightBezel(myBounds,myBounds);
+        
+        [[NSColor blackColor]set];
+        NSRectFill(NSInsetRect(myBounds,2,2));
+        
+        NSFont *defaultFont = [NSFont systemFontOfSize:20.0];
+        NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:defaultFont,NSFontAttributeName,[NSColor whiteColor],NSForegroundColorAttributeName,nil];
+        NSAttributedString *attrString = [[NSAttributedString alloc]initWithString:NSLocalizedString(@"No Selection",nil) attributes:attrsDictionary];
+        NSSize attrSize = [attrString size];
+        
+        [attrString drawAtPoint:NSMakePoint(((attrSize.width / -2) + myBounds.size.width / 2),(attrSize.height / -2) + (myBounds.size.height / 2))];
+        [attrString release];
+        return;
+    }
     
     GTLog *selectedLog = [[logController selectedObjects]objectAtIndex:0];
 	
