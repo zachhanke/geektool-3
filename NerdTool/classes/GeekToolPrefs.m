@@ -53,6 +53,12 @@
 
 #pragma mark -
 #pragma mark UI management
+- (IBAction)revertDefaultSelectionColor:(id)sender
+{
+    NSData *selectionColorData = [NSArchiver archivedDataWithRootObject:[[NSColor alternateSelectedControlColor]colorWithAlphaComponent:0.3]];
+    [[NSUserDefaults standardUserDefaults]setObject:selectionColorData forKey:@"selectionColor"];    
+}
+
 - (IBAction)showExpose:(id)sender
 {
     if ([[NSUserDefaults standardUserDefaults]boolForKey:@"expose"]) [self exposeBorder];

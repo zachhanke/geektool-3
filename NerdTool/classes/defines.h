@@ -33,6 +33,11 @@
 #define ALIGN_RIGHT 2
 #define ALIGN_JUSTIFIED 3
 
-// misc
+// border drawing
 #define EXPOSE_WIDTH 16
 #define MENU_BAR_HEIGHT 22
+
+// shadow
+#define SHADOW_W 3
+#define SHADOW_H -3
+#define SHADOW_RADIUS 3

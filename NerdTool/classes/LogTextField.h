@@ -24,8 +24,6 @@
 - (void)scrollEnd;
 - (void)addText:(NSString*)newText clear:(BOOL)clear;
 - (void)drawRect:(NSRect)rect;
-- (void)showShadowHeight:(int)height radius:(int)radius azimuth:(int)azimuth ka:(float)ka;
-- (void)hideShadow;
 - (BOOL)isOpaque;
 - (BOOL)shouldDrawInsertionPoint;
 - (BOOL)acceptsFirstResponder;

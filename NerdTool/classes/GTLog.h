@@ -23,12 +23,12 @@
     BOOL postActivationRequest;
     BOOL isBeingDragged;
     BOOL needCoordObservers;
-    
 }
 @property (assign) NTGroup *parentGroup;
 @property (assign) NTLogProcess *logProcess;
 @property (retain) NSMutableDictionary *properties;
 @property (copy) NSNumber *active;
+@property (assign) BOOL postActivationRequest;
 
 - (id)initWithProperties:(NSDictionary*)newProperties;
 - (id)init;

@@ -111,6 +111,9 @@
                 
         [window setFrame:newWindowFrame display:YES animate:NO];
         [[NSNotificationCenter defaultCenter]postNotificationName:NSWindowDidResizeNotification object:window];
+        
+        int type = [[[[(LogWindow*)[logWindowController window]parentLog]properties]valueForKey:@"type"]intValue];
+        if (type == TYPE_SHELL || type == TYPE_FILE) [[(LogWindow*)[logWindowController window]textView]scrollEnd];
     }
     else
     {
@@ -162,8 +165,7 @@
 - (void)mouseUp:(NSEvent *)theEvent;
 {
     [[NSNotificationCenter defaultCenter]postNotificationName:@"NSLogViewMouseUp" object:[self window]];
-    if ([[[(LogWindow*)[logWindowController window]parentLog]properties]valueForKey:@"type"] == TYPE_SHELL)
-        [[(LogWindow*)[logWindowController window]textView]scrollEnd];
+    
     [text display];
 }
 

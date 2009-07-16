@@ -11,6 +11,8 @@
 
 @interface GroupController : NSArrayController
 {
+    IBOutlet id logController;
+    
     // used with drag and drop
     NSString *MovedRowsType;
     NSString *CopiedRowsType;
@@ -23,6 +25,7 @@
     IBOutlet id groupsSheet;
 }
 
+- (IBAction)duplicate:(id)sender;
 - (IBAction)groupsSheetClose:(id)sender;
 - (IBAction)showGroupsCustomization:(id)sender;
 

@@ -34,6 +34,7 @@
     
     [self addObserver:self forKeyPath:@"selectedObjects" options:0 context:nil];
     [self observeValueForKeyPath:@"selectedObjects" ofObject:self change:nil context:nil];
+    [self setAvoidsEmptySelection:YES];
 }
 
 - (void)dealloc
@@ -47,6 +48,12 @@
 {
     userInsert = YES;
     [super insert:sender];
+}
+
+- (void)removeObjectsAtArrangedObjectIndexes:(NSIndexSet *)indexes
+{
+    oldSelectedLog = nil;
+    [super removeObjectsAtArrangedObjectIndexes:indexes];
 }
 
 - (IBAction)duplicate:(id)sender

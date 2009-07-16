@@ -30,6 +30,8 @@
     
     [self addObserver:self forKeyPath:@"selectedObjects" options:0 context:nil];
     [self observeValueForKeyPath:@"selectedObjects" ofObject:self change:nil context:nil];
+    
+    [self setAvoidsEmptySelection:YES];
 }
 
 - (void)dealloc
@@ -44,6 +46,7 @@
 {
     if([keyPath isEqualToString:@"selectedObjects"])
     {
+        [logController setSelectedObjects:nil];
         if (oldSelectedGroup) [[oldSelectedGroup properties]setValue:[NSNumber numberWithBool:NO] forKey:@"active"];
         
         if (![[self selectedObjects]count]) return;
@@ -56,6 +59,17 @@
 }
 
 #pragma mark UI
+- (void)removeObjectsAtArrangedObjectIndexes:(NSIndexSet *)indexes
+{
+    oldSelectedGroup = nil;
+    [super removeObjectsAtArrangedObjectIndexes:indexes];
+}
+
+- (IBAction)duplicate:(id)sender
+{
+    [self duplicateSelection];
+}
+
 - (IBAction)showGroupsCustomization:(id)sender
 {
     [NSApp beginSheet:groupsSheet modalForWindow:[NSApp mainWindow] modalDelegate:nil didEndSelector:nil contextInfo:nil];

@@ -9,6 +9,8 @@
 #import "NTFontDisplay.h"
 #import "GTLog.h"
 
+#import "defines.h"
+
 @implementation NTFontDisplay
 - (BOOL)isOpaque
 {
@@ -44,7 +46,15 @@
     NSFont *font = [NSFont fontWithName:fontName size:fontSize];
 	NSColor *backgroundColor = [NSUnarchiver unarchiveObjectWithData:[[selectedLog properties]valueForKey:@"backgroundColor"]];
     NSColor *textColor = [NSUnarchiver unarchiveObjectWithData:[[selectedLog properties]valueForKey:@"textColor"]];
-	
+    NSShadow *defShadow = nil;
+    if ([[[selectedLog properties]valueForKey:@"shadowText"]boolValue])
+    {
+        defShadow = [[NSShadow alloc]init];
+        [defShadow setShadowOffset:(NSSize){SHADOW_W,SHADOW_H}];
+        [defShadow setShadowBlurRadius:SHADOW_RADIUS];
+    }
+    
+    
 	// Do the actual drawing
 	NSRect myBounds = [self bounds];
 	NSDrawLightBezel(myBounds,myBounds);
@@ -52,7 +62,7 @@
 	[backgroundColor set];
 	NSRectFillUsingOperation(NSInsetRect(myBounds,2,2),NSCompositeSourceOver);
 	
-    NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName,textColor,NSForegroundColorAttributeName,nil];
+    NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName,textColor,NSForegroundColorAttributeName,[defShadow autorelease],NSShadowAttributeName,nil];
     NSString *stringToPrint = [NSString stringWithFormat:@"%@ - %.1fpt",fontName,fontSize];
 	NSAttributedString *attrString = [[NSAttributedString alloc]initWithString:stringToPrint attributes:attrsDictionary];
 	NSSize attrSize = [attrString size];

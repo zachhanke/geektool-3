@@ -19,6 +19,7 @@
 @synthesize logProcess;
 @synthesize properties;
 @synthesize active;
+@synthesize postActivationRequest;
 
 - (id)initWithProperties:(NSDictionary*)newProperties
 {
@@ -41,7 +42,7 @@
     NSData *textColorData = [NSArchiver archivedDataWithRootObject:[NSColor blackColor]];
     NSData *backgroundColorData = [NSArchiver archivedDataWithRootObject:[NSColor clearColor]]; 
     
-    NSMutableDictionary *defaultProperties = [[NSMutableDictionary alloc]initWithObjectsAndKeys:
+    NSMutableDictionary *defaultProperties = [[[NSMutableDictionary alloc]initWithObjectsAndKeys:
                                               NSLocalizedString(@"New log",nil),@"name",
                                               [NSNumber numberWithInt:TYPE_SHELL],@"type",
                                               [NSNumber numberWithBool:YES],@"enabled",
@@ -61,6 +62,7 @@
                                               [NSNumber numberWithBool:NO],@"wrap",
                                               [NSNumber numberWithBool:NO],@"shadowText",
                                               [NSNumber numberWithBool:NO],@"shadowWindow",
+                                              [NSNumber numberWithBool:NO],@"useAsciiEscapes",
                                               [NSNumber numberWithBool:NO],@"alignment",
                                                                                           
                                               [NSNumber numberWithInt:TOP_LEFT],@"pictureAlignment",
@@ -74,7 +76,7 @@
                                               [NSNumber numberWithInt:150],@"h",
                                               
                                               [NSNumber numberWithBool:NO],@"alwaysOnTop",
-                                              nil];
+                                              nil]autorelease];
     
     return [self initWithProperties:defaultProperties];
 }
@@ -82,7 +84,13 @@
 - (void)dealloc
 {
     [self removeObservers];
-    [logProcess release];
+    parentGroup = nil;
+    
+    if (logProcess)
+    {
+        [logProcess killTimer];
+        [logProcess release];
+    }
     [properties release];
     [active release];
     [super dealloc];
@@ -109,6 +117,8 @@
     [self addObserver:self forKeyPath:@"properties.wrap" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
     [self addObserver:self forKeyPath:@"properties.shadowText" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
     [self addObserver:self forKeyPath:@"properties.shadowWindow" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [self addObserver:self forKeyPath:@"properties.useAsciiEscapes" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+
     [self addObserver:self forKeyPath:@"properties.alignment" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
     [self addObserver:self forKeyPath:@"properties.pictureAlignment" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
     [self addObserver:self forKeyPath:@"properties.imageURL" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
@@ -140,6 +150,7 @@
     [self removeObserver:self forKeyPath:@"properties.wrap"];
     [self removeObserver:self forKeyPath:@"properties.shadowText"];
     [self removeObserver:self forKeyPath:@"properties.shadowWindow"];
+    [self removeObserver:self forKeyPath:@"properties.useAsciiEscapes"];
     [self removeObserver:self forKeyPath:@"properties.alignment"];
     [self removeObserver:self forKeyPath:@"properties.pictureAlignment"];
     [self removeObserver:self forKeyPath:@"properties.imageURL"];
@@ -159,6 +170,7 @@
     {
         if (logProcess)
         {
+            [logProcess killTimer];
             [logProcess release];
             logProcess = nil;
         }

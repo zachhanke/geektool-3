@@ -40,6 +40,7 @@
 		0A904C03100D8F2B009A2F5E /* justified.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BE6100D8F2B009A2F5E /* justified.png */; };
 		0A904C04100D8F2B009A2F5E /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BE7100D8F2B009A2F5E /* left.png */; };
 		0A904C0D100D8F2B009A2F5E /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BF5100D8F2B009A2F5E /* right.png */; };
+		0ABCBAEA100EEC6100ACC9CB /* ANSIEscapeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ABCBAE8100EEC6100ACC9CB /* ANSIEscapeHelper.m */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -96,6 +97,9 @@
 		0A904BE6100D8F2B009A2F5E /* justified.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = justified.png; path = resources/justified.png; sourceTree = "<group>"; };
 		0A904BE7100D8F2B009A2F5E /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = left.png; path = resources/left.png; sourceTree = "<group>"; };
 		0A904BF5100D8F2B009A2F5E /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = right.png; path = resources/right.png; sourceTree = "<group>"; };
+		0A904C29100D9794009A2F5E /* NerdTool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NerdTool.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0ABCBAE8100EEC6100ACC9CB /* ANSIEscapeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANSIEscapeHelper.m; sourceTree = "<group>"; };
+		0ABCBAE9100EEC6100ACC9CB /* ANSIEscapeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANSIEscapeHelper.h; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -103,7 +107,6 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* NerdTool_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NerdTool_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* NerdTool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = NerdTool.app; path = "/Programs/Geektool 3/NerdTool/build/Debug/NerdTool.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,16 +126,16 @@
 		080E96DDFE201D6D7F000001 /* Log UI Classes */ = {
 			isa = PBXGroup;
 			children = (
-				0A904BAE100D8EAC009A2F5E /* LogTextField.h */,
-				0A904BAF100D8EAC009A2F5E /* LogTextField.m */,
 				0A904BB0100D8EAC009A2F5E /* LogWindow.h */,
 				0A904BB1100D8EAC009A2F5E /* LogWindow.m */,
 				0A904BB8100D8EAC009A2F5E /* NSLogView.h */,
 				0A904BB9100D8EAC009A2F5E /* NSLogView.m */,
-				0A904B9F100D8EAC009A2F5E /* AIQuartzView.h */,
-				0A904BA0100D8EAC009A2F5E /* AIQuartzView.m */,
 				0A904BA1100D8EAC009A2F5E /* AJRScrollView.h */,
 				0A904BA2100D8EAC009A2F5E /* AJRScrollView.m */,
+				0A904BAE100D8EAC009A2F5E /* LogTextField.h */,
+				0A904BAF100D8EAC009A2F5E /* LogTextField.m */,
+				0A904B9F100D8EAC009A2F5E /* AIQuartzView.h */,
+				0A904BA0100D8EAC009A2F5E /* AIQuartzView.m */,
 			);
 			name = "Log UI Classes";
 			sourceTree = "<group>";
@@ -140,10 +143,10 @@
 		0A194D8C0FED967C0062EA84 /* Data Classes */ = {
 			isa = PBXGroup;
 			children = (
-				0A904BA9100D8EAC009A2F5E /* GTLog.h */,
-				0A904BAA100D8EAC009A2F5E /* GTLog.m */,
 				0A904BBE100D8EAC009A2F5E /* NTGroup.h */,
 				0A904BBF100D8EAC009A2F5E /* NTGroup.m */,
+				0A904BA9100D8EAC009A2F5E /* GTLog.h */,
+				0A904BAA100D8EAC009A2F5E /* GTLog.m */,
 				0A904BC0100D8EAC009A2F5E /* NTLogProcess.h */,
 				0A904BC1100D8EAC009A2F5E /* NTLogProcess.m */,
 			);
@@ -210,6 +213,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				0A904C29100D9794009A2F5E /* NerdTool.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -233,6 +237,8 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				0ABCBAE9100EEC6100ACC9CB /* ANSIEscapeHelper.h */,
+				0ABCBAE8100EEC6100ACC9CB /* ANSIEscapeHelper.m */,
 				0A904BA3100D8EAC009A2F5E /* CGSPrivate.h */,
 				0A904BA4100D8EAC009A2F5E /* defines.h */,
 				32CA4F630368D1EE00C91783 /* NerdTool_Prefix.pch */,
@@ -291,7 +297,7 @@
 			name = NerdTool;
 			productInstallPath = "$(HOME)/Applications";
 			productName = NerdTool;
-			productReference = 8D1107320486CEB800E47090 /* NerdTool.app */;
+			productReference = 0A904C29100D9794009A2F5E /* NerdTool.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -358,6 +364,7 @@
 				0A904BD0100D8EAC009A2F5E /* NTFontDisplay.m in Sources */,
 				0A904BD1100D8EAC009A2F5E /* NTGroup.m in Sources */,
 				0A904BD2100D8EAC009A2F5E /* NTLogProcess.m in Sources */,
+				0ABCBAEA100EEC6100ACC9CB /* ANSIEscapeHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

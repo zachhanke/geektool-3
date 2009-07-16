@@ -97,7 +97,7 @@
 #pragma mark Copying
 - (id)copyWithZone:(NSZone *)zone
 {
-    return [[[self class]allocWithZone:zone]initWithProperties:[self properties] andLogs:[self logs]];
+    return [[[self class]allocWithZone:zone]initWithProperties:[NSDictionary dictionaryWithDictionary:[self properties]] andLogs:[[[NSArray alloc]initWithArray:[self logs] copyItems:YES]autorelease]];
 }
 
 - (id)mutableCopyWithZone:(NSZone *)zone

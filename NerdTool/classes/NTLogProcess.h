@@ -15,26 +15,30 @@
 {
     NSWindowController *windowController;
     LogWindow *window;
-    
-    BOOL timerRepeats;
-    
     NSDictionary *env;
-    NSTask *task;
-    NSTimer *timer;
-    
     GTLog *parentLog;
     NSDictionary *parentProperties;
     NSDictionary *attributes;
+
+    BOOL timerRepeats;
+    
+    NSTask *task;
+    NSTimer *timer;
+    
     NSArray *arguments;
     BOOL timerNeedsUpdate;
 }
-@property (assign) NSWindowController *windowController;
+@property (retain) NSWindowController *windowController;
+@property (retain) LogWindow *window;
+@property (copy) NSDictionary *env;
 @property (assign) GTLog *parentLog;
 @property (assign) NSDictionary *parentProperties;
 @property (copy) NSDictionary *attributes;
 @property (copy) NSArray *arguments;
 @property (assign) BOOL timerNeedsUpdate;
-@property (assign) LogWindow *window;
+
+@property (retain) NSTask *task;
+@property (retain) NSTimer *timer;
 
 - (id)initWithParentLog:(id)parent;
 - (void)setupObservers;

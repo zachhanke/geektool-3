@@ -11,32 +11,39 @@
 #import "GTLog.h"
 #import "LogTextField.h"
 #import "AIQuartzView.h"
-#import "NSDictionary+IntAndBoolAccessors.h"
+
+#import "ANSIEscapeHelper.h"
 #import "defines.h"
+#import "NSDictionary+IntAndBoolAccessors.h"
 
 @implementation NTLogProcess
 
 @synthesize windowController;
 @synthesize window;
+@synthesize env;
 @synthesize parentLog;
 @synthesize parentProperties;
 @synthesize attributes;
 @synthesize arguments;
 @synthesize timerNeedsUpdate;
+@synthesize task;
+@synthesize timer;
 
 - (id)initWithParentLog:(id)parent
 {
     if (!(self = [super init])) return nil;
     
-    windowController = [[NSWindowController alloc]initWithWindowNibName:@"logWindow"];
-    window = (LogWindow*)[windowController window];
-    task = nil;
+    [self setWindowController:[[[NSWindowController alloc]initWithWindowNibName:@"logWindow"]autorelease]];
+    [self setWindow:(LogWindow *)[windowController window]];
+    attributes = nil;
         
     // append app support folder to shell PATH
     NSMutableDictionary *tmpEnv = [NSMutableDictionary dictionaryWithDictionary:[[NSProcessInfo processInfo]environment]];
     NSString *appendedPath = [NSString stringWithFormat:@"%@:%@",[[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,NSUserDomainMask,YES) objectAtIndex:0]stringByAppendingPathComponent:[[NSProcessInfo processInfo]processName]],[tmpEnv objectForKey:@"PATH"]];
-    [tmpEnv setObject:appendedPath forKey:@"PATH"];  
-    env = [tmpEnv copy];
+    [tmpEnv setObject:appendedPath forKey:@"PATH"]; 
+    [tmpEnv setObject:@"xterm-color" forKey:@"TERM"];
+    //[tmpEnv setObject:@"YES" forKey:@"CLICOLOR_FORCE"];
+    [self setEnv:tmpEnv];
     
     [self setParentLog:parent];
     [self setupObservers];
@@ -52,11 +59,14 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter]removeObserver:self];
+    
     [windowController close];
     [windowController release];
+    [window release];
     [env release];
-    [task release];
-    [self killTimer];
+    if (attributes) [attributes release];
+    if (arguments) [arguments release];
+    if (task) [task release];
     [super dealloc];
 }
 
@@ -88,11 +98,18 @@
 }
 
 #pragma mark KVC
-- (void)setParentLog:(GTLog*)log;
+- (void)setParentLog:(GTLog*)log
 {
     parentLog = log;
     [self setParentProperties:[parentLog properties]];
     [window setParentLog:parentLog];
+}
+
+- (void)setTimer:(NSTimer*)newTimer
+{
+    [timer autorelease];
+    if ([timer isValid]) [timer invalidate];
+    timer = [newTimer retain];
 }
 
 #pragma mark Window Creation/Management
@@ -106,10 +123,6 @@
 // Gets called when initializing a log for viewing. All initialization for all log types should occur here
 - (void)createWindow
 {        
-    // we have to do this here instead of in the nib because we get an "invalid drawable" error if its done via the nib
-    // it would actually turns out that the window MUST be drawn before doing anything with anything that pertains to OpenGL, which includes the custom quartz window
-    // should this error become fatal, you know what to do (uncomment the line below). I just don't want the app displaying windows like a moron.
-    //[windowController showWindow:nil];
     [[window quartzView]setHidden:TRUE];
     [window setHasShadow:[parentProperties boolForKey:@"shadowWindow"]];
         
@@ -117,10 +130,9 @@
     {
         case TYPE_FILE:
             if ([[parentProperties objectForKey:@"file"]isEqual:@""]) return;
-            
-            // Read file to 50 lines. The -F file makes sure the file keeps getting read even if it hits the EOF or the file name is changed
-            if (task) [task release];
-            task = [[NSTask alloc]init];
+            [self setTimer:nil];
+            // Read file to 50 lines. The -F file makes sure the file keeps getting read even if it hits the EOF or the file name is changed            
+            [self setTask:[[[NSTask alloc]init]autorelease]];
             NSPipe *pipe = [NSPipe pipe];
             
             [task setLaunchPath:@"/usr/bin/tail"];
@@ -136,6 +148,9 @@
             [task launch];
             break;
             
+        case TYPE_SHELL:
+            [self setTask:nil];
+            break;
         case TYPE_QUARTZ:
             [[window textView]setHidden:YES];
             [[window quartzView]setHidden:FALSE];
@@ -177,7 +192,7 @@
             {
                 [self setArguments:[[[NSArray alloc]initWithObjects:@"-c",[parentProperties objectForKey:@"command"],nil]autorelease]];
                 
-                [[window textView]addText:@"" clear:YES];
+                [[window textView]setString:@""];
                 [self updateTimer];
             }
             [[window textView]scrollEnd];
@@ -198,7 +213,8 @@
             break;
     }
     //==Post-Init==
-    [window display];
+    [self front];
+    [parentLog setPostActivationRequest:YES];
     
     timerNeedsUpdate = NO;
 }
@@ -212,9 +228,8 @@
         case TYPE_SHELL:
             if ([task isRunning]) return;
                         
-            if (task) [task release];
-            task = [[NSTask alloc]init];
-            NSPipe *pipe = [[NSPipe alloc]init];
+            [self setTask:[[[NSTask alloc]init]autorelease]];
+            NSPipe *pipe = [NSPipe pipe];
 
             [task setLaunchPath:@"/bin/sh"];
             [task setArguments:arguments];
@@ -225,8 +240,6 @@
             [[pipe fileHandleForReading]readToEndOfFileInBackgroundAndNotify];
 
             [task launch];
-            
-            [pipe release];
             break;
             
         case TYPE_IMAGE:
@@ -252,18 +265,36 @@
     else
         newData = [[aNotification object]availableData];
     
-    NSString *newString = [[NSString alloc]initWithData:newData encoding:NSASCIIStringEncoding];
+    NSMutableString *newString = [[NSMutableString alloc]initWithData:newData encoding:NSASCIIStringEncoding];
     
     if (![newString isEqualTo:@""] || [parentProperties integerForKey:@"type"] == TYPE_FILE)
     {
-        [[window textView]addText:newString clear:([parentProperties integerForKey:@"type"] != TYPE_IMAGE)];
+        while ([newString length] && [newString characterAtIndex:[newString length] - 1] == 10) [newString deleteCharactersInRange:NSMakeRange([newString length] - 1,1)]; 
+
+        if ([parentProperties boolForKey:@"useAsciiEscapes"])
+        {
+            ANSIEscapeHelper *ansiEscapeHelper = [[[ANSIEscapeHelper alloc]init]autorelease];
+            NSMutableAttributedString *attrStr = [[ansiEscapeHelper attributedStringWithANSIEscapedString:newString] mutableCopy];
+            
+            for (NSString *key in attributes)
+            {
+                if ([key isEqualToString:NSForegroundColorAttributeName]) continue;
+                [attrStr addAttribute:key value:[attributes valueForKey:key] range:NSMakeRange(0,[[attrStr string]length])];
+            }
+            [[[window textView]textStorage]setAttributedString:attrStr];
+            [attrStr release];
+        }
+        else
+        {
+            [[window textView]setAttributes:attributes];
+            [[window textView]setString:newString];
+        }
         
         if ([parentProperties integerForKey:@"type"] == TYPE_SHELL)
         {
             [[window textView]scrollEnd];
             [[aNotification object]waitForDataInBackgroundAndNotify];
         }
-        [[window textView]setAttributes:attributes];
     }
     
     [window display];
@@ -273,40 +304,38 @@
 #pragma mark Update
 - (void)updateTimer
 {
-    [self killTimer];
     int refresh = [parentProperties integerForKey:@"refresh"];
     timerRepeats = refresh?YES:NO;
     
-    timer = [[NSTimer scheduledTimerWithTimeInterval:refresh target:self selector:@selector(updateCommand:) userInfo:nil repeats:timerRepeats]retain];
+    [self setTimer:[NSTimer scheduledTimerWithTimeInterval:refresh target:self selector:@selector(updateCommand:) userInfo:nil repeats:timerRepeats]];
     [timer fire];
     
-    if (timerRepeats) [self release]; // when the timer is added to the runloop, we are retained. we don't want to be.
-    else [timer release];
+    if (!timerRepeats) [timer release];
 }
 
 - (void)killTimer
 {
     if (!timer) return;
-    if (!timerRepeats) return;
-        
-    [self retain];
-    [timer invalidate];
+    if ([timer isValid]) [timer invalidate];
     [timer release];
 }
 
 - (void)updateTextAttributes
 {
-    // get the colors right
     [window setTextBackgroundColor:[NSUnarchiver unarchiveObjectWithData:[parentProperties objectForKey:@"backgroundColor"]]];
-    [[window textView] setShadowText:[parentProperties boolForKey:@"shadowText"]];
+        
+    NSShadow *defShadow = nil;
+    if ([parentProperties boolForKey:@"shadowText"])
+    {
+        defShadow = [[NSShadow alloc]init];
+        [defShadow setShadowOffset:(NSSize){SHADOW_W,SHADOW_H}];
+        [defShadow setShadowBlurRadius:SHADOW_RADIUS];
+    }
     
-    // Paragraph style
     NSMutableParagraphStyle *myParagraphStyle = [[NSMutableParagraphStyle alloc]init];
     [myParagraphStyle setParagraphStyle:[NSParagraphStyle defaultParagraphStyle]];
-    
     if ([parentProperties boolForKey:@"wrap"]) [myParagraphStyle setLineBreakMode:NSLineBreakByCharWrapping];
     else [myParagraphStyle setLineBreakMode:NSLineBreakByClipping];
-    
     switch ([parentProperties integerForKey:@"alignment"])
     {
         case ALIGN_LEFT: [myParagraphStyle setAlignment:NSLeftTextAlignment]; break;
@@ -317,14 +346,17 @@
         
     NSFont *tmpFont = [NSFont fontWithName:[parentProperties objectForKey:@"fontName"] size:[[parentProperties objectForKey:@"fontSize"]floatValue]];    
     
-    // here is where we override the scheme of the text. if you wanted to keep colors through the shell, here is where you would check for it
-    NSDictionary *tmpAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                   [myParagraphStyle autorelease], NSParagraphStyleAttributeName,
-                                   tmpFont, NSFontAttributeName,
-                                   [NSUnarchiver unarchiveObjectWithData:[parentProperties objectForKey:@"textColor"]], NSForegroundColorAttributeName,
-                                   nil];
+    
+    NSDictionary *tmpAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[myParagraphStyle autorelease],NSParagraphStyleAttributeName,tmpFont,NSFontAttributeName,[NSUnarchiver unarchiveObjectWithData:[parentProperties objectForKey:@"textColor"]],NSForegroundColorAttributeName,[defShadow autorelease],NSShadowAttributeName,nil];
     
     [self setAttributes:tmpAttributes];
+    
+    if ([parentProperties boolForKey:@"useAsciiEscapes"])
+    {
+        if (timer) [timer fire];
+        return;
+    }
+    
     [[window textView]setAttributes:attributes];
 }
 
