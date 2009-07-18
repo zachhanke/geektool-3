@@ -22,6 +22,7 @@
 
 #pragma mark -
 #pragma mark UI management
+- (IBAction)logImport:(id)sender;
 - (IBAction)revertDefaultSelectionColor:(id)sender;
 - (IBAction)showExpose:(id)sender;
 - (void)exposeBorder;

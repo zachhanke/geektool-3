@@ -9,21 +9,20 @@
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 
-
 @interface LogTextField : NSTextView
-{    
-    void *shadowValues;
-    BOOL shadowText;
+{
+    NSDictionary *attributes;
 }
-@property (assign) BOOL shadowText;
+@property (copy) NSDictionary *attributes;
 
 - (void)awakeFromNib;
-- (void)setTextAlignment:(int)alignment;
-- (void)setAttributes:(NSDictionary*)attributes;
-- (void)setWrap:(BOOL)wrap;
+// Text Properties
+- (void)applyAttributes:(NSDictionary *)attrs;
+- (void)updateTextAttributesUsingProps:(NSDictionary *)properties;
+- (void)processAndSetText:(NSString *)newString withEscapes:(BOOL)translateAsciiEscapes;
+// Text Actions
 - (void)scrollEnd;
-- (void)addText:(NSString*)newText clear:(BOOL)clear;
-- (void)drawRect:(NSRect)rect;
+// Attributes
 - (BOOL)isOpaque;
 - (BOOL)shouldDrawInsertionPoint;
 - (BOOL)acceptsFirstResponder;

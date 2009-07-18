@@ -8,7 +8,8 @@
 
 #import "GTLog.h"
 #import "LogController.h"
-#import "NTLogProcess.h"
+#import "NTShell.h"
+
 #import "NSDictionary+IntAndBoolAccessors.h"
 #import "defines.h"
 
@@ -27,7 +28,9 @@
     
     [self setProperties:[NSMutableDictionary dictionaryWithDictionary:newProperties]];
     
-    logProcess = nil;
+    if([properties integerForKey:@"type"] == TYPE_SHELL)
+        logProcess = [[NTShell alloc]initWithParentLog:self];
+    
     highlightSender = nil;
     parentGroup = nil;
     needCoordObservers = NO;
@@ -36,6 +39,13 @@
     [self setupObservers];
     return self;
 }
+
+- (id)initAsType:(NSString*)type
+{
+    if([type isEqualToString:@"Shell"])
+        return [self initWithProperties:[NTShell defaultProperties]];
+}
+
 
 - (id)init
 {    
@@ -63,7 +73,7 @@
                                               [NSNumber numberWithBool:NO],@"shadowText",
                                               [NSNumber numberWithBool:NO],@"shadowWindow",
                                               [NSNumber numberWithBool:NO],@"useAsciiEscapes",
-                                              [NSNumber numberWithBool:NO],@"alignment",
+                                              [NSNumber numberWithInt:ALIGN_LEFT],@"alignment",
                                                                                           
                                               [NSNumber numberWithInt:TOP_LEFT],@"pictureAlignment",
                                               @"",@"imageURL",
@@ -96,6 +106,7 @@
     [super dealloc];
 }
 
+
 #pragma mark -
 #pragma mark Observing
 - (void)setupObservers
@@ -103,7 +114,6 @@
     [self addObserver:self forKeyPath:@"active" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
     
     [self addObserver:self forKeyPath:@"properties.name" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
-    [self addObserver:self forKeyPath:@"properties.type" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
     [self addObserver:self forKeyPath:@"properties.enabled" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
     [self addObserver:self forKeyPath:@"properties.group" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
     [self addObserver:self forKeyPath:@"properties.fontName" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
@@ -136,7 +146,6 @@
     [self removeObserver:self forKeyPath:@"active"];
     
     [self removeObserver:self forKeyPath:@"properties.name"];
-    [self removeObserver:self forKeyPath:@"properties.type"];
     [self removeObserver:self forKeyPath:@"properties.enabled"];
     [self removeObserver:self forKeyPath:@"properties.group"];
     [self removeObserver:self forKeyPath:@"properties.fontName"];
@@ -163,6 +172,7 @@
     [self removeObserver:self forKeyPath:@"properties.alwaysOnTop"];
 }
 
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     // open/close windows if at all possible
@@ -176,10 +186,11 @@
         }
         if (![[self active]boolValue] || ![properties boolForKey:@"enabled"]) return;
         
-        self.logProcess = [[NTLogProcess alloc]initWithParentLog:self];
+        if ([[self properties]integerForKey:@"type"] == TYPE_SHELL)
+            [self setLogProcess:[[NTShell alloc]initWithParentLog:self]];
         [logProcess setupLogWindowAndDisplay];
     }
-    else if ([keyPath isEqualToString:@"properties.shadowWindow"] || [keyPath isEqualToString:@"properties.file"] || [keyPath isEqualToString:@"properties.command"] || [keyPath isEqualToString:@"properties.type"] || [keyPath isEqualToString:@"properties.quartzFile"])
+    else if ([keyPath isEqualToString:@"properties.shadowWindow"] || [keyPath isEqualToString:@"properties.file"] || [keyPath isEqualToString:@"properties.command"] || [keyPath isEqualToString:@"properties.quartzFile"])
     {
         [logProcess setupLogWindowAndDisplay];
     }
@@ -235,7 +246,7 @@
 {
     highlightSender = sender;
     
-    if (logProcess) [(LogWindow*)[[[self logProcess]windowController]window]setHighlighted:val];
+    if (logProcess) [(LogWindow*)[[self logProcess]window]setHighlighted:val];
     else postActivationRequest = YES;
 }
 

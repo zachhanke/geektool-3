@@ -8,15 +8,16 @@
 
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
-@class NTLogProcess;
+#import "NTLogProtocol.h"
+
 @class NTGroup;
 
-@interface GTLog : NSObject <NSMutableCopying, NSCopying, NSCoding>
+@interface GTLog : NSObject <NSMutableCopying,NSCopying,NSCoding>
 {
     id highlightSender;
     NTGroup *parentGroup;
     
-    NTLogProcess *logProcess;
+    id<NTLogProtocol> logProcess;
     NSMutableDictionary *properties;
     
     NSNumber *active;
@@ -25,13 +26,13 @@
     BOOL needCoordObservers;
 }
 @property (assign) NTGroup *parentGroup;
-@property (assign) NTLogProcess *logProcess;
+@property (assign) id<NTLogProtocol> logProcess;
 @property (retain) NSMutableDictionary *properties;
 @property (copy) NSNumber *active;
 @property (assign) BOOL postActivationRequest;
 
 - (id)initWithProperties:(NSDictionary*)newProperties;
-- (id)init;
+- (id)initAsType:(NSString*)type;
 - (void)dealloc;
 
 // observing

@@ -1,22 +1,19 @@
 /* LogWindow */
 
 #import <Cocoa/Cocoa.h>
-@class GTLog;
-@class QCView;
+#import "NTLogProtocol.h"
+
 @class LogTextField;
-@class AIQuartzView;
 
 @interface LogWindow : NSWindow
 {
     IBOutlet id textView;
     IBOutlet id scrollView;
     IBOutlet id logView;
-    IBOutlet id imageView;
-    IBOutlet id quartzView;
     
-    GTLog *parentLog;
+    id<NTLogProtocol> *parentLog;
 }
-@property (assign) GTLog *parentLog;
+@property (assign) id<NTLogProtocol> *parentLog;
 
 - (id)initWithContentRect:(NSRect)contentRect styleMask:(unsigned int)styleMask backing:(NSBackingStoreType)backingType defer:(BOOL)flag;
 - (BOOL)canBecomeKeyWindow;
@@ -26,7 +23,5 @@
 - (void)setTextColor:(NSColor*)color;
 - (void)setTextBackgroundColor:(NSColor*)color;
 - (void)setTextRect:(NSRect)rect;
-- (AIQuartzView*)quartzView;
-- (NSImageView*)imageView;
 - (LogTextField*)textView;
 @end

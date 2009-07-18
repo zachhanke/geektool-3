@@ -73,15 +73,12 @@
 - (IBAction)showGroupsCustomization:(id)sender
 {
     [NSApp beginSheet:groupsSheet modalForWindow:[NSApp mainWindow] modalDelegate:nil didEndSelector:nil contextInfo:nil];
-    [NSApp runModalForWindow:[NSApp mainWindow]];
-    // Sheet is up here
-    [NSApp endSheet:groupsSheet];
-    [groupsSheet orderOut:self];
 }
 
 - (IBAction)groupsSheetClose:(id)sender
 {    
-    [NSApp stopModal];
+    [groupsSheet orderOut:self];
+    [NSApp endSheet:groupsSheet];
 }
 #pragma mark Drag n' Drop Stuff
 // thanks to mmalc for figuring most of this stuff out for me (and just being amazing)
@@ -114,7 +111,6 @@
 
 - (NSDragOperation)tableView:(NSTableView*)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)op
 {
-    
     NSDragOperation dragOp = NSDragOperationCopy;
     
     // if drag source is self, it's a move unless the Option key is pressed

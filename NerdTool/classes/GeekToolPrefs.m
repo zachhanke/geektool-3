@@ -9,6 +9,7 @@
 #import <Carbon/Carbon.h>
 #import "GeekToolPrefs.h"
 #import "NTGroup.h"
+#import "GTLog.h"
 #import "LogWindow.h"
 #import "NTExposeBorder.h"
 
@@ -53,6 +54,61 @@
 
 #pragma mark -
 #pragma mark UI management
+- (IBAction)logImport:(id)sender
+{
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+    [openPanel setAllowsMultipleSelection:NO];
+    [openPanel setCanChooseFiles:YES];
+
+    [openPanel beginSheetForDirectory:@"/Users/Kevin/Library/Preferences/" file:@"org.tynsoe.geektool.plist" types:nil modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+}
+
+- (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo
+{
+    [NSApp endSheet:sheet];
+    if (returnCode == NSOKButton)
+    {
+        if (![[sheet filenames]count]) return;
+        NSString *fileToOpen = [[sheet filenames]objectAtIndex:0];
+        
+        NTGroup *importedGroup = [[NTGroup alloc]init];
+        [[importedGroup properties]setObject:@"Imported Logs" forKey:@"name"];
+
+        NSArray *oldPreferences = [[NSMutableDictionary dictionaryWithContentsOfFile:fileToOpen]objectForKey:@"logs"];
+        
+        for (NSMutableDictionary *importDict in oldPreferences)
+        {
+            NSMutableDictionary *convertedProps = [NSMutableDictionary dictionary];
+            
+            [convertedProps setObject:[importDict objectForKey:@"command"] forKey:@"command"];
+            [convertedProps setObject:[NSArchiver archivedDataWithRootObject:[NSColor colorWithDeviceRed:[[[importDict objectForKey:@"backgroundColor"]objectForKey:@"red"]floatValue] green:[[[importDict objectForKey:@"backgroundColor"]objectForKey:@"green"]floatValue] blue:[[[importDict objectForKey:@"backgroundColor"]objectForKey:@"blue"]floatValue] alpha:[[[importDict objectForKey:@"backgroundColor"]objectForKey:@"alpha"]floatValue]]] forKey:@"backgroundColor"];
+            [convertedProps setObject:[NSArchiver archivedDataWithRootObject:[NSColor colorWithDeviceRed:[[[importDict objectForKey:@"textColor"]objectForKey:@"red"]floatValue] green:[[[importDict objectForKey:@"textColor"]objectForKey:@"green"]floatValue] blue:[[[importDict objectForKey:@"textColor"]objectForKey:@"blue"]floatValue] alpha:[[[importDict objectForKey:@"textColor"]objectForKey:@"alpha"]floatValue]]] forKey:@"textColor"];
+            [convertedProps setObject:[[importDict objectForKey:@"rect"]objectForKey:@"x"] forKey:@"x"];
+            [convertedProps setObject:[[importDict objectForKey:@"rect"]objectForKey:@"y"] forKey:@"y"];
+            [convertedProps setObject:[[importDict objectForKey:@"rect"]objectForKey:@"w"] forKey:@"w"];
+            [convertedProps setObject:[[importDict objectForKey:@"rect"]objectForKey:@"h"] forKey:@"h"];
+            [convertedProps setObject:[importDict objectForKey:@"enabled"] forKey:@"enabled"];
+            [convertedProps setObject:[importDict objectForKey:@"file"] forKey:@"file"];
+            [convertedProps setObject:[importDict objectForKey:@"fontName"] forKey:@"fontName"];
+            [convertedProps setObject:[importDict objectForKey:@"fontSize"] forKey:@"fontSize"];
+            [convertedProps setObject:[importDict objectForKey:@"imageURL"] forKey:@"imageURL"];
+            [convertedProps setObject:[importDict objectForKey:@"name"] forKey:@"name"];
+            [convertedProps setObject:[importDict objectForKey:@"refresh"] forKey:@"refresh"];
+            [convertedProps setObject:[importDict objectForKey:@"shadowText"] forKey:@"shadowText"];
+            [convertedProps setObject:[importDict objectForKey:@"shadowWindow"] forKey:@"shadowWindow"];
+            //[convertedProps setObject:[importDict objectForKey:@"type"] forKey:@"type"];
+            
+            [[importedGroup logs]addObject:[[GTLog alloc]initWithProperties:convertedProps]];
+        }
+        [groupController addObject:importedGroup];
+    }
+}
+
+- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+{
+    if (returnCode == NSAlertDefaultReturn) [sheet close];
+}
+
 - (IBAction)revertDefaultSelectionColor:(id)sender
 {
     NSData *selectionColorData = [NSArchiver archivedDataWithRootObject:[[NSColor alternateSelectedControlColor]colorWithAlphaComponent:0.3]];

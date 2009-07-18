@@ -2,7 +2,6 @@
 #import <Carbon/Carbon.h>
 #import "CGSPrivate.h"
 
-// simply a window that holds logView, logTextField, and NSImageView
 @implementation LogWindow
 
 @synthesize parentLog;
@@ -64,7 +63,6 @@
 }
 
 #pragma mark Text Properties
-
 - (void)setTextColor:(NSColor*)color
 {
     [textView setTextColor:color];
@@ -83,16 +81,6 @@
 }
 
 #pragma mark Accessors
-- (AIQuartzView*)quartzView
-{
-    return quartzView;
-}
-
-- (NSImageView*)imageView
-{
-    return imageView;
-}
-
 - (LogTextField*)textView
 {
     return textView;

@@ -24,5 +24,9 @@
 	<string>GeektoolPrefs</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>SUFeedURL</key>
+	<string>http://balthamos.darkraver.net/nerdtoolAppcast.xml</string>
+	<key>SUEnableSystemProfiling</key>
+	<false/>
 </dict>
 </plist>

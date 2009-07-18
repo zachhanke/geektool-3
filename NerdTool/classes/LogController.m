@@ -9,7 +9,7 @@
 #import "LogController.h"
 #import "GroupController.h"
 #import "NTGroup.h"
-#import "GTLog.h"
+#import "NTShell.h"
 #import "LogWindow.h"
 
 #import "defines.h"
@@ -44,10 +44,10 @@
 }
 
 #pragma mark UI
-- (void)insert:(id)sender
+- (IBAction)insertLog:(id)sender
 {
     userInsert = YES;
-    [super insert:sender];
+    if ([[sender title]isEqualToString:@"Shell"]) [self insertObject:[[NTShell alloc]init] atArrangedObjectIndex:0];
 }
 
 - (void)removeObjectsAtArrangedObjectIndexes:(NSIndexSet *)indexes
@@ -127,11 +127,16 @@
     // when a selection is changed
     if([keyPath isEqualToString:@"selectedObjects"])
     {
-        if (oldSelectedLog != nil) [oldSelectedLog setHighlighted:NO from:self];
+        if (oldSelectedLog != nil)
+        {
+            [oldSelectedLog setHighlighted:NO from:self];
+            [[oldSelectedLog unloadPrefsViewAndUnbind]removeFromSuperview];
+        }
         
         if (![[self selectedObjects]count]) return;
         
         oldSelectedLog = [[self selectedObjects]objectAtIndex:0];
+        [prefsView addSubview:[oldSelectedLog loadPrefsViewAndBind:self]];
         [oldSelectedLog setHighlighted:YES from:self];
     }
     else [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

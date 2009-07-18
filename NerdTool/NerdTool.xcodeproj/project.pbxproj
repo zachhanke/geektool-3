@@ -40,10 +40,31 @@
 		0A904C03100D8F2B009A2F5E /* justified.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BE6100D8F2B009A2F5E /* justified.png */; };
 		0A904C04100D8F2B009A2F5E /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BE7100D8F2B009A2F5E /* left.png */; };
 		0A904C0D100D8F2B009A2F5E /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BF5100D8F2B009A2F5E /* right.png */; };
+		0AB87596101008150000E274 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AB87595101008150000E274 /* Sparkle.framework */; };
+		0AB875A91010086C0000E274 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0AB87595101008150000E274 /* Sparkle.framework */; };
+		0AB8768D101038510000E274 /* NTShell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8768C101038510000E274 /* NTShell.m */; };
+		0AB876F7101050610000E274 /* shellWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AB876F5101050610000E274 /* shellWindow.xib */; };
+		0AB877B4101172B10000E274 /* shellPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AB877B2101172B10000E274 /* shellPrefs.xib */; };
+		0AB877ED1011853B0000E274 /* imagePrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AB877EB1011853B0000E274 /* imagePrefs.xib */; };
+		0AB877F0101185590000E274 /* filePrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AB877EE101185590000E274 /* filePrefs.xib */; };
+		0AB877F31011857B0000E274 /* quartzPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AB877F11011857B0000E274 /* quartzPrefs.xib */; };
 		0ABCBAEA100EEC6100ACC9CB /* ANSIEscapeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ABCBAE8100EEC6100ACC9CB /* ANSIEscapeHelper.m */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0AB875AA1010088A0000E274 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0AB875A91010086C0000E274 /* Sparkle.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0A7D38870FD805FA0070D678 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
@@ -98,6 +119,15 @@
 		0A904BE7100D8F2B009A2F5E /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = left.png; path = resources/left.png; sourceTree = "<group>"; };
 		0A904BF5100D8F2B009A2F5E /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = right.png; path = resources/right.png; sourceTree = "<group>"; };
 		0A904C29100D9794009A2F5E /* NerdTool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NerdTool.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0AB87595101008150000E274 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
+		0AB8768B101038510000E274 /* NTShell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTShell.h; sourceTree = "<group>"; };
+		0AB8768C101038510000E274 /* NTShell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTShell.m; sourceTree = "<group>"; };
+		0AB8769B10103B970000E274 /* NTLogProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTLogProtocol.h; sourceTree = "<group>"; };
+		0AB876F6101050610000E274 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = resources/English.lproj/shellWindow.xib; sourceTree = "<group>"; };
+		0AB877B3101172B10000E274 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = resources/English.lproj/shellPrefs.xib; sourceTree = "<group>"; };
+		0AB877EC1011853B0000E274 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = resources/English.lproj/imagePrefs.xib; sourceTree = "<group>"; };
+		0AB877EF101185590000E274 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = resources/English.lproj/filePrefs.xib; sourceTree = "<group>"; };
+		0AB877F21011857B0000E274 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = resources/English.lproj/quartzPrefs.xib; sourceTree = "<group>"; };
 		0ABCBAE8100EEC6100ACC9CB /* ANSIEscapeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANSIEscapeHelper.m; sourceTree = "<group>"; };
 		0ABCBAE9100EEC6100ACC9CB /* ANSIEscapeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANSIEscapeHelper.h; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -117,6 +147,7 @@
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				0A7D38890FD805FA0070D678 /* Quartz.framework in Frameworks */,
 				0A7D388A0FD805FA0070D678 /* Carbon.framework in Frameworks */,
+				0AB87596101008150000E274 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -190,9 +221,20 @@
 			name = "Preferences UI Classes";
 			sourceTree = "<group>";
 		};
+		0AB8769C10103BA90000E274 /* Log Types */ = {
+			isa = PBXGroup;
+			children = (
+				0AB8769B10103B970000E274 /* NTLogProtocol.h */,
+				0AB8768B101038510000E274 /* NTShell.h */,
+				0AB8768C101038510000E274 /* NTShell.m */,
+			);
+			name = "Log Types";
+			sourceTree = "<group>";
+		};
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0AB87595101008150000E274 /* Sparkle.framework */,
 				0A7D38870FD805FA0070D678 /* Quartz.framework */,
 				0A7D38880FD805FA0070D678 /* Carbon.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
@@ -224,12 +266,18 @@
 				0A439DA00FE9D29D00BB8B6A /* Categories */,
 				0A7D372A0FD802B10070D678 /* Controllers */,
 				0A194D8C0FED967C0062EA84 /* Data Classes */,
+				0AB8769C10103BA90000E274 /* Log Types */,
 				0A94855E100C45BA0071EFF9 /* Preferences UI Classes */,
 				080E96DDFE201D6D7F000001 /* Log UI Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				0AB876F5101050610000E274 /* shellWindow.xib */,
+				0AB877B2101172B10000E274 /* shellPrefs.xib */,
+				0AB877EB1011853B0000E274 /* imagePrefs.xib */,
+				0AB877EE101185590000E274 /* filePrefs.xib */,
+				0AB877F11011857B0000E274 /* quartzPrefs.xib */,
 			);
 			name = NerdTool;
 			sourceTree = "<group>";
@@ -289,6 +337,7 @@
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
+				0AB875AA1010088A0000E274 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -337,6 +386,11 @@
 				0A904C03100D8F2B009A2F5E /* justified.png in Resources */,
 				0A904C04100D8F2B009A2F5E /* left.png in Resources */,
 				0A904C0D100D8F2B009A2F5E /* right.png in Resources */,
+				0AB876F7101050610000E274 /* shellWindow.xib in Resources */,
+				0AB877B4101172B10000E274 /* shellPrefs.xib in Resources */,
+				0AB877ED1011853B0000E274 /* imagePrefs.xib in Resources */,
+				0AB877F0101185590000E274 /* filePrefs.xib in Resources */,
+				0AB877F31011857B0000E274 /* quartzPrefs.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,6 +419,7 @@
 				0A904BD1100D8EAC009A2F5E /* NTGroup.m in Sources */,
 				0A904BD2100D8EAC009A2F5E /* NTLogProcess.m in Sources */,
 				0ABCBAEA100EEC6100ACC9CB /* ANSIEscapeHelper.m in Sources */,
+				0AB8768D101038510000E274 /* NTShell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,6 +471,46 @@
 			path = resources;
 			sourceTree = "<group>";
 		};
+		0AB876F5101050610000E274 /* shellWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0AB876F6101050610000E274 /* English */,
+			);
+			name = shellWindow.xib;
+			sourceTree = "<group>";
+		};
+		0AB877B2101172B10000E274 /* shellPrefs.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0AB877B3101172B10000E274 /* English */,
+			);
+			name = shellPrefs.xib;
+			sourceTree = "<group>";
+		};
+		0AB877EB1011853B0000E274 /* imagePrefs.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0AB877EC1011853B0000E274 /* English */,
+			);
+			name = imagePrefs.xib;
+			sourceTree = "<group>";
+		};
+		0AB877EE101185590000E274 /* filePrefs.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0AB877EF101185590000E274 /* English */,
+			);
+			name = filePrefs.xib;
+			sourceTree = "<group>";
+		};
+		0AB877F11011857B0000E274 /* quartzPrefs.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0AB877F21011857B0000E274 /* English */,
+			);
+			name = quartzPrefs.xib;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -424,6 +519,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
@@ -441,6 +540,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = NerdTool_Prefix.pch;

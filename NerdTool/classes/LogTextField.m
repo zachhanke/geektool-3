@@ -7,13 +7,16 @@
 //
 
 #import "LogTextField.h"
+
+#import "ANSIEscapeHelper.h"
 #import "defines.h"
+#import "NSDictionary+IntAndBoolAccessors.h"
 
 #define ZeroRange NSMakeRange(NSNotFound, 0)
 
 @implementation LogTextField
 
-@synthesize shadowText;
+@synthesize attributes;
 
 - (void)awakeFromNib
 {
@@ -21,38 +24,74 @@
     [self setSelectable:NO];
 }
 
+- (void)dealloc
+{
+    [attributes release];
+    [super dealloc];
+}
+
 #pragma mark Text Properties
-- (void)setTextAlignment:(int)alignment
+- (void)applyAttributes:(NSDictionary *)attrs
 {
-    switch (alignment)
+    [[self textStorage]setAttributes:attrs range:NSMakeRange(0,[[self string]length])];
+}
+
+- (void)updateTextAttributesUsingProps:(NSDictionary *)properties
+{
+    NSShadow *defShadow = nil;
+    if ([properties boolForKey:@"shadowText"])
     {
-        case ALIGN_LEFT: [self setAlignment:NSLeftTextAlignment]; break;
-        case ALIGN_CENTER: [self setAlignment:NSCenterTextAlignment]; break;
-        case ALIGN_RIGHT: [self setAlignment:NSRightTextAlignment]; break;
-        case ALIGN_JUSTIFIED: [self setAlignment:NSJustifiedTextAlignment]; break;
+        defShadow = [[NSShadow alloc]init];
+        [defShadow setShadowOffset:(NSSize){SHADOW_W,SHADOW_H}];
+        [defShadow setShadowBlurRadius:SHADOW_RADIUS];
     }
-    //[self display];
+    
+    NSMutableParagraphStyle *myParagraphStyle = [[NSMutableParagraphStyle alloc]init];
+    [myParagraphStyle setParagraphStyle:[NSParagraphStyle defaultParagraphStyle]];
+    if ([properties boolForKey:@"wrap"]) [myParagraphStyle setLineBreakMode:NSLineBreakByCharWrapping];
+    else [myParagraphStyle setLineBreakMode:NSLineBreakByClipping];
+    switch ([properties integerForKey:@"alignment"])
+    {
+        case ALIGN_LEFT: [myParagraphStyle setAlignment:NSLeftTextAlignment]; break;
+        case ALIGN_CENTER: [myParagraphStyle setAlignment:NSCenterTextAlignment]; break;
+        case ALIGN_RIGHT: [myParagraphStyle setAlignment:NSRightTextAlignment]; break;
+        case ALIGN_JUSTIFIED: [myParagraphStyle setAlignment:NSJustifiedTextAlignment]; break;
+    }
+    [myParagraphStyle autorelease];
+    
+    NSFont *tmpFont = [NSFont fontWithName:[properties objectForKey:@"fontName"] size:[[properties objectForKey:@"fontSize"]floatValue]];    
+    
+    
+    NSDictionary *tmpAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[[myParagraphStyle copy]autorelease],NSParagraphStyleAttributeName,tmpFont,NSFontAttributeName,[NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"textColor"]],NSForegroundColorAttributeName,[defShadow autorelease],NSShadowAttributeName,nil];
+    
+    [self setAttributes:tmpAttributes];
 }
 
-- (void)setAttributes:(NSDictionary*)attributes
+- (void)processAndSetText:(NSString *)newString withEscapes:(BOOL)translateAsciiEscapes
 {
-    [[self textStorage]setAttributes:attributes range:NSMakeRange(0,[[self string]length])];
+    // kill \n's at the end of the string (to correct "push up" error on resizing)
+    while ([newString length] && [newString characterAtIndex:[newString length] - 1] == 10) [newString deleteCharactersInRange:NSMakeRange([newString length] - 1,1)];
+    
+    if (translateAsciiEscapes)
+    {
+        ANSIEscapeHelper *ansiEscapeHelper = [[[ANSIEscapeHelper alloc]init]autorelease];
+        NSMutableAttributedString *attrStr = [[ansiEscapeHelper attributedStringWithANSIEscapedString:newString]mutableCopy];
+        
+        // add in attributes (like font and alignment) to colored text
+        for (NSString *key in attributes)
+        {
+            if ([key isEqualToString:NSForegroundColorAttributeName]) continue;
+            [attrStr addAttribute:key value:[attributes valueForKey:key] range:NSMakeRange(0,[[attrStr string]length])];
+        }
+        [[self textStorage]setAttributedString:attrStr];
+        [attrStr release];
+    }
+    else
+    {
+        [self setString:newString];
+        [self applyAttributes:attributes];
+    }    
 }
-
-- (void)setWrap:(BOOL)wrap
-{
-    if ([[self string]length] == 0) [self setString: @" "];
-    
-    NSRange range = NSMakeRange(0,[[self string]length]);
-    NSTextStorage *textStorage = [self textStorage];
-    NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle]mutableCopy];
-    
-    if (wrap) [paragraphStyle setLineBreakMode:NSLineBreakByCharWrapping];
-    else [paragraphStyle setLineBreakMode:NSLineBreakByClipping];
-    
-    [textStorage addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
-}
-
 
 #pragma mark Text Actions
 - (void)scrollEnd

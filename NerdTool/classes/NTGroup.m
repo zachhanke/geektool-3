@@ -9,6 +9,7 @@
 #import "NTGroup.h"
 #import "GTLog.h"
 #import "NTLogProcess.h"
+#import "NTLogProtocol.h"
 
 // Organizes and holds instantiated GTLogs
 @implementation NTGroup
@@ -54,7 +55,7 @@
 - (void)reorder
 {
     NSEnumerator *e = [[self logs]reverseObjectEnumerator];
-    for (GTLog *log in e) [[log logProcess]front];
+    for (id<NTLogProtocol> log in e) [log front];
 }
 
 #pragma mark Observing

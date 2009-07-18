@@ -237,6 +237,7 @@
             [task setStandardOutput:pipe];
             
             [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleReadToEndOfFileCompletionNotification object:[pipe fileHandleForReading]];
+
             [[pipe fileHandleForReading]readToEndOfFileInBackgroundAndNotify];
 
             [task launch];
@@ -269,8 +270,9 @@
     
     if (![newString isEqualTo:@""] || [parentProperties integerForKey:@"type"] == TYPE_FILE)
     {
+        // kill \n's at the end of the string (to correct "push up" error on resizing)
         while ([newString length] && [newString characterAtIndex:[newString length] - 1] == 10) [newString deleteCharactersInRange:NSMakeRange([newString length] - 1,1)]; 
-
+        
         if ([parentProperties boolForKey:@"useAsciiEscapes"])
         {
             ANSIEscapeHelper *ansiEscapeHelper = [[[ANSIEscapeHelper alloc]init]autorelease];
@@ -290,11 +292,12 @@
             [[window textView]setString:newString];
         }
         
-        if ([parentProperties integerForKey:@"type"] == TYPE_SHELL)
-        {
-            [[window textView]scrollEnd];
+        [[window textView]scrollEnd];
+        
+        if ([parentProperties integerForKey:@"type"])
+            [[aNotification object]readInBackgroundAndNotify];
+        else            
             [[aNotification object]waitForDataInBackgroundAndNotify];
-        }
     }
     
     [window display];

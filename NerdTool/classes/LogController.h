@@ -11,6 +11,8 @@
 
 @interface LogController : NSArrayController
 {
+    IBOutlet id prefsView;
+    
     IBOutlet id groupController;
     BOOL userInsert;
     
@@ -24,6 +26,7 @@
 }
 @property (assign) BOOL userInsert;
 
+- (IBAction)insertLog:(id)sender;
 - (IBAction)duplicate:(id)sender;
 
 - (IBAction)fileChoose:(id)sender;
