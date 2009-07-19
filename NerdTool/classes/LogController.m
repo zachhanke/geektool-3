@@ -11,6 +11,7 @@
 #import "NTGroup.h"
 #import "NTShell.h"
 #import "LogWindow.h"
+#import "NTLogProtocol.h"
 
 #import "defines.h"
 #import "NSIndexSet+CountOfIndexesInRange.h"
@@ -20,8 +21,8 @@
 
 - (void)awakeFromNib
 {
-    oldSelectedLog = nil;
-    userInsert = NO;
+    _oldSelectedLog = nil;
+    _userInsert = NO;
 
     MovedRowsType = @"GTLog_Moved_Item";
     CopiedRowsType = @"GTLog_Copied_Item";
@@ -44,40 +45,59 @@
 }
 
 #pragma mark UI
-- (IBAction)insertLog:(id)sender
-{
-    userInsert = YES;
-    if ([[sender title]isEqualToString:@"Shell"]) [self insertObject:[[NTShell alloc]init] atArrangedObjectIndex:0];
+- (IBAction)displayLogTypeMenu:(id)sender
+{    
+    NSRect frame = [sender frame];    
+    NSEvent *event = [NSEvent mouseEventWithType:NSLeftMouseDown location:[sender convertPoint:NSMakePoint(frame.origin.x,frame.origin.y + NSHeight(frame) + MENU_Y_OFFSET) toView:nil] modifierFlags:0 timestamp:0 windowNumber:[[sender window]windowNumber] context:nil eventNumber:0 clickCount:1 pressure:0]; 
+    [NSMenu popUpContextMenu:[sender menu] withEvent:event forView:sender];    
 }
 
+#pragma mark Content Add/Dupe/Remove
 - (void)removeObjectsAtArrangedObjectIndexes:(NSIndexSet *)indexes
 {
-    oldSelectedLog = nil;
+    _oldSelectedLog = nil;
     [super removeObjectsAtArrangedObjectIndexes:indexes];
 }
 
 - (IBAction)duplicate:(id)sender
 {
-    userInsert = YES;
+    _userInsert = YES;
     [self duplicateSelection];
+}
+
+- (IBAction)insertLog:(id)sender
+{
+    _userInsert = YES;
+    if ([[sender title]isEqualToString:@"Shell"]) [self insertObject:[[NTShell alloc]init] atArrangedObjectIndex:0];
 }
 
 - (void)insertObject:(id)object atArrangedObjectIndex:(NSUInteger)index
 {
     NTGroup *parentGroup = [[groupController selectedObjects]objectAtIndex:0];
-    
-    if (userInsert)
+    if (_userInsert)
     {
         [object setActive:[NSNumber numberWithBool:YES]];
         [object setParentGroup:parentGroup];
-        userInsert = NO;
+        _userInsert = NO;
     }
-    
     [super insertObject:object atArrangedObjectIndex:index];
-    
     [parentGroup reorder];
 }
 
+- (void)insertObjects:(NSArray *)objects atArrangedObjectIndexes:(NSIndexSet *)indexes
+{
+    NTGroup *parentGroup = [[groupController selectedObjects]objectAtIndex:0];
+    if (_userInsert)
+    {
+        [objects makeObjectsPerformSelector:@selector(setActive:) withObject:[NSNumber numberWithBool:YES]];
+        [objects makeObjectsPerformSelector:@selector(setParentGroup:) withObject:parentGroup];
+        _userInsert = NO;
+    }
+    [super insertObjects:objects atArrangedObjectIndexes:indexes];
+    [parentGroup reorder];
+}
+
+#pragma mark File handling
 - (IBAction)fileChoose:(id)sender
 {
     NSOpenPanel *openPanel = [NSOpenPanel openPanel];
@@ -102,7 +122,7 @@
         if (![[sheet filenames]count]) return;
         NSString *fileToOpen = [[sheet filenames]objectAtIndex:0];
         
-        GTLog *selectedLog = [[self selectedObjects]objectAtIndex:0];
+        id<NTLogProtocol> selectedLog = [[self selectedObjects]objectAtIndex:0];
         int selectedLogType = [[[[[self selectedObjects]objectAtIndex:0]properties]objectForKey:@"type"]intValue];
 
         if (selectedLogType == TYPE_FILE)
@@ -127,17 +147,17 @@
     // when a selection is changed
     if([keyPath isEqualToString:@"selectedObjects"])
     {
-        if (oldSelectedLog != nil)
+        if (_oldSelectedLog != nil)
         {
-            [oldSelectedLog setHighlighted:NO from:self];
-            [[oldSelectedLog unloadPrefsViewAndUnbind]removeFromSuperview];
+            [_oldSelectedLog setHighlighted:NO from:self];
+            [[_oldSelectedLog unloadPrefsViewAndUnbind]removeFromSuperview];
         }
         
         if (![[self selectedObjects]count]) return;
         
-        oldSelectedLog = [[self selectedObjects]objectAtIndex:0];
-        [prefsView addSubview:[oldSelectedLog loadPrefsViewAndBind:self]];
-        [oldSelectedLog setHighlighted:YES from:self];
+        _oldSelectedLog = [[self selectedObjects]objectAtIndex:0];
+        [prefsView addSubview:[_oldSelectedLog loadPrefsViewAndBind:self]];
+        [_oldSelectedLog setHighlighted:YES from:self];
     }
     else [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
@@ -171,15 +191,13 @@
     return YES;
 }
 
-
 - (NSDragOperation)tableView:(NSTableView*)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)op
 {
-    
     NSDragOperation dragOp = NSDragOperationCopy;
     
     // if drag source is self, it's a move unless the Option key is pressed
     if ([info draggingSource] == tableView)
-        dragOp =  NSDragOperationMove;
+        dragOp = NSDragOperationMove;
     
     // we want to put the object at, not over, the current row (contrast NSTableViewDropOn) 
     [tv setDropRow:row dropOperation:NSTableViewDropAbove];
@@ -192,24 +210,25 @@
     BOOL result = NO;
     
     if (row < 0) row = 0;
-	
+    
 	// if drag source is self, it's a move unless the Option key is pressed
     if ([info draggingSource] == tableView)
     {
-        NSData *rowsData = [[info draggingPasteboard] dataForType:MovedRowsType];
+        NSData *rowsData = [[info draggingPasteboard]dataForType:MovedRowsType];
         NSIndexSet *indexSet = [NSKeyedUnarchiver unarchiveObjectWithData:rowsData];
         
         NSIndexSet *destinationIndexes = [self moveObjectsInArrangedObjectsFromIndexes:indexSet toIndex:row];
         // set selected rows to those that were just moved
         [self setSelectionIndexes:destinationIndexes];
-
+        
+        
         result = YES;
     }
     
     return result;
 }
 
--(NSIndexSet *)moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)fromIndexSet toIndex:(unsigned int)insertIndex
+- (NSIndexSet *)moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)fromIndexSet toIndex:(unsigned int)insertIndex
 {	
 	// If any of the removed objects come before the insertion index, we need to decrement the index appropriately
 	unsigned int adjustedInsertIndex = insertIndex - [fromIndexSet countOfIndexesInRange:(NSRange){0, insertIndex}];

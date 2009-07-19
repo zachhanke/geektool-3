@@ -7,7 +7,7 @@
 //
 
 #import "NTFontDisplay.h"
-#import "GTLog.h"
+#import "NTLogProtocol.h"
 
 #import "defines.h"
 
@@ -38,7 +38,7 @@
         return;
     }
     
-    GTLog *selectedLog = [[logController selectedObjects]objectAtIndex:0];
+    id<NTLogProtocol> selectedLog = [[logController selectedObjects]objectAtIndex:0];
 	
     NSString *fontName = [[selectedLog properties]valueForKey:@"fontName"];
 	float fontSize = [[[selectedLog properties]valueForKey:@"fontSize"]floatValue];
@@ -73,7 +73,7 @@
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
-    GTLog *selectedLog = [[logController selectedObjects]objectAtIndex:0];
+    id<NTLogProtocol> selectedLog = [[logController selectedObjects]objectAtIndex:0];
     NSFont *font = [NSFont fontWithName:[[selectedLog properties]objectForKey:@"fontName"] size:[[[selectedLog properties]objectForKey:@"fontSize"]floatValue]];
 	if (!font) font = [NSFont systemFontOfSize:[NSFont systemFontSize]];
     
@@ -87,7 +87,7 @@
 
 - (void)changeFont:(id)sender
 {
-    GTLog *selectedLog = [[logController selectedObjects]objectAtIndex:0];
+    id<NTLogProtocol> selectedLog = [[logController selectedObjects]objectAtIndex:0];
     
 	NSFont *selectedFont = [[NSFontManager sharedFontManager]selectedFont];
 	if (!selectedFont) selectedFont = [NSFont systemFontOfSize:[NSFont systemFontSize]];

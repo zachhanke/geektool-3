@@ -9,6 +9,7 @@
 #import "NTShell.h"
 #import "LogWindow.h"
 #import "LogTextField.h"
+#import "NTGroup.h"
 
 #import "defines.h"
 #import "NSDictionary+IntAndBoolAccessors.h"
@@ -35,16 +36,27 @@
 
 - (NSView *)loadPrefsViewAndBind:(id)bindee
 {
+    if (_loadedView) return nil;
     if (!prefsView) [NSBundle loadNibNamed:@"shellPrefs" owner:self];
+    
+    // These can get turned off if you have the text field selected, and then change logs. When you go back to that log, things are screwed up. The setEditable: fixes this (as well as makes them tasty :P)
+    [command setEditable:YES];
+    [refresh setEditable:YES];
+
     [command bind:@"value" toObject:bindee withKeyPath:@"selection.properties.command" options:nil];
     [refresh bind:@"value" toObject:bindee withKeyPath:@"selection.properties.refresh" options:nil];
+    
+    _loadedView = YES;
     return prefsView;
 }
 
 - (NSView *)unloadPrefsViewAndUnbind
 {
+    if (!_loadedView) return nil;
     [command unbind:@"value"];
     [refresh unbind:@"value"];
+    
+    _loadedView = NO;
     return prefsView;
 }
 
@@ -56,7 +68,10 @@
 	if (!(self = [super init])) return nil;
     
     [self setProperties:[NSMutableDictionary dictionaryWithDictionary:newProperties]];
-        
+    [self setActive:[NSNumber numberWithBool:NO]];
+    
+    _loadedView = NO;
+    _windowController = nil;
     [self setupPreferenceObservers];
     return self;
 }
@@ -122,6 +137,7 @@
     [self addObserver:self forKeyPath:@"properties.textColor" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.backgroundColor" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.wrap" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.alignment" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.shadowText" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.shadowWindow" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.useAsciiEscapes" options:0 context:NULL];
@@ -148,6 +164,7 @@
     [self removeObserver:self forKeyPath:@"properties.textColor"];
     [self removeObserver:self forKeyPath:@"properties.backgroundColor"];
     [self removeObserver:self forKeyPath:@"properties.wrap"];
+    [self removeObserver:self forKeyPath:@"properties.alignment"];
     [self removeObserver:self forKeyPath:@"properties.shadowText"];
     [self removeObserver:self forKeyPath:@"properties.shadowWindow"];
     [self removeObserver:self forKeyPath:@"properties.useAsciiEscapes"];
@@ -239,12 +256,12 @@
 {
     [self removeProcessObservers];
     [_windowController close];
-    [_windowController release];
-    [_env release];
+    [self set_windowController:nil];
+    [self set_env:nil];
     
-    [_arguments release];
-    [_task release];
-    [self killTimer];
+    [self set_arguments:nil];
+    [self set_task:nil];
+    [self set_timer:nil];
 }
 
 #pragma mark Observing
@@ -275,9 +292,9 @@
         [properties setValue:[NSNumber numberWithInt:NSHeight(newCoords)] forKey:@"h"];
     }
     else if ([[notification name]isEqualToString:@"NSLogViewMouseDown"])
-        _isBeingDragged = YES;
+        self._isBeingDragged = YES;
     else if ([[notification name]isEqualToString:@"NSLogViewMouseUp"])
-        _isBeingDragged = NO;
+        self._isBeingDragged = NO;
 }
 
 #pragma mark KVC
@@ -286,7 +303,7 @@
     [_timer autorelease];
     if ([_timer isValid])
     {
-        [self retain];
+        [self retain]; // to counter our balancing done in updateTimer
         [_timer invalidate];
     }
     _timer = [newTimer retain];
@@ -295,12 +312,7 @@
 - (void)killTimer
 {
     if (!_timer) return;
-    if ([_timer isValid])
-    {
-        [self retain]; // to counter our balancing done in updateTimer
-        [_timer invalidate];
-    }
-    [_timer release];
+    [self set_timer:nil];
 }
 
 - (void)updateTimer
@@ -312,7 +324,7 @@
     [_timer fire];
 
     if (timerRepeats) [self release]; // since timer repeats, self is retained. we don't want this
-    else [_timer release];
+    else [self set_timer:nil];
     _timerNeedsUpdate = NO;
 }
 
@@ -348,9 +360,13 @@
     if (![properties boolForKey:@"useAsciiEscapes"]) [[window textView]applyAttributes:[[window textView]attributes]];
     else
     {
-        NSMutableDictionary *modAttr = [NSDictionary dictionaryWithDictionary:[[window textView]attributes]];
-        [modAttr removeObjectForKey:NSForegroundColorAttributeName];
-        [[window textView]applyAttributes:modAttr];
+        NSMutableAttributedString *attrStr = [[[[window textView]attributedString]mutableCopy]autorelease];
+        for (NSString *key in [[window textView]attributes])
+        {
+            if ([key isEqualToString:NSForegroundColorAttributeName]) continue;
+            [attrStr addAttribute:key value:[[[window textView]attributes] valueForKey:key] range:NSMakeRange(0,[[attrStr string]length])];
+        }
+        [[[window textView]textStorage]setAttributedString:attrStr];
     }
     
     if (_timerNeedsUpdate)
@@ -362,7 +378,11 @@
     }
     
     //==Post-Init==
-    [self front];
+    if (![window isVisible])
+    {
+        [self front];
+        [parentGroup reorder];
+    }
     _postActivationRequest = YES;
 }
 

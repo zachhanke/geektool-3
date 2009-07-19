@@ -57,17 +57,15 @@
         case ALIGN_RIGHT: [myParagraphStyle setAlignment:NSRightTextAlignment]; break;
         case ALIGN_JUSTIFIED: [myParagraphStyle setAlignment:NSJustifiedTextAlignment]; break;
     }
-    [myParagraphStyle autorelease];
     
-    NSFont *tmpFont = [NSFont fontWithName:[properties objectForKey:@"fontName"] size:[[properties objectForKey:@"fontSize"]floatValue]];    
+    NSFont *tmpFont = [NSFont fontWithName:[properties objectForKey:@"fontName"] size:[[properties objectForKey:@"fontSize"]floatValue]];   
     
+    NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:myParagraphStyle,NSParagraphStyleAttributeName,tmpFont,NSFontAttributeName,[NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"textColor"]],NSForegroundColorAttributeName,[defShadow autorelease],NSShadowAttributeName,nil];
     
-    NSDictionary *tmpAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[[myParagraphStyle copy]autorelease],NSParagraphStyleAttributeName,tmpFont,NSFontAttributeName,[NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"textColor"]],NSForegroundColorAttributeName,[defShadow autorelease],NSShadowAttributeName,nil];
-    
-    [self setAttributes:tmpAttributes];
+    [self setAttributes:attrs];
 }
 
-- (void)processAndSetText:(NSString *)newString withEscapes:(BOOL)translateAsciiEscapes
+- (void)processAndSetText:(NSMutableString *)newString withEscapes:(BOOL)translateAsciiEscapes
 {
     // kill \n's at the end of the string (to correct "push up" error on resizing)
     while ([newString length] && [newString characterAtIndex:[newString length] - 1] == 10) [newString deleteCharactersInRange:NSMakeRange([newString length] - 1,1)];

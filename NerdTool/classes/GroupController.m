@@ -8,8 +8,7 @@
 
 #import "GroupController.h"
 #import "NTGroup.h"
-#import "GTLog.h"
-#import "NTLogProcess.h"
+#import "NTLogProtocol.h"
 
 #import "NSArrayController+Duplicate.h"
 
@@ -59,6 +58,18 @@
 }
 
 #pragma mark UI
+- (IBAction)showGroupsCustomization:(id)sender
+{
+    [NSApp beginSheet:groupsSheet modalForWindow:[NSApp mainWindow] modalDelegate:nil didEndSelector:nil contextInfo:nil];
+}
+
+- (IBAction)groupsSheetClose:(id)sender
+{    
+    [groupsSheet orderOut:self];
+    [NSApp endSheet:groupsSheet];
+}
+
+#pragma mark Content Remove/Dupe
 - (void)removeObjectsAtArrangedObjectIndexes:(NSIndexSet *)indexes
 {
     oldSelectedGroup = nil;
@@ -70,16 +81,6 @@
     [self duplicateSelection];
 }
 
-- (IBAction)showGroupsCustomization:(id)sender
-{
-    [NSApp beginSheet:groupsSheet modalForWindow:[NSApp mainWindow] modalDelegate:nil didEndSelector:nil contextInfo:nil];
-}
-
-- (IBAction)groupsSheetClose:(id)sender
-{    
-    [groupsSheet orderOut:self];
-    [NSApp endSheet:groupsSheet];
-}
 #pragma mark Drag n' Drop Stuff
 // thanks to mmalc for figuring most of this stuff out for me (and just being amazing)
 - (BOOL)tableView:(NSTableView *)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard

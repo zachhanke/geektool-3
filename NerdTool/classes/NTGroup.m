@@ -7,9 +7,9 @@
 //
 
 #import "NTGroup.h"
-#import "GTLog.h"
-#import "NTLogProcess.h"
 #import "NTLogProtocol.h"
+
+#import "NSDictionary+IntAndBoolAccessors.h"
 
 // Organizes and holds instantiated GTLogs
 @implementation NTGroup
@@ -55,7 +55,7 @@
 - (void)reorder
 {
     NSEnumerator *e = [[self logs]reverseObjectEnumerator];
-    for (id<NTLogProtocol> log in e) [log front];
+    for (id<NTLogProtocol> log in e) if ([[log properties]boolForKey:@"enabled"] && [[log active]boolValue]) [log front];
 }
 
 #pragma mark Observing

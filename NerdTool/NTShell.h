@@ -18,6 +18,8 @@
     IBOutlet id refresh;
     IBOutlet id prefsView;
     
+    BOOL _loadedView;
+    
     // Container
     NSMutableDictionary *properties;
     NTGroup *parentGroup;
@@ -51,9 +53,6 @@
 @property (copy) NSArray *_arguments;
 @property (retain) NSTask *_task;
 @property (retain) NSTimer *_timer;
-@property (assign) BOOL timerNeedsUpdate;
-
-//// Container
 
 // Protocol Methods
 - (BOOL)needsDisplayUIBox;
@@ -88,8 +87,6 @@
 // Task
 - (void)updateCommand:(NSTimer*)timer;
 - (void)processNewDataFromTask:(NSNotification*)aNotification;
-// Update
-- (void)updateTextAttributes;
 // Window operations
 - (void)front;
 // Convience

@@ -1,8 +1,8 @@
 #import "NSLogView.h"
 #import "NTGroup.h"
-#import "GTLog.h"
 #import "LogWindow.h"
 #import "LogTextField.h"
+
 #import "defines.h"
 
 #define MoveDragType 2

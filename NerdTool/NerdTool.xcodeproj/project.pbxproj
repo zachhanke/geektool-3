@@ -13,7 +13,6 @@
 		0A904BC3100D8EAC009A2F5E /* AJRScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BA2100D8EAC009A2F5E /* AJRScrollView.m */; };
 		0A904BC4100D8EAC009A2F5E /* GeekToolPrefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BA6100D8EAC009A2F5E /* GeekToolPrefs.m */; };
 		0A904BC5100D8EAC009A2F5E /* GroupController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BA8100D8EAC009A2F5E /* GroupController.m */; };
-		0A904BC6100D8EAC009A2F5E /* GTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BAA100D8EAC009A2F5E /* GTLog.m */; };
 		0A904BC8100D8EAC009A2F5E /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BAD100D8EAC009A2F5E /* LogController.m */; };
 		0A904BC9100D8EAC009A2F5E /* LogTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BAF100D8EAC009A2F5E /* LogTextField.m */; };
 		0A904BCA100D8EAC009A2F5E /* LogWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BB1100D8EAC009A2F5E /* LogWindow.m */; };
@@ -24,7 +23,6 @@
 		0A904BCF100D8EAC009A2F5E /* NTExposeBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BBB100D8EAC009A2F5E /* NTExposeBorder.m */; };
 		0A904BD0100D8EAC009A2F5E /* NTFontDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BBD100D8EAC009A2F5E /* NTFontDisplay.m */; };
 		0A904BD1100D8EAC009A2F5E /* NTGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BBF100D8EAC009A2F5E /* NTGroup.m */; };
-		0A904BD2100D8EAC009A2F5E /* NTLogProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BC1100D8EAC009A2F5E /* NTLogProcess.m */; };
 		0A904BF7100D8F2B009A2F5E /* center.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BD5100D8F2B009A2F5E /* center.png */; };
 		0A904BF8100D8F2B009A2F5E /* corner.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BD6100D8F2B009A2F5E /* corner.tif */; };
 		0A904BF9100D8F2B009A2F5E /* defaultFailure.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BD7100D8F2B009A2F5E /* defaultFailure.png */; };
@@ -48,6 +46,9 @@
 		0AB877ED1011853B0000E274 /* imagePrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AB877EB1011853B0000E274 /* imagePrefs.xib */; };
 		0AB877F0101185590000E274 /* filePrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AB877EE101185590000E274 /* filePrefs.xib */; };
 		0AB877F31011857B0000E274 /* quartzPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AB877F11011857B0000E274 /* quartzPrefs.xib */; };
+		0AB89D191012F9F4006FE649 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 0AB89D181012F9F4006FE649 /* Credits.rtf */; };
+		0AB89D1C1012FC9A006FE649 /* COPYING.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0AB89D1B1012FC9A006FE649 /* COPYING.txt */; };
+		0AB89D381012FD03006FE649 /* logo.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0AB89D371012FD03006FE649 /* logo.icns */; };
 		0ABCBAEA100EEC6100ACC9CB /* ANSIEscapeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ABCBAE8100EEC6100ACC9CB /* ANSIEscapeHelper.m */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -128,6 +129,9 @@
 		0AB877EC1011853B0000E274 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = resources/English.lproj/imagePrefs.xib; sourceTree = "<group>"; };
 		0AB877EF101185590000E274 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = resources/English.lproj/filePrefs.xib; sourceTree = "<group>"; };
 		0AB877F21011857B0000E274 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = resources/English.lproj/quartzPrefs.xib; sourceTree = "<group>"; };
+		0AB89D181012F9F4006FE649 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
+		0AB89D1B1012FC9A006FE649 /* COPYING.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYING.txt; sourceTree = "<group>"; };
+		0AB89D371012FD03006FE649 /* logo.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = logo.icns; path = resources/logo/logo.icns; sourceTree = "<group>"; };
 		0ABCBAE8100EEC6100ACC9CB /* ANSIEscapeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANSIEscapeHelper.m; sourceTree = "<group>"; };
 		0ABCBAE9100EEC6100ACC9CB /* ANSIEscapeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANSIEscapeHelper.h; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -213,10 +217,10 @@
 		0A94855E100C45BA0071EFF9 /* Preferences UI Classes */ = {
 			isa = PBXGroup;
 			children = (
-				0A904BBA100D8EAC009A2F5E /* NTExposeBorder.h */,
-				0A904BBB100D8EAC009A2F5E /* NTExposeBorder.m */,
 				0A904BBC100D8EAC009A2F5E /* NTFontDisplay.h */,
 				0A904BBD100D8EAC009A2F5E /* NTFontDisplay.m */,
+				0A904BBA100D8EAC009A2F5E /* NTExposeBorder.h */,
+				0A904BBB100D8EAC009A2F5E /* NTExposeBorder.m */,
 			);
 			name = "Preferences UI Classes";
 			sourceTree = "<group>";
@@ -298,6 +302,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0AB89D181012F9F4006FE649 /* Credits.rtf */,
+				0AB89D1B1012FC9A006FE649 /* COPYING.txt */,
 				0A904BD5100D8F2B009A2F5E /* center.png */,
 				0A904BD6100D8F2B009A2F5E /* corner.tif */,
 				0A904BD7100D8F2B009A2F5E /* defaultFailure.png */,
@@ -308,6 +314,7 @@
 				0A904BE6100D8F2B009A2F5E /* justified.png */,
 				0A904BE7100D8F2B009A2F5E /* left.png */,
 				0A904BF5100D8F2B009A2F5E /* right.png */,
+				0AB89D371012FD03006FE649 /* logo.icns */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				0A904BDC100D8F2B009A2F5E /* InfoPlist.strings */,
 				0A904BDE100D8F2B009A2F5E /* Localizable.strings */,
@@ -391,6 +398,9 @@
 				0AB877ED1011853B0000E274 /* imagePrefs.xib in Resources */,
 				0AB877F0101185590000E274 /* filePrefs.xib in Resources */,
 				0AB877F31011857B0000E274 /* quartzPrefs.xib in Resources */,
+				0AB89D191012F9F4006FE649 /* Credits.rtf in Resources */,
+				0AB89D1C1012FC9A006FE649 /* COPYING.txt in Resources */,
+				0AB89D381012FD03006FE649 /* logo.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,7 +416,6 @@
 				0A904BC3100D8EAC009A2F5E /* AJRScrollView.m in Sources */,
 				0A904BC4100D8EAC009A2F5E /* GeekToolPrefs.m in Sources */,
 				0A904BC5100D8EAC009A2F5E /* GroupController.m in Sources */,
-				0A904BC6100D8EAC009A2F5E /* GTLog.m in Sources */,
 				0A904BC8100D8EAC009A2F5E /* LogController.m in Sources */,
 				0A904BC9100D8EAC009A2F5E /* LogTextField.m in Sources */,
 				0A904BCA100D8EAC009A2F5E /* LogWindow.m in Sources */,
@@ -417,7 +426,6 @@
 				0A904BCF100D8EAC009A2F5E /* NTExposeBorder.m in Sources */,
 				0A904BD0100D8EAC009A2F5E /* NTFontDisplay.m in Sources */,
 				0A904BD1100D8EAC009A2F5E /* NTGroup.m in Sources */,
-				0A904BD2100D8EAC009A2F5E /* NTLogProcess.m in Sources */,
 				0ABCBAEA100EEC6100ACC9CB /* ANSIEscapeHelper.m in Sources */,
 				0AB8768D101038510000E274 /* NTShell.m in Sources */,
 			);
