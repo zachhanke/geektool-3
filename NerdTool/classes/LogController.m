@@ -12,6 +12,8 @@
 #import "LogWindow.h"
 #import "NTLog.h"
 #import "NTShell.h"
+#import "NTFile.h"
+#import "NTImage.h"
 
 #import "defines.h"
 #import "NSIndexSet+CountOfIndexesInRange.h"
@@ -53,6 +55,14 @@
 }
 
 #pragma mark Content Add/Dupe/Remove
+- (IBAction)insertLog:(id)sender
+{
+    _userInsert = YES;
+    if ([[sender title]isEqualToString:@"Shell"]) [self insertObject:[[NTShell alloc]init] atArrangedObjectIndex:0];
+    else if ([[sender title]isEqualToString:@"File"]) [self insertObject:[[NTFile alloc]init] atArrangedObjectIndex:0];
+    else if ([[sender title]isEqualToString:@"Image"]) [self insertObject:[[NTImage alloc]init] atArrangedObjectIndex:0];
+}
+
 - (void)removeObjectsAtArrangedObjectIndexes:(NSIndexSet *)indexes
 {
     _oldSelectedLog = nil;
@@ -63,12 +73,6 @@
 {
     _userInsert = YES;
     [self duplicateSelection];
-}
-
-- (IBAction)insertLog:(id)sender
-{
-    _userInsert = YES;
-    if ([[sender title]isEqualToString:@"Shell"]) [self insertObject:[[NTShell alloc]init] atArrangedObjectIndex:0];
 }
 
 - (void)insertObject:(id)object atArrangedObjectIndex:(NSUInteger)index

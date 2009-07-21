@@ -8,7 +8,6 @@
     NSRect windowFrame;
     
     IBOutlet id logWindowController;
-    IBOutlet id picture;
     IBOutlet id text;
     
     int highlighted;

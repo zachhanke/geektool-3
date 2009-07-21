@@ -86,4 +86,9 @@
     return textView;
 }
 
+- (NSImageView*)imageView
+{
+    return imageView;
+}
+
 @end

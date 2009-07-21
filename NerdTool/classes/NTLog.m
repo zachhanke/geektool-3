@@ -246,6 +246,7 @@
     [self addObserver:self forKeyPath:@"properties.w" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.h" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.alwaysOnTop" options:0 context:NULL];        
+    [self addObserver:self forKeyPath:@"properties.shadowWindow" options:0 context:NULL];
     
     if (![self needsDisplayUIBox]) return;
     [self addObserver:self forKeyPath:@"properties.font" options:0 context:NULL];
@@ -254,7 +255,6 @@
     [self addObserver:self forKeyPath:@"properties.wrap" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.alignment" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.shadowText" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"properties.shadowWindow" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.useAsciiEscapes" options:0 context:NULL];
 }
 
@@ -271,6 +271,7 @@
     [self removeObserver:self forKeyPath:@"properties.w"];
     [self removeObserver:self forKeyPath:@"properties.h"];
     [self removeObserver:self forKeyPath:@"properties.alwaysOnTop"];
+    [self removeObserver:self forKeyPath:@"properties.shadowWindow"];
     
     if (![self needsDisplayUIBox]) return;
     [self removeObserver:self forKeyPath:@"properties.font"];
@@ -279,7 +280,6 @@
     [self removeObserver:self forKeyPath:@"properties.wrap"];
     [self removeObserver:self forKeyPath:@"properties.alignment"];
     [self removeObserver:self forKeyPath:@"properties.shadowText"];
-    [self removeObserver:self forKeyPath:@"properties.shadowWindow"];
     [self removeObserver:self forKeyPath:@"properties.useAsciiEscapes"];
 }
 

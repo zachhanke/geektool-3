@@ -67,6 +67,8 @@
 		0AB8A1ED10154CBA006FE649 /* NTRunOnly.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8A1EB10154CBA006FE649 /* NTRunOnly.m */; };
 		0AB8A1F010154CE1006FE649 /* ANSIEscapeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8A1EE10154CE1006FE649 /* ANSIEscapeHelper.m */; };
 		0AB8A1F310154CF0006FE649 /* NTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8A1F110154CF0006FE649 /* NTLog.m */; };
+		0AB8A21D1015FCA8006FE649 /* NTImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8A21C1015FCA8006FE649 /* NTImage.m */; };
+		0AB8A22C101604D3006FE649 /* imageWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AB8A22A101604D3006FE649 /* imageWindow.xib */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -159,6 +161,9 @@
 		0AB8A1EF10154CE1006FE649 /* ANSIEscapeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ANSIEscapeHelper.h; path = classes/ANSIEscapeHelper.h; sourceTree = "<group>"; };
 		0AB8A1F110154CF0006FE649 /* NTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTLog.m; path = classes/NTLog.m; sourceTree = "<group>"; };
 		0AB8A1F210154CF0006FE649 /* NTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTLog.h; path = classes/NTLog.h; sourceTree = "<group>"; };
+		0AB8A21B1015FCA8006FE649 /* NTImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTImage.h; sourceTree = "<group>"; };
+		0AB8A21C1015FCA8006FE649 /* NTImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTImage.m; sourceTree = "<group>"; };
+		0AB8A22B101604D3006FE649 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = resources/English.lproj/imageWindow.xib; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -262,6 +267,8 @@
 				0AB8A1E510154C9F006FE649 /* NTShell.m */,
 				0AB8A1E810154C9F006FE649 /* NTFile.h */,
 				0AB8A1E710154C9F006FE649 /* NTFile.m */,
+				0AB8A21B1015FCA8006FE649 /* NTImage.h */,
+				0AB8A21C1015FCA8006FE649 /* NTImage.m */,
 			);
 			name = "Log Types";
 			sourceTree = "<group>";
@@ -347,6 +354,7 @@
 				0AB877EE101185590000E274 /* filePrefs.xib */,
 				0AB877F11011857B0000E274 /* quartzPrefs.xib */,
 				0AB89EED1014A5C4006FE649 /* NerdToolRO-Info.plist */,
+				0AB8A22A101604D3006FE649 /* imageWindow.xib */,
 			);
 			name = NerdTool;
 			sourceTree = "<group>";
@@ -494,6 +502,7 @@
 				0AB89D191012F9F4006FE649 /* Credits.rtf in Resources */,
 				0AB89D1C1012FC9A006FE649 /* COPYING.txt in Resources */,
 				0AB89D381012FD03006FE649 /* logo.icns in Resources */,
+				0AB8A22C101604D3006FE649 /* imageWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -539,6 +548,7 @@
 				0AB8A1ED10154CBA006FE649 /* NTRunOnly.m in Sources */,
 				0AB8A1F010154CE1006FE649 /* ANSIEscapeHelper.m in Sources */,
 				0AB8A1F310154CF0006FE649 /* NTLog.m in Sources */,
+				0AB8A21D1015FCA8006FE649 /* NTImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -628,6 +638,14 @@
 				0AB877F21011857B0000E274 /* English */,
 			);
 			name = quartzPrefs.xib;
+			sourceTree = "<group>";
+		};
+		0AB8A22A101604D3006FE649 /* imageWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0AB8A22B101604D3006FE649 /* English */,
+			);
+			name = imageWindow.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

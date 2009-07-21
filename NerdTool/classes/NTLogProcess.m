@@ -163,7 +163,6 @@
 
 - (void)updateWindow
 {
-    @public
     //==Pre-init==    
     [window setFrame:[self screenToRect:[self rect]] display:NO];
     

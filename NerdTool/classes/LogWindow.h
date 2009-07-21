@@ -10,6 +10,7 @@
     IBOutlet id textView;
     IBOutlet id scrollView;
     IBOutlet id logView;
+    IBOutlet id imageView;
     
     NTLog *parentLog;
 }
@@ -24,4 +25,5 @@
 - (void)setTextBackgroundColor:(NSColor*)color;
 - (void)setTextRect:(NSRect)rect;
 - (LogTextField*)textView;
+- (NSImageView*)imageView;
 @end
