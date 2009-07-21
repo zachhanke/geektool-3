@@ -178,9 +178,7 @@
     [NSApp endSheet:sheet];
     if (returnCode == NSOKButton)
     {
-        if (![[sheet filenames]count]) return;
-        NSString *fileToOpen = [[sheet filenames]objectAtIndex:0];
-        
+        if (![[sheet filenames]count]) return;        
         [[self properties]setObject:[[[sheet URLs]objectAtIndex:0]absoluteString] forKey:@"imageURL"];
     }
 }
