@@ -4,6 +4,7 @@
 
 @class LogTextField;
 @class NTLog;
+@class AIQuartzView;
 
 @interface LogWindow : NSWindow
 {
@@ -11,6 +12,7 @@
     IBOutlet id scrollView;
     IBOutlet id logView;
     IBOutlet id imageView;
+    IBOutlet id quartzView;
     
     NTLog *parentLog;
 }
@@ -26,4 +28,5 @@
 - (void)setTextRect:(NSRect)rect;
 - (LogTextField*)textView;
 - (NSImageView*)imageView;
+- (AIQuartzView*)quartzView;
 @end

@@ -14,6 +14,7 @@
 #import "NTShell.h"
 #import "NTFile.h"
 #import "NTImage.h"
+#import "NTQuartz.h"
 
 #import "defines.h"
 #import "NSIndexSet+CountOfIndexesInRange.h"
@@ -58,13 +59,19 @@
 - (IBAction)insertLog:(id)sender
 {
     _userInsert = YES;
-    if ([[sender title]isEqualToString:@"Shell"]) [self insertObject:[[NTShell alloc]init] atArrangedObjectIndex:0];
-    else if ([[sender title]isEqualToString:@"File"]) [self insertObject:[[NTFile alloc]init] atArrangedObjectIndex:0];
-    else if ([[sender title]isEqualToString:@"Image"]) [self insertObject:[[NTImage alloc]init] atArrangedObjectIndex:0];
+    
+    int insertionIndex = 0;
+    if ([[self selectedObjects]count] > 0) insertionIndex = [[self selectionIndexes]firstIndex];
+        
+    if ([[sender title]isEqualToString:@"Shell"]) [self insertObject:[[NTShell alloc]init] atArrangedObjectIndex:insertionIndex];
+    else if ([[sender title]isEqualToString:@"File"]) [self insertObject:[[NTFile alloc]init] atArrangedObjectIndex:insertionIndex];
+    else if ([[sender title]isEqualToString:@"Image"]) [self insertObject:[[NTImage alloc]init] atArrangedObjectIndex:insertionIndex];
+    else if ([[sender title]isEqualToString:@"Quartz"]) [self insertObject:[[NTQuartz alloc]init] atArrangedObjectIndex:insertionIndex];
 }
 
 - (void)removeObjectsAtArrangedObjectIndexes:(NSIndexSet *)indexes
 {
+    [[_oldSelectedLog unloadPrefsViewAndUnbind]removeFromSuperview];
     _oldSelectedLog = nil;
     [super removeObjectsAtArrangedObjectIndexes:indexes];
 }
@@ -101,49 +108,6 @@
     [parentGroup reorder];
 }
 
-#pragma mark File handling
-- (IBAction)fileChoose:(id)sender
-{
-    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
-    [openPanel setAllowsMultipleSelection:NO];
-    [openPanel setCanChooseFiles:YES];
-    
-    int selectedLogType = [[[[[self selectedObjects]objectAtIndex:0]properties]objectForKey:@"type"]intValue];
-    if (selectedLogType == TYPE_FILE)
-        [openPanel beginSheetForDirectory:@"/var/log/" file:@"system.log" types:nil modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
-    else if (selectedLogType == TYPE_IMAGE)
-        [openPanel beginSheetForDirectory:[[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,NSUserDomainMask,YES) objectAtIndex:0]stringByAppendingPathComponent:[[NSProcessInfo processInfo]processName]] file:nil types:nil modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
-    else if (selectedLogType == TYPE_QUARTZ)
-        [openPanel beginSheetForDirectory:[[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,NSUserDomainMask,YES) objectAtIndex:0]stringByAppendingPathComponent:[[NSProcessInfo processInfo]processName]] file:nil types:[NSArray arrayWithObjects:@"qtz",nil] modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
-
-}
-
-- (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo
-{
-    [NSApp endSheet:sheet];
-    if (returnCode == NSOKButton)
-    {
-        if (![[sheet filenames]count]) return;
-        NSString *fileToOpen = [[sheet filenames]objectAtIndex:0];
-        
-        NTLog *selectedLog = [[self selectedObjects]objectAtIndex:0];
-        int selectedLogType = [[[[[self selectedObjects]objectAtIndex:0]properties]objectForKey:@"type"]intValue];
-
-        if (selectedLogType == TYPE_FILE)
-            [[selectedLog properties]setObject:fileToOpen forKey:@"file"];
-        else if (selectedLogType == TYPE_IMAGE)
-            [[selectedLog properties]setObject:[[[sheet URLs]objectAtIndex:0]absoluteString] forKey:@"imageURL"];
-        else if (selectedLogType == TYPE_QUARTZ)
-            [[selectedLog properties]setObject:fileToOpen forKey:@"quartzFile"];
-
-    }
-}
-
-- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
-{
-    if (returnCode == NSAlertDefaultReturn) [sheet close];
-}
-
 #pragma mark Observing
 // based on selection, highlight/dehighlight the log window
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -151,13 +115,39 @@
     // when a selection is changed
     if([keyPath isEqualToString:@"selectedObjects"])
     {
+        if ([[defaultPrefsView superview]isEqualTo:prefsView]) [defaultPrefsView removeFromSuperview];
+        
         if (_oldSelectedLog != nil)
         {
             [_oldSelectedLog setHighlighted:NO from:self];
             [[_oldSelectedLog unloadPrefsViewAndUnbind]removeFromSuperview];
         }
         
-        if (![[self selectedObjects]count]) return;
+        if (![[self selectedObjects]count])
+        {
+            [defaultPrefsViewText setStringValue:@"No Selection"];
+            [prefsView addSubview:defaultPrefsView];
+            return;
+        }
+        else if ([[self selectedObjects]count] > 1)
+        {
+            BOOL useSameView = YES;
+            for (NTLog *log in [self selectedObjects])
+            {
+                if (![[[[self selectedObjects]objectAtIndex:0]logTypeName]isEqualToString:[log logTypeName]])
+                {
+                    useSameView = NO;
+                    break;
+                }
+            }
+            
+            if (!useSameView)
+            {
+                [defaultPrefsViewText setStringValue:@"Multiple Values"];
+                [prefsView addSubview:defaultPrefsView];
+                return;            
+            }
+        }
         
         _oldSelectedLog = [[self selectedObjects]objectAtIndex:0];
         [prefsView addSubview:[_oldSelectedLog loadPrefsViewAndBind:self]];

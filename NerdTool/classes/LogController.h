@@ -16,6 +16,8 @@
     BOOL _userInsert;
     
     IBOutlet id prefsView;
+    IBOutlet id defaultPrefsView;
+    IBOutlet id defaultPrefsViewText;
     
     // drag n drop
     NSString *MovedRowsType;
@@ -35,10 +37,6 @@
 - (IBAction)insertLog:(id)sender;
 - (void)insertObject:(id)object atArrangedObjectIndex:(NSUInteger)index;
 - (void)insertObjects:(NSArray *)objects atArrangedObjectIndexes:(NSIndexSet *)indexes;
-// File handling
-- (IBAction)fileChoose:(id)sender;
-- (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo;
-- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 // Observing
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context;
 // Drag n' Drop Stuff

@@ -128,6 +128,8 @@
 #pragma mark Window Management
 - (void)createWindow
 {        
+    [super createWindow];
+
     if ([[properties objectForKey:@"file"]isEqual:@""]) return;
     
     // Read file to 50 lines. The -F file makes sure the file keeps getting read even if it hits the EOF or the file name is changed            
@@ -145,8 +147,6 @@
     [[pipe fileHandleForReading]waitForDataInBackgroundAndNotify];
     
     [task launch];
-    
-    [super createWindow];
 }
 
 - (void)updateWindow

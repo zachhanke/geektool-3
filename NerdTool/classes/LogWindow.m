@@ -91,4 +91,10 @@
     return imageView;
 }
 
+- (AIQuartzView*)quartzView
+{
+    return quartzView;
+}
+
+
 @end
