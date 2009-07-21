@@ -19,8 +19,23 @@
 - (void)awakeFromNib
 {
     highlighted = NO;
-    [self setNextResponder: [NSApplication sharedApplication]];
+    [[NSUserDefaults standardUserDefaults]addObserver:self forKeyPath:@"selectionColor" options:0 context:nil];
+    [self setNextResponder:[NSApplication sharedApplication]];
 }
+
+- (void)dealloc
+{
+    [[NSUserDefaults standardUserDefaults]removeObserver:self forKeyPath:@"selectionColor"];
+    
+    [super dealloc];
+}
+
+#pragma mark Observing
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"selectionColor"]) [self setNeedsDisplay:YES];
+}
+
 
 #pragma mark View Attributes
 // lets us so user can move window immediately, instead of clicking on it to make it "active" and then again to actually move it
@@ -38,22 +53,19 @@
 
 - (BOOL)acceptsFirstResponder
 {
-    if (highlighted)
-        return YES;
+    if (highlighted) return YES;
     return NO;
 }
 
 - (BOOL)resignFirstResponder
 {
-    if (highlighted)
-        return YES;
+    if (highlighted) return YES;
     return NO;
 }
 
 - (BOOL)becomeFirstResponder
 {
-    if (highlighted)
-        return YES;
+    if (highlighted) return YES;
     return NO;
 }
 
@@ -111,9 +123,6 @@
                 
         [window setFrame:newWindowFrame display:YES animate:NO];
         [[NSNotificationCenter defaultCenter]postNotificationName:NSWindowDidResizeNotification object:window];
-        
-        int type = [[[[(LogWindow*)[logWindowController window]parentLog]properties]valueForKey:@"type"]intValue];
-        if (type == TYPE_SHELL || type == TYPE_FILE) [[(LogWindow*)[logWindowController window]textView]scrollEnd];
     }
     else
     {
@@ -182,7 +191,7 @@
         [color set];
         [bp fill];
         
-        [[NSImage imageNamed:@"corner"] drawInRect:(NSRect){{[self bounds].size.width - 11,0},{11,11}} fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
+        [[NSImage imageNamed:@"corner"]drawInRect:(NSRect){{[self bounds].size.width - 11,0},{11,11}} fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
     }
     else
     {
@@ -199,7 +208,6 @@
 - (void)setHighlighted:(BOOL)flag
 {
     highlighted = flag;
-    //if (highlighted) [[self window] makeKeyWindow];
     [self setNeedsDisplay:YES];
 }
 @end

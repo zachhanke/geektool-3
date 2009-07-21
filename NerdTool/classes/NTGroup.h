@@ -7,7 +7,6 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "NTLogProtocol.h"
 
 @interface NTGroup : NSObject <NSCoding, NSCopying, NSMutableCopying>
 {

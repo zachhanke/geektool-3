@@ -9,9 +9,9 @@
 #import "LogController.h"
 #import "GroupController.h"
 #import "NTGroup.h"
-#import "NTShell.h"
 #import "LogWindow.h"
-#import "NTLogProtocol.h"
+#import "NTLog.h"
+#import "NTShell.h"
 
 #import "defines.h"
 #import "NSIndexSet+CountOfIndexesInRange.h"
@@ -122,7 +122,7 @@
         if (![[sheet filenames]count]) return;
         NSString *fileToOpen = [[sheet filenames]objectAtIndex:0];
         
-        id<NTLogProtocol> selectedLog = [[self selectedObjects]objectAtIndex:0];
+        NTLog *selectedLog = [[self selectedObjects]objectAtIndex:0];
         int selectedLogType = [[[[[self selectedObjects]objectAtIndex:0]properties]objectForKey:@"type"]intValue];
 
         if (selectedLogType == TYPE_FILE)

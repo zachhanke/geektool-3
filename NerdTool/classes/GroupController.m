@@ -8,7 +8,6 @@
 
 #import "GroupController.h"
 #import "NTGroup.h"
-#import "NTLogProtocol.h"
 
 #import "NSArrayController+Duplicate.h"
 

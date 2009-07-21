@@ -1,9 +1,9 @@
 /* LogWindow */
 
 #import <Cocoa/Cocoa.h>
-#import "NTLogProtocol.h"
 
 @class LogTextField;
+@class NTLog;
 
 @interface LogWindow : NSWindow
 {
@@ -11,9 +11,9 @@
     IBOutlet id scrollView;
     IBOutlet id logView;
     
-    id<NTLogProtocol> *parentLog;
+    NTLog *parentLog;
 }
-@property (assign) id<NTLogProtocol> *parentLog;
+@property (assign) NTLog *parentLog;
 
 - (id)initWithContentRect:(NSRect)contentRect styleMask:(unsigned int)styleMask backing:(NSBackingStoreType)backingType defer:(BOOL)flag;
 - (BOOL)canBecomeKeyWindow;

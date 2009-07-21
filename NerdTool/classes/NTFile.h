@@ -1,21 +1,20 @@
 //
-//  NTShell.h
+//  NTFile.h
 //  NerdTool
 //
-//  Created by Kevin Nygaard on 7/16/09.
+//  Created by Kevin Nygaard on 7/20/09.
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
-#import "NTLogProtocol.h"
 
 @class LogWindow;
 @class NTGroup;
+@class NTShell;
 
-@interface NTShell : NSObject <NTLogProtocol>
+@interface NTFile : NSObject
 {
-    IBOutlet id command;
-    IBOutlet id refresh;
+    IBOutlet id file;
     IBOutlet id prefsView;
     
     BOOL _loadedView;
@@ -38,7 +37,7 @@
     NSTask *_task;
     NSTimer *_timer;
     
-    BOOL _timerNeedsUpdate;
+    BOOL _timerNeedsUpdate;    
 }
 // Container
 @property (retain) NSMutableDictionary *properties;

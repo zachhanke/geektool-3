@@ -1,12 +1,12 @@
 //
-//  NTShell.m
+//  NTFile.m
 //  NerdTool
 //
-//  Created by Kevin Nygaard on 7/16/09.
+//  Created by Kevin Nygaard on 7/20/09.
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import "NTShell.h"
+#import "NTFile.h"
 #import "LogWindow.h"
 #import "LogTextField.h"
 #import "NTGroup.h"
@@ -14,7 +14,7 @@
 #import "defines.h"
 #import "NSDictionary+IntAndBoolAccessors.h"
 
-@implementation NTShell
+@implementation NTFile
 
 @synthesize properties;
 @synthesize parentGroup;
@@ -37,14 +37,12 @@
 - (NSView *)loadPrefsViewAndBind:(id)bindee
 {
     if (_loadedView) return nil;
-    if (!prefsView) [NSBundle loadNibNamed:@"shellPrefs" owner:self];
+    if (!prefsView) [NSBundle loadNibNamed:@"filePrefs" owner:self];
     
     // These can get turned off if you have the text field selected, and then change logs. When you go back to that log, things are screwed up. The setEditable: fixes this (as well as makes them tasty :P)
-    [command setEditable:YES];
-    [refresh setEditable:YES];
-
-    [command bind:@"value" toObject:bindee withKeyPath:@"selection.properties.command" options:nil];
-    [refresh bind:@"value" toObject:bindee withKeyPath:@"selection.properties.refresh" options:nil];
+    [file setEditable:YES];
+    
+    [file bind:@"value" toObject:bindee withKeyPath:@"selection.properties.refresh" options:nil];
     
     _loadedView = YES;
     return prefsView;
@@ -53,8 +51,7 @@
 - (NSView *)unloadPrefsViewAndUnbind
 {
     if (!_loadedView) return nil;
-    [command unbind:@"value"];
-    [refresh unbind:@"value"];
+    [file unbind:@"value"];
     
     _loadedView = NO;
     return prefsView;
@@ -80,18 +77,16 @@
 {    
     NSData *textColorData = [NSArchiver archivedDataWithRootObject:[NSColor blackColor]];
     NSData *backgroundColorData = [NSArchiver archivedDataWithRootObject:[NSColor clearColor]]; 
+    NSData *font = [NSArchiver archivedDataWithRootObject:[NSFont systemFontOfSize:[NSFont systemFontSize]]];
     
     NSMutableDictionary *defaultProperties = [[[NSMutableDictionary alloc]initWithObjectsAndKeys:
-                                               NSLocalizedString(@"New log",nil),@"name",
-                                               [NSNumber numberWithInt:TYPE_SHELL],@"type",
+                                               NSLocalizedString(@"New file log",nil),@"name",
+                                               [NSNumber numberWithInt:TYPE_FILE],@"type",
                                                [NSNumber numberWithBool:YES],@"enabled",
                                                NSLocalizedString(@"Default",nil),@"group",
                                                
-                                               @"Monaco",@"fontName",
-                                               [NSNumber numberWithFloat:12],@"fontSize",
-                                               
-                                               @"date",@"command",
-                                               [NSNumber numberWithInt:10],@"refresh",
+                                               font,@"font",
+                                               @"",@"file",
                                                
                                                textColorData,@"textColor",
                                                backgroundColorData,@"backgroundColor",
@@ -109,7 +104,7 @@
                                                [NSNumber numberWithBool:NO],@"alwaysOnTop",
                                                nil]autorelease];    
     
-    return [self initWithProperties:defaultProperties];;
+    return [self initWithProperties:defaultProperties];
 }    
 
 - (void)dealloc
@@ -129,11 +124,9 @@
     [self addObserver:self forKeyPath:@"properties.name" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.enabled" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.group" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"properties.fontName" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"properties.fontSize" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.font" options:0 context:NULL];
     
-    [self addObserver:self forKeyPath:@"properties.command" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"properties.refresh" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.file" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.textColor" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.backgroundColor" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.wrap" options:0 context:NULL];
@@ -156,11 +149,9 @@
     [self removeObserver:self forKeyPath:@"properties.name"];
     [self removeObserver:self forKeyPath:@"properties.enabled"];
     [self removeObserver:self forKeyPath:@"properties.group"];
-    [self removeObserver:self forKeyPath:@"properties.fontName"];
-    [self removeObserver:self forKeyPath:@"properties.fontSize"];
+    [self removeObserver:self forKeyPath:@"properties.font"];
     
-    [self removeObserver:self forKeyPath:@"properties.command"];
-    [self removeObserver:self forKeyPath:@"properties.refresh"];
+    [self removeObserver:self forKeyPath:@"properties.file"];
     [self removeObserver:self forKeyPath:@"properties.textColor"];
     [self removeObserver:self forKeyPath:@"properties.backgroundColor"];
     [self removeObserver:self forKeyPath:@"properties.wrap"];
@@ -285,6 +276,8 @@
         // this happens on init, which screws things up
         if (!_isBeingDragged) return;
         
+        if ([[notification name]isEqualToString:NSWindowDidResizeNotification]) [[window textView]scrollEnd];
+        
         NSRect newCoords = [self screenToRect:[[notification object]frame]];
         [properties setValue:[NSNumber numberWithInt:NSMinX(newCoords)] forKey:@"x"];
         [properties setValue:[NSNumber numberWithInt:NSMinY(newCoords)] forKey:@"y"];
@@ -322,7 +315,7 @@
     
     [self set_timer:[NSTimer scheduledTimerWithTimeInterval:refreshTime target:self selector:@selector(updateCommand:) userInfo:nil repeats:timerRepeats]];
     [_timer fire];
-
+    
     if (timerRepeats) [self release]; // since timer repeats, self is retained. we don't want this
     else [self set_timer:nil];
     _timerNeedsUpdate = NO;
@@ -337,8 +330,27 @@
 }
 
 - (void)createWindow
-{        
+{
     [window setHasShadow:[[self properties]boolForKey:@"shadowWindow"]];
+
+    if ([[properties objectForKey:@"file"]isEqual:@""]) return;
+    [self set_timer:nil];
+    
+    // Read file to 50 lines. The -F file makes sure the file keeps getting read even if it hits the EOF or the file name is changed            
+    [self set_task:[[[NSTask alloc]init]autorelease]];
+    NSPipe *pipe = [NSPipe pipe];
+    
+    [_task setLaunchPath:@"/usr/bin/tail"];
+    [_task setArguments:[NSArray arrayWithObjects:@"-n",@"50",@"-F",[properties objectForKey:@"file"],nil]];
+    [_task setEnvironment:_env];
+    [_task setStandardOutput:pipe];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleReadCompletionNotification object:[pipe fileHandleForReading]];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleDataAvailableNotification object:[pipe fileHandleForReading]];
+    
+    [[pipe fileHandleForReading]waitForDataInBackgroundAndNotify];
+    
+    [_task launch];
 }
 
 - (void)updateWindow
@@ -351,23 +363,15 @@
     tmpRect.origin.y = 0;
     [window setTextRect:tmpRect]; 
     
-    [window setLevel:(([[self properties]integerForKey:@"alwaysOnTop"])?[[self properties]integerForKey:@"alwaysOnTop"]:kCGDesktopWindowLevel)];
-    [window setSticky:(![[self properties]boolForKey:@"alwaysOnTop"])];
+    [window setLevel:[[self properties]integerForKey:@"alwaysOnTop"]?[[self properties]integerForKey:@"alwaysOnTop"]:kCGDesktopWindowLevel];
+    [window setSticky:![[self properties]boolForKey:@"alwaysOnTop"]];
     
     //==Init==
     [window setTextBackgroundColor:[NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"backgroundColor"]]];
     [[window textView]updateTextAttributesUsingProps:properties];
+    
     if (![properties boolForKey:@"useAsciiEscapes"]) [[window textView]applyAttributes:[[window textView]attributes]];
-    else
-    {
-        NSMutableAttributedString *attrStr = [[[[window textView]attributedString]mutableCopy]autorelease];
-        for (NSString *key in [[window textView]attributes])
-        {
-            if ([key isEqualToString:NSForegroundColorAttributeName]) continue;
-            [attrStr addAttribute:key value:[[[window textView]attributes] valueForKey:key] range:NSMakeRange(0,[[attrStr string]length])];
-        }
-        [[[window textView]textStorage]setAttributedString:attrStr];
-    }
+    else [[[window textView]textStorage]setAttributedString:[[window textView]combineAttributes:[[window textView]attributes] withAttributedString:[[window textView]attributedString]]];
     
     if (_timerNeedsUpdate)
     {
@@ -469,7 +473,7 @@
 
 - (NSString*)description
 {
-    return [NSString stringWithFormat: @"Log:[%@]%@",[[[self properties]objectForKey:@"enabled"]boolValue]?@"X":@" ",[[self properties]objectForKey:@"name"]];
+    return [NSString stringWithFormat: @"Log (Shell):[%@]%@",[[[self properties]objectForKey:@"enabled"]boolValue]?@"X":@" ",[[self properties]objectForKey:@"name"]];
 }
 
 #pragma mark  

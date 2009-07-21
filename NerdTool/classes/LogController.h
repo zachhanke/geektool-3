@@ -7,9 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "NTLogProtocol.h"
 
-@class GTLog;
+@class NTLog;
 
 @interface LogController : NSArrayController
 {
@@ -24,7 +23,7 @@
     IBOutlet id tableView;
 
     // observing
-    id<NTLogProtocol> _oldSelectedLog;
+    NTLog *_oldSelectedLog;
 }
 - (void)awakeFromNib;
 - (void)dealloc;

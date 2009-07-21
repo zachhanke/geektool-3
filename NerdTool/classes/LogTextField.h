@@ -20,6 +20,7 @@
 - (void)applyAttributes:(NSDictionary *)attrs;
 - (void)updateTextAttributesUsingProps:(NSDictionary *)properties;
 - (void)processAndSetText:(NSMutableString *)newString withEscapes:(BOOL)translateAsciiEscapes;
+- (NSAttributedString *)combineAttributes:(NSDictionary *)attrs withAttributedString:(NSAttributedString *)attributedString;
 // Text Actions
 - (void)scrollEnd;
 // Attributes

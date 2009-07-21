@@ -7,8 +7,7 @@
 //
 
 #import "NTFontDisplay.h"
-#import "NTLogProtocol.h"
-
+#import "NTLog.h"
 #import "defines.h"
 
 @implementation NTFontDisplay
@@ -18,63 +17,81 @@
 }
 
 - (void)drawRect:(NSRect)rect
-{        
-    if (![[logController selectedObjects]count])
-    {
-        NSRect myBounds = [self bounds];
+{   
+    NSFont *font = [NSFont systemFontOfSize:20.0];
+    NSColor *backgroundColor = [NSColor blackColor];
+    NSColor *textColor = [NSColor whiteColor];
+    NSShadow *defShadow = nil;    
+    NSString *stringToPrint = [NSString stringWithString:NSLocalizedString(@"No Selection",nil)];
+    BOOL printLabel = NO;
+    
+    if ([[logController selectedObjects]count])
+    {    
+        printLabel = YES;
+        NTLog *firstLog = [[logController selectedObjects]objectAtIndex:0];
 
-        NSDrawLightBezel(myBounds,myBounds);
-        
-        [[NSColor blackColor]set];
-        NSRectFill(NSInsetRect(myBounds,2,2));
-        
-        NSFont *defaultFont = [NSFont systemFontOfSize:20.0];
-        NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:defaultFont,NSFontAttributeName,[NSColor whiteColor],NSForegroundColorAttributeName,nil];
-        NSAttributedString *attrString = [[NSAttributedString alloc]initWithString:NSLocalizedString(@"No Selection",nil) attributes:attrsDictionary];
-        NSSize attrSize = [attrString size];
-        
-        [attrString drawAtPoint:NSMakePoint(((attrSize.width / -2) + myBounds.size.width / 2),(attrSize.height / -2) + (myBounds.size.height / 2))];
-        [attrString release];
-        return;
+        for (NTLog *log in [logController selectedObjects])
+        {        
+            if (![log needsDisplayUIBox])
+            {
+                stringToPrint = [NSString stringWithString:NSLocalizedString(@"Not Applicable",nil)];
+                printLabel = NO;
+                break;
+            }
+            else if(![[[firstLog properties]valueForKey:@"font"]isEqual:[[log properties]valueForKey:@"font"]])
+            {
+                stringToPrint = [NSString stringWithString:NSLocalizedString(@"Multiple Values",nil)];
+                printLabel = NO;
+                break;
+            }
+        }
+        if (printLabel)
+        {
+            font = [NSUnarchiver unarchiveObjectWithData:[[firstLog properties]valueForKey:@"font"]];
+            backgroundColor = [NSUnarchiver unarchiveObjectWithData:[[firstLog properties]valueForKey:@"backgroundColor"]];
+            textColor = [NSUnarchiver unarchiveObjectWithData:[[firstLog properties]valueForKey:@"textColor"]];
+            if ([[[firstLog properties]valueForKey:@"shadowText"]boolValue])
+            {
+                defShadow = [[NSShadow alloc]init];
+                [defShadow setShadowOffset:(NSSize){SHADOW_W,SHADOW_H}];
+                [defShadow setShadowBlurRadius:SHADOW_RADIUS];
+            }
+            stringToPrint = [NSString stringWithFormat:@"%@",[font displayName]];
+        }
     }
     
-    id<NTLogProtocol> selectedLog = [[logController selectedObjects]objectAtIndex:0];
-	
-    NSString *fontName = [[selectedLog properties]valueForKey:@"fontName"];
-	float fontSize = [[[selectedLog properties]valueForKey:@"fontSize"]floatValue];
-	
-    NSFont *font = [NSFont fontWithName:fontName size:fontSize];
-	NSColor *backgroundColor = [NSUnarchiver unarchiveObjectWithData:[[selectedLog properties]valueForKey:@"backgroundColor"]];
-    NSColor *textColor = [NSUnarchiver unarchiveObjectWithData:[[selectedLog properties]valueForKey:@"textColor"]];
-    NSShadow *defShadow = nil;
-    if ([[[selectedLog properties]valueForKey:@"shadowText"]boolValue])
-    {
-        defShadow = [[NSShadow alloc]init];
-        [defShadow setShadowOffset:(NSSize){SHADOW_W,SHADOW_H}];
-        [defShadow setShadowBlurRadius:SHADOW_RADIUS];
-    }
+    // Do the actual drawing
+    NSRect myBounds = [self bounds];
+    NSDrawLightBezel(myBounds,myBounds);
     
+    [backgroundColor set];
+    NSRectFillUsingOperation(NSInsetRect(myBounds,2,2),NSCompositeSourceOver);
     
-	// Do the actual drawing
-	NSRect myBounds = [self bounds];
-	NSDrawLightBezel(myBounds,myBounds);
-    
-	[backgroundColor set];
-	NSRectFillUsingOperation(NSInsetRect(myBounds,2,2),NSCompositeSourceOver);
-	
     NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName,textColor,NSForegroundColorAttributeName,[defShadow autorelease],NSShadowAttributeName,nil];
-    NSString *stringToPrint = [NSString stringWithFormat:@"%@ - %.1fpt",fontName,fontSize];
-	NSAttributedString *attrString = [[NSAttributedString alloc]initWithString:stringToPrint attributes:attrsDictionary];
-	NSSize attrSize = [attrString size];
+    NSAttributedString *attrString = [[[NSAttributedString alloc]initWithString:stringToPrint attributes:attrsDictionary]autorelease];
+    NSSize attrSize = [attrString size];
     
     [attrString drawAtPoint:NSMakePoint(((attrSize.width / -2) + myBounds.size.width / 2),(attrSize.height / -2) + (myBounds.size.height / 2))];
-    [attrString release];
+    
+    if (!printLabel) return;
+    NSDictionary *labelDict = [NSDictionary dictionaryWithObjectsAndKeys:[NSFont labelFontOfSize:[NSFont smallSystemFontSize]],NSFontAttributeName,[NSColor grayColor],NSForegroundColorAttributeName,nil];
+    NSAttributedString *labelString = [[[NSAttributedString alloc]initWithString:[NSString stringWithFormat:@"%@ %.1f pt.",[font displayName],[font pointSize]] attributes:labelDict]autorelease];
+    NSSize labelSize = [labelString size];        
+    
+    NSRect labelBounds = NSInsetRect(NSMakeRect(0,0,myBounds.size.width,labelSize.height + 1),2,2);
+    [[NSColor whiteColor]set];
+    NSRectFill(labelBounds);
+    [labelString drawAtPoint:NSMakePoint(((labelSize.width / -2) + myBounds.size.width / 2),1)];
+    
 }
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
-    id<NTLogProtocol> selectedLog = [[logController selectedObjects]objectAtIndex:0];
-    NSFont *font = [NSFont fontWithName:[[selectedLog properties]objectForKey:@"fontName"] size:[[[selectedLog properties]objectForKey:@"fontSize"]floatValue]];
+    for (NTLog *log in [logController selectedObjects])
+        if (![log needsDisplayUIBox]) return;
+    
+    NTLog *selectedLog = [[logController selectedObjects]objectAtIndex:0];
+    NSFont *font = [NSUnarchiver unarchiveObjectWithData:[[selectedLog properties]valueForKey:@"font"]];
 	if (!font) font = [NSFont systemFontOfSize:[NSFont systemFontSize]];
     
 	[[NSFontManager sharedFontManager]setSelectedFont:font isMultiple:NO];
@@ -87,23 +104,21 @@
 
 - (void)changeFont:(id)sender
 {
-    id<NTLogProtocol> selectedLog = [[logController selectedObjects]objectAtIndex:0];
-    
 	NSFont *selectedFont = [[NSFontManager sharedFontManager]selectedFont];
 	if (!selectedFont) selectedFont = [NSFont systemFontOfSize:[NSFont systemFontSize]];
     
 	NSFont *panelFont = [[NSFontManager sharedFontManager]convertFont:selectedFont];
-	
-	[[selectedLog properties]setValue:[panelFont fontName] forKey:@"fontName"];
-	[[selectedLog properties]setValue:[NSNumber numberWithFloat:[panelFont pointSize]] forKey:@"fontSize"];
+    
+    for (NTLog *log in [logController selectedObjects])
+        [[log properties]setValue:[NSArchiver archivedDataWithRootObject:panelFont] forKey:@"font"];
 }
 
 - (void)awakeFromNib
 {
     [logController addObserver:self forKeyPath:@"selection.properties.textColor" options:0 context:nil];
     [logController addObserver:self forKeyPath:@"selection.properties.backgroundColor" options:0 context:nil];
-    [logController addObserver:self forKeyPath:@"selection.properties.fontName" options:0 context:nil];
-    [logController addObserver:self forKeyPath:@"selection.properties.fontSize" options:0 context:nil];
+    [logController addObserver:self forKeyPath:@"selection.properties.font" options:0 context:nil];
+    [logController addObserver:self forKeyPath:@"selection.properties.shadowText" options:0 context:nil];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -115,8 +130,8 @@
 {
 	[logController removeObserver:self forKeyPath:@"selection.properties.textColor"];
 	[logController removeObserver:self forKeyPath:@"selection.properties.backgroundColor"];
-	[logController removeObserver:self forKeyPath:@"selection.properties.fontName"];
-	[logController removeObserver:self forKeyPath:@"selection.properties.fontSize"];
+	[logController removeObserver:self forKeyPath:@"selection.properties.font"];
+	[logController removeObserver:self forKeyPath:@"selection.properties.shadowText"];
 	
 	[super dealloc];	
 }

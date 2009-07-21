@@ -6,7 +6,6 @@
 //  Copyright (c) 2002 __MyCompanyName__. All rights reserved.
 //
 
-#import <CoreFoundation/CoreFoundation.h>
 #import <Cocoa/Cocoa.h>
 
 @interface GeekToolPrefs : NSObject 

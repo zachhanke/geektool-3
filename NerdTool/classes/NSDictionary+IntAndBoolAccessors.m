@@ -12,12 +12,12 @@
 
 - (int)integerForKey:(NSString *)key
 {
-    return [[self objectForKey:key]intValue];
+    return [[self valueForKey:key]intValue];
 }
 
 - (BOOL)boolForKey:(NSString *)key
 {
-    return [[self objectForKey:key]boolValue];
+    return [[self valueForKey:key]boolValue];
 }
 
 @end

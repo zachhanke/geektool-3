@@ -6,14 +6,10 @@
 //  Copyright (c) 2002 __MyCompanyName__. All rights reserved.
 //
 
-#import <Carbon/Carbon.h>
-
 #import "GeekToolPrefs.h"
 #import "NTGroup.h"
-#import "LogWindow.h"
 #import "NTExposeBorder.h"
 
-#import "defines.h"
 #import "CGSPrivate.h"
 
 @implementation GeekToolPrefs
@@ -23,7 +19,7 @@
 - (id)init
 {
     if (self = [super init])
-    {
+    {        
         groups = [[NSMutableArray alloc]init];
         exposeBorderWindowArray = [[NSMutableArray alloc]init];
         windowControllerArray = [[NSMutableArray alloc]init];

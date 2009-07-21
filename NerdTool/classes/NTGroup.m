@@ -7,7 +7,7 @@
 //
 
 #import "NTGroup.h"
-#import "NTLogProtocol.h"
+#import "NTLog.h"
 
 #import "NSDictionary+IntAndBoolAccessors.h"
 
@@ -55,7 +55,7 @@
 - (void)reorder
 {
     NSEnumerator *e = [[self logs]reverseObjectEnumerator];
-    for (id<NTLogProtocol> log in e) if ([[log properties]boolForKey:@"enabled"] && [[log active]boolValue]) [log front];
+    for (NTLog *log in e) if ([[log properties]boolForKey:@"enabled"] && [[log active]boolValue]) [log front];
 }
 
 #pragma mark Observing

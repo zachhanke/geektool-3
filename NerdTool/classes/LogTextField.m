@@ -58,7 +58,7 @@
         case ALIGN_JUSTIFIED: [myParagraphStyle setAlignment:NSJustifiedTextAlignment]; break;
     }
     
-    NSFont *tmpFont = [NSFont fontWithName:[properties objectForKey:@"fontName"] size:[[properties objectForKey:@"fontSize"]floatValue]];   
+    NSFont *tmpFont = [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"font"]];
     
     NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:myParagraphStyle,NSParagraphStyleAttributeName,tmpFont,NSFontAttributeName,[NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"textColor"]],NSForegroundColorAttributeName,[defShadow autorelease],NSShadowAttributeName,nil];
     
@@ -73,22 +73,25 @@
     if (translateAsciiEscapes)
     {
         ANSIEscapeHelper *ansiEscapeHelper = [[[ANSIEscapeHelper alloc]init]autorelease];
-        NSMutableAttributedString *attrStr = [[ansiEscapeHelper attributedStringWithANSIEscapedString:newString]mutableCopy];
-        
-        // add in attributes (like font and alignment) to colored text
-        for (NSString *key in attributes)
-        {
-            if ([key isEqualToString:NSForegroundColorAttributeName]) continue;
-            [attrStr addAttribute:key value:[attributes valueForKey:key] range:NSMakeRange(0,[[attrStr string]length])];
-        }
-        [[self textStorage]setAttributedString:attrStr];
-        [attrStr release];
+        [[self textStorage]setAttributedString:[self combineAttributes:attributes withAttributedString:[ansiEscapeHelper attributedStringWithANSIEscapedString:newString]]];
     }
     else
     {
         [self setString:newString];
         [self applyAttributes:attributes];
     }    
+}
+
+- (NSAttributedString *)combineAttributes:(NSDictionary *)attrs withAttributedString:(NSAttributedString *)attributedString
+{
+    // add in attributes (like font and alignment) to colored text
+    NSMutableAttributedString *attrStr = [[attributedString mutableCopy]autorelease];
+    for (NSString *key in attrs)
+    {
+        if ([key isEqualToString:NSForegroundColorAttributeName]) continue;
+        [attrStr addAttribute:key value:[attrs valueForKey:key] range:NSMakeRange(0,[[attrStr string]length])];
+    }
+    return attrStr;
 }
 
 #pragma mark Text Actions
