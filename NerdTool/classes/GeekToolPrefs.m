@@ -7,8 +7,12 @@
 //
 
 #import "GeekToolPrefs.h"
-#import "NTGroup.h"
 #import "NTExposeBorder.h"
+#import "NTGroup.h"
+#import "NTLog.h"
+#import "NTShell.h"
+#import "NTFile.h"
+#import "NTImage.h"
 
 #import "CGSPrivate.h"
 
@@ -23,6 +27,7 @@
         groups = [[NSMutableArray alloc]init];
         exposeBorderWindowArray = [[NSMutableArray alloc]init];
         windowControllerArray = [[NSMutableArray alloc]init];
+        hitROProcess = NO;
     }
     return self;
 }
@@ -38,6 +43,11 @@
 - (void)applicationWillTerminate:(NSNotification *)note
 {
     [self saveDataToDisk];
+    
+    if (!hitROProcess) return;
+    NSString *resourcePath = [[NSBundle mainBundle]resourcePath];
+    NSString *ROPath = [resourcePath stringByAppendingPathComponent:@"NerdToolRO.app"];
+    [[NSWorkspace sharedWorkspace]launchApplication:ROPath];    
 }  
 
 - (void)dealloc
@@ -49,6 +59,23 @@
 }
 
 #pragma mark -
+#pragma mark NerdToolRO
+- (IBAction)trackROProcess:(id)sender
+{
+    NSString *resourcePath = [[NSBundle mainBundle]resourcePath];
+    NSString *shellCommand = [resourcePath stringByAppendingPathComponent:@"killROProcess.sh"];
+    NSTask *task = [[NSTask alloc]init];
+    [task setLaunchPath:@"/bin/sh"];
+    [task setArguments:[NSArray arrayWithObjects:shellCommand,@"-k",nil]];
+    [task launch];
+    [task waitUntilExit];
+    
+    if (!sender) [NTEnable setState:[task terminationStatus]];
+    hitROProcess = [NTEnable state];
+    
+    [task release];
+}
+
 #pragma mark UI management
 - (IBAction)revertDefaultSelectionColor:(id)sender
 {
@@ -118,7 +145,9 @@
     [openPanel setAllowsMultipleSelection:NO];
     [openPanel setCanChooseFiles:YES];
     
-    [openPanel beginSheetForDirectory:@"/Users/Kevin/Library/Preferences/" file:@"org.tynsoe.geektool.plist" types:nil modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+    NSString *prefsDirectory = [[NSSearchPathForDirectoriesInDomains(NSAllLibrariesDirectory,NSUserDomainMask,YES) objectAtIndex:0]stringByAppendingPathComponent:@"Preferences"];
+    
+    [openPanel beginSheetForDirectory:prefsDirectory file:@"org.tynsoe.geektool.plist" types:nil modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
 }
 
 - (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo
@@ -136,32 +165,45 @@
         
         for (NSMutableDictionary *importDict in oldPreferences)
         {
-            NSMutableDictionary *convertedProps = [NSMutableDictionary dictionary];
+            int type = [[importDict objectForKey:@"type"]intValue];
+            // 0 : file
+            // 1 : shell
+            // 2 : image
+            NTLog *newLog = nil;
+            if (type == 0) newLog = [[NTFile alloc]init];
+            else if (type == 1) newLog = [[NTShell alloc]init];
+            else if (type == 2) newLog = [[NTImage alloc]init];            
             
-            [convertedProps setObject:[importDict objectForKey:@"command"] forKey:@"command"];
-            [convertedProps setObject:[NSArchiver archivedDataWithRootObject:[NSColor colorWithDeviceRed:[[[importDict objectForKey:@"backgroundColor"]objectForKey:@"red"]floatValue] green:[[[importDict objectForKey:@"backgroundColor"]objectForKey:@"green"]floatValue] blue:[[[importDict objectForKey:@"backgroundColor"]objectForKey:@"blue"]floatValue] alpha:[[[importDict objectForKey:@"backgroundColor"]objectForKey:@"alpha"]floatValue]]] forKey:@"backgroundColor"];
-            [convertedProps setObject:[NSArchiver archivedDataWithRootObject:[NSColor colorWithDeviceRed:[[[importDict objectForKey:@"textColor"]objectForKey:@"red"]floatValue] green:[[[importDict objectForKey:@"textColor"]objectForKey:@"green"]floatValue] blue:[[[importDict objectForKey:@"textColor"]objectForKey:@"blue"]floatValue] alpha:[[[importDict objectForKey:@"textColor"]objectForKey:@"alpha"]floatValue]]] forKey:@"textColor"];
-            [convertedProps setObject:[[importDict objectForKey:@"rect"]objectForKey:@"x"] forKey:@"x"];
-            [convertedProps setObject:[[importDict objectForKey:@"rect"]objectForKey:@"y"] forKey:@"y"];
-            [convertedProps setObject:[[importDict objectForKey:@"rect"]objectForKey:@"w"] forKey:@"w"];
-            [convertedProps setObject:[[importDict objectForKey:@"rect"]objectForKey:@"h"] forKey:@"h"];
-            [convertedProps setObject:[importDict objectForKey:@"enabled"] forKey:@"enabled"];
-            [convertedProps setObject:[importDict objectForKey:@"file"] forKey:@"file"];
-            [convertedProps setObject:[importDict objectForKey:@"fontName"] forKey:@"fontName"];
-            [convertedProps setObject:[importDict objectForKey:@"fontSize"] forKey:@"fontSize"];
-            [convertedProps setObject:[importDict objectForKey:@"imageURL"] forKey:@"imageURL"];
-            [convertedProps setObject:[importDict objectForKey:@"name"] forKey:@"name"];
-            [convertedProps setObject:[importDict objectForKey:@"refresh"] forKey:@"refresh"];
-            [convertedProps setObject:[importDict objectForKey:@"shadowText"] forKey:@"shadowText"];
-            [convertedProps setObject:[importDict objectForKey:@"shadowWindow"] forKey:@"shadowWindow"];
-            //[convertedProps setObject:[importDict objectForKey:@"type"] forKey:@"type"];
+            [[importedGroup logs]addObject:newLog];
             
-            //[[importedGroup logs]addObject:[[id<NTLogProtocol> alloc]initWithProperties:convertedProps]];
+            [[newLog properties]setObject:[importDict objectForKey:@"name"] forKey:@"name"];
+            [[newLog properties]setObject:[importDict objectForKey:@"enabled"] forKey:@"enabled"];
+            
+            [[newLog properties]setObject:[[importDict objectForKey:@"rect"]objectForKey:@"x"] forKey:@"x"];
+            [[newLog properties]setObject:[[importDict objectForKey:@"rect"]objectForKey:@"y"] forKey:@"y"];
+            [[newLog properties]setObject:[[importDict objectForKey:@"rect"]objectForKey:@"w"] forKey:@"w"];
+            [[newLog properties]setObject:[[importDict objectForKey:@"rect"]objectForKey:@"h"] forKey:@"h"];            
+            
+            if (type == 0) [[newLog properties]setObject:[importDict objectForKey:@"file"] forKey:@"file"];
+            else if (type == 1) [[newLog properties]setObject:[importDict objectForKey:@"command"] forKey:@"command"];
+            else if (type == 2) [[newLog properties]setObject:[importDict objectForKey:@"imageURL"] forKey:@"imageURL"];
+            
+            if (type != 0) [[newLog properties]setObject:[importDict objectForKey:@"refresh"] forKey:@"refresh"];
+            
+            if (type != 2)
+            {
+                [[newLog properties]setObject:[NSArchiver archivedDataWithRootObject:[NSColor colorWithDeviceRed:[[[importDict objectForKey:@"backgroundColor"]objectForKey:@"red"]floatValue] green:[[[importDict objectForKey:@"backgroundColor"]objectForKey:@"green"]floatValue] blue:[[[importDict objectForKey:@"backgroundColor"]objectForKey:@"blue"]floatValue] alpha:[[[importDict objectForKey:@"backgroundColor"]objectForKey:@"alpha"]floatValue]]] forKey:@"backgroundColor"];
+                [[newLog properties]setObject:[NSArchiver archivedDataWithRootObject:[NSColor colorWithDeviceRed:[[[importDict objectForKey:@"textColor"]objectForKey:@"red"]floatValue] green:[[[importDict objectForKey:@"textColor"]objectForKey:@"green"]floatValue] blue:[[[importDict objectForKey:@"textColor"]objectForKey:@"blue"]floatValue] alpha:[[[importDict objectForKey:@"textColor"]objectForKey:@"alpha"]floatValue]]] forKey:@"textColor"];
+                [[newLog properties]setObject:[NSArchiver archivedDataWithRootObject:[NSFont fontWithName:[importDict objectForKey:@"fontName"] size:[[importDict objectForKey:@"fontSize"]floatValue]]] forKey:@"font"];
+                [[newLog properties]setObject:[importDict objectForKey:@"shadowText"] forKey:@"shadowText"];
+                [[newLog properties]setObject:[importDict objectForKey:@"shadowWindow"] forKey:@"shadowWindow"];
+            }
         }
         [groupController addObject:importedGroup];
+        [groupController setSelectedObjects:[NSArray arrayWithObject:importedGroup]];
     }
 }
-
+                
 - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 {
     if (returnCode == NSAlertDefaultReturn) [sheet close];
@@ -221,6 +263,7 @@
     [[NSUserDefaults standardUserDefaults]setObject:selectionColorData forKey:@"selectionColor"];
     
     [self showExpose:nil];
+    [self trackROProcess:nil];
 }
 
 #pragma mark -

@@ -46,7 +46,6 @@
     NSDictionary *defaultProperties = [[NSDictionary alloc]initWithObjectsAndKeys:
                                        NSLocalizedString(@"New file log",nil),@"name",
                                        [NSNumber numberWithBool:YES],@"enabled",
-                                       NSLocalizedString(@"Default",nil),@"group",
                                        
                                        [NSNumber numberWithInt:16],@"x",
                                        [NSNumber numberWithInt:38],@"y",
@@ -73,7 +72,7 @@
 - (void)setupInterfaceBindingsWithObject:(id)bindee
 {
     // These can get turned off if you have the text field selected, and then change logs. When you go back to that log, things are screwed up. The setEditable: fixes this (as well as makes them tasty :P)
-    [file setEditable:YES];    
+    [file setEditable:YES];
     [file bind:@"value" toObject:bindee withKeyPath:@"selection.properties.file" options:nil];
 }
 

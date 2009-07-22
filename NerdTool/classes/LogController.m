@@ -32,7 +32,6 @@
 
 	[tableView setDraggingSourceOperationMask:NSDragOperationLink forLocal:NO];
 	[tableView setDraggingSourceOperationMask:(NSDragOperationCopy | NSDragOperationMove) forLocal:YES];
-	
 	[tableView registerForDraggedTypes:[NSArray arrayWithObjects:CopiedRowsType,MovedRowsType,nil]];
     [tableView setAllowsMultipleSelection:YES];
     

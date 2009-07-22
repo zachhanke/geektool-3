@@ -11,7 +11,10 @@
 @interface GeekToolPrefs : NSObject 
 {        
     IBOutlet id groupController;
-
+    
+    BOOL hitROProcess;
+    IBOutlet id NTEnable;
+    
     NSMutableArray *windowControllerArray;
     NSMutableArray *exposeBorderWindowArray;    
     
@@ -20,6 +23,7 @@
 @property (retain) NSMutableArray *groups;
 
 #pragma mark -
+- (IBAction)trackROProcess:(id)sender;
 #pragma mark UI management
 - (IBAction)logImport:(id)sender;
 - (IBAction)revertDefaultSelectionColor:(id)sender;

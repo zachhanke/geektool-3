@@ -43,7 +43,6 @@
     NSDictionary *defaultProperties = [[NSDictionary alloc]initWithObjectsAndKeys:
                                        NSLocalizedString(@"New quartz log",nil),@"name",
                                        [NSNumber numberWithBool:YES],@"enabled",
-                                       NSLocalizedString(@"Default",nil),@"group",
                                        
                                        [NSNumber numberWithInt:16],@"x",
                                        [NSNumber numberWithInt:38],@"y",

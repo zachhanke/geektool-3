@@ -42,7 +42,6 @@
     NSDictionary *defaultProperties = [[NSDictionary alloc]initWithObjectsAndKeys:
                                        NSLocalizedString(@"New image log",nil),@"name",
                                        [NSNumber numberWithBool:YES],@"enabled",
-                                       NSLocalizedString(@"Default",nil),@"group",
                                        
                                        [NSNumber numberWithInt:16],@"x",
                                        [NSNumber numberWithInt:38],@"y",
@@ -158,6 +157,7 @@
 - (void)updateCommand:(NSTimer*)timer
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+    if (![properties objectForKey:@"imageURL"] || [[properties objectForKey:@"imageURL"]isEqualToString:@""]) return;
     [NSThread detachNewThreadSelector:@selector(setImage:) toTarget:self withObject:[properties objectForKey:@"imageURL"]];            
     [pool release];
 }

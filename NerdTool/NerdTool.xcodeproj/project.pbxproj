@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A791E981016BC31003F392D /* NTDroppableTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A791E971016BC31003F392D /* NTDroppableTextField.m */; };
 		0A7D38890FD805FA0070D678 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7D38870FD805FA0070D678 /* Quartz.framework */; };
 		0A7D388A0FD805FA0070D678 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7D38880FD805FA0070D678 /* Carbon.framework */; };
+		0A88EC061017734C00EF5B6F /* killROProcess.sh in Resources */ = {isa = PBXBuildFile; fileRef = 0A88EC051017734C00EF5B6F /* killROProcess.sh */; };
+		0A88EC83101778B200EF5B6F /* NerdToolRO.app in Resources */ = {isa = PBXBuildFile; fileRef = 0AB89EEB1014A5C4006FE649 /* NerdToolRO.app */; };
 		0A904BC2100D8EAC009A2F5E /* AIQuartzView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BA0100D8EAC009A2F5E /* AIQuartzView.m */; };
 		0A904BC3100D8EAC009A2F5E /* AJRScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BA2100D8EAC009A2F5E /* AJRScrollView.m */; };
 		0A904BC4100D8EAC009A2F5E /* GeekToolPrefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BA6100D8EAC009A2F5E /* GeekToolPrefs.m */; };
@@ -82,6 +85,16 @@
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		0A88EC73101777B900EF5B6F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0AB89EEA1014A5C4006FE649 /* NerdToolRO */;
+			remoteInfo = NerdToolRO;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		0AB875AA1010088A0000E274 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -96,8 +109,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A791E961016BC31003F392D /* NTDroppableTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTDroppableTextField.h; path = classes/NTDroppableTextField.h; sourceTree = "<group>"; };
+		0A791E971016BC31003F392D /* NTDroppableTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTDroppableTextField.m; path = classes/NTDroppableTextField.m; sourceTree = "<group>"; };
 		0A7D38870FD805FA0070D678 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		0A7D38880FD805FA0070D678 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		0A88EC051017734C00EF5B6F /* killROProcess.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = killROProcess.sh; sourceTree = "<group>"; };
 		0A904B9F100D8EAC009A2F5E /* AIQuartzView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AIQuartzView.h; path = classes/AIQuartzView.h; sourceTree = "<group>"; };
 		0A904BA0100D8EAC009A2F5E /* AIQuartzView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AIQuartzView.m; path = classes/AIQuartzView.m; sourceTree = "<group>"; };
 		0A904BA1100D8EAC009A2F5E /* AJRScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AJRScrollView.h; path = classes/AJRScrollView.h; sourceTree = "<group>"; };
@@ -258,6 +274,8 @@
 				0A904BBD100D8EAC009A2F5E /* NTFontDisplay.m */,
 				0A904BBA100D8EAC009A2F5E /* NTExposeBorder.h */,
 				0A904BBB100D8EAC009A2F5E /* NTExposeBorder.m */,
+				0A791E961016BC31003F392D /* NTDroppableTextField.h */,
+				0A791E971016BC31003F392D /* NTDroppableTextField.m */,
 			);
 			name = "Preferences UI Classes";
 			sourceTree = "<group>";
@@ -375,9 +393,9 @@
 				0A7D372A0FD802B10070D678 /* Controllers */,
 				0A194D8C0FED967C0062EA84 /* Data Classes */,
 				0AB8769C10103BA90000E274 /* Log Types */,
+				080E96DDFE201D6D7F000001 /* Generic log type UI */,
 				0AB8A0221014BE90006FE649 /* Text-based log type UI */,
 				0A94855E100C45BA0071EFF9 /* Preferences UI Classes */,
-				080E96DDFE201D6D7F000001 /* Generic log type UI */,
 				0AB89EF11014A61F006FE649 /* Run Only */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -396,6 +414,7 @@
 				0A904BA4100D8EAC009A2F5E /* defines.h */,
 				32CA4F630368D1EE00C91783 /* NerdTool_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
+				0A88EC051017734C00EF5B6F /* killROProcess.sh */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -466,6 +485,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				0A88EC74101777B900EF5B6F /* PBXTargetDependency */,
 			);
 			name = NerdTool;
 			productInstallPath = "$(HOME)/Applications";
@@ -507,6 +527,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A88EC83101778B200EF5B6F /* NerdToolRO.app in Resources */,
 				0A904BF7100D8F2B009A2F5E /* center.png in Resources */,
 				0A904BF8100D8F2B009A2F5E /* corner.tif in Resources */,
 				0A904BF9100D8F2B009A2F5E /* defaultFailure.png in Resources */,
@@ -531,6 +552,7 @@
 				0AB8A22C101604D3006FE649 /* imageWindow.xib in Resources */,
 				0AB8A2D210161421006FE649 /* NTRO.xib in Resources */,
 				0AB8A2EF101616E2006FE649 /* quartzWindow.xib in Resources */,
+				0A88EC061017734C00EF5B6F /* killROProcess.sh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -585,10 +607,19 @@
 				0AB8A1F310154CF0006FE649 /* NTLog.m in Sources */,
 				0AB8A2CF1016140E006FE649 /* NTImage.m in Sources */,
 				0AB8A2DB1016149A006FE649 /* NTQuartz.m in Sources */,
+				0A791E981016BC31003F392D /* NTDroppableTextField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0A88EC74101777B900EF5B6F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0AB89EEA1014A5C4006FE649 /* NerdToolRO */;
+			targetProxy = 0A88EC73101777B900EF5B6F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		0A904BDA100D8F2B009A2F5E /* GeektoolPrefs.xib */ = {
