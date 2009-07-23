@@ -140,6 +140,9 @@
     [task setEnvironment:env];
     [task setStandardOutput:pipe];
     
+    [[window textView]setString:@""];
+    if (![[NSFileManager defaultManager]fileExistsAtPath:[properties objectForKey:@"file"]]) return;
+    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleReadCompletionNotification object:[pipe fileHandleForReading]];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleDataAvailableNotification object:[pipe fileHandleForReading]];
     
@@ -173,9 +176,13 @@
     
     NSMutableString *newString = [[[NSMutableString alloc]initWithData:newData encoding:NSASCIIStringEncoding]autorelease];
     
-    if ([newString isEqualTo:@""]) return;
+    if ([newString isEqualTo:@""])
+    {
+        [[NSNotificationCenter defaultCenter]removeObserver:self name:[aNotification name] object:nil];
+        return;
+    }
     
-    [(LogTextField*)[window textView]processAndSetText:newString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"]];
+    [[window textView]processAndSetText:newString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"] insert:YES];
     [(LogTextField*)[window textView]scrollEnd];
     
     [[aNotification object]waitForDataInBackgroundAndNotify];

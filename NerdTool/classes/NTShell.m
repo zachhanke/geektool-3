@@ -202,7 +202,7 @@
     
     if ([newString isEqualTo:@""]) return;
     
-    [(LogTextField*)[window textView]processAndSetText:newString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"]];
+    [(LogTextField*)[window textView]processAndSetText:newString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"] insert:NO];
     [(LogTextField*)[window textView]scrollEnd];
     
     [[aNotification object]readInBackgroundAndNotify];

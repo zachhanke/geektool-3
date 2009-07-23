@@ -62,10 +62,10 @@
     int insertionIndex = 0;
     if ([[self selectedObjects]count] > 0) insertionIndex = [[self selectionIndexes]firstIndex];
         
-    if ([[sender title]isEqualToString:@"Shell"]) [self insertObject:[[NTShell alloc]init] atArrangedObjectIndex:insertionIndex];
-    else if ([[sender title]isEqualToString:@"File"]) [self insertObject:[[NTFile alloc]init] atArrangedObjectIndex:insertionIndex];
-    else if ([[sender title]isEqualToString:@"Image"]) [self insertObject:[[NTImage alloc]init] atArrangedObjectIndex:insertionIndex];
-    else if ([[sender title]isEqualToString:@"Quartz"]) [self insertObject:[[NTQuartz alloc]init] atArrangedObjectIndex:insertionIndex];
+    if ([[sender title]isEqualToString:@"Shell"]) [self insertObject:[[[NTShell alloc]init]autorelease] atArrangedObjectIndex:insertionIndex];
+    else if ([[sender title]isEqualToString:@"File"]) [self insertObject:[[[NTFile alloc]init]autorelease] atArrangedObjectIndex:insertionIndex];
+    else if ([[sender title]isEqualToString:@"Image"]) [self insertObject:[[[NTImage alloc]init]autorelease] atArrangedObjectIndex:insertionIndex];
+    else if ([[sender title]isEqualToString:@"Quartz"]) [self insertObject:[[[NTQuartz alloc]init]autorelease] atArrangedObjectIndex:insertionIndex];
 }
 
 - (void)removeObjectsAtArrangedObjectIndexes:(NSIndexSet *)indexes

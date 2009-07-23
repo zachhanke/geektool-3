@@ -8,7 +8,7 @@
 #define MoveDragType 2
 #define ResizeDragType 1
 
-#define SNAP_TOLERANCE 10.0
+#define SNAP_TOLERANCE 5.0
 
 #define MIN_W 40
 #define MIN_H 10

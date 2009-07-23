@@ -19,7 +19,7 @@
 // Text Properties
 - (void)applyAttributes:(NSDictionary *)attrs;
 - (void)updateTextAttributesUsingProps:(NSDictionary *)properties;
-- (void)processAndSetText:(NSMutableString *)newString withEscapes:(BOOL)translateAsciiEscapes;
+- (void)processAndSetText:(NSMutableString *)newString withEscapes:(BOOL)translateAsciiEscapes insert:(BOOL)insert;
 - (NSAttributedString *)combineAttributes:(NSDictionary *)attrs withAttributedString:(NSAttributedString *)attributedString;
 // Text Actions
 - (void)scrollEnd;
