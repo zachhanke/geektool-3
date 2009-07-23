@@ -138,6 +138,12 @@
         [windowController release];
     }    
 }
+
+- (IBAction)donate:(id)sender
+{
+	[[NSWorkspace sharedWorkspace]openURL:[NSURL URLWithString:@"http://balthamos.darkraver.net/donate.php"]];
+}
+
 #pragma mark Log Import
 - (IBAction)logImport:(id)sender
 {

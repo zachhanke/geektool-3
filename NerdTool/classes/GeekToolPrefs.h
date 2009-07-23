@@ -29,6 +29,7 @@
 - (IBAction)revertDefaultSelectionColor:(id)sender;
 - (IBAction)showExpose:(id)sender;
 - (void)exposeBorder;
+- (IBAction)donate:(id)sender;
 #pragma mark Saving
 - (NSString *)pathForDataFile;
 - (void)saveDataToDisk;

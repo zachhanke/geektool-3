@@ -19,14 +19,14 @@
 	<key>CFBundleSignature</key>
 	<string>ALOC</string>
 	<key>CFBundleVersion</key>
-	<string>0.5b</string>
+	<string>0.5</string>
 	<key>NSMainNibFile</key>
 	<string>GeektoolPrefs</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>SUFeedURL</key>
-	<string>http://balthamos.darkraver.net/nerdtoolAppcast.xml</string>
 	<key>SUEnableSystemProfiling</key>
 	<false/>
+	<key>SUFeedURL</key>
+	<string>http://balthamos.darkraver.net/nerdtool/appcast.xml</string>
 </dict>
 </plist>
