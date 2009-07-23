@@ -167,17 +167,19 @@
     [task setEnvironment:[self env]];
     [task setStandardOutput:pipe];
     
-    /* // original shell (waits until the command is done before reading)
+    ///* // original shell (waits until the command is done before reading)
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleReadToEndOfFileCompletionNotification object:[pipe fileHandleForReading]];
     
     [[pipe fileHandleForReading]readToEndOfFileInBackgroundAndNotify];
-     */
+    // */
     
     // file type (pulls data as it comes)
+    /*
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleReadCompletionNotification object:[pipe fileHandleForReading]];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleDataAvailableNotification object:[pipe fileHandleForReading]];
     
     [[pipe fileHandleForReading]waitForDataInBackgroundAndNotify];
+    */
     
     
     [task launch];
@@ -203,8 +205,8 @@
     [(LogTextField*)[window textView]processAndSetText:newString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"]];
     [(LogTextField*)[window textView]scrollEnd];
     
-    //[[aNotification object]readInBackgroundAndNotify];
-    [[aNotification object]waitForDataInBackgroundAndNotify];
+    [[aNotification object]readInBackgroundAndNotify];
+    //[[aNotification object]waitForDataInBackgroundAndNotify];
 
     [window display];
 }
