@@ -13,9 +13,12 @@
 
 @implementation AIQuartzView
 
+@synthesize unlock;
+
 - (void)awakeFromNib
 {
     render = FALSE;
+    unlock = FALSE;
     
     // set this low because we don't want to spend too much time on the clock
     [self setMaxRenderingFrameRate:MAX_FRAMERATE];
@@ -34,7 +37,7 @@
 {
     // render ONCE and only once
     BOOL success = FALSE;
-    if (render) success = [super renderAtTime:time arguments:arguments];
+    if (unlock || render) success = [super renderAtTime:time arguments:arguments];
     
     render = FALSE;
     

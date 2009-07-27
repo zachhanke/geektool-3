@@ -13,6 +13,8 @@
 {
     IBOutlet id quartzFile;
     IBOutlet id refresh;
+    IBOutlet id framerateSlider;
+    IBOutlet id framerateText;
 }
 - (IBAction)fileChoose:(id)sender;
 

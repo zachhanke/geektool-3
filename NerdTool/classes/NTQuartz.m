@@ -53,6 +53,7 @@
                                        
                                        [NSNumber numberWithInt:10],@"refresh",
                                        @"",@"quartzFile",
+                                       [NSNumber numberWithFloat:1.0],@"framerate",
                                        nil];
     
     return [defaultProperties autorelease];
@@ -66,12 +67,16 @@
     
     [quartzFile bind:@"value" toObject:bindee withKeyPath:@"selection.properties.quartzFile" options:nil];
     [refresh bind:@"value" toObject:bindee withKeyPath:@"selection.properties.refresh" options:nil];
+    [framerateText bind:@"value" toObject:bindee withKeyPath:@"selection.properties.framerate" options:nil];
+    [framerateSlider bind:@"value" toObject:bindee withKeyPath:@"selection.properties.framerate" options:nil];
 }
 
 - (void)destroyInterfaceBindings
 {
     [quartzFile unbind:@"value"];
     [refresh unbind:@"value"];
+    [framerateText unbind:@"value"];
+    [framerateSlider unbind:@"value"];
 }
 
 #pragma mark Observing
@@ -79,6 +84,7 @@
 {
     [self addObserver:self forKeyPath:@"properties.refresh" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.quartzFile" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.framerate" options:0 context:NULL];
     [super setupPreferenceObservers];
 }
 
@@ -86,6 +92,7 @@
 {
     [self removeObserver:self forKeyPath:@"properties.refresh"];
     [self removeObserver:self forKeyPath:@"properties.quartzFile"];
+    [self removeObserver:self forKeyPath:@"properties.framerate"];
     [super removePreferenceObservers];
 }
 
@@ -110,6 +117,12 @@
         timerNeedsUpdate = YES;
         [self updateWindow];
     }    
+    else if ([keyPath isEqualToString:@"properties.framerate"])
+    {
+        float newFramerate = [framerateSlider floatValue];
+        [[window quartzView]setMaxRenderingFrameRate:newFramerate];
+        [[window quartzView]setUnlock:(newFramerate == 1.0)?FALSE:TRUE];
+    }        
     else
     {
         timerNeedsUpdate = NO;
@@ -128,6 +141,11 @@
 - (void)createWindow
 {
     [super createWindow];
+    
+    float newFramerate = [[properties objectForKey:@"framerate"]floatValue];
+    [[window quartzView]setMaxRenderingFrameRate:newFramerate];
+    [[window quartzView]setUnlock:(newFramerate == 1.0)?FALSE:TRUE];  
+    
     if ([[properties objectForKey:@"quartzFile"]isEqual:@""]) return;
     if ([[window quartzView]loadCompositionFromFile:[properties objectForKey:@"quartzFile"]]) [[window quartzView]setAutostartsRendering:TRUE];
 }

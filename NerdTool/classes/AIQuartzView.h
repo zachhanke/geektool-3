@@ -14,7 +14,9 @@
 {
     IBOutlet id parentWindow;
     BOOL render;
+    BOOL unlock;
 }
+@property (assign) BOOL unlock;
 
 - (void)requestRender;
 @end
