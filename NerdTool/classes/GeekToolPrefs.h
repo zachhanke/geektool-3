@@ -11,6 +11,8 @@
 @interface GeekToolPrefs : NSObject 
 {        
     IBOutlet id groupController;
+    IBOutlet id logController;
+    IBOutlet id mainConfigWindow;
     
     BOOL hitROProcess;
     IBOutlet id NTEnable;
@@ -25,6 +27,7 @@
 #pragma mark -
 - (IBAction)trackROProcess:(id)sender;
 #pragma mark UI management
+- (IBAction)addAsLoginItem:(id)sender;
 - (IBAction)logImport:(id)sender;
 - (IBAction)revertDefaultSelectionColor:(id)sender;
 - (IBAction)showExpose:(id)sender;

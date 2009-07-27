@@ -58,6 +58,17 @@
     [super dealloc];
 }
 
+- (void)windowWillClose:(NSNotification *)notification
+{
+    [logController setSelectedObjects:nil];
+}
+
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
+{
+    if (![mainConfigWindow isVisible]) [mainConfigWindow makeKeyAndOrderFront:nil];
+    return NO;
+}
+
 #pragma mark -
 #pragma mark NerdToolRO
 - (IBAction)trackROProcess:(id)sender
@@ -77,6 +88,32 @@
 }
 
 #pragma mark UI management
+- (IBAction)addAsLoginItem:(id)sender
+{
+    LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL,kLSSharedFileListSessionLoginItems,NULL);
+    NSString *roPath = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"NerdToolRO.app"];
+    CFURLRef ROURL = (CFURLRef)[NSURL fileURLWithPath:roPath];
+    
+    if ([sender state])
+    {
+        LSSharedFileListItemRef item = LSSharedFileListInsertItemURL(loginItems,kLSSharedFileListItemLast,NULL,NULL,ROURL,NULL,NULL);		
+        if (item) CFRelease(item);    
+    }
+    else
+    {
+        UInt32 seedValue;
+        
+        NSArray *loginItemsArray = (NSArray *)LSSharedFileListCopySnapshot(loginItems, &seedValue);
+        for (id item in loginItemsArray)
+        {		
+            if (LSSharedFileListItemResolve((LSSharedFileListItemRef)item,0,(CFURLRef*)&ROURL,NULL) == noErr && [[(NSURL *)ROURL path]hasPrefix:roPath])
+                LSSharedFileListItemRemove(loginItems,(LSSharedFileListItemRef)item); // Remove startup item
+        }
+        
+        [loginItemsArray release];        
+    }
+}
+
 - (IBAction)revertDefaultSelectionColor:(id)sender
 {
     NSData *selectionColorData = [NSArchiver archivedDataWithRootObject:[[NSColor alternateSelectedControlColor]colorWithAlphaComponent:0.3]];

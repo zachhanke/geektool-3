@@ -91,7 +91,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 0AB89EEA1014A5C4006FE649 /* NerdToolRO */;
+			remoteGlobalIDString = 0AB89EEA1014A5C4006FE649;
 			remoteInfo = NerdToolRO;
 		};
 /* End PBXContainerItemProxy section */

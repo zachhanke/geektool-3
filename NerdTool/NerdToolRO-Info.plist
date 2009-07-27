@@ -9,17 +9,17 @@
 	<key>CFBundleIconFile</key>
 	<string>icon</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.yourcompany.${PRODUCT_NAME:identifier}</string>
+	<string>com.allocinit.${PRODUCT_NAME:identifier}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
 	<string>ALOC</string>
-	<key>LSUIElement</key>
-	<string>1</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
+	<key>LSUIElement</key>
+	<string>1</string>
 	<key>NSMainNibFile</key>
 	<string>NTRO</string>
 	<key>NSPrincipalClass</key>

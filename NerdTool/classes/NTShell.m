@@ -121,6 +121,10 @@
         timerNeedsUpdate = YES;
         [self updateWindow];
     }
+    else if ([keyPath isEqualToString:@"properties.useAsciiEscapes"])
+    {
+        if (windowController && timer) [timer fire];
+    }    
     else
     {
         timerNeedsUpdate = NO;

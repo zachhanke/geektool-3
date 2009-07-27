@@ -19,7 +19,7 @@
 	<key>CFBundleSignature</key>
 	<string>ALOC</string>
 	<key>CFBundleVersion</key>
-	<string>0.5</string>
+	<string>0.6</string>
 	<key>NSMainNibFile</key>
 	<string>GeektoolPrefs</string>
 	<key>NSPrincipalClass</key>
