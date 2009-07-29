@@ -13,6 +13,9 @@
 {
     IBOutlet id command;
     IBOutlet id refresh;
+    
+    NSMutableString *lastRecievedString;
 }
+@property (retain) NSMutableString *lastRecievedString;
 
 @end

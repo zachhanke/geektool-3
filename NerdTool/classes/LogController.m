@@ -38,6 +38,7 @@
     [self addObserver:self forKeyPath:@"selectedObjects" options:0 context:nil];
     [self observeValueForKeyPath:@"selectedObjects" ofObject:self change:nil context:nil];
     [self setAvoidsEmptySelection:YES];
+    [self setSelectsInsertedObjects:YES];
 }
 
 - (void)dealloc
@@ -88,10 +89,13 @@
     {
         [object setActive:[NSNumber numberWithBool:YES]];
         [object setParentGroup:parentGroup];
-        _userInsert = NO;
     }
     [super insertObject:object atArrangedObjectIndex:index];
+    
+    if (_userInsert) [tableView editColumn:1 row:[tableView selectedRow] withEvent:nil select:YES];
+    
     [parentGroup reorder];
+    _userInsert = NO;
 }
 
 - (void)insertObjects:(NSArray *)objects atArrangedObjectIndexes:(NSIndexSet *)indexes

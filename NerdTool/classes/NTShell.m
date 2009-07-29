@@ -15,6 +15,8 @@
 
 @implementation NTShell
 
+@synthesize lastRecievedString;
+
 #pragma mark Properties
 - (NSString *)logTypeName
 {
@@ -63,6 +65,23 @@
                                        [NSNumber numberWithBool:NO],@"shadowWindow",
                                        [NSNumber numberWithBool:NO],@"useAsciiEscapes",
                                        [NSNumber numberWithInt:ALIGN_LEFT],@"alignment",
+                                       
+                                       [NSArchiver archivedDataWithRootObject:[NSColor blackColor]]  ,@"fgBlack",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor redColor]]    ,@"fgRed",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor greenColor]]  ,@"fgGreen",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor yellowColor]] ,@"fgYellow",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor blueColor]]   ,@"fgBlue",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor magentaColor]],@"fgMagenta",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor cyanColor]]   ,@"fgCyan",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor whiteColor]]  ,@"fgWhite",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor blackColor]]  ,@"bgBlack",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor redColor]]    ,@"bgRed",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor greenColor]]  ,@"bgGreen",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor yellowColor]] ,@"bgYellow",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor blueColor]]   ,@"bgBlue",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor magentaColor]],@"bgMagenta",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor cyanColor]]   ,@"bgCyan",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor whiteColor]]  ,@"bgWhite",                                       
                                        nil];
     
     return [defaultProperties autorelease];
@@ -154,6 +173,7 @@
         [[window textView]setString:@""];
         [self updateTimer];
     }
+    if (lastRecievedString) [(LogTextField*)[window textView]processAndSetText:lastRecievedString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"] andCustomColors:[self customAnsiColors] insert:NO];
     [super updateWindow];
 }
 
@@ -206,7 +226,9 @@
     
     if ([newString isEqualTo:@""]) return;
     
-    [(LogTextField*)[window textView]processAndSetText:newString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"] insert:NO];
+    
+    [self setLastRecievedString:newString];
+    [(LogTextField*)[window textView]processAndSetText:newString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"] andCustomColors:[self customAnsiColors] insert:NO];
     [(LogTextField*)[window textView]scrollEnd];
     
     [[aNotification object]readInBackgroundAndNotify];

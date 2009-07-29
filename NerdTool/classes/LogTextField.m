@@ -65,7 +65,7 @@
     [self setAttributes:attrs];
 }
 
-- (void)processAndSetText:(NSMutableString *)newString withEscapes:(BOOL)translateAsciiEscapes insert:(BOOL)insert
+- (void)processAndSetText:(NSMutableString *)newString withEscapes:(BOOL)translateAsciiEscapes andCustomColors:(NSDictionary*)customColors insert:(BOOL)insert
 {
     // kill \n's at the end of the string (to correct "push up" error on resizing)
     while ([newString length] && [newString characterAtIndex:[newString length] - 1] == 10) [newString deleteCharactersInRange:NSMakeRange([newString length] - 1,1)];
@@ -73,6 +73,7 @@
     if (translateAsciiEscapes)
     {
         ANSIEscapeHelper *ansiEscapeHelper = [[[ANSIEscapeHelper alloc]init]autorelease];
+        [ansiEscapeHelper setAnsiColors:[[customColors mutableCopy]autorelease]];
         NSAttributedString *outputString = [self combineAttributes:attributes withAttributedString:[ansiEscapeHelper attributedStringWithANSIEscapedString:newString]];
         if (!insert)
             [[self textStorage]setAttributedString:outputString];

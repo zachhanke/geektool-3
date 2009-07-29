@@ -30,6 +30,7 @@
     [self observeValueForKeyPath:@"selectedObjects" ofObject:self change:nil context:nil];
     
     [self setAvoidsEmptySelection:YES];
+    [self setSelectsInsertedObjects:YES];
 }
 
 - (void)dealloc
@@ -54,6 +55,12 @@
         [[oldSelectedGroup properties]setValue:[NSNumber numberWithBool:YES] forKey:@"active"];
     }    
     
+}
+
+- (void)addObject:(id)object
+{
+    [super addObject:object];
+    [tableView editColumn:0 row:[tableView selectedRow] withEvent:nil select:YES];
 }
 
 #pragma mark UI

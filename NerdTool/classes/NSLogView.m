@@ -202,6 +202,7 @@
 
         NSRectFillUsingOperation((NSRect){{[self bounds].size.width - 11,0},{11,11}},NSCompositeSourceOver);
     }
+    
 }
 
 #pragma mark Misc Actions

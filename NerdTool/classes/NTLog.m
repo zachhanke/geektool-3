@@ -10,6 +10,7 @@
 #import "LogWindow.h"
 #import "LogTextField.h"
 #import "NTGroup.h"
+#import "ANSIEscapeHelper.h"
 
 #import "defines.h"
 #import "NSDictionary+IntAndBoolAccessors.h"
@@ -83,6 +84,23 @@
                                        [NSNumber numberWithBool:NO],@"shadowWindow",
                                        [NSNumber numberWithBool:NO],@"useAsciiEscapes",
                                        [NSNumber numberWithInt:ALIGN_LEFT],@"alignment",
+                                       
+                                       [NSArchiver archivedDataWithRootObject:[NSColor blackColor]]  ,@"fgBlack",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor redColor]]    ,@"fgRed",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor greenColor]]  ,@"fgGreen",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor yellowColor]] ,@"fgYellow",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor blueColor]]   ,@"fgBlue",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor magentaColor]],@"fgMagenta",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor cyanColor]]   ,@"fgCyan",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor whiteColor]]  ,@"fgWhite",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor blackColor]]  ,@"bgBlack",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor redColor]]    ,@"bgRed",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor greenColor]]  ,@"bgGreen",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor yellowColor]] ,@"bgYellow",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor blueColor]]   ,@"bgBlue",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor magentaColor]],@"bgMagenta",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor cyanColor]]   ,@"bgCyan",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor whiteColor]]  ,@"bgWhite",
                                        nil];
     
     return [defaultProperties autorelease];
@@ -255,6 +273,22 @@
     [self addObserver:self forKeyPath:@"properties.alignment" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.shadowText" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.useAsciiEscapes" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.fgBlack" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.fgRed" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.fgGreen" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.fgYellow" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.fgBlue" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.fgMagenta" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.fgCyan" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.fgWhite" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.bgBlack" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.bgRed" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.bgGreen" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.bgYellow" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.bgBlue" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.bgMagenta" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.bgCyan" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.bgWhite" options:0 context:NULL];    
 }
 
 - (void)removePreferenceObservers
@@ -280,6 +314,22 @@
     [self removeObserver:self forKeyPath:@"properties.alignment"];
     [self removeObserver:self forKeyPath:@"properties.shadowText"];
     [self removeObserver:self forKeyPath:@"properties.useAsciiEscapes"];
+    [self removeObserver:self forKeyPath:@"properties.fgBlack"];
+    [self removeObserver:self forKeyPath:@"properties.fgRed"];
+    [self removeObserver:self forKeyPath:@"properties.fgGreen"];
+    [self removeObserver:self forKeyPath:@"properties.fgYellow"];
+    [self removeObserver:self forKeyPath:@"properties.fgBlue"];
+    [self removeObserver:self forKeyPath:@"properties.fgMagenta"];
+    [self removeObserver:self forKeyPath:@"properties.fgCyan"];
+    [self removeObserver:self forKeyPath:@"properties.fgWhite"];
+    [self removeObserver:self forKeyPath:@"properties.bgBlack"];
+    [self removeObserver:self forKeyPath:@"properties.bgRed"];
+    [self removeObserver:self forKeyPath:@"properties.bgGreen"];
+    [self removeObserver:self forKeyPath:@"properties.bgYellow"];
+    [self removeObserver:self forKeyPath:@"properties.bgBlue"];
+    [self removeObserver:self forKeyPath:@"properties.bgMagenta"];
+    [self removeObserver:self forKeyPath:@"properties.bgCyan"];
+    [self removeObserver:self forKeyPath:@"properties.bgWhite"];    
 }
 
 #pragma mark KVC
@@ -427,6 +477,29 @@
 
 #pragma mark  
 #pragma mark Convience
+- (NSDictionary*)customAnsiColors
+{
+    return [NSDictionary dictionaryWithObjectsAndKeys:
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgBlack"]]  ,[NSNumber numberWithInt:SGRCodeFgBlack],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgRed"]]    ,[NSNumber numberWithInt:SGRCodeFgRed],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgGreen"]]  ,[NSNumber numberWithInt:SGRCodeFgGreen],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgYellow"]] ,[NSNumber numberWithInt:SGRCodeFgYellow],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgBlue"]]   ,[NSNumber numberWithInt:SGRCodeFgBlue],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgMagenta"]],[NSNumber numberWithInt:SGRCodeFgMagenta],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgCyan"]]   ,[NSNumber numberWithInt:SGRCodeFgCyan],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgWhite"]]  ,[NSNumber numberWithInt:SGRCodeFgWhite],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgBlack"]]  ,[NSNumber numberWithInt:SGRCodeBgBlack],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgRed"]]    ,[NSNumber numberWithInt:SGRCodeBgRed],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgGreen"]]  ,[NSNumber numberWithInt:SGRCodeBgGreen],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgYellow"]] ,[NSNumber numberWithInt:SGRCodeBgYellow],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgBlue"]]   ,[NSNumber numberWithInt:SGRCodeBgBlue],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgMagenta"]],[NSNumber numberWithInt:SGRCodeBgMagenta],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgCyan"]]   ,[NSNumber numberWithInt:SGRCodeBgCyan],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgWhite"]]  ,[NSNumber numberWithInt:SGRCodeBgWhite],
+            nil];
+    
+}
+
 - (NSRect)screenToRect:(NSRect)appleCoordRect
 {
     // remember, the coordinates we use are with respect to the top left corner (both window and screen), but the actual OS takes them with respect to the bottom left (both window and screen), so we must convert between these
@@ -467,7 +540,12 @@
 #pragma mark Coding
 - (id)initWithCoder:(NSCoder *)coder
 {
-    return [self initWithProperties:[coder decodeObjectForKey:@"properties"]];
+    // allows object to change properties and still function properly. Old, unused properties are NOT deleted.
+    id tmpObject = [self init];
+    NSMutableDictionary *loadedProps = [coder decodeObjectForKey:@"properties"];
+    [properties addEntriesFromDictionary:loadedProps];
+    
+    return tmpObject;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder

@@ -100,6 +100,7 @@
 - (void)front;
 
 // Convience
+- (NSDictionary*)customAnsiColors;
 - (NSRect)screenToRect:(NSRect)appleCoordRect;
 - (NSRect)rect;
 - (BOOL)equals:(NTLog*)comp;

@@ -19,7 +19,6 @@
 @implementation GeekToolPrefs
 
 @synthesize groups;
-
 - (id)init
 {
     if (self = [super init])

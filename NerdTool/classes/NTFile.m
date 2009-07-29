@@ -182,7 +182,7 @@
         return;
     }
     
-    [[window textView]processAndSetText:newString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"] insert:YES];
+    [[window textView]processAndSetText:newString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"] andCustomColors:[self customAnsiColors] insert:YES];
     [(LogTextField*)[window textView]scrollEnd];
     
     [[aNotification object]waitForDataInBackgroundAndNotify];
