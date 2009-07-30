@@ -15,6 +15,7 @@
 #import "NTFile.h"
 #import "NTImage.h"
 #import "NTQuartz.h"
+#import "NTWeb.h"
 
 #import "defines.h"
 #import "NSIndexSet+CountOfIndexesInRange.h"
@@ -67,6 +68,7 @@
     else if ([[sender title]isEqualToString:@"File"]) [self insertObject:[[[NTFile alloc]init]autorelease] atArrangedObjectIndex:insertionIndex];
     else if ([[sender title]isEqualToString:@"Image"]) [self insertObject:[[[NTImage alloc]init]autorelease] atArrangedObjectIndex:insertionIndex];
     else if ([[sender title]isEqualToString:@"Quartz"]) [self insertObject:[[[NTQuartz alloc]init]autorelease] atArrangedObjectIndex:insertionIndex];
+    else if ([[sender title]isEqualToString:@"Web"]) [self insertObject:[[[NTWeb alloc]init]autorelease] atArrangedObjectIndex:insertionIndex];
 }
 
 - (void)removeObjectsAtArrangedObjectIndexes:(NSIndexSet *)indexes

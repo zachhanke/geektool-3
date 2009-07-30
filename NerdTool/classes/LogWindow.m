@@ -1,5 +1,6 @@
 #import "LogWindow.h"
 #import <Carbon/Carbon.h>
+#import <WebKit/WebKit.h>
 #import "CGSPrivate.h"
 
 @implementation LogWindow
@@ -94,6 +95,11 @@
 - (AIQuartzView*)quartzView
 {
     return quartzView;
+}
+
+- (WebView*)webView
+{
+    return webView;
 }
 
 

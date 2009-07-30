@@ -5,6 +5,7 @@
 @class LogTextField;
 @class NTLog;
 @class AIQuartzView;
+@class WebView;
 
 @interface LogWindow : NSWindow
 {
@@ -13,6 +14,7 @@
     IBOutlet id logView;
     IBOutlet id imageView;
     IBOutlet id quartzView;
+    IBOutlet id webView;
     
     NTLog *parentLog;
 }
@@ -29,4 +31,5 @@
 - (LogTextField*)textView;
 - (NSImageView*)imageView;
 - (AIQuartzView*)quartzView;
+- (WebView*)webView;
 @end
