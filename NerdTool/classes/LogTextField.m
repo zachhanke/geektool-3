@@ -74,6 +74,8 @@
     {
         ANSIEscapeHelper *ansiEscapeHelper = [[[ANSIEscapeHelper alloc]init]autorelease];
         [ansiEscapeHelper setAnsiColors:[[customColors mutableCopy]autorelease]];
+        [ansiEscapeHelper setDefaultStringColor:[attributes valueForKey:NSForegroundColorAttributeName]];
+        [ansiEscapeHelper setFont:[attributes valueForKey:NSFontAttributeName]];
         NSAttributedString *outputString = [self combineAttributes:attributes withAttributedString:[ansiEscapeHelper attributedStringWithANSIEscapedString:newString]];
         if (!insert)
             [[self textStorage]setAttributedString:outputString];
@@ -105,7 +107,8 @@
     NSMutableAttributedString *attrStr = [[attributedString mutableCopy]autorelease];
     for (NSString *key in attrs)
     {
-        if ([key isEqualToString:NSForegroundColorAttributeName]) continue;
+        // these are taken care of in ANSIEscapeHelper
+        if ([key isEqualToString:NSForegroundColorAttributeName] || [key isEqualToString:NSFontAttributeName]) continue;
         [attrStr addAttribute:key value:[attrs valueForKey:key] range:NSMakeRange(0,[[attrStr string]length])];
     }
     return attrStr;
