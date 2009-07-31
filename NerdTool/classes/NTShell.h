@@ -8,14 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 #import "NTLog.h"
+#import "LogProtocol.h"
 
-@interface NTShell : NTLog
+@interface NTShell : NTLog <LogProtocol>
 {
     IBOutlet id command;
     IBOutlet id refresh;
-    
-    NSMutableString *lastRecievedString;
 }
-@property (retain) NSMutableString *lastRecievedString;
 
 @end

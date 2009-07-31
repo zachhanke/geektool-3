@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="4017"/>
+			<integer value="3672"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -50,7 +50,7 @@
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{213.663, 10}</string>
 				<object class="NSView" key="NSWindowView" id="978680386">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -761,7 +761,7 @@
 														<object class="NSButton" id="385333987">
 															<reference key="NSNextResponder" ref="370690692"/>
 															<int key="NSvFlags">268</int>
-															<string key="NSFrame">{{128, 124}, {63, 20}}</string>
+															<string key="NSFrame">{{139, 124}, {63, 20}}</string>
 															<reference key="NSSuperview" ref="370690692"/>
 															<bool key="NSEnabled">YES</bool>
 															<object class="NSButtonCell" key="NSCell" id="99074946">
@@ -1001,6 +1001,7 @@
 													</object>
 													<string key="NSFrame">{{1, 1}, {136, 280}}</string>
 													<reference key="NSSuperview" ref="427623247"/>
+													<reference key="NSNextKeyView" ref="361346808"/>
 													<reference key="NSDocView" ref="361346808"/>
 													<reference key="NSBGColor" ref="822804351"/>
 													<int key="NScvFlags">4</int>
@@ -1027,6 +1028,7 @@
 											</object>
 											<string key="NSFrame">{{18, 43}, {138, 282}}</string>
 											<reference key="NSSuperview" ref="42207590"/>
+											<reference key="NSNextKeyView" ref="1054419975"/>
 											<int key="NSsFlags">514</int>
 											<reference key="NSVScroller" ref="1794"/>
 											<reference key="NSHScroller" ref="506208446"/>
@@ -1232,6 +1234,7 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{654, 556}</string>
+					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMinSize">{213.663, 32}</string>
@@ -1398,6 +1401,7 @@
 									</object>
 									<string key="NSFrame">{{1, 17}, {318, 71}}</string>
 									<reference key="NSSuperview" ref="788336380"/>
+									<reference key="NSNextKeyView" ref="293096707"/>
 									<reference key="NSDocView" ref="293096707"/>
 									<reference key="NSBGColor" ref="826383127"/>
 									<int key="NScvFlags">4</int>
@@ -1431,6 +1435,7 @@
 									</object>
 									<string key="NSFrame">{{1, 0}, {318, 17}}</string>
 									<reference key="NSSuperview" ref="788336380"/>
+									<reference key="NSNextKeyView" ref="150133871"/>
 									<reference key="NSDocView" ref="150133871"/>
 									<reference key="NSBGColor" ref="826383127"/>
 									<int key="NScvFlags">4</int>
@@ -1439,6 +1444,7 @@
 							</object>
 							<string key="NSFrame">{{20, 41}, {320, 89}}</string>
 							<reference key="NSSuperview" ref="731146825"/>
+							<reference key="NSNextKeyView" ref="258126660"/>
 							<int key="NSsFlags">530</int>
 							<reference key="NSVScroller" ref="59352571"/>
 							<reference key="NSHScroller" ref="578699706"/>
@@ -1703,7 +1709,7 @@
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
 				<string key="NSWindowRect">{{196, 102}, {362, 408}}</string>
-				<int key="NSWTFlags">603979776</int>
+				<int key="NSWTFlags">1677721600</int>
 				<string key="NSWindowTitle">Customize ANSI colors</string>
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
@@ -8570,7 +8576,7 @@ cyAod2l0aCByZXNwZWN0IHRvIHRoZSB0b3AgbGVmdCBjb3JuZXIpLg</string>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">4018</int>
+			<int key="maxID">4020</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

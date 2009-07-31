@@ -8,14 +8,15 @@
 
 #import <Cocoa/Cocoa.h>
 #import "NTLog.h"
+#import "LogProtocol.h"
 
-
-@interface NTImage : NTLog
+@interface NTImage : NTLog <LogProtocol>
 {
     IBOutlet id refresh;
     IBOutlet id imageURL;
     IBOutlet id alignment;
     IBOutlet id opacity;
+    IBOutlet id opacityText;
     IBOutlet id scaling;    
 }
 

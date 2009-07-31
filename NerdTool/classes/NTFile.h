@@ -8,10 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 #import "NTLog.h"
+#import "LogProtocol.h"
 
-@interface NTFile : NTLog
+@interface NTFile : NTLog <LogProtocol>
 {
     IBOutlet id file;
 }
+- (void)configureLog;
 - (IBAction)fileChoose:(id)sender;
 @end

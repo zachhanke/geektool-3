@@ -53,7 +53,7 @@
                                        [NSNumber numberWithInt:10],@"refresh",
                                        @"",@"imageURL",
                                        [NSNumber numberWithInt:TOP_LEFT],@"pictureAlignment",
-                                       [NSNumber numberWithInt:100],@"transparency",
+                                       [NSNumber numberWithFloat:1.0],@"opacity",
                                        [NSNumber numberWithInt:PROPORTIONALLY],@"imageFit",
                                        nil];
     
@@ -69,7 +69,8 @@
     [refresh bind:@"value" toObject:bindee withKeyPath:@"selection.properties.refresh" options:nil];
     [imageURL bind:@"value" toObject:bindee withKeyPath:@"selection.properties.imageURL" options:nil];
     [alignment bind:@"selectedIndex" toObject:bindee withKeyPath:@"selection.properties.pictureAlignment" options:nil];
-    [opacity bind:@"value" toObject:bindee withKeyPath:@"selection.properties.transparency" options:nil];
+    [opacity bind:@"value" toObject:bindee withKeyPath:@"selection.properties.opacity" options:nil];
+    [opacityText bind:@"value" toObject:bindee withKeyPath:@"selection.properties.opacity" options:nil];
     [scaling bind:@"selectedIndex" toObject:bindee withKeyPath:@"selection.properties.imageFit" options:nil];
 }
 
@@ -79,6 +80,7 @@
     [imageURL unbind:@"value"];
     [alignment unbind:@"value"];
     [opacity unbind:@"value"];
+    [opacityText unbind:@"value"];
     [scaling unbind:@"value"];
 }
 
@@ -88,7 +90,7 @@
     [self addObserver:self forKeyPath:@"properties.refresh" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.imageURL" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.pictureAlignment" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"properties.transparency" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.opacity" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.imageFit" options:0 context:NULL];
     [super setupPreferenceObservers];
 }
@@ -98,7 +100,7 @@
     [self removeObserver:self forKeyPath:@"properties.refresh"];
     [self removeObserver:self forKeyPath:@"properties.imageURL"];
     [self removeObserver:self forKeyPath:@"properties.pictureAlignment"];
-    [self removeObserver:self forKeyPath:@"properties.transparency"];
+    [self removeObserver:self forKeyPath:@"properties.opacity"];
     [self removeObserver:self forKeyPath:@"properties.imageFit"];
     [super removePreferenceObservers];
 }
@@ -111,23 +113,17 @@
         if (![[self active]boolValue] || ![properties boolForKey:@"enabled"]) return;
         
         [self createLogProcess];
-        [self setupLogWindowAndDisplay];
+        [self updateWindowIncludingTimer:YES];
     }
     // check if our LogProcess is alive
     else if (!windowController) return;
-    else if ([keyPath isEqualToString:@"properties.shadowWindow"] || [keyPath isEqualToString:@"properties.imageURL"])
+    else if ([keyPath isEqualToString:@"properties.shadowWindow"] || [keyPath isEqualToString:@"properties.imageURL"] || [keyPath isEqualToString:@"properties.refresh"])
     {
-        [self setupLogWindowAndDisplay];
+        [self updateWindowIncludingTimer:YES];
     }
-    else if ([keyPath isEqualToString:@"properties.refresh"])
-    {
-        timerNeedsUpdate = YES;
-        [self updateWindow];
-    }    
     else
     {
-        timerNeedsUpdate = NO;
-        [self updateWindow];
+        [self updateWindowIncludingTimer:NO];
     }
     
     if (postActivationRequest)
@@ -139,18 +135,13 @@
 }
 
 #pragma mark Window Management
-- (void)createWindow
-{        
-    [super createWindow];
-}
-
-- (void)updateWindow
+- (void)updateWindowIncludingTimer:(BOOL)updateTimer
 {    
+    [window setAlphaValue:[[properties valueForKey:@"opacity"]floatValue]];
     [[window imageView]setImageAlignment:[self imageAlignment]];
     [[window imageView]setImageScaling:[self imageFit]];
-    if (timerNeedsUpdate) [self updateTimer];
     
-    [super updateWindow];
+    [super updateWindowIncludingTimer:updateTimer];
 }
 
 #pragma mark Task

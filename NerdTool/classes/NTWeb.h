@@ -8,12 +8,16 @@
 
 #import <Cocoa/Cocoa.h>
 #import "NTLog.h"
+#import "LogProtocol.h"
 
-@interface NTWeb : NTLog
+@interface NTWeb : NTLog <LogProtocol>
 {
     IBOutlet id webURL;
     IBOutlet id refresh;
+    IBOutlet id opacity;
+    IBOutlet id opacityText;
     BOOL highlighted;
 }
+- (void)configureLog;
 
 @end

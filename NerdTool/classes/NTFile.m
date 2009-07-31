@@ -102,18 +102,19 @@
         if (![[self active]boolValue] || ![properties boolForKey:@"enabled"]) return;
         
         [self createLogProcess];
-        [self setupLogWindowAndDisplay];
+        [self configureLog];
+        [self updateWindowIncludingTimer:NO];
     }
     // check if our LogProcess is alive
     else if (!windowController) return;
-    else if ([keyPath isEqualToString:@"properties.shadowWindow"] || [keyPath isEqualToString:@"properties.file"])
+    else if ([keyPath isEqualToString:@"properties.file"])
     {
-        [self setupLogWindowAndDisplay];
+        [self configureLog];
+        [self updateWindowIncludingTimer:NO];
     }
     else
     {
-        timerNeedsUpdate = NO;
-        [self updateWindow];
+        [self updateWindowIncludingTimer:NO];
     }
     
     if (postActivationRequest)
@@ -125,10 +126,8 @@
 }
 
 #pragma mark Window Management
-- (void)createWindow
-{        
-    [super createWindow];
-
+- (void)configureLog
+{
     if ([[properties objectForKey:@"file"]isEqual:@""]) return;
     
     // Read file to 50 lines. The -F file makes sure the file keeps getting read even if it hits the EOF or the file name is changed            
@@ -148,20 +147,10 @@
     
     [[pipe fileHandleForReading]waitForDataInBackgroundAndNotify];
     
-    [task launch];
-}
-
-- (void)updateWindow
-{
-    [super updateWindow];
+    [task launch];        
 }
 
 #pragma mark Task
-- (void)updateCommand:(NSTimer*)timer
-{
-    [super updateCommand:timer];
-}
-
 - (void)processNewDataFromTask:(NSNotification*)aNotification
 {
     NSData *newData;

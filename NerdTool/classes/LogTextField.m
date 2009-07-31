@@ -48,7 +48,7 @@
     
     NSMutableParagraphStyle *myParagraphStyle = [[NSMutableParagraphStyle alloc]init];
     [myParagraphStyle setParagraphStyle:[NSParagraphStyle defaultParagraphStyle]];
-    if ([properties boolForKey:@"wrap"]) [myParagraphStyle setLineBreakMode:NSLineBreakByCharWrapping];
+    if ([properties boolForKey:@"wrap"]) [myParagraphStyle setLineBreakMode:NSLineBreakByWordWrapping];
     else [myParagraphStyle setLineBreakMode:NSLineBreakByClipping];
     switch ([properties integerForKey:@"alignment"])
     {

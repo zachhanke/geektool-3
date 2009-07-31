@@ -104,18 +104,19 @@
         if (![[self active]boolValue] || ![properties boolForKey:@"enabled"]) return;
         
         [self createLogProcess];
-        [self setupLogWindowAndDisplay];
+        [self configureLog];
+        [self updateWindowIncludingTimer:YES];
     }
     // check if our LogProcess is alive
     else if (!windowController) return;
-    else if ([keyPath isEqualToString:@"properties.shadowWindow"] || [keyPath isEqualToString:@"properties.quartzFile"])
+    else if ([keyPath isEqualToString:@"properties.quartzFile"])
     {
-        [self setupLogWindowAndDisplay];
+        [self configureLog];
+        [self updateWindowIncludingTimer:YES];
     }
     else if ([keyPath isEqualToString:@"properties.refresh"])
     {
-        timerNeedsUpdate = YES;
-        [self updateWindow];
+        [self updateWindowIncludingTimer:YES];
     }    
     else if ([keyPath isEqualToString:@"properties.framerate"])
     {
@@ -125,8 +126,7 @@
     }        
     else
     {
-        timerNeedsUpdate = NO;
-        [self updateWindow];
+        [self updateWindowIncludingTimer:NO];
     }
     
     if (postActivationRequest)
@@ -138,22 +138,14 @@
 }
 
 #pragma mark Window Management
-- (void)createWindow
+- (void)configureLog
 {
-    [super createWindow];
-    
     float newFramerate = [[properties objectForKey:@"framerate"]floatValue];
     [[window quartzView]setMaxRenderingFrameRate:newFramerate];
     [[window quartzView]setUnlock:(newFramerate == 1.0)?FALSE:TRUE];  
     
     if ([[properties objectForKey:@"quartzFile"]isEqual:@""]) return;
     if ([[window quartzView]loadCompositionFromFile:[properties objectForKey:@"quartzFile"]]) [[window quartzView]setAutostartsRendering:TRUE];
-}
-
-- (void)updateWindow
-{    
-    if (timerNeedsUpdate) [self updateTimer];
-    [super updateWindow];
 }
 
 #pragma mark Task

@@ -47,6 +47,7 @@
                                        
                                        [NSNumber numberWithInt:10],@"refresh",
                                        @"",@"webURL",
+                                       [NSNumber numberWithFloat:1.0],@"opacity",
                                        
                                        [NSNumber numberWithBool:NO],@"shadowWindow",
                                        nil];
@@ -63,12 +64,16 @@
     
     [refresh bind:@"value" toObject:bindee withKeyPath:@"selection.properties.refresh" options:nil];    
     [webURL bind:@"value" toObject:bindee withKeyPath:@"selection.properties.webURL" options:nil];
+    [opacity bind:@"value" toObject:bindee withKeyPath:@"selection.properties.opacity" options:nil];
+    [opacityText bind:@"value" toObject:bindee withKeyPath:@"selection.properties.opacity" options:nil];
 }
 
 - (void)destroyInterfaceBindings
 {
     [refresh unbind:@"value"];
     [webURL unbind:@"value"];
+    [opacity unbind:@"value"];
+    [opacityText unbind:@"value"];
 }
 
 #pragma mark Observing
@@ -76,6 +81,7 @@
 {
     [self addObserver:self forKeyPath:@"properties.refresh" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.webURL" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.opacity" options:0 context:NULL];
     [super setupPreferenceObservers];
 }
 
@@ -83,6 +89,7 @@
 {
     [self removeObserver:self forKeyPath:@"properties.refresh"];
     [self removeObserver:self forKeyPath:@"properties.webURL"];
+    [self removeObserver:self forKeyPath:@"properties.opacity"];
     [super removePreferenceObservers];
 }
 
@@ -94,23 +101,23 @@
         if (![[self active]boolValue] || ![properties boolForKey:@"enabled"]) return;
         
         [self createLogProcess];
-        [self setupLogWindowAndDisplay];
+        [self configureLog];
+        [self updateWindowIncludingTimer:YES];
     }
     // check if our LogProcess is alive
     else if (!windowController) return;
-    else if ([keyPath isEqualToString:@"properties.shadowWindow"] || [keyPath isEqualToString:@"properties.webURL"])
+    else if ([keyPath isEqualToString:@"properties.webURL"])
     {
-        [self setupLogWindowAndDisplay];
+        [self configureLog];
+        [self updateWindowIncludingTimer:YES];
     }
     else if ([keyPath isEqualToString:@"properties.refresh"])
     {
-        timerNeedsUpdate = YES;
-        [self updateWindow];
+        [self updateWindowIncludingTimer:YES];
     }
     else
     {
-        timerNeedsUpdate = NO;
-        [self updateWindow];
+        [self updateWindowIncludingTimer:NO];
     }
     
     if (postActivationRequest)
@@ -122,33 +129,30 @@
 }
 
 #pragma mark Window Management
-- (void)createWindow
+- (void)configureLog
 {        
-    [super createWindow];
     highlighted = NO;
     if ([[properties objectForKey:@"webURL"]isEqual:@""]) return;
-    [[[window webView]mainFrame]loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[properties objectForKey:@"webURL"]]]];
     [[window webView]setFrameLoadDelegate:self];
-    [[[window webView]windowScriptObject]evaluateWebScript:@"document.body.style.overflow='visible';"];
-    [[[window webView]windowScriptObject]evaluateWebScript:@"document.body.style.overflow='hidden';"];
+    [[[window webView]mainFrame]loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[properties objectForKey:@"webURL"]]]];
 }
     
 - (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame
 {
-    if (![[window webView]windowScriptObject]) return;
+    if (!windowController || ![[window webView]windowScriptObject]) return;
     [[[window webView]windowScriptObject]evaluateWebScript:[NSString stringWithFormat:@"document.body.style.overflow='%@';",highlighted?@"visible":@"hidden"]];
 }
 
-- (void)updateWindow
+- (void)updateWindowIncludingTimer:(BOOL)updateTimer
 {
-    if (timerNeedsUpdate) [self updateTimer];
-    [super updateWindow];
+    [window setAlphaValue:[[properties valueForKey:@"opacity"]floatValue]];
+    [super updateWindowIncludingTimer:updateTimer];
 }
 
 - (void)updateCommand:(NSTimer*)timer
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-    [[[window webView]mainFrame]reload];
+    if (![[window webView]isLoading])[[[window webView]mainFrame]reload];
     [pool release];
 }
 

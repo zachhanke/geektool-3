@@ -14,6 +14,7 @@
 
 #import "defines.h"
 #import "NSDictionary+IntAndBoolAccessors.h"
+#import "NS(Attributed)String+Geometrics.h"
 
 @implementation NTLog
 
@@ -34,15 +35,48 @@
 @synthesize env;
 @synthesize timer;
 @synthesize task;
-@synthesize timerNeedsUpdate;
 
-#pragma mark Window Management
-- (void)createWindow
-{        
-    [window setHasShadow:[[self properties]boolForKey:@"shadowWindow"]];
+@synthesize lastRecievedString;
+
+#pragma mark Properties
+// Subclasses would probably want to override the following methods
+- (NSString *)logTypeName
+{
+    return @"Box";
 }
 
-- (void)updateWindow
+- (BOOL)needsDisplayUIBox
+{
+    return YES;
+}
+
+- (NSString *)preferenceNibName
+{
+    return @"";
+}
+
+- (NSString *)displayNibName
+{
+    return @"";
+}
+
+- (NSDictionary *)defaultProperties
+{
+    return [NSDictionary dictionary];
+}
+
+- (void)setupInterfaceBindingsWithObject:(id)bindee
+{
+    return;
+}
+
+- (void)destroyInterfaceBindings
+{
+    return;
+}
+
+#pragma mark Window Management
+- (void)updateWindowIncludingTimer:(BOOL)updateTimer
 {
     NSRect tmpRect = [self rect];
     [window setFrame:[self screenToRect:tmpRect] display:NO];
@@ -50,9 +84,9 @@
     tmpRect.origin.x = 0;
     tmpRect.origin.y = 0;
     
+    [window setHasShadow:[[self properties]boolForKey:@"shadowWindow"]];
     [window setLevel:[[self properties]integerForKey:@"alwaysOnTop"]?[[self properties]integerForKey:@"alwaysOnTop"]:kCGDesktopWindowLevel];
     [window setSticky:![[self properties]boolForKey:@"alwaysOnTop"]];
-    
     
     if ([self needsDisplayUIBox])
     {
@@ -61,7 +95,7 @@
         [[window textView]updateTextAttributesUsingProps:properties];
         
         if (![properties boolForKey:@"useAsciiEscapes"]) [[window textView]applyAttributes:[[window textView]attributes]];
-        else [[[window textView]textStorage]setAttributedString:[[window textView]combineAttributes:[[window textView]attributes] withAttributedString:[[window textView]attributedString]]];
+        else if (lastRecievedString) [[window textView]processAndSetText:lastRecievedString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"] andCustomColors:[self customAnsiColors] insert:NO];
     }
     
     if (![window isVisible])
@@ -70,13 +104,8 @@
         [parentGroup reorder];
     }
     postActivationRequest = YES;
-}
-
-#pragma mark Task
-
-- (void)processNewDataFromTask:(NSNotification*)aNotification
-{
-    [window display];
+    
+    if (updateTimer) [self updateTimer];
 }
 
 #pragma mark -
@@ -93,6 +122,7 @@
     _loadedView = NO;
     windowController = nil;
     highlightSender = nil;
+    lastRecievedString = nil;
     
     [self setupPreferenceObservers];
     return self;
@@ -265,7 +295,8 @@
 
 - (void)destroyLogProcess
 {
-    [self removeProcessObservers];
+    // removes process observers (they call notificationHandler:)
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
     [windowController close];
     [self setWindowController:nil];
     [self setEnv:nil];
@@ -284,17 +315,12 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationHandler:) name:@"NSLogViewMouseUp" object:window];
 }
 
-- (void)removeProcessObservers
-{
-    [[NSNotificationCenter defaultCenter]removeObserver:self];
-}
-
 - (void)notificationHandler:(NSNotification *)notification
 {
     if (([[notification name]isEqualToString:NSWindowDidResizeNotification] || [[notification name]isEqualToString:NSWindowDidMoveNotification]))
     {
         // this happens on init, which screws things up
-        if (!_isBeingDragged) return;
+        // if (!_isBeingDragged) return;
         
         NSRect newCoords = [self screenToRect:[[notification object]frame]];
         [properties setValue:[NSNumber numberWithInt:NSMinX(newCoords)] forKey:@"x"];
@@ -336,17 +362,9 @@
     
     if (timerRepeats) [self release]; // since timer repeats, self is retained. we don't want this
     else [self setTimer:nil];
-    timerNeedsUpdate = NO;
 }
 
 #pragma mark Window Management
-- (void)setupLogWindowAndDisplay
-{
-    timerNeedsUpdate = YES;
-    [self createWindow];
-    [self updateWindow];
-}
-
 - (void)setHighlighted:(BOOL)val from:(id)sender
 {
     highlightSender = sender;
@@ -360,27 +378,36 @@
     [window orderFront:self];
 }
 
+- (IBAction)attemptBestWindowSize:(id)sender
+{
+    NSSize bestFit = [[[window textView]attributedString] sizeForWidth:[properties boolForKey:@"wrap"]?NSWidth([window frame]):FLT_MAX height:FLT_MAX];
+    [window setContentSize:bestFit];
+    [[NSNotificationCenter defaultCenter]postNotificationName:NSWindowDidResizeNotification object:window];
+    [window displayIfNeeded];
+}
+
+
 #pragma mark  
 #pragma mark Convience
 - (NSDictionary*)customAnsiColors
 {
     return [NSDictionary dictionaryWithObjectsAndKeys:
-            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgBlack"]]  ,[NSNumber numberWithInt:SGRCodeFgBlack],
-            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgRed"]]    ,[NSNumber numberWithInt:SGRCodeFgRed],
-            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgGreen"]]  ,[NSNumber numberWithInt:SGRCodeFgGreen],
-            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgYellow"]] ,[NSNumber numberWithInt:SGRCodeFgYellow],
-            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgBlue"]]   ,[NSNumber numberWithInt:SGRCodeFgBlue],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgBlack"]],[NSNumber numberWithInt:SGRCodeFgBlack],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgRed"]],[NSNumber numberWithInt:SGRCodeFgRed],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgGreen"]],[NSNumber numberWithInt:SGRCodeFgGreen],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgYellow"]],[NSNumber numberWithInt:SGRCodeFgYellow],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgBlue"]],[NSNumber numberWithInt:SGRCodeFgBlue],
             [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgMagenta"]],[NSNumber numberWithInt:SGRCodeFgMagenta],
-            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgCyan"]]   ,[NSNumber numberWithInt:SGRCodeFgCyan],
-            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgWhite"]]  ,[NSNumber numberWithInt:SGRCodeFgWhite],
-            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgBlack"]]  ,[NSNumber numberWithInt:SGRCodeBgBlack],
-            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgRed"]]    ,[NSNumber numberWithInt:SGRCodeBgRed],
-            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgGreen"]]  ,[NSNumber numberWithInt:SGRCodeBgGreen],
-            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgYellow"]] ,[NSNumber numberWithInt:SGRCodeBgYellow],
-            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgBlue"]]   ,[NSNumber numberWithInt:SGRCodeBgBlue],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgCyan"]],[NSNumber numberWithInt:SGRCodeFgCyan],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgWhite"]],[NSNumber numberWithInt:SGRCodeFgWhite],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgBlack"]],[NSNumber numberWithInt:SGRCodeBgBlack],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgRed"]],[NSNumber numberWithInt:SGRCodeBgRed],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgGreen"]],[NSNumber numberWithInt:SGRCodeBgGreen],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgYellow"]],[NSNumber numberWithInt:SGRCodeBgYellow],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgBlue"]],[NSNumber numberWithInt:SGRCodeBgBlue],
             [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgMagenta"]],[NSNumber numberWithInt:SGRCodeBgMagenta],
-            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgCyan"]]   ,[NSNumber numberWithInt:SGRCodeBgCyan],
-            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgWhite"]]  ,[NSNumber numberWithInt:SGRCodeBgWhite],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgCyan"]],[NSNumber numberWithInt:SGRCodeBgCyan],
+            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgWhite"]],[NSNumber numberWithInt:SGRCodeBgWhite],
             nil];
     
 }

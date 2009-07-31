@@ -15,12 +15,10 @@
 
 @implementation NTShell
 
-@synthesize lastRecievedString;
-
 #pragma mark Properties
 - (NSString *)logTypeName
 {
-    return @"Shell";
+    return NSLocalizedString(@"Shell",nil);
 }
 
 - (BOOL)needsDisplayUIBox
@@ -40,11 +38,7 @@
 
 - (NSDictionary *)defaultProperties
 {
-    NSData *textColorData = [NSArchiver archivedDataWithRootObject:[NSColor blackColor]];
-    NSData *backgroundColorData = [NSArchiver archivedDataWithRootObject:[NSColor clearColor]]; 
-    NSData *font = [NSArchiver archivedDataWithRootObject:[NSFont systemFontOfSize:[NSFont systemFontSize]]];
-    
-    NSDictionary *defaultProperties = [[NSDictionary alloc]initWithObjectsAndKeys:
+    NSDictionary *defaultProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                        NSLocalizedString(@"New shell log",nil),@"name",
                                        [NSNumber numberWithBool:YES],@"enabled",
                                        
@@ -57,34 +51,34 @@
                                        @"date",@"command",
                                        [NSNumber numberWithInt:10],@"refresh",
 
-                                       font,@"font",
-                                       textColorData,@"textColor",
-                                       backgroundColorData,@"backgroundColor",
+                                       [NSArchiver archivedDataWithRootObject:[NSFont systemFontOfSize:[NSFont systemFontSize]]],@"font",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor blackColor]],@"textColor",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor clearColor]],@"backgroundColor",
                                        [NSNumber numberWithBool:NO],@"wrap",
                                        [NSNumber numberWithBool:NO],@"shadowText",
                                        [NSNumber numberWithBool:NO],@"shadowWindow",
                                        [NSNumber numberWithBool:NO],@"useAsciiEscapes",
                                        [NSNumber numberWithInt:ALIGN_LEFT],@"alignment",
                                        
-                                       [NSArchiver archivedDataWithRootObject:[NSColor blackColor]]  ,@"fgBlack",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor redColor]]    ,@"fgRed",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor greenColor]]  ,@"fgGreen",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor yellowColor]] ,@"fgYellow",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor blueColor]]   ,@"fgBlue",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor blackColor]],@"fgBlack",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor redColor]],@"fgRed",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor greenColor]],@"fgGreen",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor yellowColor]],@"fgYellow",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor blueColor]],@"fgBlue",
                                        [NSArchiver archivedDataWithRootObject:[NSColor magentaColor]],@"fgMagenta",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor cyanColor]]   ,@"fgCyan",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor whiteColor]]  ,@"fgWhite",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor blackColor]]  ,@"bgBlack",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor redColor]]    ,@"bgRed",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor greenColor]]  ,@"bgGreen",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor yellowColor]] ,@"bgYellow",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor blueColor]]   ,@"bgBlue",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor cyanColor]],@"fgCyan",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor whiteColor]],@"fgWhite",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor blackColor]],@"bgBlack",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor redColor]],@"bgRed",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor greenColor]],@"bgGreen",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor yellowColor]],@"bgYellow",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor blueColor]],@"bgBlue",
                                        [NSArchiver archivedDataWithRootObject:[NSColor magentaColor]],@"bgMagenta",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor cyanColor]]   ,@"bgCyan",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor whiteColor]]  ,@"bgWhite",                                       
+                                       [NSArchiver archivedDataWithRootObject:[NSColor cyanColor]],@"bgCyan",
+                                       [NSArchiver archivedDataWithRootObject:[NSColor whiteColor]],@"bgWhite",                                       
                                        nil];
     
-    return [defaultProperties autorelease];
+    return defaultProperties;
 }
 
 #pragma mark Interface
@@ -127,18 +121,13 @@
         if (![[self active]boolValue] || ![properties boolForKey:@"enabled"]) return;
         
         [self createLogProcess];
-        [self setupLogWindowAndDisplay];
+        [self updateWindowIncludingTimer:YES];
     }
     // check if our LogProcess is alive
     else if (!windowController) return;
-    else if ([keyPath isEqualToString:@"properties.shadowWindow"] || [keyPath isEqualToString:@"properties.command"])
+    else if ([keyPath isEqualToString:@"properties.command"] || [keyPath isEqualToString:@"properties.refresh"])
     {
-        [self setupLogWindowAndDisplay];
-    }
-    else if ([keyPath isEqualToString:@"properties.refresh"])
-    {
-        timerNeedsUpdate = YES;
-        [self updateWindow];
+        [self updateWindowIncludingTimer:YES];
     }
     else if ([keyPath isEqualToString:@"properties.useAsciiEscapes"])
     {
@@ -146,8 +135,7 @@
     }    
     else
     {
-        timerNeedsUpdate = NO;
-        [self updateWindow];
+        [self updateWindowIncludingTimer:NO];
     }
     
     if (postActivationRequest)
@@ -159,22 +147,15 @@
 }
 
 #pragma mark Window Management
-- (void)createWindow
-{        
-    [super createWindow];
-}
-
-- (void)updateWindow
+- (void)updateWindowIncludingTimer:(BOOL)updateTimer
 {
-    if (timerNeedsUpdate)
+    if (updateTimer)
     {
         [self setArguments:[[[NSArray alloc]initWithObjects:@"-c",[[self properties]objectForKey:@"command"],nil]autorelease]];
-        
         [[window textView]setString:@""];
-        [self updateTimer];
     }
-    if (lastRecievedString) [(LogTextField*)[window textView]processAndSetText:lastRecievedString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"] andCustomColors:[self customAnsiColors] insert:NO];
-    [super updateWindow];
+    
+    [super updateWindowIncludingTimer:updateTimer];
 }
 
 #pragma mark Task
@@ -191,20 +172,9 @@
     [task setEnvironment:[self env]];
     [task setStandardOutput:pipe];
     
-    ///* // original shell (waits until the command is done before reading)
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleReadToEndOfFileCompletionNotification object:[pipe fileHandleForReading]];
     
     [[pipe fileHandleForReading]readToEndOfFileInBackgroundAndNotify];
-    // */
-    
-    // file type (pulls data as it comes)
-    /*
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleReadCompletionNotification object:[pipe fileHandleForReading]];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleDataAvailableNotification object:[pipe fileHandleForReading]];
-    
-    [[pipe fileHandleForReading]waitForDataInBackgroundAndNotify];
-    */
-    
     
     [task launch];
     [pool release];
@@ -232,7 +202,6 @@
     [(LogTextField*)[window textView]scrollEnd];
     
     [[aNotification object]readInBackgroundAndNotify];
-    //[[aNotification object]waitForDataInBackgroundAndNotify];
 
     [window display];
 }

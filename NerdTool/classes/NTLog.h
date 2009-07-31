@@ -31,7 +31,8 @@
     NSDictionary *env;
     NSTimer *timer;
     NSTask *task;
-    BOOL timerNeedsUpdate;
+    
+    NSMutableString *lastRecievedString;
 }
 @property (retain) NSMutableDictionary *properties;
 @property (copy) NSNumber *active;
@@ -50,9 +51,8 @@
 @property (copy) NSDictionary *env;
 @property (retain) NSTimer *timer;
 @property (retain) NSTask *task;
-@property (assign) BOOL timerNeedsUpdate;
+@property (retain) NSMutableString *lastRecievedString;
 
-// Most likely to subclass
 // Properties
 - (NSString *)logTypeName;
 - (BOOL)needsDisplayUIBox;
@@ -62,14 +62,9 @@
 // Interface
 - (void)setupInterfaceBindingsWithObject:(id)bindee;
 - (void)destroyInterfaceBindings;
-// Observing
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context;
+
 // Window Management
-- (void)createWindow;
-- (void)updateWindow;
-// Task
-- (void)updateCommand:(NSTimer*)timer;
-- (void)processNewDataFromTask:(NSNotification*)aNotification;
+- (void)updateWindowIncludingTimer:(BOOL)updateTimer;
 // Log Container
 - (id)initWithProperties:(NSDictionary*)newProperties;
 - (id)init;
@@ -81,24 +76,21 @@
 - (void)removePreferenceObservers;
 // KVC
 - (void)set_isBeingDragged:(BOOL)var;
-
 // Log Process
 // Management
 - (void)createLogProcess;
 - (void)destroyLogProcess;
 // Observing
 - (void)setupProcessObservers;
-- (void)removeProcessObservers;
 - (void)notificationHandler:(NSNotification *)notification;
 // KVC
 - (void)setTimer:(NSTimer*)newTimer;
 - (void)killTimer;
 - (void)updateTimer;
 // Window Management
-- (void)setupLogWindowAndDisplay;
 - (void)setHighlighted:(BOOL)val from:(id)sender;
 - (void)front;
-
+- (IBAction)attemptBestWindowSize:(id)sender;
 // Convience
 - (NSDictionary*)customAnsiColors;
 - (NSRect)screenToRect:(NSRect)appleCoordRect;
