@@ -106,6 +106,8 @@
     postActivationRequest = YES;
     
     if (updateTimer) [self updateTimer];
+    
+    [window display];
 }
 
 #pragma mark -
@@ -135,7 +137,7 @@
 
 - (void)dealloc
 {
-    [self removePreferenceObservers];    
+    [self removePreferenceObservers];
     [self destroyLogProcess];
     [properties release];
     [active release];

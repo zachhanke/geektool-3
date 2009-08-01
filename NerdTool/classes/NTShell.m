@@ -192,7 +192,7 @@
     else
         newData = [[aNotification object]availableData];
     
-    NSMutableString *newString = [[[NSMutableString alloc]initWithData:newData encoding:NSASCIIStringEncoding]autorelease];
+    NSMutableString *newString = [[[NSMutableString alloc]initWithData:newData encoding:NSUTF8StringEncoding]autorelease];
     
     if ([newString isEqualTo:@""]) return;
     
