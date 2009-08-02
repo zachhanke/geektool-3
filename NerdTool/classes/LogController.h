@@ -31,6 +31,14 @@
 - (void)dealloc;
 // UI
 - (IBAction)displayLogTypeMenu:(id)sender;
+- (IBAction)displayLogGearMenu:(id)sender;
+// Exporting
+- (IBAction)exportSelectedLogs:(id)sender;
+- (NSString *)pathForExportFile:(NSString*)name;
+// Importing
+- (IBAction)importLogs:(id)sender;
+- (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo;
+- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 // Content Add/Dupe/Remove
 - (void)removeObjectsAtArrangedObjectIndexes:(NSIndexSet *)indexes;
 - (IBAction)duplicate:(id)sender;

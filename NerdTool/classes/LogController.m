@@ -52,8 +52,93 @@
 - (IBAction)displayLogTypeMenu:(id)sender
 {    
     NSRect frame = [sender frame];    
-    NSEvent *event = [NSEvent mouseEventWithType:NSLeftMouseDown location:[sender convertPoint:NSMakePoint(frame.origin.x,frame.origin.y + NSHeight(frame) + MENU_Y_OFFSET) toView:nil] modifierFlags:0 timestamp:0 windowNumber:[[sender window]windowNumber] context:nil eventNumber:0 clickCount:1 pressure:0]; 
+    NSEvent *event = [NSEvent mouseEventWithType:NSLeftMouseDown location:[[sender superview]convertPoint:NSMakePoint(frame.origin.x,frame.origin.y) toView:nil] modifierFlags:0 timestamp:0 windowNumber:[[sender window]windowNumber] context:nil eventNumber:0 clickCount:1 pressure:0]; 
     [NSMenu popUpContextMenu:[sender menu] withEvent:event forView:sender];    
+}
+
+- (IBAction)displayLogGearMenu:(id)sender
+{    
+    NSRect frame = [sender frame];    
+    NSEvent *event = [NSEvent mouseEventWithType:NSLeftMouseDown location:[[sender superview]convertPoint:NSMakePoint(frame.origin.x,frame.origin.y) toView:nil] modifierFlags:0 timestamp:0 windowNumber:[[sender window]windowNumber] context:nil eventNumber:0 clickCount:1 pressure:0]; 
+    
+    NSMenu *menu = [[NSMenu alloc]init]; 
+    
+    NSMenuItem *duplicateItem = [[NSMenuItem alloc]init];
+    [duplicateItem setTitle:@"Duplicate"];
+    [duplicateItem setTarget:self];
+    [duplicateItem setAction:@selector(duplicate:)];
+    [menu addItem:duplicateItem];
+    
+    NSMenuItem *exportItem = [[NSMenuItem alloc]init];
+    [exportItem setTitle:@"Export"];
+    [exportItem setTarget:self];
+    [exportItem setAction:@selector(exportSelectedLogs:)];
+    [menu addItem:exportItem];
+    
+    [NSMenu popUpContextMenu:menu withEvent:event forView:sender];    
+    
+    [menu release];
+    [duplicateItem release];
+    [exportItem release];
+}
+
+#pragma mark Exporting
+- (IBAction)exportSelectedLogs:(id)sender
+{
+    if (![[self selectedObjects]count]) return;
+    for (NTLog *log in [self selectedObjects])
+    {
+        NSMutableDictionary *rootObject = [NSMutableDictionary dictionary];
+        [rootObject setValue:log forKey:@"log"];
+        [NSKeyedArchiver archiveRootObject:rootObject toFile:[self pathForExportFile:[[log properties]valueForKey:@"name"]]];
+    }
+}
+
+- (NSString *)pathForExportFile:(NSString*)name
+{
+    NSString *baseExportDir = [[NSSearchPathForDirectoriesInDomains(NSDesktopDirectory,NSUserDomainMask,YES) objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat:@"%@ Exported Logs",[[NSProcessInfo processInfo]processName]]];
+    
+    if ([[NSFileManager defaultManager]fileExistsAtPath:baseExportDir] == NO) [[NSFileManager defaultManager]createDirectoryAtPath:baseExportDir attributes:nil];
+    
+    NSString *outputFile = [baseExportDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.ntlog",name]];
+    int x = 0;
+    while ([[NSFileManager defaultManager]fileExistsAtPath:outputFile])
+    {
+        x++;
+        outputFile = [baseExportDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@ %i.ntlog",name,x]];
+    }
+        
+    return outputFile;    
+}
+
+#pragma mark Importing
+- (IBAction)importLogs:(id)sender
+{
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+    [openPanel setAllowsMultipleSelection:YES];
+    [openPanel setCanChooseFiles:YES];
+    [openPanel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObject:@"ntlog"] modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];    
+}
+
+- (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo
+{
+    [NSApp endSheet:sheet];
+    if (returnCode == NSOKButton)
+    {
+        if (![[sheet filenames]count]) return;
+        for (NSString *path in [sheet filenames])
+        {
+            NSDictionary *rootObject = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+            NTLog *importedLog = [rootObject objectForKey:@"log"];
+            _userInsert = YES;
+            [self addObject:importedLog];
+        }        
+    }
+}
+
+- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+{
+    if (returnCode == NSAlertDefaultReturn) [sheet close];
 }
 
 #pragma mark Content Add/Dupe/Remove

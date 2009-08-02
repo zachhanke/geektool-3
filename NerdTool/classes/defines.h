@@ -43,4 +43,4 @@
 #define SHADOW_RADIUS 3
 
 // menu
-#define MENU_Y_OFFSET -40
+#define MENU_Y_OFFSET 40
