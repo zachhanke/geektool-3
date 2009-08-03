@@ -117,7 +117,10 @@
     NSOpenPanel *openPanel = [NSOpenPanel openPanel];
     [openPanel setAllowsMultipleSelection:YES];
     [openPanel setCanChooseFiles:YES];
-    [openPanel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObject:@"ntlog"] modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];    
+    
+    NSString *defExportPath = [[NSSearchPathForDirectoriesInDomains(NSDesktopDirectory,NSUserDomainMask,YES) objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat:@"%@ Exported Logs",[[NSProcessInfo processInfo]processName]]];
+    
+    [openPanel beginSheetForDirectory:defExportPath file:nil types:[NSArray arrayWithObject:@"ntlog"] modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];    
 }
 
 - (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo

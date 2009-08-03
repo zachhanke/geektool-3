@@ -164,7 +164,16 @@
     NSOpenPanel *openPanel = [NSOpenPanel openPanel];
     [openPanel setAllowsMultipleSelection:NO];
     [openPanel setCanChooseFiles:YES];
-    [openPanel beginSheetForDirectory:[[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,NSUserDomainMask,YES) objectAtIndex:0]stringByAppendingPathComponent:[[NSProcessInfo processInfo]processName]] file:nil types:[NSArray arrayWithObjects:@"qtz",nil] modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+    
+    NSString *defaultDir = nil;
+    NSString *defaultFile = nil;
+    NSString *curPath = [[self properties]objectForKey:@"quartzFile"];
+    if ([[NSFileManager defaultManager]fileExistsAtPath:curPath])
+    {
+        defaultFile = [curPath lastPathComponent];
+        defaultDir = [curPath stringByDeletingLastPathComponent];
+    }
+    [openPanel beginSheetForDirectory:defaultDir file:defaultFile types:[NSArray arrayWithObjects:@"qtz",nil] modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];    
 }
 
 - (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo

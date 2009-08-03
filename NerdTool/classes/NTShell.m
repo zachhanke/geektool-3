@@ -38,7 +38,7 @@
 
 - (NSDictionary *)defaultProperties
 {
-    NSDictionary *defaultProperties = [NSDictionary dictionaryWithObjectsAndKeys:
+    NSDictionary *defaultProperties = [[NSDictionary alloc]initWithObjectsAndKeys:
                                        NSLocalizedString(@"New shell log",nil),@"name",
                                        [NSNumber numberWithBool:YES],@"enabled",
                                        
@@ -78,7 +78,7 @@
                                        [NSArchiver archivedDataWithRootObject:[NSColor whiteColor]],@"bgWhite",                                       
                                        nil];
     
-    return defaultProperties;
+    return [defaultProperties autorelease];
 }
 
 #pragma mark Interface
@@ -182,6 +182,7 @@
 
 - (void)processNewDataFromTask:(NSNotification*)aNotification
 {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
     NSData *newData;
     
     if ([[aNotification name]isEqual:NSFileHandleReadToEndOfFileCompletionNotification])
@@ -204,6 +205,7 @@
     [[aNotification object]readInBackgroundAndNotify];
 
     [window display];
+    [pool release];
 }
 
 - (void)notificationHandler:(NSNotification *)notification

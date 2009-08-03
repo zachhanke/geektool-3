@@ -215,9 +215,7 @@
             if (type == 0) newLog = [[NTFile alloc]init];
             else if (type == 1) newLog = [[NTShell alloc]init];
             else if (type == 2) newLog = [[NTImage alloc]init];            
-            
-            [[importedGroup logs]addObject:newLog];
-            
+                        
             [[newLog properties]setObject:[importDict objectForKey:@"name"] forKey:@"name"];
             [[newLog properties]setObject:[importDict objectForKey:@"enabled"] forKey:@"enabled"];
             
@@ -240,9 +238,13 @@
                 [[newLog properties]setObject:[importDict objectForKey:@"shadowText"] forKey:@"shadowText"];
                 [[newLog properties]setObject:[importDict objectForKey:@"shadowWindow"] forKey:@"shadowWindow"];
             }
+            
+            [[importedGroup logs]addObject:newLog];
+            [newLog release];
         }
         [groupController addObject:importedGroup];
         [groupController setSelectedObjects:[NSArray arrayWithObject:importedGroup]];
+        [importedGroup release];
     }
 }
                 
@@ -285,6 +287,8 @@
         NTGroup *defaultGroup = [[NTGroup alloc]init];
         [groupArray addObject:defaultGroup];
         groupToSelect = defaultGroup;
+        
+        [defaultGroup release];
     }
     
     for (NTGroup *tmp in groupArray)

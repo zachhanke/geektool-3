@@ -209,7 +209,16 @@
     NSOpenPanel *openPanel = [NSOpenPanel openPanel];
     [openPanel setAllowsMultipleSelection:NO];
     [openPanel setCanChooseFiles:YES];
-    [openPanel beginSheetForDirectory:@"/var/log/" file:@"system.log" types:nil modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];    
+    
+    NSString *defaultDir = @"/var/log/";
+    NSString *defaultFile = @"system.log";
+    NSString *curPath = [[self properties]objectForKey:@"file"];
+    if ([[NSFileManager defaultManager]fileExistsAtPath:curPath])
+    {
+        defaultFile = [curPath lastPathComponent];
+        defaultDir = [curPath stringByDeletingLastPathComponent];
+    }
+    [openPanel beginSheetForDirectory:defaultDir file:defaultFile types:nil modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];    
 }
 
 - (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo

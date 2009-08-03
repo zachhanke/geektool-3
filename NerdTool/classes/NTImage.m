@@ -161,7 +161,16 @@
     NSOpenPanel *openPanel = [NSOpenPanel openPanel];
     [openPanel setAllowsMultipleSelection:NO];
     [openPanel setCanChooseFiles:YES];
-    [openPanel beginSheetForDirectory:[[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,NSUserDomainMask,YES) objectAtIndex:0]stringByAppendingPathComponent:[[NSProcessInfo processInfo]processName]] file:nil types:nil modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+    
+    NSString *defaultDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES) objectAtIndex:0];
+    NSString *defaultFile = nil;
+    NSURL *curURL = [NSURL URLWithString:[[self properties]objectForKey:@"imageURL"]];
+    if ([curURL isFileURL] && [[NSFileManager defaultManager]fileExistsAtPath:[curURL path]])
+    {
+        defaultFile = [[curURL path]lastPathComponent];
+        defaultDir = [[curURL path]stringByDeletingLastPathComponent];
+    }
+    [openPanel beginSheetForDirectory:defaultDir file:defaultFile types:nil modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];    
 }
 
 - (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo

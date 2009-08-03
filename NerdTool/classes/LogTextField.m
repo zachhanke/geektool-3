@@ -60,9 +60,13 @@
     
     NSFont *tmpFont = [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"font"]];
     
-    NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:myParagraphStyle,NSParagraphStyleAttributeName,tmpFont,NSFontAttributeName,[NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"textColor"]],NSForegroundColorAttributeName,[defShadow autorelease],NSShadowAttributeName,nil];
+    NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:myParagraphStyle,NSParagraphStyleAttributeName,tmpFont,NSFontAttributeName,[NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"textColor"]],NSForegroundColorAttributeName,defShadow,NSShadowAttributeName,nil];
     
     [self setAttributes:attrs];
+    
+    [myParagraphStyle release];
+    [defShadow release];
+    
 }
 
 - (void)processAndSetText:(NSMutableString *)newString withEscapes:(BOOL)translateAsciiEscapes andCustomColors:(NSDictionary*)customColors insert:(BOOL)insert
@@ -73,7 +77,7 @@
     if (translateAsciiEscapes)
     {
         ANSIEscapeHelper *ansiEscapeHelper = [[[ANSIEscapeHelper alloc]init]autorelease];
-        [ansiEscapeHelper setAnsiColors:[[customColors mutableCopy]autorelease]];
+        [ansiEscapeHelper setAnsiColors:customColors];
         [ansiEscapeHelper setDefaultStringColor:[attributes valueForKey:NSForegroundColorAttributeName]];
         [ansiEscapeHelper setFont:[attributes valueForKey:NSFontAttributeName]];
         NSAttributedString *outputString = [self combineAttributes:attributes withAttributedString:[ansiEscapeHelper attributedStringWithANSIEscapedString:newString]];
