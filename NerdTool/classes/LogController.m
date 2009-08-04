@@ -372,8 +372,18 @@
         for (NSString *url in urls)
         {
             if (!url || [url isEqualToString:@""]) continue;
-            NTLog *logToAdd = [[NTWeb alloc]init];
-            [[logToAdd properties]setValue:[[NSURL URLWithString:url]absoluteString] forKey:@"webURL"];
+            NTLog *logToAdd = nil;
+            
+            if ([[NSImage imageFileTypes]containsObject:[url pathExtension]])
+            {
+                logToAdd = [[NTImage alloc]init];
+                [[logToAdd properties]setValue:[[NSURL URLWithString:url]absoluteString] forKey:@"imageURL"];
+            }
+            else
+            {
+                logToAdd = [[NTWeb alloc]init];
+                [[logToAdd properties]setValue:[[NSURL URLWithString:url]absoluteString] forKey:@"webURL"];
+            }
             
             _userInsert = YES;
             [self insertObject:logToAdd atArrangedObjectIndex:row];
