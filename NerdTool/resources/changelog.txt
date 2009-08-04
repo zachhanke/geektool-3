@@ -1,9 +1,27 @@
 Changelog
 NerdTool
-June 2009
 
-0.5: First public release
+0.5 (2009-07-23): 
+	* First public release
 
-0.6: Changed...
+0.6 (2009-08-#): 
+	* [New] Added log import/export ability.
+	* [New] Added auto-resize for shell/file log types.
+	* [New] Added opacity to Image log type.
+	* [New] Added WebKit log type.
+	* [New] Added FPS option to Quartz view.
+	* [New] Added customizeable ANSI colors.
+	* [New] Added "Start NerdTool at login" preference. 
+	* [Change] Updated ANSIEscapeHelper class to version 0.9.1
+	* [Change] UTF-8 string encoding used over standard ASCII encoding.
+	* [Change] Switched to a monospace font for shell text input. 
+	* [Change] Shell colorized output now uses text color as a default color.
+	* [Change] When new group is added, name is selected and highlighted for change. 
+	* [Change] When new log is added, name is selected and highlighted for change. 
+	* [Change] Wrapping is now by-word instead of by-character.
+	* [Change] Switching to ANSI escaped text happens instantly, rather than waiting for next refresh. 
+	* [Change] Logs deselect if configuration window is closed. 
+	* [Change] Main window now opens when application is reactivated via the Dock.
+	* [Fix] Fixed error where application would crash when the Preferences window was closed via the mouse and then clicking on the menu bar. 
 
 ===========================================================================

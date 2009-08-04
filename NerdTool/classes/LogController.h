@@ -34,9 +34,10 @@
 - (IBAction)displayLogGearMenu:(id)sender;
 // Exporting
 - (IBAction)exportSelectedLogs:(id)sender;
-- (NSString *)pathForExportFile:(NSString*)name;
+- (NSArray*)exportLogs:(NSArray*)logs withRootDestination:(NSString*)rootPath;
 // Importing
 - (IBAction)importLogs:(id)sender;
+- (void)importLogsAtPaths:(NSArray*)logPaths;
 - (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo;
 - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 // Content Add/Dupe/Remove
@@ -47,9 +48,5 @@
 - (void)insertObjects:(NSArray *)objects atArrangedObjectIndexes:(NSIndexSet *)indexes;
 // Observing
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context;
-// Drag n' Drop Stuff
-- (BOOL)tableView:(NSTableView *)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard;
-- (NSDragOperation)tableView:(NSTableView*)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)op;
-- (BOOL)tableView:(NSTableView*)tv acceptDrop:(id <NSDraggingInfo>)info row:(int)row dropOperation:(NSTableViewDropOperation)op;
 - (NSIndexSet *)moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)fromIndexSet toIndex:(unsigned int)insertIndex;
 @end

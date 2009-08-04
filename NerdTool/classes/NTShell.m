@@ -170,6 +170,8 @@
     [task setLaunchPath:@"/bin/sh"];
     [task setArguments:[self arguments]];
     [task setEnvironment:[self env]];
+    // needed to keep xcode's console working
+    [task setStandardInput:[NSPipe pipe]];
     [task setStandardOutput:pipe];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleReadToEndOfFileCompletionNotification object:[pipe fileHandleForReading]];

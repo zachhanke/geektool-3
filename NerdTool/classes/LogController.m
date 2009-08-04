@@ -27,14 +27,15 @@
 {
     _oldSelectedLog = nil;
     _userInsert = NO;
-
-    MovedRowsType = @"GTLog_Moved_Item";
-    CopiedRowsType = @"GTLog_Copied_Item";
-
-	[tableView setDraggingSourceOperationMask:NSDragOperationLink forLocal:NO];
-	[tableView setDraggingSourceOperationMask:(NSDragOperationCopy | NSDragOperationMove) forLocal:YES];
-	[tableView registerForDraggedTypes:[NSArray arrayWithObjects:CopiedRowsType,MovedRowsType,nil]];
-    [tableView setAllowsMultipleSelection:YES];
+    
+    MovedRowsType = @"NTLog_Moved_Item";
+    CopiedRowsType = @"NTLog_Copied_Item";
+    
+    [tableView setDelegate:self];
+	[tableView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:NO];
+	[tableView setDraggingSourceOperationMask:NSDragOperationMove forLocal:YES];
+	[tableView registerForDraggedTypes:[NSArray arrayWithObjects:CopiedRowsType,MovedRowsType,NSFilenamesPboardType,nil]];
+    [tableView setAllowsMultipleSelection:YES];    
     
     [self addObserver:self forKeyPath:@"selectedObjects" options:0 context:nil];
     [self observeValueForKeyPath:@"selectedObjects" ofObject:self change:nil context:nil];
@@ -86,29 +87,35 @@
 - (IBAction)exportSelectedLogs:(id)sender
 {
     if (![[self selectedObjects]count]) return;
-    for (NTLog *log in [self selectedObjects])
-    {
-        NSMutableDictionary *rootObject = [NSMutableDictionary dictionary];
-        [rootObject setValue:log forKey:@"log"];
-        [NSKeyedArchiver archiveRootObject:rootObject toFile:[self pathForExportFile:[[log properties]valueForKey:@"name"]]];
-    }
+    NSString *baseExportDir = [[NSSearchPathForDirectoriesInDomains(NSDesktopDirectory,NSUserDomainMask,YES) objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat:@"%@ Exported Logs",[[NSProcessInfo processInfo]processName]]];
+    [self exportLogs:[self selectedObjects] withRootDestination:baseExportDir];
 }
 
-- (NSString *)pathForExportFile:(NSString*)name
+- (NSArray*)exportLogs:(NSArray*)logs withRootDestination:(NSString*)rootPath
 {
-    NSString *baseExportDir = [[NSSearchPathForDirectoriesInDomains(NSDesktopDirectory,NSUserDomainMask,YES) objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat:@"%@ Exported Logs",[[NSProcessInfo processInfo]processName]]];
+    if (!rootPath) return nil;
+    if (![[NSFileManager defaultManager]fileExistsAtPath:rootPath]) [[NSFileManager defaultManager]createDirectoryAtPath:rootPath attributes:nil];
+    NSMutableArray *returnArray = [NSMutableArray arrayWithCapacity:[logs count]];
     
-    if ([[NSFileManager defaultManager]fileExistsAtPath:baseExportDir] == NO) [[NSFileManager defaultManager]createDirectoryAtPath:baseExportDir attributes:nil];
-    
-    NSString *outputFile = [baseExportDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.ntlog",name]];
-    int x = 0;
-    while ([[NSFileManager defaultManager]fileExistsAtPath:outputFile])
+    for (NTLog *log in logs)
     {
-        x++;
-        outputFile = [baseExportDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@ %i.ntlog",name,x]];
-    }
+        NSMutableDictionary *rootObject = [NSMutableDictionary dictionaryWithCapacity:[logs count]];
+        [rootObject setValue:log forKey:@"log"];
+        NSString *name = [[log properties]valueForKey:@"name"];
         
-    return outputFile;    
+        // prevent clobbering
+        NSString *outputFile = [rootPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.ntlog",name]];
+        int x = 0;
+        while ([[NSFileManager defaultManager]fileExistsAtPath:outputFile])
+        {
+            x++;
+            outputFile = [rootPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@ %i.ntlog",name,x]];
+        }        
+        
+        [returnArray addObject:outputFile];
+        [NSKeyedArchiver archiveRootObject:rootObject toFile:outputFile];
+    }
+    return returnArray;
 }
 
 #pragma mark Importing
@@ -120,7 +127,19 @@
     
     NSString *defExportPath = [[NSSearchPathForDirectoriesInDomains(NSDesktopDirectory,NSUserDomainMask,YES) objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat:@"%@ Exported Logs",[[NSProcessInfo processInfo]processName]]];
     
-    [openPanel beginSheetForDirectory:defExportPath file:nil types:[NSArray arrayWithObject:@"ntlog"] modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];    
+    [openPanel beginSheetForDirectory:defExportPath file:nil types:[NSArray arrayWithObject:@"ntlog"] modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+}
+
+- (void)importLogsAtPaths:(NSArray*)logPaths toRow:(int)insertRow
+{
+    for (NSString *path in logPaths)
+    {
+        if (![[path pathExtension]isEqualToString:@"ntlog"]) continue;
+        NSDictionary *rootObject = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+        NTLog *importedLog = [rootObject objectForKey:@"log"];
+        _userInsert = YES;
+        [self insertObject:importedLog atArrangedObjectIndex:insertRow];
+    }            
 }
 
 - (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo
@@ -129,13 +148,7 @@
     if (returnCode == NSOKButton)
     {
         if (![[sheet filenames]count]) return;
-        for (NSString *path in [sheet filenames])
-        {
-            NSDictionary *rootObject = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
-            NTLog *importedLog = [rootObject objectForKey:@"log"];
-            _userInsert = YES;
-            [self addObject:importedLog];
-        }        
+        [self importLogsAtPaths:[sheet filenames] toRow:([tableView selectedRow] > 0)?[tableView selectedRow]:0];
     }
 }
 
@@ -144,7 +157,7 @@
     if (returnCode == NSAlertDefaultReturn) [sheet close];
 }
 
-#pragma mark Content Add/Dupe/Remove
+#pragma mark Content
 - (IBAction)insertLog:(id)sender
 {
     _userInsert = YES;
@@ -248,43 +261,42 @@
     }
     else [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
+#pragma mark Drag and Drop
 
-#pragma mark Drag n' Drop Stuff
-// thanks to mmalc for figuring most of this stuff out for me (and just being amazing)
+// drag source
 - (BOOL)tableView:(NSTableView *)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
 {
-	// declare our own pasteboard types
-    NSArray *typesArray = [NSArray arrayWithObjects:MovedRowsType,nil];
-    
-    [pboard declareTypes:typesArray owner:self];
+    [pboard declareTypes:[NSArray arrayWithObjects:NSFilesPromisePboardType,MovedRowsType,nil] owner:self];
+    [pboard setData:[NSKeyedArchiver archivedDataWithRootObject:rowIndexes] forType:MovedRowsType];
 	
-    // add rows array for local move
-	NSData *rowIndexesArchive = [NSKeyedArchiver archivedDataWithRootObject:rowIndexes];
-    [pboard setData:rowIndexesArchive forType:MovedRowsType];
-	
-	// create new array of selected rows for remote drop could do deferred provision, but keep it direct for clarity
+	// create new array of selected rows for remote drop. could do deferred provision, but keep it direct for clarity
 	NSMutableArray *rowCopies = [NSMutableArray arrayWithCapacity:[rowIndexes count]];
 	
     unsigned int currentIndex = [rowIndexes firstIndex];
     while (currentIndex != NSNotFound)
     {
 		[rowCopies addObject:[[self arrangedObjects]objectAtIndex:currentIndex]];
-        currentIndex = [rowIndexes indexGreaterThanIndex: currentIndex];
+        currentIndex = [rowIndexes indexGreaterThanIndex:currentIndex];
     }
 	
 	// setPropertyList works here because we're using dictionaries, strings, and dates; otherwise, archive collection to NSData...
+    [pboard setPropertyList:[NSArray arrayWithObject:@"ntlog"] forType:NSFilesPromisePboardType];
 	[pboard setPropertyList:rowCopies forType:CopiedRowsType];
 	
     return YES;
 }
 
+- (NSArray *)tableView:(NSTableView *)aTableView namesOfPromisedFilesDroppedAtDestination:(NSURL *)dropDestination forDraggedRowsWithIndexes:(NSIndexSet *)indexSet
+{
+    return [self exportLogs:[[self content]objectsAtIndexes:indexSet] withRootDestination:[dropDestination path]];
+}
+
+// drag destination
 - (NSDragOperation)tableView:(NSTableView*)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)op
 {
     NSDragOperation dragOp = NSDragOperationCopy;
     
-    // if drag source is self, it's a move unless the Option key is pressed
-    if ([info draggingSource] == tableView)
-        dragOp = NSDragOperationMove;
+    if ([info draggingSource] == tableView) dragOp = NSDragOperationMove;
     
     // we want to put the object at, not over, the current row (contrast NSTableViewDropOn) 
     [tv setDropRow:row dropOperation:NSTableViewDropAbove];
@@ -308,7 +320,12 @@
         // set selected rows to those that were just moved
         [self setSelectionIndexes:destinationIndexes];
         
-        
+        result = YES;
+    }
+    else if ([[[info draggingPasteboard]types]containsObject:NSFilenamesPboardType])
+    {
+        NSArray *files = [[info draggingPasteboard]propertyListForType:NSFilenamesPboardType];
+        [self importLogsAtPaths:files toRow:row];
         result = YES;
     }
     

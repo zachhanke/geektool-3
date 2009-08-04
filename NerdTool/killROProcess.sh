@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 ############################
 # Kill NerdTool RO process #
 ############################

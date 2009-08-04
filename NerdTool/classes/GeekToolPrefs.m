@@ -76,6 +76,8 @@
     NSString *shellCommand = [resourcePath stringByAppendingPathComponent:@"killROProcess.sh"];
     NSTask *task = [[NSTask alloc]init];
     [task setLaunchPath:@"/bin/sh"];
+    // needed to keep xcode's console working
+    [task setStandardInput:[NSPipe pipe]];
     [task setArguments:[NSArray arrayWithObjects:shellCommand,@"-k",nil]];
     [task launch];
     [task waitUntilExit];
@@ -299,7 +301,7 @@
         }
     
     [self setGroups:[NSMutableArray arrayWithArray:groupArray]];
-    [groupController setSelectedObjects:[NSArray arrayWithObject:groupToSelect]];
+    [groupController setSelectedObjects:[NSArray arrayWithObject:groupToSelect?groupToSelect:[groupArray objectAtIndex:0]]];
 }
 
 - (void)loadPreferences
