@@ -37,7 +37,7 @@
 - (NSArray*)exportLogs:(NSArray*)logs withRootDestination:(NSString*)rootPath;
 // Importing
 - (IBAction)importLogs:(id)sender;
-- (void)importLogsAtPaths:(NSArray*)logPaths;
+- (void)importLogAtPath:(NSString*)logPath toRow:(int)insertRow;
 - (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo;
 - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 // Content Add/Dupe/Remove

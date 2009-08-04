@@ -148,7 +148,7 @@
 - (void)updateCommand:(NSTimer*)timer
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-    if (![properties objectForKey:@"imageURL"] || [[properties objectForKey:@"imageURL"]isEqualToString:@""]) return;
+    if (![properties objectForKey:@"imageURL"]) return;
     [NSThread detachNewThreadSelector:@selector(setImage:) toTarget:self withObject:[properties objectForKey:@"imageURL"]];            
     [pool release];
 }

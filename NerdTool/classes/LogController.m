@@ -34,7 +34,7 @@
     [tableView setDelegate:self];
 	[tableView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:NO];
 	[tableView setDraggingSourceOperationMask:NSDragOperationMove forLocal:YES];
-	[tableView registerForDraggedTypes:[NSArray arrayWithObjects:CopiedRowsType,MovedRowsType,NSFilenamesPboardType,nil]];
+	[tableView registerForDraggedTypes:[NSArray arrayWithObjects:CopiedRowsType,MovedRowsType,NSFilenamesPboardType,NSURLPboardType,nil]];
     [tableView setAllowsMultipleSelection:YES];    
     
     [self addObserver:self forKeyPath:@"selectedObjects" options:0 context:nil];
@@ -130,16 +130,12 @@
     [openPanel beginSheetForDirectory:defExportPath file:nil types:[NSArray arrayWithObject:@"ntlog"] modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
 }
 
-- (void)importLogsAtPaths:(NSArray*)logPaths toRow:(int)insertRow
+- (void)importLogAtPath:(NSString*)logPath toRow:(int)insertRow
 {
-    for (NSString *path in logPaths)
-    {
-        if (![[path pathExtension]isEqualToString:@"ntlog"]) continue;
-        NSDictionary *rootObject = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
-        NTLog *importedLog = [rootObject objectForKey:@"log"];
-        _userInsert = YES;
-        [self insertObject:importedLog atArrangedObjectIndex:insertRow];
-    }            
+    NSDictionary *rootObject = [NSKeyedUnarchiver unarchiveObjectWithFile:logPath];
+    NTLog *importedLog = [rootObject objectForKey:@"log"];
+    _userInsert = YES;
+    [self insertObject:importedLog atArrangedObjectIndex:insertRow];
 }
 
 - (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo
@@ -148,7 +144,11 @@
     if (returnCode == NSOKButton)
     {
         if (![[sheet filenames]count]) return;
-        [self importLogsAtPaths:[sheet filenames] toRow:([tableView selectedRow] > 0)?[tableView selectedRow]:0];
+        for (NSString *path in [sheet filenames])
+        {
+            if (![[path pathExtension]isEqualToString:@"ntlog"]) continue;
+            [self importLogAtPath:path toRow:([tableView selectedRow] > 0)?[tableView selectedRow]:0];
+        }        
     }
 }
 
@@ -325,8 +325,61 @@
     else if ([[[info draggingPasteboard]types]containsObject:NSFilenamesPboardType])
     {
         NSArray *files = [[info draggingPasteboard]propertyListForType:NSFilenamesPboardType];
-        [self importLogsAtPaths:files toRow:row];
+        for (NSString *file in files)
+        {   
+            if (!file || [file isEqualToString:@""]) continue;
+            NTLog *logToAdd = nil;
+            if ([[file pathExtension]isEqualToString:@"ntlog"])
+            {
+                [self importLogAtPath:file toRow:row];
+            }
+            else if ([[file pathExtension]isEqualToString:@"qtz"])
+            {
+                logToAdd = [[NTQuartz alloc]init];
+                [[logToAdd properties]setValue:file forKey:@"quartzFile"];
+            }
+            else if ([[NSArray arrayWithObjects:@"url",@"htm",@"html",nil]containsObject:[file pathExtension]])
+            {
+                logToAdd = [[NTWeb alloc]init];
+                [[logToAdd properties]setValue:[[NSURL fileURLWithPath:file]absoluteString] forKey:@"webURL"];
+            }
+            else if ([[NSArray arrayWithObjects:@"txt",@"log",@"todo",nil]containsObject:[file pathExtension]])
+            {
+                logToAdd = [[NTFile alloc]init];
+                [[logToAdd properties]setValue:file forKey:@"file"];
+            }
+            else if ([[NSArray arrayWithObjects:@"sh",@"pl",@"rb",@"py",nil]containsObject:[file pathExtension]])
+            {
+                logToAdd = [[NTShell alloc]init];
+                [[logToAdd properties]setValue:file forKey:@"command"];
+            }
+            else if ([[NSImage imageFileTypes]containsObject:[file pathExtension]])
+            {
+                logToAdd = [[NTImage alloc]init];
+                [[logToAdd properties]setValue:[[NSURL fileURLWithPath:file]absoluteString] forKey:@"imageURL"];
+            }
+            
+            if (!logToAdd) continue;
+            _userInsert = YES;
+            [self insertObject:logToAdd atArrangedObjectIndex:row];
+            [logToAdd release];
+        }
         result = YES;
+    }
+    else if ([[[info draggingPasteboard]types]containsObject:NSURLPboardType])
+    {
+        NSArray *urls = [[info draggingPasteboard]propertyListForType:NSURLPboardType];
+        for (NSString *url in urls)
+        {
+            if (!url || [url isEqualToString:@""]) continue;
+            NTLog *logToAdd = [[NTWeb alloc]init];
+            [[logToAdd properties]setValue:[[NSURL URLWithString:url]absoluteString] forKey:@"webURL"];
+            
+            _userInsert = YES;
+            [self insertObject:logToAdd atArrangedObjectIndex:row];
+            [logToAdd release];
+        }
+        
     }
     
     return result;
