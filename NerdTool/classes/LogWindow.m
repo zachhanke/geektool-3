@@ -102,5 +102,9 @@
     return webView;
 }
 
+- (id)scrollView
+{
+    return scrollView;
+}
 
 @end

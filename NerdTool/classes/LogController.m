@@ -338,6 +338,11 @@
                 logToAdd = [[NTQuartz alloc]init];
                 [[logToAdd properties]setValue:file forKey:@"quartzFile"];
             }
+            else if ([[file pathExtension]isEqualToString:@"scpt"])
+            {
+                logToAdd = [[NTShell alloc]init];
+                [[logToAdd properties]setValue:[NSString stringWithFormat:@"osascript %@",file] forKey:@"command"];
+            }
             else if ([[NSArray arrayWithObjects:@"url",@"htm",@"html",nil]containsObject:[file pathExtension]])
             {
                 logToAdd = [[NTWeb alloc]init];

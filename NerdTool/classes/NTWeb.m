@@ -49,10 +49,19 @@
                                        @"",@"webURL",
                                        [NSNumber numberWithFloat:1.0],@"opacity",
                                        
+                                       [NSNumber numberWithInt:0],@"scrollX",
+                                       [NSNumber numberWithInt:0],@"scrollY",
+                                       
                                        [NSNumber numberWithBool:NO],@"shadowWindow",
                                        nil];
     
     return [defaultProperties autorelease];
+}
+
+- (void)dealloc
+{
+    if(!windowController) [[window webView]stopLoading:nil];
+    [super dealloc];
 }
 
 #pragma mark Interface
@@ -134,13 +143,41 @@
     highlighted = NO;
     if ([[properties objectForKey:@"webURL"]isEqual:@""]) return;
     [[window webView]setFrameLoadDelegate:self];
+    [[window scrollView]setDocumentView:[window webView]];
+    needsScroll = YES;
     [[[window webView]mainFrame]loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[properties objectForKey:@"webURL"]]]];
 }
     
 - (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame
 {
     if (!windowController || ![[window webView]windowScriptObject]) return;
+    if (needsScroll && [[[NSProcessInfo processInfo]processName]isEqual:@"NerdToolRO"])
+    {
+        NSRect frame = [[[[[window webView]mainFrame]frameView]documentView]frame];
+        [[window webView]setFrame:frame];
+        NSPoint bounds = NSMakePoint([[properties valueForKey:@"scrollX"]intValue],NSHeight(frame) - [[properties valueForKey:@"scrollY"]intValue] - NSHeight([window frame]));
+        [[window scrollView]scrollPoint:NSZeroPoint];
+        [[window scrollView]scrollPoint:bounds];
+        [[[[window webView]mainFrame]frameView]setAllowsScrolling:NO];
+    }
+    else if (needsScroll)
+    {
+        NSScrollView *scrollView = [[[[[window webView]mainFrame]frameView]documentView]enclosingScrollView];
+        NSPoint bounds = NSMakePoint([[properties valueForKey:@"scrollX"]intValue],[[properties valueForKey:@"scrollY"]intValue]);
+        //bounds = [[[[[window webView]mainFrame]frameView]documentView] convertPoint:bounds toView:scrollView];
+        [[scrollView documentView]scrollPoint:bounds];    
+    }
+    needsScroll = NO;
     [[[window webView]windowScriptObject]evaluateWebScript:[NSString stringWithFormat:@"document.body.style.overflow='%@';",highlighted?@"visible":@"hidden"]];
+}
+
+- (IBAction)setScrollLocation:(id)sender
+{
+    if (!windowController) return;
+    NSScrollView *scrollView = [[[[[window webView]mainFrame]frameView]documentView]enclosingScrollView];
+    NSPoint bounds = [[scrollView contentView]bounds].origin;
+    [properties setValue:[NSNumber numberWithInt:bounds.x] forKey:@"scrollX"];
+    [properties setValue:[NSNumber numberWithInt:bounds.y] forKey:@"scrollY"];    
 }
 
 - (void)updateWindowIncludingTimer:(BOOL)updateTimer
@@ -158,8 +195,8 @@
 
 - (void)setHighlighted:(BOOL)val from:(id)sender
 {
-    highlighted = val;
     if (windowController) [[[window webView]windowScriptObject]evaluateWebScript:[NSString stringWithFormat:@"document.body.style.overflow='%@';",val?@"visible":@"hidden"]];
+    highlighted = val;
     [super setHighlighted:val from:sender];
 }
 

@@ -17,7 +17,9 @@
     IBOutlet id opacity;
     IBOutlet id opacityText;
     BOOL highlighted;
+    BOOL needsScroll;
 }
 - (void)configureLog;
+- (IBAction)setScrollLocation:(id)sender;
 
 @end

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A0BC2DB1028ABF700716B75 /* NTWeb.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A422401102130C80074C19D /* NTWeb.m */; };
+		0A0BC2ED1028AC3500716B75 /* webWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A42233A10212EE60074C19D /* webWindow.xib */; };
+		0A0BC2F41028AC5C00716B75 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A42234E1021300B0074C19D /* WebKit.framework */; };
 		0A42233C10212EE60074C19D /* webWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A42233A10212EE60074C19D /* webWindow.xib */; };
 		0A42234F1021300B0074C19D /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A42234E1021300B0074C19D /* WebKit.framework */; };
 		0A4223FF102130900074C19D /* webPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A4223FD102130900074C19D /* webPrefs.xib */; };
@@ -217,6 +220,7 @@
 				0AB89F031014A91A006FE649 /* Cocoa.framework in Frameworks */,
 				0AB89F041014A923006FE649 /* Quartz.framework in Frameworks */,
 				0AB89F121014A982006FE649 /* Carbon.framework in Frameworks */,
+				0A0BC2F41028AC5C00716B75 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -549,6 +553,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A0BC2ED1028AC3500716B75 /* webWindow.xib in Resources */,
 				0AA4E0A710165DD800C010F3 /* imageWindow.xib in Resources */,
 				0AA4E0A810165DD800C010F3 /* quartzWindow.xib in Resources */,
 				0AA4E0A910165DD800C010F3 /* shellWindow.xib in Resources */,
@@ -614,6 +619,7 @@
 				0AA4E09F10165DAE00C010F3 /* NTImage.m in Sources */,
 				0AA4E0A010165DB000C010F3 /* NTQuartz.m in Sources */,
 				0AA4E0A110165DB100C010F3 /* NTShell.m in Sources */,
+				0A0BC2DB1028ABF700716B75 /* NTWeb.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
