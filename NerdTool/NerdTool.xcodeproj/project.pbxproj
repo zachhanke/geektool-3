@@ -11,6 +11,7 @@
 		0A0BC2ED1028AC3500716B75 /* webWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A42233A10212EE60074C19D /* webWindow.xib */; };
 		0A0BC2F41028AC5C00716B75 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A42234E1021300B0074C19D /* WebKit.framework */; };
 		0A0BC45E102A09A900716B75 /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0A0BC45D102A09A900716B75 /* readme.txt */; };
+		0A0BC46A102A0F0200716B75 /* changelog.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0A0BC469102A0F0200716B75 /* changelog.txt */; };
 		0A42233C10212EE60074C19D /* webWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A42233A10212EE60074C19D /* webWindow.xib */; };
 		0A42234F1021300B0074C19D /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A42234E1021300B0074C19D /* WebKit.framework */; };
 		0A4223FF102130900074C19D /* webPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A4223FD102130900074C19D /* webPrefs.xib */; };
@@ -120,6 +121,7 @@
 
 /* Begin PBXFileReference section */
 		0A0BC45D102A09A900716B75 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = readme.txt; path = resources/readme.txt; sourceTree = "<group>"; };
+		0A0BC469102A0F0200716B75 /* changelog.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = changelog.txt; path = resources/changelog.txt; sourceTree = "<group>"; };
 		0A42233B10212EE60074C19D /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = resources/English.lproj/webWindow.xib; sourceTree = "<group>"; };
 		0A42234E1021300B0074C19D /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		0A4223FE102130900074C19D /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = resources/English.lproj/webPrefs.xib; sourceTree = "<group>"; };
@@ -460,6 +462,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0A0BC469102A0F0200716B75 /* changelog.txt */,
 				0A0BC45D102A09A900716B75 /* readme.txt */,
 				0A88EE3E1019694000EF5B6F /* dsa_pub.pem */,
 				0AB89EED1014A5C4006FE649 /* NerdToolRO-Info.plist */,
@@ -598,6 +601,7 @@
 				0A42233C10212EE60074C19D /* webWindow.xib in Resources */,
 				0A4223FF102130900074C19D /* webPrefs.xib in Resources */,
 				0A0BC45E102A09A900716B75 /* readme.txt in Resources */,
+				0A0BC46A102A0F0200716B75 /* changelog.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

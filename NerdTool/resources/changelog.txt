@@ -4,7 +4,7 @@ NerdTool
 0.5 (2009-07-23): 
 	* First public release
 
-0.6 (2009-08-#): 
+0.6 (2009-08-05): 
 	* [New] Added log import/export ability.
 	* [New] Added auto-resize for shell/file log types.
 	* [New] Added opacity to Image log type.
@@ -22,6 +22,7 @@ NerdTool
 	* [Change] Switching to ANSI escaped text happens instantly, rather than waiting for next refresh. 
 	* [Change] Logs deselect if configuration window is closed. 
 	* [Change] Main window now opens when application is reactivated via the Dock.
-	* [Fix] Fixed error where application would crash when the Preferences window was closed via the mouse and then clicking on the menu bar. 
+	* [Fix] Fixed error where application would crash when the Preferences window was closed via the mouse and then clicking on the menu bar.
+    * [Fix] Login item checkbox retains it's state.
 
 ===========================================================================
