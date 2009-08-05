@@ -182,6 +182,11 @@
 	[[NSWorkspace sharedWorkspace]openURL:[NSURL URLWithString:@"http://balthamos.darkraver.net/donate.php"]];
 }
 
+- (IBAction)openReadme:(id)sender
+{
+    [[NSWorkspace sharedWorkspace]openFile:[[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"readme.txt"]];        
+}
+
 #pragma mark Log Import
 - (IBAction)logImport:(id)sender
 {
@@ -312,6 +317,15 @@
     
     [self showExpose:nil];
     [self trackROProcess:nil];
+    
+    LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL,kLSSharedFileListSessionLoginItems,NULL);
+    NSString *roPath = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"NerdToolRO.app"];
+    CFURLRef ROURL = (CFURLRef)[NSURL fileURLWithPath:roPath];    
+    UInt32 seedValue;
+    NSArray *loginItemsArray = (NSArray *)LSSharedFileListCopySnapshot(loginItems, &seedValue);
+    for (id item in loginItemsArray)
+        if (LSSharedFileListItemResolve((LSSharedFileListItemRef)item,0,(CFURLRef*)&ROURL,NULL) == noErr && [[(NSURL *)ROURL path]hasPrefix:roPath])[loginItem setState:1];
+    [loginItemsArray release];            
 }
 
 #pragma mark -

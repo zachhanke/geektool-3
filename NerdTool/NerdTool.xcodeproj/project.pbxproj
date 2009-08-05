@@ -10,6 +10,7 @@
 		0A0BC2DB1028ABF700716B75 /* NTWeb.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A422401102130C80074C19D /* NTWeb.m */; };
 		0A0BC2ED1028AC3500716B75 /* webWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A42233A10212EE60074C19D /* webWindow.xib */; };
 		0A0BC2F41028AC5C00716B75 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A42234E1021300B0074C19D /* WebKit.framework */; };
+		0A0BC45E102A09A900716B75 /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0A0BC45D102A09A900716B75 /* readme.txt */; };
 		0A42233C10212EE60074C19D /* webWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A42233A10212EE60074C19D /* webWindow.xib */; };
 		0A42234F1021300B0074C19D /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A42234E1021300B0074C19D /* WebKit.framework */; };
 		0A4223FF102130900074C19D /* webPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A4223FD102130900074C19D /* webPrefs.xib */; };
@@ -118,6 +119,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A0BC45D102A09A900716B75 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = readme.txt; path = resources/readme.txt; sourceTree = "<group>"; };
 		0A42233B10212EE60074C19D /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = resources/English.lproj/webWindow.xib; sourceTree = "<group>"; };
 		0A42234E1021300B0074C19D /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		0A4223FE102130900074C19D /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = resources/English.lproj/webPrefs.xib; sourceTree = "<group>"; };
@@ -458,6 +460,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0A0BC45D102A09A900716B75 /* readme.txt */,
 				0A88EE3E1019694000EF5B6F /* dsa_pub.pem */,
 				0AB89EED1014A5C4006FE649 /* NerdToolRO-Info.plist */,
 				0AB89D181012F9F4006FE649 /* Credits.rtf */,
@@ -594,6 +597,7 @@
 				0A88EE3F1019694000EF5B6F /* dsa_pub.pem in Resources */,
 				0A42233C10212EE60074C19D /* webWindow.xib in Resources */,
 				0A4223FF102130900074C19D /* webPrefs.xib in Resources */,
+				0A0BC45E102A09A900716B75 /* readme.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

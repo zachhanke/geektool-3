@@ -16,6 +16,7 @@
     
     BOOL hitROProcess;
     IBOutlet id NTEnable;
+    IBOutlet id loginItem;
     
     NSMutableArray *windowControllerArray;
     NSMutableArray *exposeBorderWindowArray;    
@@ -33,6 +34,7 @@
 - (IBAction)showExpose:(id)sender;
 - (void)exposeBorder;
 - (IBAction)donate:(id)sender;
+- (IBAction)openReadme:(id)sender;
 #pragma mark Saving
 - (NSString *)pathForDataFile;
 - (void)saveDataToDisk;
