@@ -9,7 +9,7 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="2422"/>
-			<integer value="3660"/>
+			<integer value="6"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2955,9 +2955,6 @@ eW91ciBzY3JpcHQuIEV4YW1wbGU6A</string>
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>properties.name</string>
 					<string>logs</string>
-					<string>properties.activeGroup</string>
-					<string>activeGroup.properties.name</string>
-					<string>properties.active</string>
 				</object>
 				<string key="NSObjectClassName">NTGroup</string>
 				<bool key="NSEditable">YES</bool>
@@ -5329,6 +5326,22 @@ eW91ciBzY3JpcHQuIEV4YW1wbGU6A</string>
 						</object>
 					</object>
 					<int key="connectionID">4054</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: selection.needsDisplayUIBox</string>
+						<reference key="source" ref="472991888"/>
+						<reference key="destination" ref="415529606"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="472991888"/>
+							<reference key="NSDestination" ref="415529606"/>
+							<string key="NSLabel">enabled: selection.needsDisplayUIBox</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">selection.needsDisplayUIBox</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">4055</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -9015,7 +9028,7 @@ cyAod2l0aCByZXNwZWN0IHRvIHRoZSB0b3AgbGVmdCBjb3JuZXIpLg</string>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">4054</int>
+			<int key="maxID">4055</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

@@ -72,8 +72,8 @@
 - (void)processAndSetText:(NSMutableString *)newString withEscapes:(BOOL)translateAsciiEscapes andCustomColors:(NSDictionary*)customColors insert:(BOOL)insert
 {
     // kill \n's at the end of the string (to correct "push up" error on resizing)
-    if (!insert)
-        while ([newString length] && [newString characterAtIndex:[newString length] - 1] == 10) [newString deleteCharactersInRange:NSMakeRange([newString length] - 1,1)];
+    if ([newString characterAtIndex:[newString length] - 1] == 10) [newString deleteCharactersInRange:NSMakeRange([newString length] - 1,1)];
+    if (insert && ![[self string]isEqualToString:@""]) [newString insertString:@"\n" atIndex:0];
     
     if (translateAsciiEscapes)
     {

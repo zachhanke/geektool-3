@@ -164,8 +164,13 @@
 - (void)updateCommand:(NSTimer*)timer
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-    if (task && [task isRunning]) return;
-    
+    if (task && [task isRunning])
+    {
+        if ([[task arguments]isEqualToArray:[self arguments]]) return;
+        [[NSNotificationCenter defaultCenter]removeObserver:self name:NSFileHandleReadToEndOfFileCompletionNotification object:nil];
+        [[NSNotificationCenter defaultCenter]removeObserver:self name:NSFileHandleDataAvailableNotification object:nil];
+        [task terminate];
+    }    
     [self setTask:[[[NSTask alloc]init]autorelease]];
     NSPipe *pipe = [NSPipe pipe];
     
@@ -175,12 +180,15 @@
     // needed to keep xcode's console working
     [task setStandardInput:[NSPipe pipe]];
     [task setStandardOutput:pipe];
+    [[window textView]setString:@""];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleReadToEndOfFileCompletionNotification object:[pipe fileHandleForReading]];
-    
-    [[pipe fileHandleForReading]readToEndOfFileInBackgroundAndNotify];
-    
-    [task launch];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleDataAvailableNotification object:[pipe fileHandleForReading]];
+
+    //[[pipe fileHandleForReading]readToEndOfFileInBackgroundAndNotify];
+    [[pipe fileHandleForReading]waitForDataInBackgroundAndNotify];
+
+    [task launch];    
     [pool release];
 }
 
@@ -192,21 +200,26 @@
     if ([[aNotification name]isEqual:NSFileHandleReadToEndOfFileCompletionNotification])
     {
         newData = [[aNotification userInfo]objectForKey:NSFileHandleNotificationDataItem];
-        [[NSNotificationCenter defaultCenter]removeObserver:self name:[aNotification name] object:nil];        
+        [[NSNotificationCenter defaultCenter]removeObserver:self name:NSFileHandleReadToEndOfFileCompletionNotification object:nil];
+        [[NSNotificationCenter defaultCenter]removeObserver:self name:NSFileHandleDataAvailableNotification object:nil];        
     }
     else
         newData = [[aNotification object]availableData];
 
     NSMutableString *newString = [[[NSMutableString alloc]initWithData:newData encoding:[[properties valueForKey:@"stringEncoding"]intValue]]autorelease];
     
-    if (!newString || [newString isEqualTo:@""]) return;
+    if (!newString || [newString isEqualTo:@""])
+    {
+        return;
+    }
     
     
     [self setLastRecievedString:newString];
-    [(LogTextField*)[window textView]processAndSetText:newString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"] andCustomColors:[self customAnsiColors] insert:NO];
+    [(LogTextField*)[window textView]processAndSetText:newString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"] andCustomColors:[self customAnsiColors] insert:YES];
     [(LogTextField*)[window textView]scrollEnd];
     
-    [[aNotification object]readInBackgroundAndNotify];
+    //[[aNotification object]readInBackgroundAndNotify];
+    [[aNotification object]waitForDataInBackgroundAndNotify];
 
     [window display];
     [pool release];

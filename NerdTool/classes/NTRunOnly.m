@@ -36,6 +36,13 @@
     [[activeGroup properties]setObject:[NSNumber numberWithBool:YES] forKey:@"active"];
 }
 
+- (void)applicationWillTerminate:(NSNotification *)note
+{
+    // cleanup processes
+    [activeGroup release];
+}  
+
+
 - (void)loadDataFromDisk
 {
     NSString *path = [self pathForDataFile];

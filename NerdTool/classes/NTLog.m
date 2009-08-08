@@ -346,6 +346,13 @@
 }
 
 #pragma mark KVC
+- (void)setTask:(NSTask*)newTask
+{
+    [task autorelease];
+    if ([task isRunning]) [task terminate];
+    task = [newTask retain];
+}
+
 - (void)setTimer:(NSTimer*)newTimer
 {
     [timer autorelease];

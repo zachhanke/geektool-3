@@ -184,7 +184,7 @@
     
     NSMutableString *newString = [[[NSMutableString alloc]initWithData:newData encoding:[[properties valueForKey:@"stringEncoding"]intValue]]autorelease];
     
-    if ([newString isEqualTo:@""])
+    if (!newString || [newString isEqualTo:@""])
     {
         [[NSNotificationCenter defaultCenter]removeObserver:self name:[aNotification name] object:nil];
         return;

@@ -43,23 +43,19 @@
 {
     [self saveDataToDisk];
     
+    // we just want to get rid of logs that could still be running (like tail -F). The controller holds a lot of retains, and we have one.
+    [groupController release];
+    self.groups = nil;
+    
     if (!hitROProcess) return;
     NSString *resourcePath = [[NSBundle mainBundle]resourcePath];
     NSString *ROPath = [resourcePath stringByAppendingPathComponent:@"NerdToolRO.app"];
     [[NSWorkspace sharedWorkspace]launchApplication:ROPath];    
 }  
 
-- (void)dealloc
-{
-    [groups release];
-    [exposeBorderWindowArray release];
-    [windowControllerArray release];
-    [super dealloc];
-}
-
 - (void)windowWillClose:(NSNotification *)notification
 {
-    [logController setSelectedObjects:nil];
+    if ([logController content]) [logController setSelectedObjects:nil];
 }
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
