@@ -204,13 +204,13 @@
     switch ([properties integerForKey:@"imageFit"])
     {
         case PROPORTIONALLY:
-            return NSScaleProportionally;
+            return NSImageScaleProportionallyUpOrDown;
             break;
         case TO_FIT:
-            return NSScaleToFit;
+            return NSImageScaleAxesIndependently;
             break;
         case NONE:
-            return NSScaleNone;
+            return NSImageScaleNone;
             break;
     }
     return NSScaleNone;
