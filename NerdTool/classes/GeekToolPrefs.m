@@ -68,6 +68,12 @@
     return NO;
 }
 
+// if the resolution is changed, reload the active group
+- (void)applicationDidChangeScreenParameters:(NSNotification *)aNotification
+{
+    [groupController observeValueForKeyPath:@"selectedObjects" ofObject:nil change:nil context:nil];
+}
+
 #pragma mark -
 #pragma mark NerdToolRO
 - (IBAction)trackROProcess:(id)sender
@@ -332,7 +338,7 @@
 #pragma mark Misc
 - (NSRect)screenRect:(NSRect)oldRect
 {
-    NSRect screenSize = [[NSScreen mainScreen]frame];
+    NSRect screenSize = [[[NSScreen screens]objectAtIndex:0]frame];
     int screenY = screenSize.size.height - oldRect.origin.y - oldRect.size.height;
     return NSMakeRect(oldRect.origin.x,screenY,oldRect.size.width,oldRect.size.height);
 }

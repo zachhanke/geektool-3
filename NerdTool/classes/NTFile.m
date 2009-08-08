@@ -52,12 +52,14 @@
                                        [NSNumber numberWithInt:280],@"w",
                                        [NSNumber numberWithInt:150],@"h",
                                        [NSNumber numberWithBool:NO],@"alwaysOnTop",
+                                       [NSNumber numberWithBool:NO],@"sizeToScreen",
                                        
                                        @"",@"file",
                                        
                                        font,@"font",
                                        textColorData,@"textColor",
                                        backgroundColorData,@"backgroundColor",
+                                       [NSNumber numberWithInt:NSASCIIStringEncoding],@"stringEncoding",
                                        [NSNumber numberWithBool:NO],@"wrap",
                                        [NSNumber numberWithBool:NO],@"shadowText",
                                        [NSNumber numberWithBool:NO],@"shadowWindow",
@@ -180,7 +182,7 @@
     else
         newData = [[aNotification object]availableData];
     
-    NSMutableString *newString = [[[NSMutableString alloc]initWithData:newData encoding:NSASCIIStringEncoding]autorelease];
+    NSMutableString *newString = [[[NSMutableString alloc]initWithData:newData encoding:[[properties valueForKey:@"stringEncoding"]intValue]]autorelease];
     
     if ([newString isEqualTo:@""])
     {

@@ -50,6 +50,7 @@
                                        [NSNumber numberWithInt:150],@"h",
                                        [NSNumber numberWithBool:NO],@"alwaysOnTop",
                                        [NSNumber numberWithBool:NO],@"shadowWindow",
+                                       [NSNumber numberWithBool:NO],@"sizeToScreen",
                                        
                                        [NSNumber numberWithInt:10],@"refresh",
                                        @"",@"quartzFile",

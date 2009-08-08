@@ -44,6 +44,7 @@
                                        [NSNumber numberWithInt:280],@"w",
                                        [NSNumber numberWithInt:150],@"h",
                                        [NSNumber numberWithBool:NO],@"alwaysOnTop",
+                                       [NSNumber numberWithBool:NO],@"sizeToScreen",
                                        
                                        [NSNumber numberWithInt:10],@"refresh",
                                        @"",@"webURL",

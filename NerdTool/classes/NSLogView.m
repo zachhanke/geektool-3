@@ -132,7 +132,7 @@
         newWindowFrame.origin.x += (currentMouseLoc.x - mouseLoc.x);
         newWindowFrame.origin.y += currentMouseLoc.y - mouseLoc.y;
         
-        NSRect screen = [[NSScreen mainScreen]frame];
+        NSRect screen = [[[NSScreen screens]objectAtIndex:0]frame];
         
         if ([[NSUserDefaults standardUserDefaults]boolForKey:@"expose"])
         {

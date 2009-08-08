@@ -29,6 +29,13 @@
     return [appSupportDir stringByAppendingPathComponent:@"LogData.ntdata"];    
 }
 
+// if the resolution is changed, reload the active group
+- (void)applicationDidChangeScreenParameters:(NSNotification *)aNotification
+{
+    [[activeGroup properties]setObject:[NSNumber numberWithBool:NO] forKey:@"active"];
+    [[activeGroup properties]setObject:[NSNumber numberWithBool:YES] forKey:@"active"];
+}
+
 - (void)loadDataFromDisk
 {
     NSString *path = [self pathForDataFile];

@@ -78,11 +78,13 @@
 #pragma mark Window Management
 - (void)updateWindowIncludingTimer:(BOOL)updateTimer
 {
-    NSRect tmpRect = [self rect];
-    [window setFrame:[self screenToRect:tmpRect] display:NO];
+    NSRect newRect = [self screenToRect:[self rect]];
+    if ([properties boolForKey:@"sizeToScreen"]) newRect = [[[NSScreen screens]objectAtIndex:0]frame];
     
-    tmpRect.origin.x = 0;
-    tmpRect.origin.y = 0;
+    [window setFrame:newRect display:NO];
+    
+    NSRect tmpRect = [self rect];
+    tmpRect.origin = NSZeroPoint;
     
     [window setHasShadow:[[self properties]boolForKey:@"shadowWindow"]];
     [window setLevel:[[self properties]integerForKey:@"alwaysOnTop"]?[[self properties]integerForKey:@"alwaysOnTop"]:kCGDesktopWindowLevel];
@@ -125,6 +127,7 @@
     windowController = nil;
     highlightSender = nil;
     lastRecievedString = nil;
+    _visibleFrame = [[[NSScreen screens]objectAtIndex:0]frame];
     
     [self setupPreferenceObservers];
     return self;
@@ -178,11 +181,13 @@
     [self addObserver:self forKeyPath:@"properties.y" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.w" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.h" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"properties.alwaysOnTop" options:0 context:NULL];        
+    [self addObserver:self forKeyPath:@"properties.alwaysOnTop" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.sizeToScreen" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.shadowWindow" options:0 context:NULL];
     
     if (![self needsDisplayUIBox]) return;
     [self addObserver:self forKeyPath:@"properties.font" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.stringEncoding" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.textColor" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.backgroundColor" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.wrap" options:0 context:NULL];
@@ -220,10 +225,12 @@
     [self removeObserver:self forKeyPath:@"properties.w"];
     [self removeObserver:self forKeyPath:@"properties.h"];
     [self removeObserver:self forKeyPath:@"properties.alwaysOnTop"];
+    [self removeObserver:self forKeyPath:@"properties.sizeToScreen"];
     [self removeObserver:self forKeyPath:@"properties.shadowWindow"];
     
     if (![self needsDisplayUIBox]) return;
     [self removeObserver:self forKeyPath:@"properties.font"];
+    [self removeObserver:self forKeyPath:@"properties.stringEncoding"];
     [self removeObserver:self forKeyPath:@"properties.textColor"];
     [self removeObserver:self forKeyPath:@"properties.backgroundColor"];
     [self removeObserver:self forKeyPath:@"properties.wrap"];
@@ -318,12 +325,14 @@
 }
 
 - (void)notificationHandler:(NSNotification *)notification
-{
-    if (([[notification name]isEqualToString:NSWindowDidResizeNotification] || [[notification name]isEqualToString:NSWindowDidMoveNotification]))
+{    
+    // when the resolution changes, don't change the window positions
+    if (!NSEqualRects(_visibleFrame,[[[NSScreen screens]objectAtIndex:0]frame]))
     {
-        // this happens on init, which screws things up
-        // if (!_isBeingDragged) return;
-        
+        _visibleFrame = [[[NSScreen screens]objectAtIndex:0]frame];
+    }
+    else if (([[notification name]isEqualToString:NSWindowDidResizeNotification] || [[notification name]isEqualToString:NSWindowDidMoveNotification]))
+    {                
         NSRect newCoords = [self screenToRect:[[notification object]frame]];
         [properties setValue:[NSNumber numberWithInt:NSMinX(newCoords)] forKey:@"x"];
         [properties setValue:[NSNumber numberWithInt:NSMinY(newCoords)] forKey:@"y"];
@@ -388,7 +397,6 @@
     [window displayIfNeeded];
 }
 
-
 #pragma mark  
 #pragma mark Convience
 - (NSDictionary*)customAnsiColors
@@ -418,7 +426,7 @@
 - (NSRect)screenToRect:(NSRect)appleCoordRect
 {
     // remember, the coordinates we use are with respect to the top left corner (both window and screen), but the actual OS takes them with respect to the bottom left (both window and screen), so we must convert between these
-    NSRect screenSize = [[NSScreen mainScreen] frame];
+    NSRect screenSize = [[[NSScreen screens]objectAtIndex:0]frame];
     return NSMakeRect(appleCoordRect.origin.x,(screenSize.size.height - appleCoordRect.origin.y - appleCoordRect.size.height),appleCoordRect.size.width,appleCoordRect.size.height);
 }
 

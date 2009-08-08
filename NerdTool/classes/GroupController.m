@@ -49,7 +49,7 @@
         if (oldSelectedGroup) [[oldSelectedGroup properties]setValue:[NSNumber numberWithBool:NO] forKey:@"active"];
         
         if (![[self selectedObjects]count]) return;
-        if (oldSelectedGroup == [[self selectedObjects]objectAtIndex:0]) return;
+        //if (oldSelectedGroup == [[self selectedObjects]objectAtIndex:0]) return;
         
         oldSelectedGroup = [[self selectedObjects]objectAtIndex:0];
         [[oldSelectedGroup properties]setValue:[NSNumber numberWithBool:YES] forKey:@"active"];

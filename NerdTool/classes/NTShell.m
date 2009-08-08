@@ -47,11 +47,13 @@
                                        [NSNumber numberWithInt:280],@"w",
                                        [NSNumber numberWithInt:150],@"h",
                                        [NSNumber numberWithBool:NO],@"alwaysOnTop",
+                                       [NSNumber numberWithBool:NO],@"sizeToScreen",
                                        
                                        @"date",@"command",
                                        [NSNumber numberWithInt:10],@"refresh",
 
                                        [NSArchiver archivedDataWithRootObject:[NSFont systemFontOfSize:[NSFont systemFontSize]]],@"font",
+                                       [NSNumber numberWithInt:NSASCIIStringEncoding],@"stringEncoding",
                                        [NSArchiver archivedDataWithRootObject:[NSColor blackColor]],@"textColor",
                                        [NSArchiver archivedDataWithRootObject:[NSColor clearColor]],@"backgroundColor",
                                        [NSNumber numberWithBool:NO],@"wrap",
@@ -129,7 +131,7 @@
     {
         [self updateWindowIncludingTimer:YES];
     }
-    else if ([keyPath isEqualToString:@"properties.useAsciiEscapes"])
+    else if ([keyPath isEqualToString:@"properties.useAsciiEscapes"] || [keyPath isEqualToString:@"properties.stringEncoding"])
     {
         if (windowController && timer) [timer fire];
     }    
@@ -194,10 +196,10 @@
     }
     else
         newData = [[aNotification object]availableData];
+
+    NSMutableString *newString = [[[NSMutableString alloc]initWithData:newData encoding:[[properties valueForKey:@"stringEncoding"]intValue]]autorelease];
     
-    NSMutableString *newString = [[[NSMutableString alloc]initWithData:newData encoding:NSUTF8StringEncoding]autorelease];
-    
-    if ([newString isEqualTo:@""]) return;
+    if (!newString || [newString isEqualTo:@""]) return;
     
     
     [self setLastRecievedString:newString];

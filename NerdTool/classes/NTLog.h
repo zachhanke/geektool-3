@@ -32,6 +32,8 @@
     NSTimer *timer;
     NSTask *task;
     
+    NSRect _visibleFrame;
+    
     NSMutableString *lastRecievedString;
 }
 @property (retain) NSMutableDictionary *properties;
