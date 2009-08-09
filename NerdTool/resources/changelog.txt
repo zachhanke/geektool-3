@@ -23,6 +23,17 @@ NerdTool
 	* [Change] Logs deselect if configuration window is closed. 
 	* [Change] Main window now opens when application is reactivated via the Dock.
 	* [Fix] Fixed error where application would crash when the Preferences window was closed via the mouse and then clicking on the menu bar.
-    * [Fix] Login item checkbox retains it's state.
+	* [Fix] Login item checkbox retains it's state.
+
+0.7 (2009-08-09): 
+	* [New] Added option to append new data for shell log.
+	* [New] Images can be scaled proportionally up now.
+	* [New] Both NerdTool and NerdToolRO will try to clean up stray processes when they are quit.
+	* [New] NTShell logs can act as if they were an NTFile, which means to say, they display information as it comes, instead of waiting until all information has been recieved. So you coud run tail -F as a Shell command now (though, if you get deeper into pipes, you need to make the commands line buffered, or else they won't work).
+	* [New] String encoding can be changed.
+	* [New] Handles screen resolution changes.
+	* [New] Added "Fit to screen" option for log window size.
+	* [Fix] Fixed error where some logs would be the wrong font size and face on startup.
+	* [Fix] Fixed error where File logs would not append data correctly.
 
 ===========================================================================
