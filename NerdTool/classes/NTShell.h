@@ -10,10 +10,18 @@
 #import "NTLog.h"
 #import "LogProtocol.h"
 
+enum printMode
+{
+    NTWaitForData = 0,
+    NTAppendData,
+    NTPrintOnlyNewData
+};
+
 @interface NTShell : NTLog <LogProtocol>
 {
     IBOutlet id command;
     IBOutlet id refresh;
+    IBOutlet id printMode;
+    int oldPrintMode;
 }
-
 @end

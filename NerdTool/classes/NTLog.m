@@ -96,8 +96,8 @@
         [window setTextBackgroundColor:[NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"backgroundColor"]]];
         [[window textView]updateTextAttributesUsingProps:properties];
         
-        if (![properties boolForKey:@"useAsciiEscapes"]) [[window textView]applyAttributes:[[window textView]attributes]];
-        else if (lastRecievedString) [[window textView]processAndSetText:lastRecievedString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"] andCustomColors:[self customAnsiColors] insert:NO];
+        if (![properties boolForKey:@"useAsciiEscapes"] || !lastRecievedString) [[window textView]applyAttributes:[[window textView]attributes]];
+        else [[window textView]processAndSetText:lastRecievedString withEscapes:YES andCustomColors:[self customAnsiColors] insert:NO];
     }
     
     if (![window isVisible])

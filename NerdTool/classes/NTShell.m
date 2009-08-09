@@ -51,6 +51,7 @@
                                        
                                        @"date",@"command",
                                        [NSNumber numberWithInt:10],@"refresh",
+                                       [NSNumber numberWithInt:NTWaitForData],@"printMode",
 
                                        [NSArchiver archivedDataWithRootObject:[NSFont systemFontOfSize:[NSFont systemFontSize]]],@"font",
                                        [NSNumber numberWithInt:NSASCIIStringEncoding],@"stringEncoding",
@@ -83,6 +84,12 @@
     return [defaultProperties autorelease];
 }
 
+- (void)createLogProcess
+{
+    [super createLogProcess];
+    oldPrintMode = [properties integerForKey:@"printMode"];
+}
+
 #pragma mark Interface
 - (void)setupInterfaceBindingsWithObject:(id)bindee
 {
@@ -92,12 +99,14 @@
     
     [command bind:@"value" toObject:bindee withKeyPath:@"selection.properties.command" options:nil];
     [refresh bind:@"value" toObject:bindee withKeyPath:@"selection.properties.refresh" options:nil];
+    [printMode bind:@"selectedIndex" toObject:bindee withKeyPath:@"selection.properties.printMode" options:nil];
 }
 
 - (void)destroyInterfaceBindings
 {
     [command unbind:@"value"];
     [refresh unbind:@"value"];
+    [printMode unbind:@"selectedIndex"];
 }
 
 #pragma mark Observing
@@ -105,6 +114,7 @@
 {
     [self addObserver:self forKeyPath:@"properties.command" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.refresh" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.printMode" options:0 context:NULL];
     [super setupPreferenceObservers];
 }
 
@@ -112,6 +122,7 @@
 {
     [self removeObserver:self forKeyPath:@"properties.command"];
     [self removeObserver:self forKeyPath:@"properties.refresh"];
+    [self removeObserver:self forKeyPath:@"properties.printMode"];
     [super removePreferenceObservers];
 }
 
@@ -127,7 +138,7 @@
     }
     // check if our LogProcess is alive
     else if (!windowController) return;
-    else if ([keyPath isEqualToString:@"properties.command"] || [keyPath isEqualToString:@"properties.refresh"])
+    else if ([keyPath isEqualToString:@"properties.command"] || [keyPath isEqualToString:@"properties.refresh"] || [keyPath isEqualToString:@"properties.printMode"])
     {
         [self updateWindowIncludingTimer:YES];
     }
@@ -166,13 +177,15 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
     if (task && [task isRunning])
     {
-        if ([[task arguments]isEqualToArray:[self arguments]]) return;
+        if ([[task arguments]isEqualToArray:[self arguments]] && [properties integerForKey:@"printMode"] == oldPrintMode) return;
         [[NSNotificationCenter defaultCenter]removeObserver:self name:NSFileHandleReadToEndOfFileCompletionNotification object:nil];
         [[NSNotificationCenter defaultCenter]removeObserver:self name:NSFileHandleDataAvailableNotification object:nil];
         [task terminate];
-    }    
+    }
     [self setTask:[[[NSTask alloc]init]autorelease]];
     NSPipe *pipe = [NSPipe pipe];
+    
+    oldPrintMode = [properties integerForKey:@"printMode"];
     
     [task setLaunchPath:@"/bin/sh"];
     [task setArguments:[self arguments]];
@@ -180,14 +193,13 @@
     // needed to keep xcode's console working
     [task setStandardInput:[NSPipe pipe]];
     [task setStandardOutput:pipe];
-    [[window textView]setString:@""];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleReadToEndOfFileCompletionNotification object:[pipe fileHandleForReading]];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleDataAvailableNotification object:[pipe fileHandleForReading]];
 
-    //[[pipe fileHandleForReading]readToEndOfFileInBackgroundAndNotify];
-    [[pipe fileHandleForReading]waitForDataInBackgroundAndNotify];
-
+    if ([properties integerForKey:@"printMode"] == NTWaitForData) [[pipe fileHandleForReading]readToEndOfFileInBackgroundAndNotify];
+    else [[pipe fileHandleForReading]waitForDataInBackgroundAndNotify];
+    
     [task launch];    
     [pool release];
 }
@@ -195,31 +207,33 @@
 - (void)processNewDataFromTask:(NSNotification*)aNotification
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+
+    NSFileHandle *fh = [aNotification object];
+    
     NSData *newData;
     
     if ([[aNotification name]isEqual:NSFileHandleReadToEndOfFileCompletionNotification])
     {
         newData = [[aNotification userInfo]objectForKey:NSFileHandleNotificationDataItem];
-        [[NSNotificationCenter defaultCenter]removeObserver:self name:NSFileHandleReadToEndOfFileCompletionNotification object:nil];
-        [[NSNotificationCenter defaultCenter]removeObserver:self name:NSFileHandleDataAvailableNotification object:nil];        
+        [[NSNotificationCenter defaultCenter]removeObserver:self name:NSFileHandleReadToEndOfFileCompletionNotification object:fh];
+        [[NSNotificationCenter defaultCenter]removeObserver:self name:NSFileHandleDataAvailableNotification object:fh];        
     }
     else
-        newData = [[aNotification object]availableData];
+        newData = [fh availableData];
 
-    NSMutableString *newString = [[[NSMutableString alloc]initWithData:newData encoding:[[properties valueForKey:@"stringEncoding"]intValue]]autorelease];
+    NSMutableString *newString = [[[NSMutableString alloc]initWithData:newData encoding:[properties integerForKey:@"stringEncoding"]]autorelease];
     
     if (!newString || [newString isEqualTo:@""])
     {
         return;
     }
     
-    
     [self setLastRecievedString:newString];
-    [(LogTextField*)[window textView]processAndSetText:newString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"] andCustomColors:[self customAnsiColors] insert:YES];
+    [(LogTextField*)[window textView]processAndSetText:newString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"] andCustomColors:[self customAnsiColors] insert:([properties integerForKey:@"printMode"] == NTAppendData)];
     [(LogTextField*)[window textView]scrollEnd];
     
-    //[[aNotification object]readInBackgroundAndNotify];
-    [[aNotification object]waitForDataInBackgroundAndNotify];
+    if ([properties integerForKey:@"printMode"] == NTWaitForData) [fh readToEndOfFileInBackgroundAndNotify];
+    else [fh waitForDataInBackgroundAndNotify];
 
     [window display];
     [pool release];

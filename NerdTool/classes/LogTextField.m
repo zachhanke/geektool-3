@@ -72,9 +72,12 @@
 - (void)processAndSetText:(NSMutableString *)newString withEscapes:(BOOL)translateAsciiEscapes andCustomColors:(NSDictionary*)customColors insert:(BOOL)insert
 {
     // kill \n's at the end of the string (to correct "push up" error on resizing)
-    if ([newString characterAtIndex:[newString length] - 1] == 10) [newString deleteCharactersInRange:NSMakeRange([newString length] - 1,1)];
-    if (insert && ![[self string]isEqualToString:@""]) [newString insertString:@"\n" atIndex:0];
-    
+    if ([newString characterAtIndex:[newString length] - 1] == 10)
+    {
+        [newString deleteCharactersInRange:NSMakeRange([newString length] - 1,1)];
+        if (insert && ![[self string]isEqualToString:@""]) [newString insertString:@"\n" atIndex:0];
+    }
+        
     if (translateAsciiEscapes)
     {
         ANSIEscapeHelper *ansiEscapeHelper = [[[ANSIEscapeHelper alloc]init]autorelease];
@@ -82,7 +85,7 @@
         [ansiEscapeHelper setDefaultStringColor:[attributes valueForKey:NSForegroundColorAttributeName]];
         [ansiEscapeHelper setFont:[attributes valueForKey:NSFontAttributeName]];
         NSAttributedString *outputString = [self combineAttributes:attributes withAttributedString:[ansiEscapeHelper attributedStringWithANSIEscapedString:newString]];
-        if (!insert)
+        if (!insert || [[self string]isEqualToString:@""])
             [[self textStorage]setAttributedString:outputString];
         else
         {
@@ -93,7 +96,7 @@
     }
     else
     {
-        if (!insert)
+        if (!insert || [[self string]isEqualToString:@""])
             [self setString:newString];
         else
         {
