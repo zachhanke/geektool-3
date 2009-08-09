@@ -62,19 +62,22 @@ Interface
         is displayed.
 
         Display
-           Alignment: Align text either left, center, right, or justified.
-           Wrap output: Soft-wrap a line when it reaches the end of the window.
-           Drop shadow: Display a drop shadow on the text.
-           Colorize output: Evaluate color, intensity, and underline ANSI escape
+            Encoding: The encoding that will be used to evaluate the output data.
+            Alignment: Align text either left, center, right, or justified.
+            Wrap output: Soft-wrap a line when it reaches the end of the window.
+            Drop shadow: Display a drop shadow on the text.
+            Colorize output: Evaluate color, intensity, and underline ANSI escape
                sequences. Colors can be customized via the `Customize' button.
-           Background: The background color of the text.
-           Text: The foreground color of the text.
-           Font: Click to change the size and typeface of font.
+            Background: The background color of the text.
+            Text: The foreground color of the text.
+            Font: Click to change the size and typeface of font.
 
         Window
             Shadow: Display a drop shadow on the log windows.
             Always on top: Instead of being below all windows, put the log above
                 all other windows.
+            Size to screen: Keep the size of the window the full size of the
+                screen, even when the monitor resolution changes.
             x,y: Cartesian coordinates of the log window, in pixels. The location
                 0,0 is in top-left corner of the screen and the origin of the window
                 the top left corner.
@@ -90,6 +93,14 @@ Interface
                 insert hard linebreaks, press Alt+Return or Ctrl+Return.
             Size window to fit: Resize the log window to perfectly fit the
                 existing contents.
+            Printing modes:
+                See section ``Log Types'' for more information on usage.
+                Wait for all data: Standard shell option. Wait until the entire
+                    command is done before printing anything.
+                Append new data: Start printing data as it comes, and append it
+                    to the current buffer.
+                Print new data only: When new data arrives, print that new data,
+                    and only that new data (flush the old buffer).
 
         Image
             Refresh: Same as Shell.
@@ -151,6 +162,27 @@ Log Types
     Shell
         Executes a shell command and outputs the result to the window. Commands
         are sh, but can take any script that has execution privileges.
+        When printing information as it comes (like `tail -F', what File logs
+        use), it may be hard to get data to come out as you expect it too. In my
+        tests, running a simple tail -F works with no trouble at all, but as
+        soon as you start piping information around, things stop working.
+        For example, 
+            `tail -F aFile.txt | sed 's/old/new/'' 
+        does not work. The problem seems to be with the buffering of the output.
+        NerdTool likes the output to be line-buffered, so to do that with this
+        command specifically, you could do
+            `tail -F aFile.txt | sed -l 's/old/new/'' 
+        which makes the output line buffered. I have successfully gotten outputs
+        for the `Append new data' option for `sed', `grep', and `awk'. A quick
+        search told me that experienced perl users should know what to do, and
+        I'm guessing that other like languages have similar methods.
+        For `sed' use the `-l' option.
+        For `grep' use the `--line-buffered' option.
+        For `awk' use `fflush()' where appropriate in your command.
+
+        If you have more methods, or better instructions/explanations, for line
+        buffering, please send them to me.
+            
         Relevant topics:
             Shell script <http://en.wikipedia.org/wiki/Shell_script>
             Quick guide to bash
