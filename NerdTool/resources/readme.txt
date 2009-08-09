@@ -1,7 +1,7 @@
                                     NerdTool
-                                     v 0.6
+                                     v 0.7
                                      Readme
-                                   2009-08-05
+                                   2009-08-09
 Developer: Kevin Nygaard
 Website: <http://balthamos.darkraver.net/>
 Email: balthamos89 AT gmail DOT com
