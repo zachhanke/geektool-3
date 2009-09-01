@@ -17,6 +17,8 @@
 		0A4223FF102130900074C19D /* webPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A4223FD102130900074C19D /* webPrefs.xib */; };
 		0A422402102130C80074C19D /* NTWeb.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A422401102130C80074C19D /* NTWeb.m */; };
 		0A4226BE102285130074C19D /* NS(Attributed)String+Geometrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A4226BD102285130074C19D /* NS(Attributed)String+Geometrics.m */; };
+		0A7732EC1043138400F02243 /* NTUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7732EB1043138400F02243 /* NTUtility.m */; };
+		0A7732ED1043138400F02243 /* NTUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7732EB1043138400F02243 /* NTUtility.m */; };
 		0A791E981016BC31003F392D /* NTDroppableTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A791E971016BC31003F392D /* NTDroppableTextField.m */; };
 		0A7D38890FD805FA0070D678 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7D38870FD805FA0070D678 /* Quartz.framework */; };
 		0A7D388A0FD805FA0070D678 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7D38880FD805FA0070D678 /* Carbon.framework */; };
@@ -130,6 +132,8 @@
 		0A422603102220BE0074C19D /* LogProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogProtocol.h; path = classes/LogProtocol.h; sourceTree = "<group>"; };
 		0A4226BC102285130074C19D /* NS(Attributed)String+Geometrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NS(Attributed)String+Geometrics.h"; path = "classes/NS(Attributed)String+Geometrics.h"; sourceTree = "<group>"; };
 		0A4226BD102285130074C19D /* NS(Attributed)String+Geometrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NS(Attributed)String+Geometrics.m"; path = "classes/NS(Attributed)String+Geometrics.m"; sourceTree = "<group>"; };
+		0A7732EA1043138400F02243 /* NTUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTUtility.h; path = classes/NTUtility.h; sourceTree = "<group>"; };
+		0A7732EB1043138400F02243 /* NTUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTUtility.m; path = classes/NTUtility.m; sourceTree = "<group>"; };
 		0A791E961016BC31003F392D /* NTDroppableTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTDroppableTextField.h; path = classes/NTDroppableTextField.h; sourceTree = "<group>"; };
 		0A791E971016BC31003F392D /* NTDroppableTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTDroppableTextField.m; path = classes/NTDroppableTextField.m; sourceTree = "<group>"; };
 		0A7D38870FD805FA0070D678 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
@@ -291,6 +295,15 @@
 			name = Categories;
 			sourceTree = "<group>";
 		};
+		0A7732E7104312FF00F02243 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				0A7732EA1043138400F02243 /* NTUtility.h */,
+				0A7732EB1043138400F02243 /* NTUtility.m */,
+			);
+			name = Utility;
+			sourceTree = "<group>";
+		};
 		0A7D372A0FD802B10070D678 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -366,6 +379,7 @@
 			isa = PBXGroup;
 			children = (
 				0A422603102220BE0074C19D /* LogProtocol.h */,
+				0A7732E7104312FF00F02243 /* Utility */,
 				0AA4DFF5101648A000C010F3 /* Shell */,
 				0AA4DFF8101648B200C010F3 /* File */,
 				0AA4DFF7101648AF00C010F3 /* Image */,
@@ -628,6 +642,7 @@
 				0AA4E0A010165DB000C010F3 /* NTQuartz.m in Sources */,
 				0AA4E0A110165DB100C010F3 /* NTShell.m in Sources */,
 				0A0BC2DB1028ABF700716B75 /* NTWeb.m in Sources */,
+				0A7732ED1043138400F02243 /* NTUtility.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -660,6 +675,7 @@
 				0A791E981016BC31003F392D /* NTDroppableTextField.m in Sources */,
 				0A422402102130C80074C19D /* NTWeb.m in Sources */,
 				0A4226BE102285130074C19D /* NS(Attributed)String+Geometrics.m in Sources */,
+				0A7732EC1043138400F02243 /* NTUtility.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
