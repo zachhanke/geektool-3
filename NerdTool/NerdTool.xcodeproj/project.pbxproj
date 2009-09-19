@@ -12,6 +12,8 @@
 		0A0BC2F41028AC5C00716B75 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A42234E1021300B0074C19D /* WebKit.framework */; };
 		0A0BC45E102A09A900716B75 /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0A0BC45D102A09A900716B75 /* readme.txt */; };
 		0A0BC46A102A0F0200716B75 /* changelog.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0A0BC469102A0F0200716B75 /* changelog.txt */; };
+		0A37B789106592A200BF4C07 /* utilityPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A37B787106592A200BF4C07 /* utilityPrefs.xib */; };
+		0A37B78A106592A200BF4C07 /* utilityPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A37B787106592A200BF4C07 /* utilityPrefs.xib */; };
 		0A42233C10212EE60074C19D /* webWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A42233A10212EE60074C19D /* webWindow.xib */; };
 		0A42234F1021300B0074C19D /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A42234E1021300B0074C19D /* WebKit.framework */; };
 		0A4223FF102130900074C19D /* webPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A4223FD102130900074C19D /* webPrefs.xib */; };
@@ -124,6 +126,7 @@
 /* Begin PBXFileReference section */
 		0A0BC45D102A09A900716B75 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = readme.txt; path = resources/readme.txt; sourceTree = "<group>"; };
 		0A0BC469102A0F0200716B75 /* changelog.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = changelog.txt; path = resources/changelog.txt; sourceTree = "<group>"; };
+		0A37B788106592A200BF4C07 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = resources/English.lproj/utilityPrefs.xib; sourceTree = "<group>"; };
 		0A42233B10212EE60074C19D /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = resources/English.lproj/webWindow.xib; sourceTree = "<group>"; };
 		0A42234E1021300B0074C19D /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		0A4223FE102130900074C19D /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = resources/English.lproj/webPrefs.xib; sourceTree = "<group>"; };
@@ -298,6 +301,7 @@
 		0A7732E7104312FF00F02243 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				0A37B787106592A200BF4C07 /* utilityPrefs.xib */,
 				0A7732EA1043138400F02243 /* NTUtility.h */,
 				0A7732EB1043138400F02243 /* NTUtility.m */,
 			);
@@ -578,6 +582,7 @@
 				0AA4E0A810165DD800C010F3 /* quartzWindow.xib in Resources */,
 				0AA4E0A910165DD800C010F3 /* shellWindow.xib in Resources */,
 				0AA4E08610165D4B00C010F3 /* NTRO.xib in Resources */,
+				0A37B789106592A200BF4C07 /* utilityPrefs.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -616,6 +621,7 @@
 				0A4223FF102130900074C19D /* webPrefs.xib in Resources */,
 				0A0BC45E102A09A900716B75 /* readme.txt in Resources */,
 				0A0BC46A102A0F0200716B75 /* changelog.txt in Resources */,
+				0A37B78A106592A200BF4C07 /* utilityPrefs.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -690,6 +696,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		0A37B787106592A200BF4C07 /* utilityPrefs.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A37B788106592A200BF4C07 /* English */,
+			);
+			name = utilityPrefs.xib;
+			sourceTree = "<group>";
+		};
 		0A42233A10212EE60074C19D /* webWindow.xib */ = {
 			isa = PBXVariantGroup;
 			children = (

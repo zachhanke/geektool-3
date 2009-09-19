@@ -13,6 +13,7 @@
 #import "NTShell.h"
 #import "NTFile.h"
 #import "NTImage.h"
+#import "NTUtility.h"
 
 #import "CGSPrivate.h"
 
