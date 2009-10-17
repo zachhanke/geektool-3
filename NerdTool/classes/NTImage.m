@@ -193,7 +193,8 @@
 - (void)setImage:(NSString*)urlStr
 {    
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-    NSImage *myImage = [[NSImage alloc]initByReferencingURL:[NSURL URLWithString:urlStr]];
+    NSURL *tmp = [NSURL URLWithString:urlStr];
+    NSImage *myImage = [[NSImage alloc]initWithContentsOfURL:tmp];
     [[window imageView]setImage:myImage];
     [myImage release];
     [pool release];
