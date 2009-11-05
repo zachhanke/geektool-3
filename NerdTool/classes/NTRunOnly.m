@@ -16,6 +16,16 @@
 - (void)awakeFromNib
 {
     [self loadDataFromDisk];
+    
+    // register for wake notifications
+    [[[NSWorkspace sharedWorkspace]notificationCenter]addObserver:self selector:@selector(receiveWakeNote) name: NSWorkspaceDidWakeNotification object:NULL];
+}
+
+- (void)receiveWakeNote
+{
+    // refresh everything on wake
+    [[activeGroup properties]setObject:[NSNumber numberWithBool:NO] forKey:@"active"];
+    [[activeGroup properties]setObject:[NSNumber numberWithBool:YES] forKey:@"active"];
 }
 
 #pragma mark Loading

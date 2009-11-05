@@ -39,8 +39,8 @@
 
 - (NSDictionary *)defaultProperties
 {
-    NSData *textColorData = [NSArchiver archivedDataWithRootObject:[NSColor blackColor]];
-    NSData *backgroundColorData = [NSArchiver archivedDataWithRootObject:[NSColor clearColor]]; 
+    NSData *textColorData = [[NSUserDefaults standardUserDefaults]objectForKey:@"defaultFgColor"];
+    NSData *backgroundColorData = [[NSUserDefaults standardUserDefaults]objectForKey:@"defaultBgColor"]; 
     NSData *font = [NSArchiver archivedDataWithRootObject:[NSFont systemFontOfSize:[NSFont systemFontSize]]];
     
     NSDictionary *defaultProperties = [[NSDictionary alloc]initWithObjectsAndKeys:

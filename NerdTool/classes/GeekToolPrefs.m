@@ -37,7 +37,16 @@
     [self loadDataFromDisk];
     [self loadPreferences];
     
+    // register for wake notifications
+    [[[NSWorkspace sharedWorkspace]notificationCenter]addObserver:self selector:@selector(receiveWakeNote) name: NSWorkspaceDidWakeNotification object:NULL];
+    
     [[NSColorPanel sharedColorPanel]setShowsAlpha:YES];
+}
+
+- (void)receiveWakeNote
+{
+    // refresh everything on wake
+    [groupController observeValueForKeyPath:@"selectedObjects" ofObject:nil change:nil context:nil];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)note
@@ -317,6 +326,14 @@
     NSData *selectionColorData = [[NSUserDefaults standardUserDefaults]objectForKey:@"selectionColor"];
     if (!selectionColorData) selectionColorData = [NSArchiver archivedDataWithRootObject:[[NSColor alternateSelectedControlColor]colorWithAlphaComponent:0.3]];
     [[NSUserDefaults standardUserDefaults]setObject:selectionColorData forKey:@"selectionColor"];
+    
+    NSData *defaultFgColor = [[NSUserDefaults standardUserDefaults]objectForKey:@"defaultFgColor"];
+    if (!defaultFgColor) defaultFgColor = [NSArchiver archivedDataWithRootObject:[NSColor blackColor]];
+    [[NSUserDefaults standardUserDefaults]setObject:defaultFgColor forKey:@"defaultFgColor"];    
+    
+    NSData *defaultBgColor = [[NSUserDefaults standardUserDefaults]objectForKey:@"defaultBgColor"];
+    if (!defaultBgColor) defaultBgColor = [NSArchiver archivedDataWithRootObject:[NSColor clearColor]];
+    [[NSUserDefaults standardUserDefaults]setObject:defaultBgColor forKey:@"defaultBgColor"];    
     
     [self showExpose:nil];
     [self trackROProcess:nil];

@@ -61,8 +61,8 @@
                                        
                                        [NSArchiver archivedDataWithRootObject:[NSFont systemFontOfSize:[NSFont systemFontSize]]],@"font",
                                        [NSNumber numberWithInt:NSASCIIStringEncoding],@"stringEncoding",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor blackColor]],@"textColor",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor clearColor]],@"backgroundColor",
+                                       [[NSUserDefaults standardUserDefaults]objectForKey:@"defaultFgColor"],@"textColor",
+                                       [[NSUserDefaults standardUserDefaults]objectForKey:@"defaultBgColor"],@"backgroundColor",
                                        [NSNumber numberWithBool:NO],@"wrap",
                                        [NSNumber numberWithBool:NO],@"shadowText",
                                        [NSNumber numberWithBool:NO],@"shadowWindow",
