@@ -36,9 +36,17 @@
     
     NSMutableString *lastRecievedString;
 }
-@property (retain) NSMutableDictionary *properties;
-@property (copy) NSNumber *active;
-@property (assign) NTGroup *parentGroup;
+
+@property (nonatomic, retain) NSNumber * alwaysOnTop;
+@property (nonatomic, retain) NSNumber * enabled;
+@property (nonatomic, retain) NSNumber * h;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSNumber * shadowWindow;
+@property (nonatomic, retain) NSNumber * sizeToScreen;
+@property (nonatomic, retain) NSNumber * w;
+@property (nonatomic, retain) NSNumber * x;
+@property (nonatomic, retain) NSNumber * y;
+@property (nonatomic, retain) NSManagedObject * group;
 
 @property (retain) NSWindowController *windowController;
 @property (assign) LogWindow *window;
@@ -56,8 +64,6 @@
 @property (retain) NSMutableString *lastRecievedString;
 
 // Properties
-- (NSString *)logTypeName;
-- (BOOL)needsDisplayUIBox;
 - (NSString *)preferenceNibName;
 - (NSString *)displayNibName;
 - (NSDictionary *)defaultProperties;

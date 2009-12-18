@@ -18,9 +18,16 @@
 
 @implementation NTLog
 
-@synthesize properties;
-@synthesize active;
-@synthesize parentGroup;
+@dynamic alwaysOnTop;
+@dynamic enabled;
+@dynamic h;
+@dynamic name;
+@dynamic shadowWindow;
+@dynamic sizeToScreen;
+@dynamic w;
+@dynamic x;
+@dynamic y;
+@dynamic group;
 
 @synthesize windowController;
 @synthesize window;
@@ -39,17 +46,6 @@
 @synthesize lastRecievedString;
 
 #pragma mark Properties
-// Subclasses would probably want to override the following methods
-- (NSString *)logTypeName
-{
-    return @"Box";
-}
-
-- (BOOL)needsDisplayUIBox
-{
-    return YES;
-}
-
 - (NSString *)preferenceNibName
 {
     return @"";
@@ -58,11 +54,6 @@
 - (NSString *)displayNibName
 {
     return @"";
-}
-
-- (NSDictionary *)defaultProperties
-{
-    return [NSDictionary dictionary];
 }
 
 - (void)setupInterfaceBindingsWithObject:(id)bindee
@@ -79,17 +70,18 @@
 - (void)updateWindowIncludingTimer:(BOOL)updateTimer
 {
     NSRect newRect = [self screenToRect:[self rect]];
-    if ([properties boolForKey:@"sizeToScreen"]) newRect = [[[NSScreen screens]objectAtIndex:0]frame];
+    if ([self sizeToScreen]) newRect = [[[NSScreen screens]objectAtIndex:0]frame];
     
     [window setFrame:newRect display:NO];
     
     NSRect tmpRect = [self rect];
     tmpRect.origin = NSZeroPoint;
     
-    [window setHasShadow:[[self properties]boolForKey:@"shadowWindow"]];
-    [window setLevel:[[self properties]integerForKey:@"alwaysOnTop"]?[[self properties]integerForKey:@"alwaysOnTop"]:kCGDesktopWindowLevel];
-    [window setSticky:![[self properties]boolForKey:@"alwaysOnTop"]];
+    [window setHasShadow:[self shadowWindow]];
+    [window setLevel:[self alwaysOnTop]?[self alwaysOnTop]:kCGDesktopWindowLevel];
+    [window setSticky:![self alwaysOnTop]];
     
+    /*
     if ([self needsDisplayUIBox])
     {
         [window setTextRect:tmpRect]; 
@@ -99,6 +91,7 @@
         if (![properties boolForKey:@"useAsciiEscapes"] || !lastRecievedString) [[window textView]applyAttributes:[[window textView]attributes]];
         else [[window textView]processAndSetText:lastRecievedString withEscapes:YES andCustomColors:[self customAnsiColors] insert:NO];
     }
+    */
     
     if (![window isVisible])
     {
@@ -119,10 +112,7 @@
 - (id)initWithProperties:(NSDictionary*)newProperties
 {
 	if (!(self = [super init])) return nil;
-    
-    [self setProperties:[NSMutableDictionary dictionaryWithDictionary:newProperties]];
-    [self setActive:[NSNumber numberWithBool:NO]];
-    
+        
     _loadedView = NO;
     windowController = nil;
     highlightSender = nil;
@@ -132,11 +122,6 @@
     [self setupPreferenceObservers];
     return self;
 }
-
-- (id)init
-{    
-    return [self initWithProperties:[self defaultProperties]];
-}    
 
 - (void)dealloc
 {

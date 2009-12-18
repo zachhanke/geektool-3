@@ -6,17 +6,29 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
+#import <CoreData/CoreData.h>
 #import <Cocoa/Cocoa.h>
 
-@interface NTGroup : NSObject <NSCoding, NSCopying, NSMutableCopying>
-{
-    NSMutableDictionary *properties;
-    NSMutableArray *logs;
-}
-@property (retain) NSMutableDictionary *properties;
-@property (retain) NSMutableArray *logs;
+@class LogWindow;
 
-- (id)initWithProperties:(NSDictionary*)initProperties andLogs:(NSArray*)initLogs;
+@interface NTGroup : NSManagedObject 
+{
+    NSWindowController *windowController;
+    LogWindow *mainWindow;
+    
+}
+
+@property (nonatomic, retain) NSNumber * active;
+@property (nonatomic, retain) NSNumber * groupID;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSNumber * order;
+@property (nonatomic, retain) NSSet* logs;
+
 - (void)reorder;
+
+- (void)addLogsObject:(NSManagedObject *)value;
+- (void)removeLogsObject:(NSManagedObject *)value;
+- (void)addLogs:(NSSet *)value;
+- (void)removeLogs:(NSSet *)value;
 
 @end

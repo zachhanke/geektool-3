@@ -19,6 +19,8 @@
 		0A4223FF102130900074C19D /* webPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A4223FD102130900074C19D /* webPrefs.xib */; };
 		0A422402102130C80074C19D /* NTWeb.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A422401102130C80074C19D /* NTWeb.m */; };
 		0A4226BE102285130074C19D /* NS(Attributed)String+Geometrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A4226BD102285130074C19D /* NS(Attributed)String+Geometrics.m */; };
+		0A4E504F10A3944B000653AF /* NerdtoolDataModel.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 0A4E504E10A3944B000653AF /* NerdtoolDataModel.xcdatamodel */; };
+		0A4E509C10A3E3DA000653AF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A4E508210A3E3D8000653AF /* CoreData.framework */; };
 		0A7732EC1043138400F02243 /* NTUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7732EB1043138400F02243 /* NTUtility.m */; };
 		0A7732ED1043138400F02243 /* NTUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7732EB1043138400F02243 /* NTUtility.m */; };
 		0A791E981016BC31003F392D /* NTDroppableTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A791E971016BC31003F392D /* NTDroppableTextField.m */; };
@@ -135,6 +137,8 @@
 		0A422603102220BE0074C19D /* LogProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogProtocol.h; path = classes/LogProtocol.h; sourceTree = "<group>"; };
 		0A4226BC102285130074C19D /* NS(Attributed)String+Geometrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NS(Attributed)String+Geometrics.h"; path = "classes/NS(Attributed)String+Geometrics.h"; sourceTree = "<group>"; };
 		0A4226BD102285130074C19D /* NS(Attributed)String+Geometrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NS(Attributed)String+Geometrics.m"; path = "classes/NS(Attributed)String+Geometrics.m"; sourceTree = "<group>"; };
+		0A4E504E10A3944B000653AF /* NerdtoolDataModel.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = NerdtoolDataModel.xcdatamodel; sourceTree = "<group>"; };
+		0A4E508210A3E3D8000653AF /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		0A7732EA1043138400F02243 /* NTUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTUtility.h; path = classes/NTUtility.h; sourceTree = "<group>"; };
 		0A7732EB1043138400F02243 /* NTUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTUtility.m; path = classes/NTUtility.m; sourceTree = "<group>"; };
 		0A791E961016BC31003F392D /* NTDroppableTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTDroppableTextField.h; path = classes/NTDroppableTextField.h; sourceTree = "<group>"; };
@@ -244,6 +248,7 @@
 				0A7D388A0FD805FA0070D678 /* Carbon.framework in Frameworks */,
 				0AB87596101008150000E274 /* Sparkle.framework in Frameworks */,
 				0A42234F1021300B0074C19D /* WebKit.framework in Frameworks */,
+				0A4E509C10A3E3DA000653AF /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,6 +301,14 @@
 				0A4226BD102285130074C19D /* NS(Attributed)String+Geometrics.m */,
 			);
 			name = Categories;
+			sourceTree = "<group>";
+		};
+		0A4E504D10A3941F000653AF /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0A4E504E10A3944B000653AF /* NerdtoolDataModel.xcdatamodel */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 		0A7732E7104312FF00F02243 /* Utility */ = {
@@ -417,6 +430,7 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0A4E508210A3E3D8000653AF /* CoreData.framework */,
 				0A42234E1021300B0074C19D /* WebKit.framework */,
 				0AB87595101008150000E274 /* Sparkle.framework */,
 				0A7D38870FD805FA0070D678 /* Quartz.framework */,
@@ -447,6 +461,7 @@
 		29B97314FDCFA39411CA2CEA /* NerdTool */ = {
 			isa = PBXGroup;
 			children = (
+				0A4E504D10A3941F000653AF /* Models */,
 				0A439DA00FE9D29D00BB8B6A /* Categories */,
 				0A7D372A0FD802B10070D678 /* Controllers */,
 				0A194D8C0FED967C0062EA84 /* Data Classes */,
@@ -682,6 +697,7 @@
 				0A422402102130C80074C19D /* NTWeb.m in Sources */,
 				0A4226BE102285130074C19D /* NS(Attributed)String+Geometrics.m in Sources */,
 				0A7732EC1043138400F02243 /* NTUtility.m in Sources */,
+				0A4E504F10A3944B000653AF /* NerdtoolDataModel.xcdatamodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

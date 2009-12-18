@@ -34,8 +34,8 @@
 
 - (void)awakeFromNib
 {
-    [self loadDataFromDisk];
-    [self loadPreferences];
+    //[self loadDataFromDisk];
+    //[self loadPreferences];
     
     // register for wake notifications
     [[[NSWorkspace sharedWorkspace]notificationCenter]addObserver:self selector:@selector(receiveWakeNote) name: NSWorkspaceDidWakeNotification object:NULL];

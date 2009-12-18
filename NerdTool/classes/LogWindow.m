@@ -83,7 +83,7 @@
 
 #pragma mark Accessors
 - (LogTextField*)textView
-{
+ {
     return textView;
 }
 
