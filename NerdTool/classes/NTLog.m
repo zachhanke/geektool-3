@@ -87,7 +87,7 @@
     tmpRect.origin = NSZeroPoint;
     
     [window setHasShadow:[[self properties]boolForKey:@"shadowWindow"]];
-    [window setLevel:[[self properties]integerForKey:@"alwaysOnTop"]?[[self properties]integerForKey:@"alwaysOnTop"]:kCGDesktopWindowLevel];
+    [window setLevel:[[self properties]integerForKey:@"alwaysOnTop"]?kCGMaximumWindowLevel:kCGDesktopWindowLevel];
     [window setSticky:![[self properties]boolForKey:@"alwaysOnTop"]];
     
     if ([self needsDisplayUIBox])

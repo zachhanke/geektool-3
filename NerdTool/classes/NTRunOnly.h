@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 @class NTGroup;
-@interface NTRunOnly : NSApplication
+@interface NTRunOnly : NSObject
 {
     NTGroup *activeGroup;
 }
