@@ -3,7 +3,7 @@
                                      Readme
                                    2009-08-09
 Developer: Kevin Nygaard
-Website: <http://balthamos.darkraver.net/>
+Website: <http://mutablecode.com>
 Email: balthamos89 AT gmail DOT com
 Source: <http://github.com/balthamos/geektool-3/tree/experimental>
 ================================================================================
