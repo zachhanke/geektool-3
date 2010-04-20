@@ -4,7 +4,7 @@
 //
 //  Created by Ali Rantakari on 18.3.09.
 //
-//  Version 0.9
+//  Version 0.9.4
 // 
 /*
 The MIT License
@@ -40,6 +40,66 @@ THE SOFTWARE.
 // the end byte of an SGR (Select Graphic Rendition)
 // ANSI Escape Sequence
 #define kANSIEscapeSGREnd		@"m"
+
+
+// color definition helper macros
+#define kBrightColorBrightness	1.0
+#define kBrightColorSaturation	0.4
+#define kBrightColorAlpha		1.0
+#define kBrightColorWithHue(h)	[NSColor colorWithCalibratedHue:(h) saturation:kBrightColorSaturation brightness:kBrightColorBrightness alpha:kBrightColorAlpha]
+
+// default colors
+#define kDefaultANSIColorFgBlack	[NSColor blackColor]
+#define kDefaultANSIColorFgRed		[NSColor redColor]
+#define kDefaultANSIColorFgGreen	[NSColor greenColor]
+#define kDefaultANSIColorFgYellow	[NSColor yellowColor]
+#define kDefaultANSIColorFgBlue		[NSColor blueColor]
+#define kDefaultANSIColorFgMagenta	[NSColor magentaColor]
+#define kDefaultANSIColorFgCyan		[NSColor cyanColor]
+#define kDefaultANSIColorFgWhite	[NSColor whiteColor]
+
+#define kDefaultANSIColorFgBrightBlack		[NSColor colorWithCalibratedWhite:0.337 alpha:1.0]
+#define kDefaultANSIColorFgBrightRed		kBrightColorWithHue(1.0)
+#define kDefaultANSIColorFgBrightGreen		kBrightColorWithHue(1.0/3.0)
+#define kDefaultANSIColorFgBrightYellow		kBrightColorWithHue(1.0/6.0)
+#define kDefaultANSIColorFgBrightBlue		kBrightColorWithHue(2.0/3.0)
+#define kDefaultANSIColorFgBrightMagenta	kBrightColorWithHue(5.0/6.0)
+#define kDefaultANSIColorFgBrightCyan		kBrightColorWithHue(0.5)
+#define kDefaultANSIColorFgBrightWhite		[NSColor whiteColor]
+
+#define kDefaultANSIColorBgBlack	[NSColor blackColor]
+#define kDefaultANSIColorBgRed		[NSColor redColor]
+#define kDefaultANSIColorBgGreen	[NSColor greenColor]
+#define kDefaultANSIColorBgYellow	[NSColor yellowColor]
+#define kDefaultANSIColorBgBlue		[NSColor blueColor]
+#define kDefaultANSIColorBgMagenta	[NSColor magentaColor]
+#define kDefaultANSIColorBgCyan		[NSColor cyanColor]
+#define kDefaultANSIColorBgWhite	[NSColor whiteColor]
+
+#define kDefaultANSIColorBgBrightBlack		kDefaultANSIColorFgBrightBlack
+#define kDefaultANSIColorBgBrightRed		kDefaultANSIColorFgBrightRed
+#define kDefaultANSIColorBgBrightGreen		kDefaultANSIColorFgBrightGreen
+#define kDefaultANSIColorBgBrightYellow		kDefaultANSIColorFgBrightYellow
+#define kDefaultANSIColorBgBrightBlue		kDefaultANSIColorFgBrightBlue
+#define kDefaultANSIColorBgBrightMagenta	kDefaultANSIColorFgBrightMagenta
+#define kDefaultANSIColorBgBrightCyan		kDefaultANSIColorFgBrightCyan
+#define kDefaultANSIColorBgBrightWhite		kDefaultANSIColorFgBrightWhite
+
+// dictionary keys for the SGR code dictionaries that the array
+// escapeCodesForString:cleanString: returns contains
+#define kCodeDictKey_code			@"code"
+#define kCodeDictKey_location		@"location"
+
+// dictionary keys for the string formatting attribute
+// dictionaries that the array attributesForString:cleanString:
+// returns contains
+#define kAttrDictKey_range			@"range"
+#define kAttrDictKey_attrName		@"attributeName"
+#define kAttrDictKey_attrValue		@"attributeValue"
+
+// minimum weight for an NSFont for it to be considered bold
+#define kBoldFontMinWeight			9
+
 
 
 
@@ -82,7 +142,25 @@ enum sgrCode
 	SGRCodeBgMagenta =			45,
 	SGRCodeBgCyan =				46,
 	SGRCodeBgWhite =			47,
-	SGRCodeBgReset =			49
+	SGRCodeBgReset =			49,
+	
+	SGRCodeFgBrightBlack =		90,
+	SGRCodeFgBrightRed =		91,
+	SGRCodeFgBrightGreen =		92,
+	SGRCodeFgBrightYellow =		93,
+	SGRCodeFgBrightBlue =		94,
+	SGRCodeFgBrightMagenta =	95,
+	SGRCodeFgBrightCyan =		96,
+	SGRCodeFgBrightWhite =		97,
+	
+	SGRCodeBgBrightBlack =		100,
+	SGRCodeBgBrightRed =		101,
+	SGRCodeBgBrightGreen =		102,
+	SGRCodeBgBrightYellow =		103,
+	SGRCodeBgBrightBlue =		104,
+	SGRCodeBgBrightMagenta =	105,
+	SGRCodeBgBrightCyan =		106,
+	SGRCodeBgBrightWhite =		107
 };
 
 
@@ -266,7 +344,7 @@ enum sgrCode
 /*!
  @method		sgrCodeForColor:isForegroundColor:
  
- @abstract		Returns an SGR code that corresponds to a given color.
+ @abstract		Returns a color SGR code that corresponds to a given color.
  
  @discussion	This method matches colors to their equivalent SGR codes
 				by going through the colors specified in the ansiColors
@@ -282,5 +360,24 @@ enum sgrCode
  @result		SGR code that corresponds with aColor.
  */
 - (enum sgrCode) sgrCodeForColor:(NSColor*)aColor isForegroundColor:(BOOL)aForeground;
+
+
+/*!
+ @method		closestSGRCodeForColor:isForegroundColor:
+ 
+ @abstract		Returns a color SGR code that represents the closest ANSI
+ 				color to a given color.
+ 
+ @discussion	This method attempts to find the closest ANSI color to
+ 				aColor and return its SGR code.
+ 
+ @param aColor			The color to get a closest color SGR code match for
+ @param aForeground		Whether you want a foreground or background color code
+ 
+ @result		SGR code for the ANSI color that is closest to aColor.
+ */
+- (enum sgrCode) closestSGRCodeForColor:(NSColor *)color isForegroundColor:(BOOL)foreground;
+
+
 
 @end
