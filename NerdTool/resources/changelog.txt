@@ -35,4 +35,16 @@ NerdTool
 	* [Fix] Fixed error where some logs would be the wrong font size and face on startup.
 	* [Fix] Fixed error where File logs would not append data correctly.
 
+0.8 (2009-12-25): 
+	* [New] Start at launch option (ID: 21).
+	* [New] Default color/background setting (ID: 16).
+	* [Change] Enable/disable button works differently (ID: 23).
+	* [Change] Shell command input now accepts return and tab (ID: 30).
+	* [Change] "Always on Top" options displays log over the menubar (ID: 06).
+	* [Fix] Picture logs accept a refresh time of `0' to indicate no refresh
+	after loading (ID: 26).
+	* [Fix] Works better with screen resolution changes (ID: 19).
+	* [Fix] Nerdtool checkbox problems (ID: 20).
+	* [Fix] Changing screen resolutions (ID: 18).
+
 ===========================================================================

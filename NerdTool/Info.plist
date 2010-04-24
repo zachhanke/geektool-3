@@ -27,7 +27,7 @@
 	<key>SUEnableSystemProfiling</key>
 	<false/>
 	<key>SUFeedURL</key>
-	<string>http://balthamos.darkraver.net/nerdtool/appcast.xml</string>
+	<string>http://mutablecode.com/appcasts/nerdtool.xml</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 </dict>

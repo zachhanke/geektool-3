@@ -18,16 +18,9 @@
 
 @implementation NTLog
 
-@dynamic alwaysOnTop;
-@dynamic enabled;
-@dynamic h;
-@dynamic name;
-@dynamic shadowWindow;
-@dynamic sizeToScreen;
-@dynamic w;
-@dynamic x;
-@dynamic y;
-@dynamic group;
+@synthesize properties;
+@synthesize active;
+@synthesize parentGroup;
 
 @synthesize windowController;
 @synthesize window;
@@ -46,6 +39,17 @@
 @synthesize lastRecievedString;
 
 #pragma mark Properties
+// Subclasses would probably want to override the following methods
+- (NSString *)logTypeName
+{
+    return @"Box";
+}
+
+- (BOOL)needsDisplayUIBox
+{
+    return YES;
+}
+
 - (NSString *)preferenceNibName
 {
     return @"";
@@ -54,6 +58,11 @@
 - (NSString *)displayNibName
 {
     return @"";
+}
+
+- (NSDictionary *)defaultProperties
+{
+    return [NSDictionary dictionary];
 }
 
 - (void)setupInterfaceBindingsWithObject:(id)bindee
@@ -70,16 +79,16 @@
 - (void)updateWindowIncludingTimer:(BOOL)updateTimer
 {
     NSRect newRect = [self screenToRect:[self rect]];
-    if ([self sizeToScreen]) newRect = [[[NSScreen screens]objectAtIndex:0]frame];
+    if ([properties boolForKey:@"sizeToScreen"]) newRect = [[[NSScreen screens]objectAtIndex:0]frame];
     
     [window setFrame:newRect display:NO];
     
     NSRect tmpRect = [self rect];
     tmpRect.origin = NSZeroPoint;
     
-    [window setHasShadow:[self shadowWindow]];
-    [window setLevel:[self alwaysOnTop]?[self alwaysOnTop]:kCGDesktopWindowLevel];
-    [window setSticky:![self alwaysOnTop]];
+    [window setHasShadow:[[self properties]boolForKey:@"shadowWindow"]];
+    [window setLevel:[[self properties]integerForKey:@"alwaysOnTop"]?kCGMaximumWindowLevel:kCGDesktopWindowLevel];
+    [window setSticky:![[self properties]boolForKey:@"alwaysOnTop"]];
     
     /*
     if ([self needsDisplayUIBox])
@@ -112,7 +121,10 @@
 - (id)initWithProperties:(NSDictionary*)newProperties
 {
 	if (!(self = [super init])) return nil;
-        
+    
+    [self setProperties:[NSMutableDictionary dictionaryWithDictionary:newProperties]];
+    [self setActive:[NSNumber numberWithBool:NO]];
+    
     _loadedView = NO;
     windowController = nil;
     highlightSender = nil;
@@ -122,6 +134,11 @@
     [self setupPreferenceObservers];
     return self;
 }
+
+- (id)init
+{    
+    return [self initWithProperties:[self defaultProperties]];
+}    
 
 - (void)dealloc
 {
@@ -195,6 +212,22 @@
     [self addObserver:self forKeyPath:@"properties.bgMagenta" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.bgCyan" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"properties.bgWhite" options:0 context:NULL];    
+    [self addObserver:self forKeyPath:@"properties.fgBrightBlack" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.fgBrightRed" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.fgBrightGreen" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.fgBrightYellow" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.fgBrightBlue" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.fgBrightMagenta" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.fgBrightCyan" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.fgBrightWhite" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.bgBrightBlack" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.bgBrightRed" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.bgBrightGreen" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.bgBrightYellow" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.bgBrightBlue" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.bgBrightMagenta" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.bgBrightCyan" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"properties.bgBrightWhite" options:0 context:NULL];    
 }
 
 - (void)removePreferenceObservers
@@ -238,6 +271,22 @@
     [self removeObserver:self forKeyPath:@"properties.bgMagenta"];
     [self removeObserver:self forKeyPath:@"properties.bgCyan"];
     [self removeObserver:self forKeyPath:@"properties.bgWhite"];    
+    [self removeObserver:self forKeyPath:@"properties.fgBrightBlack"];
+    [self removeObserver:self forKeyPath:@"properties.fgBrightRed"];
+    [self removeObserver:self forKeyPath:@"properties.fgBrightGreen"];
+    [self removeObserver:self forKeyPath:@"properties.fgBrightYellow"];
+    [self removeObserver:self forKeyPath:@"properties.fgBrightBlue"];
+    [self removeObserver:self forKeyPath:@"properties.fgBrightMagenta"];
+    [self removeObserver:self forKeyPath:@"properties.fgBrightCyan"];
+    [self removeObserver:self forKeyPath:@"properties.fgBrightWhite"];
+    [self removeObserver:self forKeyPath:@"properties.bgBrightBlack"];
+    [self removeObserver:self forKeyPath:@"properties.bgBrightRed"];
+    [self removeObserver:self forKeyPath:@"properties.bgBrightGreen"];
+    [self removeObserver:self forKeyPath:@"properties.bgBrightYellow"];
+    [self removeObserver:self forKeyPath:@"properties.bgBrightBlue"];
+    [self removeObserver:self forKeyPath:@"properties.bgBrightMagenta"];
+    [self removeObserver:self forKeyPath:@"properties.bgBrightCyan"];
+    [self removeObserver:self forKeyPath:@"properties.bgBrightWhite"];    
 }
 
 #pragma mark KVC
@@ -410,6 +459,22 @@
                             [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgMagenta"]],[NSNumber numberWithInt:SGRCodeBgMagenta],
                             [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgCyan"]],[NSNumber numberWithInt:SGRCodeBgCyan],
                             [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgWhite"]],[NSNumber numberWithInt:SGRCodeBgWhite],
+                            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgBrightBlack"]],[NSNumber numberWithInt:SGRCodeFgBrightBlack],
+                            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgBrightRed"]],[NSNumber numberWithInt:SGRCodeFgBrightRed],
+                            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgBrightGreen"]],[NSNumber numberWithInt:SGRCodeFgBrightGreen],
+                            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgBrightYellow"]],[NSNumber numberWithInt:SGRCodeFgBrightYellow],
+                            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgBrightBlue"]],[NSNumber numberWithInt:SGRCodeFgBrightBlue],
+                            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgBrightMagenta"]],[NSNumber numberWithInt:SGRCodeFgBrightMagenta],
+                            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgBrightCyan"]],[NSNumber numberWithInt:SGRCodeFgBrightCyan],
+                            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"fgBrightWhite"]],[NSNumber numberWithInt:SGRCodeFgBrightWhite],
+                            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgBrightBlack"]],[NSNumber numberWithInt:SGRCodeBgBrightBlack],
+                            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgBrightRed"]],[NSNumber numberWithInt:SGRCodeBgBrightRed],
+                            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgBrightGreen"]],[NSNumber numberWithInt:SGRCodeBgBrightGreen],
+                            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgBrightYellow"]],[NSNumber numberWithInt:SGRCodeBgBrightYellow],
+                            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgBrightBlue"]],[NSNumber numberWithInt:SGRCodeBgBrightBlue],
+                            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgBrightMagenta"]],[NSNumber numberWithInt:SGRCodeBgBrightMagenta],
+                            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgBrightCyan"]],[NSNumber numberWithInt:SGRCodeBgBrightCyan],
+                            [NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"bgBrightWhite"]],[NSNumber numberWithInt:SGRCodeBgBrightWhite],
                             nil];
     return [colors autorelease];
     

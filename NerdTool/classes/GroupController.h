@@ -19,7 +19,7 @@
     IBOutlet id tableView;
 
     // used for observing
-    NTGroup *oldSelectedGroup;
+    NTGroup *selectedGroup;
     
     // UI
     IBOutlet id groupsSheet;

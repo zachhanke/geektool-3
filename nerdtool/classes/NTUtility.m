@@ -15,6 +15,9 @@
 #import "defines.h"
 #import "NSDictionary+IntAndBoolAccessors.h"
 
+#import "ANSIEscapeHelper.h"
+
+
 #define DEFAULT_FLAG_DISKSPACE @"default"
 #define DEFAULT_FLAG_UPTIME @"default"
 #define DEFAULT_FLAG_CURRENTLOAD @"default"
@@ -69,22 +72,38 @@
                                        [NSNumber numberWithBool:NO],@"useAsciiEscapes",
                                        [NSNumber numberWithInt:ALIGN_LEFT],@"alignment",
                                        
-                                       [NSArchiver archivedDataWithRootObject:[NSColor blackColor]],@"fgBlack",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor redColor]],@"fgRed",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor greenColor]],@"fgGreen",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor yellowColor]],@"fgYellow",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor blueColor]],@"fgBlue",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor magentaColor]],@"fgMagenta",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor cyanColor]],@"fgCyan",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor whiteColor]],@"fgWhite",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor blackColor]],@"bgBlack",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor redColor]],@"bgRed",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor greenColor]],@"bgGreen",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor yellowColor]],@"bgYellow",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor blueColor]],@"bgBlue",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor magentaColor]],@"bgMagenta",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor cyanColor]],@"bgCyan",
-                                       [NSArchiver archivedDataWithRootObject:[NSColor whiteColor]],@"bgWhite",                                       
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBlack],@"fgBlack",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgRed],@"fgRed",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgGreen],@"fgGreen",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgYellow],@"fgYellow",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBlue],@"fgBlue",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgMagenta],@"fgMagenta",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgCyan],@"fgCyan",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgWhite],@"fgWhite",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBlack],@"bgBlack",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgRed],@"bgRed",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgGreen],@"bgGreen",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgYellow],@"bgYellow",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBlue],@"bgBlue",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgMagenta],@"bgMagenta",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgCyan],@"bgCyan",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgWhite],@"bgWhite",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBrightBlack],@"fgBrightBlack",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBrightRed],@"fgBrightRed",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBrightGreen],@"fgBrightGreen",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBrightYellow],@"fgBrightYellow",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBrightBlue],@"fgBrightBlue",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBrightMagenta],@"fgBrightMagenta",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBrightCyan],@"fgBrightCyan",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBrightWhite],@"fgBrightWhite",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBrightBlack],@"bgBrightBlack",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBrightRed],@"bgBrightRed",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBrightGreen],@"bgBrightGreen",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBrightYellow],@"bgBrightYellow",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBrightBlue],@"bgBrightBlue",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBrightMagenta],@"bgBrightMagenta",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBrightCyan],@"bgBrightCyan",
+                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBrightWhite],@"bgBrightWhite",
                                        nil];
     
     return [defaultProperties autorelease];

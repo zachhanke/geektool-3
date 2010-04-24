@@ -23,6 +23,6 @@
 	<key>NSMainNibFile</key>
 	<string>NTRO</string>
 	<key>NSPrincipalClass</key>
-	<string>NTRunOnly</string>
+	<string>NSApplication</string>
 </dict>
 </plist>

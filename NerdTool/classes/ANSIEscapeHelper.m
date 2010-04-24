@@ -40,41 +40,6 @@ THE SOFTWARE.
 #import "ANSIEscapeHelper.h"
 
 
-// default colors
-#define kDefaultANSIColorFgBlack	[NSColor blackColor]
-#define kDefaultANSIColorFgRed		[NSColor redColor]
-#define kDefaultANSIColorFgGreen	[NSColor greenColor]
-#define kDefaultANSIColorFgYellow	[NSColor yellowColor]
-#define kDefaultANSIColorFgBlue		[NSColor blueColor]
-#define kDefaultANSIColorFgMagenta	[NSColor magentaColor]
-#define kDefaultANSIColorFgCyan		[NSColor cyanColor]
-#define kDefaultANSIColorFgWhite	[NSColor whiteColor]
-
-#define kDefaultANSIColorBgBlack	[NSColor blackColor]
-#define kDefaultANSIColorBgRed		[NSColor redColor]
-#define kDefaultANSIColorBgGreen	[NSColor greenColor]
-#define kDefaultANSIColorBgYellow	[NSColor yellowColor]
-#define kDefaultANSIColorBgBlue		[NSColor blueColor]
-#define kDefaultANSIColorBgMagenta	[NSColor magentaColor]
-#define kDefaultANSIColorBgCyan		[NSColor cyanColor]
-#define kDefaultANSIColorBgWhite	[NSColor whiteColor]
-
-// dictionary keys for the SGR code dictionaries that the array
-// escapeCodesForString:cleanString: returns contains
-#define kCodeDictKey_code			@"code"
-#define kCodeDictKey_location		@"location"
-
-// dictionary keys for the string formatting attribute
-// dictionaries that the array attributesForString:cleanString:
-// returns contains
-#define kAttrDictKey_range			@"range"
-#define kAttrDictKey_attrName		@"attributeName"
-#define kAttrDictKey_attrValue		@"attributeValue"
-
-// minimum weight for an NSFont for it to be considered bold
-#define kBoldFontMinWeight			9
-
-
 @implementation ANSIEscapeHelper
 
 @synthesize font;
@@ -133,6 +98,7 @@ THE SOFTWARE.
 }
 
 
+
 - (NSString*) ansiEscapedStringWithAttributedString:(NSAttributedString*)aAttributedString;
 {
 	NSRange limitRange;
@@ -164,14 +130,14 @@ THE SOFTWARE.
 			if ([thisAttrName isEqualToString:NSForegroundColorAttributeName])
 			{
 				if (attributeValue != nil)
-					thisSGRCode = [self sgrCodeForColor:attributeValue isForegroundColor:YES];
+					thisSGRCode = [self closestSGRCodeForColor:attributeValue isForegroundColor:YES];
 				else
 					thisSGRCode = SGRCodeFgReset;
 			}
 			else if ([thisAttrName isEqualToString:NSBackgroundColorAttributeName])
 			{
 				if (attributeValue != nil)
-					thisSGRCode = [self sgrCodeForColor:attributeValue isForegroundColor:NO];
+					thisSGRCode = [self closestSGRCodeForColor:attributeValue isForegroundColor:NO];
 				else
 					thisSGRCode = SGRCodeBgReset;
 			}
@@ -420,6 +386,14 @@ THE SOFTWARE.
 			case SGRCodeFgMagenta:
 			case SGRCodeFgCyan:
 			case SGRCodeFgWhite:
+			case SGRCodeFgBrightBlack:
+			case SGRCodeFgBrightRed:
+			case SGRCodeFgBrightGreen:
+			case SGRCodeFgBrightYellow:
+			case SGRCodeFgBrightBlue:
+			case SGRCodeFgBrightMagenta:
+			case SGRCodeFgBrightCyan:
+			case SGRCodeFgBrightWhite:
 				thisAttributeName = NSForegroundColorAttributeName;
 				break;
 			case SGRCodeBgBlack:
@@ -430,6 +404,14 @@ THE SOFTWARE.
 			case SGRCodeBgMagenta:
 			case SGRCodeBgCyan:
 			case SGRCodeBgWhite:
+			case SGRCodeBgBrightBlack:
+			case SGRCodeBgBrightRed:
+			case SGRCodeBgBrightGreen:
+			case SGRCodeBgBrightYellow:
+			case SGRCodeBgBrightBlue:
+			case SGRCodeBgBrightMagenta:
+			case SGRCodeBgBrightCyan:
+			case SGRCodeBgBrightWhite:
 				thisAttributeName = NSBackgroundColorAttributeName;
 				break;
 			case SGRCodeIntensityBold:
@@ -464,6 +446,22 @@ THE SOFTWARE.
 			case SGRCodeFgCyan:
 			case SGRCodeBgWhite:
 			case SGRCodeFgWhite:
+			case SGRCodeBgBrightBlack:
+			case SGRCodeFgBrightBlack:
+			case SGRCodeBgBrightRed:
+			case SGRCodeFgBrightRed:
+			case SGRCodeBgBrightGreen:
+			case SGRCodeFgBrightGreen:
+			case SGRCodeBgBrightYellow:
+			case SGRCodeFgBrightYellow:
+			case SGRCodeBgBrightBlue:
+			case SGRCodeFgBrightBlue:
+			case SGRCodeBgBrightMagenta:
+			case SGRCodeFgBrightMagenta:
+			case SGRCodeBgBrightCyan:
+			case SGRCodeFgBrightCyan:
+			case SGRCodeBgBrightWhite:
+			case SGRCodeFgBrightWhite:
 				thisAttributeValue = [self colorForSGRCode:thisCode];
 				break;
 			case SGRCodeIntensityBold:
@@ -545,11 +543,23 @@ THE SOFTWARE.
 		case SGRCodeFgMagenta:
 		case SGRCodeFgCyan:
 		case SGRCodeFgWhite:
+		case SGRCodeFgBrightBlack:
+		case SGRCodeFgBrightRed:
+		case SGRCodeFgBrightGreen:
+		case SGRCodeFgBrightYellow:
+		case SGRCodeFgBrightBlue:
+		case SGRCodeFgBrightMagenta:
+		case SGRCodeFgBrightCyan:
+		case SGRCodeFgBrightWhite:
 			return (endCode == SGRCodeAllReset || endCode == SGRCodeFgReset || 
 					endCode == SGRCodeFgBlack || endCode == SGRCodeFgRed || 
 					endCode == SGRCodeFgGreen || endCode == SGRCodeFgYellow || 
 					endCode == SGRCodeFgBlue || endCode == SGRCodeFgMagenta || 
-					endCode == SGRCodeFgCyan || endCode == SGRCodeFgWhite);
+					endCode == SGRCodeFgCyan || endCode == SGRCodeFgWhite ||
+					endCode == SGRCodeFgBrightBlack || endCode == SGRCodeFgBrightRed || 
+					endCode == SGRCodeFgBrightGreen || endCode == SGRCodeFgBrightYellow || 
+					endCode == SGRCodeFgBrightBlue || endCode == SGRCodeFgBrightMagenta || 
+					endCode == SGRCodeFgBrightCyan || endCode == SGRCodeFgBrightWhite);
 			break;
 		case SGRCodeBgBlack:
 		case SGRCodeBgRed:
@@ -559,11 +569,23 @@ THE SOFTWARE.
 		case SGRCodeBgMagenta:
 		case SGRCodeBgCyan:
 		case SGRCodeBgWhite:
+		case SGRCodeBgBrightBlack:
+		case SGRCodeBgBrightRed:
+		case SGRCodeBgBrightGreen:
+		case SGRCodeBgBrightYellow:
+		case SGRCodeBgBrightBlue:
+		case SGRCodeBgBrightMagenta:
+		case SGRCodeBgBrightCyan:
+		case SGRCodeBgBrightWhite:
 			return (endCode == SGRCodeAllReset || endCode == SGRCodeBgReset || 
 					endCode == SGRCodeBgBlack || endCode == SGRCodeBgRed || 
 					endCode == SGRCodeBgGreen || endCode == SGRCodeBgYellow || 
 					endCode == SGRCodeBgBlue || endCode == SGRCodeBgMagenta || 
-					endCode == SGRCodeBgCyan || endCode == SGRCodeBgWhite);
+					endCode == SGRCodeBgCyan || endCode == SGRCodeBgWhite ||
+					endCode == SGRCodeBgBrightBlack || endCode == SGRCodeBgBrightRed || 
+					endCode == SGRCodeBgBrightGreen || endCode == SGRCodeBgBrightYellow || 
+					endCode == SGRCodeBgBrightBlue || endCode == SGRCodeBgBrightMagenta || 
+					endCode == SGRCodeBgBrightCyan || endCode == SGRCodeBgBrightWhite);
 			break;
 		case SGRCodeIntensityBold:
 		case SGRCodeIntensityNormal:
@@ -621,6 +643,30 @@ THE SOFTWARE.
 		case SGRCodeFgWhite:
 			return kDefaultANSIColorFgWhite;
 			break;
+		case SGRCodeFgBrightBlack:
+			return kDefaultANSIColorFgBrightBlack;
+			break;
+		case SGRCodeFgBrightRed:
+			return kDefaultANSIColorFgBrightRed;
+			break;
+		case SGRCodeFgBrightGreen:
+			return kDefaultANSIColorFgBrightGreen;
+			break;
+		case SGRCodeFgBrightYellow:
+			return kDefaultANSIColorFgBrightYellow;
+			break;
+		case SGRCodeFgBrightBlue:
+			return kDefaultANSIColorFgBrightBlue;
+			break;
+		case SGRCodeFgBrightMagenta:
+			return kDefaultANSIColorFgBrightMagenta;
+			break;
+		case SGRCodeFgBrightCyan:
+			return kDefaultANSIColorFgBrightCyan;
+			break;
+		case SGRCodeFgBrightWhite:
+			return kDefaultANSIColorFgBrightWhite;
+			break;
 		case SGRCodeBgBlack:
 			return kDefaultANSIColorBgBlack;
 			break;
@@ -644,6 +690,30 @@ THE SOFTWARE.
 			break;
 		case SGRCodeBgWhite:
 			return kDefaultANSIColorBgWhite;
+			break;
+		case SGRCodeBgBrightBlack:
+			return kDefaultANSIColorBgBrightBlack;
+			break;
+		case SGRCodeBgBrightRed:
+			return kDefaultANSIColorBgBrightRed;
+			break;
+		case SGRCodeBgBrightGreen:
+			return kDefaultANSIColorBgBrightGreen;
+			break;
+		case SGRCodeBgBrightYellow:
+			return kDefaultANSIColorBgBrightYellow;
+			break;
+		case SGRCodeBgBrightBlue:
+			return kDefaultANSIColorBgBrightBlue;
+			break;
+		case SGRCodeBgBrightMagenta:
+			return kDefaultANSIColorBgBrightMagenta;
+			break;
+		case SGRCodeBgBrightCyan:
+			return kDefaultANSIColorBgBrightCyan;
+			break;
+		case SGRCodeBgBrightWhite:
+			return kDefaultANSIColorBgBrightWhite;
 			break;
 		default:
 			break;
@@ -689,6 +759,22 @@ THE SOFTWARE.
 			return SGRCodeFgCyan;
 		else if ([aColor isEqual:kDefaultANSIColorFgWhite])
 			return SGRCodeFgWhite;
+		else if ([aColor isEqual:kDefaultANSIColorFgBrightBlack])
+			return SGRCodeFgBrightBlack;
+		else if ([aColor isEqual:kDefaultANSIColorFgBrightRed])
+			return SGRCodeFgBrightRed;
+		else if ([aColor isEqual:kDefaultANSIColorFgBrightGreen])
+			return SGRCodeFgBrightGreen;
+		else if ([aColor isEqual:kDefaultANSIColorFgBrightYellow])
+			return SGRCodeFgBrightYellow;
+		else if ([aColor isEqual:kDefaultANSIColorFgBrightBlue])
+			return SGRCodeFgBrightBlue;
+		else if ([aColor isEqual:kDefaultANSIColorFgBrightMagenta])
+			return SGRCodeFgBrightMagenta;
+		else if ([aColor isEqual:kDefaultANSIColorFgBrightCyan])
+			return SGRCodeFgBrightCyan;
+		else if ([aColor isEqual:kDefaultANSIColorFgBrightWhite])
+			return SGRCodeFgBrightWhite;
 	}
 	else
 	{
@@ -708,9 +794,188 @@ THE SOFTWARE.
 			return SGRCodeBgCyan;
 		else if ([aColor isEqual:kDefaultANSIColorBgWhite])
 			return SGRCodeBgWhite;
+		else if ([aColor isEqual:kDefaultANSIColorBgBrightBlack])
+			return SGRCodeBgBrightBlack;
+		else if ([aColor isEqual:kDefaultANSIColorBgBrightRed])
+			return SGRCodeBgBrightRed;
+		else if ([aColor isEqual:kDefaultANSIColorBgBrightGreen])
+			return SGRCodeBgBrightGreen;
+		else if ([aColor isEqual:kDefaultANSIColorBgBrightYellow])
+			return SGRCodeBgBrightYellow;
+		else if ([aColor isEqual:kDefaultANSIColorBgBrightBlue])
+			return SGRCodeBgBrightBlue;
+		else if ([aColor isEqual:kDefaultANSIColorBgBrightMagenta])
+			return SGRCodeBgBrightMagenta;
+		else if ([aColor isEqual:kDefaultANSIColorBgBrightCyan])
+			return SGRCodeBgBrightCyan;
+		else if ([aColor isEqual:kDefaultANSIColorBgBrightWhite])
+			return SGRCodeBgBrightWhite;
 	}
 	
 	return SGRCodeNoneOrInvalid;
+}
+
+
+
+// helper struct typedef and a few functions for
+// -closestSGRCodeForColor:isForegroundColor:
+
+typedef struct _HSB {
+	CGFloat hue;
+	CGFloat saturation;
+	CGFloat brightness;
+} HSB;
+
+HSB makeHSB(CGFloat hue, CGFloat saturation, CGFloat brightness)
+{
+	HSB outHSB;
+	outHSB.hue = hue;
+	outHSB.saturation = saturation;
+	outHSB.brightness = brightness;
+	return outHSB;
+}
+
+HSB getHSBFromColor(NSColor *color)
+{
+	CGFloat hue = 0.0;
+	CGFloat saturation = 0.0;
+	CGFloat brightness = 0.0;
+	[[color colorUsingColorSpaceName:NSCalibratedRGBColorSpace]
+		getHue:&hue
+		saturation:&saturation
+		brightness:&brightness
+		alpha:NULL
+		];
+	return makeHSB(hue, saturation, brightness);
+}
+
+BOOL floatsEqual(CGFloat first, CGFloat second, CGFloat maxAbsError)
+{
+	return (fabs(first-second)) < maxAbsError;
+}
+
+#define MAX_HUE_FLOAT_EQUALITY_ABS_ERROR 0.000001
+
+- (enum sgrCode) closestSGRCodeForColor:(NSColor *)color isForegroundColor:(BOOL)foreground
+{
+	if (color == nil)
+		return SGRCodeNoneOrInvalid;
+	
+	enum sgrCode closestColorSGRCode = [self sgrCodeForColor:color isForegroundColor:foreground];
+	if (closestColorSGRCode != SGRCodeNoneOrInvalid)
+		return closestColorSGRCode;
+	
+	HSB givenColorHSB = getHSBFromColor(color);
+	
+	CGFloat closestColorHueDiff = FLT_MAX;
+	CGFloat closestColorSaturationDiff = FLT_MAX;
+	CGFloat closestColorBrightnessDiff = FLT_MAX;
+	
+	// (background SGR codes are +10 from foreground ones:)
+	NSUInteger sgrCodeShift = (foreground)?0:10;
+	NSArray *ansiFgColorCodes = [NSArray
+		arrayWithObjects:
+			[NSNumber numberWithInt:SGRCodeFgBlack+sgrCodeShift],
+			[NSNumber numberWithInt:SGRCodeFgRed+sgrCodeShift],
+			[NSNumber numberWithInt:SGRCodeFgGreen+sgrCodeShift],
+			[NSNumber numberWithInt:SGRCodeFgYellow+sgrCodeShift],
+			[NSNumber numberWithInt:SGRCodeFgBlue+sgrCodeShift],
+			[NSNumber numberWithInt:SGRCodeFgMagenta+sgrCodeShift],
+			[NSNumber numberWithInt:SGRCodeFgCyan+sgrCodeShift],
+			[NSNumber numberWithInt:SGRCodeFgWhite+sgrCodeShift],
+			[NSNumber numberWithInt:SGRCodeFgBrightBlack+sgrCodeShift],
+			[NSNumber numberWithInt:SGRCodeFgBrightRed+sgrCodeShift],
+			[NSNumber numberWithInt:SGRCodeFgBrightGreen+sgrCodeShift],
+			[NSNumber numberWithInt:SGRCodeFgBrightYellow+sgrCodeShift],
+			[NSNumber numberWithInt:SGRCodeFgBrightBlue+sgrCodeShift],
+			[NSNumber numberWithInt:SGRCodeFgBrightMagenta+sgrCodeShift],
+			[NSNumber numberWithInt:SGRCodeFgBrightCyan+sgrCodeShift],
+			[NSNumber numberWithInt:SGRCodeFgBrightWhite+sgrCodeShift],
+			nil
+		];
+	for (NSNumber *thisSGRCodeNumber in ansiFgColorCodes)
+	{
+		enum sgrCode thisSGRCode = [thisSGRCodeNumber intValue];
+		NSColor *thisColor = [self colorForSGRCode:thisSGRCode];
+		
+		HSB thisColorHSB = getHSBFromColor(thisColor);
+		
+		CGFloat hueDiff = fabs(givenColorHSB.hue - thisColorHSB.hue);
+		CGFloat saturationDiff = fabs(givenColorHSB.saturation - thisColorHSB.saturation);
+		CGFloat brightnessDiff = fabs(givenColorHSB.brightness - thisColorHSB.brightness);
+		
+		// comparison depends on hue, saturation and brightness
+		// (strictly in that order):
+		
+		if (!floatsEqual(hueDiff, closestColorHueDiff, MAX_HUE_FLOAT_EQUALITY_ABS_ERROR))
+		{
+			if (hueDiff > closestColorHueDiff)
+				continue;
+			closestColorSGRCode = thisSGRCode;
+			closestColorHueDiff = hueDiff;
+			closestColorSaturationDiff = saturationDiff;
+			closestColorBrightnessDiff = brightnessDiff;
+			continue;
+		}
+		
+		if (!floatsEqual(saturationDiff, closestColorSaturationDiff, MAX_HUE_FLOAT_EQUALITY_ABS_ERROR))
+		{
+			if (saturationDiff > closestColorSaturationDiff)
+				continue;
+			closestColorSGRCode = thisSGRCode;
+			closestColorHueDiff = hueDiff;
+			closestColorSaturationDiff = saturationDiff;
+			closestColorBrightnessDiff = brightnessDiff;
+			continue;
+		}
+		
+		if (!floatsEqual(brightnessDiff, closestColorBrightnessDiff, MAX_HUE_FLOAT_EQUALITY_ABS_ERROR))
+		{
+			if (brightnessDiff > closestColorBrightnessDiff)
+				continue;
+			closestColorSGRCode = thisSGRCode;
+			closestColorHueDiff = hueDiff;
+			closestColorSaturationDiff = saturationDiff;
+			closestColorBrightnessDiff = brightnessDiff;
+			continue;
+		}
+		
+		// If hue (especially hue!), saturation and brightness diffs all
+		// are equal to some other color, we need to prefer one or the
+		// other so we'll select the more 'distinctive' color of the
+		// two (this is *very* subjective, obviously). I basically just
+		// looked at the hue chart, went through all the points between
+		// our main ANSI colors and decided which side the middle point
+		// would lean on. (e.g. the purple color that is exactly between
+		// the blue and magenta ANSI colors looks more magenta than
+		// blue to me so I put magenta higher than blue in the list
+		// below.)
+		// 
+		// subjective ordering of colors from most to least 'distinctive':
+		int colorDistinctivenessOrder[6] = {
+			SGRCodeFgRed+sgrCodeShift,
+			SGRCodeFgMagenta+sgrCodeShift,
+			SGRCodeFgBlue+sgrCodeShift,
+			SGRCodeFgGreen+sgrCodeShift,
+			SGRCodeFgCyan+sgrCodeShift,
+			SGRCodeFgYellow+sgrCodeShift
+			};
+		int i;
+		for (i = 0; i < 6; i++)
+		{
+			if (colorDistinctivenessOrder[i] == closestColorSGRCode)
+				break;
+			else if (colorDistinctivenessOrder[i] == thisSGRCode)
+			{
+				closestColorSGRCode = thisSGRCode;
+				closestColorHueDiff = hueDiff;
+				closestColorSaturationDiff = saturationDiff;
+				closestColorBrightnessDiff = brightnessDiff;
+			}
+		}
+	}
+	
+	return closestColorSGRCode;
 }
 
 

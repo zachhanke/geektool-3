@@ -15,7 +15,7 @@
 
 - (void)awakeFromNib
 {        
-    oldSelectedGroup = nil;
+    selectedGroup = nil;
     MovedRowsType = @"NTGroup_Moved_Item";
     CopiedRowsType = @"NTGroup_Copied_Item";
 
@@ -46,13 +46,15 @@
     if([keyPath isEqualToString:@"selectedObjects"])
     {
         [logController setSelectedObjects:nil];
-        if (oldSelectedGroup) [[oldSelectedGroup properties]setValue:[NSNumber numberWithBool:NO] forKey:@"active"];
+        if (selectedGroup) [[selectedGroup properties]setValue:[NSNumber numberWithBool:NO] forKey:@"active"];
         
         if (![[self selectedObjects]count]) return;
-        //if (oldSelectedGroup == [[self selectedObjects]objectAtIndex:0]) return;
+        //if (selectedGroup == [[self selectedObjects]objectAtIndex:0]) return;
         
-        oldSelectedGroup = [[self selectedObjects]objectAtIndex:0];
-        [[oldSelectedGroup properties]setValue:[NSNumber numberWithBool:YES] forKey:@"active"];
+        selectedGroup = [[self selectedObjects]objectAtIndex:0];
+        
+        if (![[NSUserDefaults standardUserDefaults]integerForKey:@"enableNerdtool"]) return;
+        [[selectedGroup properties]setValue:[NSNumber numberWithBool:YES] forKey:@"active"];
     }    
     
 }
@@ -78,7 +80,7 @@
 #pragma mark Content Remove/Dupe
 - (void)removeObjectsAtArrangedObjectIndexes:(NSIndexSet *)indexes
 {
-    oldSelectedGroup = nil;
+    selectedGroup = nil;
     [super removeObjectsAtArrangedObjectIndexes:indexes];
 }
 

@@ -35,6 +35,7 @@
 - (void)exposeBorder;
 - (IBAction)donate:(id)sender;
 - (IBAction)openReadme:(id)sender;
+- (IBAction)refreshGroupSelection:(id)sender;
 #pragma mark Saving
 - (NSString *)pathForDataFile;
 - (void)saveDataToDisk;

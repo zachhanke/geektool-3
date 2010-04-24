@@ -57,7 +57,8 @@
     [groupController release];
     self.groups = nil;
     
-    if (!hitROProcess) return;
+    // do we want to run the RO process before we leave?
+    if (![[NSUserDefaults standardUserDefaults]integerForKey:@"enableNerdtool"]) return;
     NSString *resourcePath = [[NSBundle mainBundle]resourcePath];
     NSString *ROPath = [resourcePath stringByAppendingPathComponent:@"NerdToolRO.app"];
     [[NSWorkspace sharedWorkspace]launchApplication:ROPath];    
@@ -82,8 +83,16 @@
 
 #pragma mark -
 #pragma mark NerdToolRO
+- (IBAction)refreshGroupSelection:(id)sender
+{
+    [groupController observeValueForKeyPath:@"selectedObjects" ofObject:nil change:nil context:nil];
+}
+
 - (IBAction)trackROProcess:(id)sender
 {
+    // see if RO process is running (and kill it if it is)
+    // returns 0 if not running
+    // returns 1 if it is running (or more accurately, was running)
     NSString *resourcePath = [[NSBundle mainBundle]resourcePath];
     NSString *shellCommand = [resourcePath stringByAppendingPathComponent:@"killROProcess.sh"];
     NSTask *task = [[NSTask alloc]init];
@@ -92,11 +101,7 @@
     [task setStandardInput:[NSPipe pipe]];
     [task setArguments:[NSArray arrayWithObjects:shellCommand,@"-k",nil]];
     [task launch];
-    [task waitUntilExit];
-    
-    if (!sender) [NTEnable setState:[task terminationStatus]];
-    hitROProcess = [NTEnable state];
-    
+    [task waitUntilExit];    
     [task release];
 }
 
@@ -126,6 +131,8 @@
         [loginItemsArray release];        
     }
 }
+
+
 
 - (IBAction)revertDefaultSelectionColor:(id)sender
 {
@@ -191,7 +198,7 @@
 
 - (IBAction)donate:(id)sender
 {
-	[[NSWorkspace sharedWorkspace]openURL:[NSURL URLWithString:@"http://balthamos.darkraver.net/donate.php"]];
+	[[NSWorkspace sharedWorkspace]openURL:[NSURL URLWithString:@"http://mutablecode.com/content/donate"]];
 }
 
 - (IBAction)openReadme:(id)sender
@@ -338,6 +345,7 @@
     [self showExpose:nil];
     [self trackROProcess:nil];
     
+    // is it a startup item?
     LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL,kLSSharedFileListSessionLoginItems,NULL);
     NSString *roPath = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"NerdToolRO.app"];
     CFURLRef ROURL = (CFURLRef)[NSURL fileURLWithPath:roPath];    
