@@ -87,7 +87,7 @@
     tmpRect.origin = NSZeroPoint;
     
     [window setHasShadow:[[self properties]boolForKey:@"shadowWindow"]];
-    [window setLevel:[[self properties]integerForKey:@"alwaysOnTop"]?kCGMaximumWindowLevel:kCGDesktopWindowLevel];
+    [window setLevel:[[self properties]integerForKey:@"alwaysOnTop"]?kCGMaximumWindowLevel:kCGDesktopIconWindowLevel];
     [window setSticky:![[self properties]boolForKey:@"alwaysOnTop"]];
     
     if ([self needsDisplayUIBox])
@@ -418,7 +418,7 @@
 - (void)setHighlighted:(BOOL)val from:(id)sender
 {
     highlightSender = sender;
-    
+	
     if (windowController) [[self window]setHighlighted:val];
     else postActivationRequest = YES;
 }
