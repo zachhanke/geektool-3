@@ -81,6 +81,10 @@
     [groupController observeValueForKeyPath:@"selectedObjects" ofObject:nil change:nil context:nil];
 }
 
+- (void)applicationDidResignActive:(NSNotification *)notification {
+	[groupController observeValueForKeyPath:@"selectedObjects" ofObject:nil change:nil context:nil];
+}
+
 #pragma mark -
 #pragma mark NerdToolRO
 - (IBAction)refreshGroupSelection:(id)sender
