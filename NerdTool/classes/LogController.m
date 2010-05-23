@@ -1,10 +1,24 @@
-//
-//  LogController.m
-//  GeektoolPreferencePane
-//
-//  Created by Kevin Nygaard on 3/18/09.
-//  Copyright 2009 AllocInit. All rights reserved.
-//
+/*
+ * LogController.m
+ * NerdTool
+ * Created by Kevin Nygaard on 3/18/09.
+ * Copyright 2009 AllocInit. All rights reserved.
+ *
+ * This file is part of NerdTool.
+ * 
+ * NerdTool is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * NerdTool is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NerdTool.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #import "LogController.h"
 #import "GroupController.h"
@@ -21,6 +35,8 @@
 #import "defines.h"
 #import "NSIndexSet+CountOfIndexesInRange.h"
 #import "NSArrayController+Duplicate.h"
+
+#import "NSTreeController-DMExtensions.h"
 
 @implementation LogController
 
@@ -231,18 +247,18 @@
             [[_oldSelectedLog unloadPrefsViewAndUnbind]removeFromSuperview];
         }
         
-        if (![[self selectedObjects]count])
+        if (![[context selectedObjects]count])
         {
             [defaultPrefsViewText setStringValue:@"No Selection"];
             [prefsView addSubview:defaultPrefsView];
             return;
         }
-        else if ([[self selectedObjects]count] > 1)
+        else if ([[context selectedObjects]count] > 1)
         {
             BOOL useSameView = YES;
             for (NTLog *log in [self selectedObjects])
             {
-                if (![[[[self selectedObjects]objectAtIndex:0]logTypeName]isEqualToString:[log logTypeName]])
+                if (![[[[context selectedObjects]objectAtIndex:0]logTypeName]isEqualToString:[log logTypeName]])
                 {
                     useSameView = NO;
                     break;
@@ -257,8 +273,8 @@
             }
         }
         
-        _oldSelectedLog = [[self selectedObjects]objectAtIndex:0];
-        [prefsView addSubview:[_oldSelectedLog loadPrefsViewAndBind:self]];
+        _oldSelectedLog = [[context selectedObjects] objectAtIndex:0];
+        [prefsView addSubview:[_oldSelectedLog loadPrefsViewAndBind:context]];
         [_oldSelectedLog setHighlighted:YES from:self];
     }
     else [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

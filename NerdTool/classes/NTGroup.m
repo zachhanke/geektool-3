@@ -1,47 +1,38 @@
-//
-//  NTGroup.m
-//  NerdTool
-//
-//  Created by Kevin Nygaard on 6/15/09.
-//  Copyright 2009 __MyCompanyName__. All rights reserved.
-//
+/*
+ * NTGroup.m
+ * NerdTool
+ * Created by Kevin Nygaard on 6/15/09.
+ * Copyright 2009 MutableCode. All rights reserved.
+ *
+ * This file is part of NerdTool.
+ * 
+ * NerdTool is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * NerdTool is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NerdTool.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #import "NTGroup.h"
-#import "NTLog.h"
-#import "LogWindow.h"
 
-#import "NSDictionary+IntAndBoolAccessors.h"
-
-// Organizes and holds instantiated GTLogs
 @implementation NTGroup
 
-@dynamic active;
-@dynamic groupID;
-@dynamic name;
-@dynamic order;
-@dynamic logs;
+// Core Data Properties
+@dynamic canCollapse;
+@dynamic canExpand;
+@dynamic isExpanded;
+@dynamic isSpecialGroup;
 
-- (void)reorder
+- (void)awakeFromInsert
 {
-    for (NTLog *log in self.logs) if (log.enabled) [log back];
+	self.isLeaf = [NSNumber numberWithBool:NO];
 }
 
-#pragma mark Observing
-// properties.active is changed by GroupController
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if ([keyPath isEqualToString:@"active"])
-    {
-        if (![self.logs count]) return;
-        
-        [self.logs makeObjectsPerformSelector:@selector(setActive:) withObject:[NSNumber numberWithBool:[[change valueForKey:NSKeyValueChangeNewKey]boolValue]]];
-        [self reorder];
-    }
-}
-
-- (void)setupCanvas
-{
-    mainWindow = [[LogWindow alloc] initWithContentRect:<#(NSRect)contentRect#> styleMask:<#(unsigned int)styleMask#> backing:<#(NSBackingStoreType)backingType#> defer:<#(BOOL)flag#>
-    [[NSWindowController alloc]initWithWindow:];
-}
 @end

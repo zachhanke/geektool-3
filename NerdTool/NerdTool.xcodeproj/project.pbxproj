@@ -21,6 +21,26 @@
 		0A4226BE102285130074C19D /* NS(Attributed)String+Geometrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A4226BD102285130074C19D /* NS(Attributed)String+Geometrics.m */; };
 		0A4E504F10A3944B000653AF /* NerdtoolDataModel.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 0A4E504E10A3944B000653AF /* NerdtoolDataModel.xcdatamodel */; };
 		0A4E509C10A3E3DA000653AF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A4E508210A3E3D8000653AF /* CoreData.framework */; };
+		0A5195CB11A7AE8D00FA3576 /* NTTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5195CA11A7AE8D00FA3576 /* NTTreeNode.m */; };
+		0A5195E411A7B15600FA3576 /* NTTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5195CA11A7AE8D00FA3576 /* NTTreeNode.m */; };
+		0A5195FE11A7B35C00FA3576 /* NTOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5195FD11A7B35C00FA3576 /* NTOutlineView.m */; };
+		0A5195FF11A7B35C00FA3576 /* NTOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5195FD11A7B35C00FA3576 /* NTOutlineView.m */; };
+		0A51960D11A7B9EF00FA3576 /* NSTreeController-DMExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A51960C11A7B9EF00FA3576 /* NSTreeController-DMExtensions.m */; };
+		0A51960E11A7B9EF00FA3576 /* NSTreeController-DMExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A51960C11A7B9EF00FA3576 /* NSTreeController-DMExtensions.m */; };
+		0A51961511A7BB7B00FA3576 /* NSOutlineView-DMExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A51961411A7BB7B00FA3576 /* NSOutlineView-DMExtensions.m */; };
+		0A51961611A7BB7B00FA3576 /* NSOutlineView-DMExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A51961411A7BB7B00FA3576 /* NSOutlineView-DMExtensions.m */; };
+		0A51964811A7C07400FA3576 /* NTTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A51964711A7C07400FA3576 /* NTTreeController.m */; };
+		0A51964911A7C07400FA3576 /* NTTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A51964711A7C07400FA3576 /* NTTreeController.m */; };
+		0A5196A611A7C86500FA3576 /* NSArray_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A51969F11A7C86500FA3576 /* NSArray_Extensions.m */; };
+		0A5196A711A7C86500FA3576 /* NSIndexPath_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5196A111A7C86500FA3576 /* NSIndexPath_Extensions.m */; };
+		0A5196A811A7C86500FA3576 /* NSTreeController_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5196A311A7C86500FA3576 /* NSTreeController_Extensions.m */; };
+		0A5196A911A7C86500FA3576 /* NSTreeNode_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5196A511A7C86500FA3576 /* NSTreeNode_Extensions.m */; };
+		0A5196AA11A7C86500FA3576 /* NSArray_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A51969F11A7C86500FA3576 /* NSArray_Extensions.m */; };
+		0A5196AB11A7C86500FA3576 /* NSIndexPath_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5196A111A7C86500FA3576 /* NSIndexPath_Extensions.m */; };
+		0A5196AC11A7C86500FA3576 /* NSTreeController_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5196A311A7C86500FA3576 /* NSTreeController_Extensions.m */; };
+		0A5196AD11A7C86500FA3576 /* NSTreeNode_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5196A511A7C86500FA3576 /* NSTreeNode_Extensions.m */; };
+		0A5197DD11A86B5F00FA3576 /* NTTextBasedLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5197DC11A86B5F00FA3576 /* NTTextBasedLog.m */; };
+		0A5197DE11A86B5F00FA3576 /* NTTextBasedLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5197DC11A86B5F00FA3576 /* NTTextBasedLog.m */; };
 		0A7732EC1043138400F02243 /* NTUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7732EB1043138400F02243 /* NTUtility.m */; };
 		0A7732ED1043138400F02243 /* NTUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7732EB1043138400F02243 /* NTUtility.m */; };
 		0A791E981016BC31003F392D /* NTDroppableTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A791E971016BC31003F392D /* NTDroppableTextField.m */; };
@@ -31,7 +51,7 @@
 		0A88EE3F1019694000EF5B6F /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 0A88EE3E1019694000EF5B6F /* dsa_pub.pem */; };
 		0A904BC2100D8EAC009A2F5E /* AIQuartzView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BA0100D8EAC009A2F5E /* AIQuartzView.m */; };
 		0A904BC3100D8EAC009A2F5E /* AJRScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BA2100D8EAC009A2F5E /* AJRScrollView.m */; };
-		0A904BC4100D8EAC009A2F5E /* GeekToolPrefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BA6100D8EAC009A2F5E /* GeekToolPrefs.m */; };
+		0A904BC4100D8EAC009A2F5E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BA6100D8EAC009A2F5E /* AppDelegate.m */; };
 		0A904BC5100D8EAC009A2F5E /* GroupController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BA8100D8EAC009A2F5E /* GroupController.m */; };
 		0A904BC8100D8EAC009A2F5E /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BAD100D8EAC009A2F5E /* LogController.m */; };
 		0A904BC9100D8EAC009A2F5E /* LogTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BAF100D8EAC009A2F5E /* LogTextField.m */; };
@@ -48,7 +68,7 @@
 		0A904BF9100D8F2B009A2F5E /* defaultFailure.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BD7100D8F2B009A2F5E /* defaultFailure.png */; };
 		0A904BFA100D8F2B009A2F5E /* defaultSuccess.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BD8100D8F2B009A2F5E /* defaultSuccess.png */; };
 		0A904BFB100D8F2B009A2F5E /* delete.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BD9100D8F2B009A2F5E /* delete.tif */; };
-		0A904BFC100D8F2B009A2F5E /* GeektoolPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BDA100D8F2B009A2F5E /* GeektoolPrefs.xib */; };
+		0A904BFC100D8F2B009A2F5E /* nerdToolPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BDA100D8F2B009A2F5E /* nerdToolPrefs.xib */; };
 		0A904BFD100D8F2B009A2F5E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BDC100D8F2B009A2F5E /* InfoPlist.strings */; };
 		0A904BFE100D8F2B009A2F5E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BDE100D8F2B009A2F5E /* Localizable.strings */; };
 		0A904C01100D8F2B009A2F5E /* GeektoolPreferencePanePref.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BE4100D8F2B009A2F5E /* GeektoolPreferencePanePref.tiff */; };
@@ -102,16 +122,6 @@
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		0A88EC73101777B900EF5B6F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 0AB89EEA1014A5C4006FE649;
-			remoteInfo = NerdToolRO;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		0AB875AA1010088A0000E274 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -139,6 +149,26 @@
 		0A4226BD102285130074C19D /* NS(Attributed)String+Geometrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NS(Attributed)String+Geometrics.m"; path = "classes/NS(Attributed)String+Geometrics.m"; sourceTree = "<group>"; };
 		0A4E504E10A3944B000653AF /* NerdtoolDataModel.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = NerdtoolDataModel.xcdatamodel; sourceTree = "<group>"; };
 		0A4E508210A3E3D8000653AF /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		0A5195C911A7AE8D00FA3576 /* NTTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTTreeNode.h; sourceTree = "<group>"; };
+		0A5195CA11A7AE8D00FA3576 /* NTTreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTTreeNode.m; sourceTree = "<group>"; };
+		0A5195FC11A7B35C00FA3576 /* NTOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTOutlineView.h; sourceTree = "<group>"; };
+		0A5195FD11A7B35C00FA3576 /* NTOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTOutlineView.m; sourceTree = "<group>"; };
+		0A51960B11A7B9EF00FA3576 /* NSTreeController-DMExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTreeController-DMExtensions.h"; sourceTree = "<group>"; };
+		0A51960C11A7B9EF00FA3576 /* NSTreeController-DMExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTreeController-DMExtensions.m"; sourceTree = "<group>"; };
+		0A51961311A7BB7B00FA3576 /* NSOutlineView-DMExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSOutlineView-DMExtensions.h"; sourceTree = "<group>"; };
+		0A51961411A7BB7B00FA3576 /* NSOutlineView-DMExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSOutlineView-DMExtensions.m"; sourceTree = "<group>"; };
+		0A51964611A7C07400FA3576 /* NTTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTTreeController.h; sourceTree = "<group>"; };
+		0A51964711A7C07400FA3576 /* NTTreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTTreeController.m; sourceTree = "<group>"; };
+		0A51969E11A7C86500FA3576 /* NSArray_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSArray_Extensions.h; sourceTree = "<group>"; };
+		0A51969F11A7C86500FA3576 /* NSArray_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSArray_Extensions.m; sourceTree = "<group>"; };
+		0A5196A011A7C86500FA3576 /* NSIndexPath_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSIndexPath_Extensions.h; sourceTree = "<group>"; };
+		0A5196A111A7C86500FA3576 /* NSIndexPath_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSIndexPath_Extensions.m; sourceTree = "<group>"; };
+		0A5196A211A7C86500FA3576 /* NSTreeController_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTreeController_Extensions.h; sourceTree = "<group>"; };
+		0A5196A311A7C86500FA3576 /* NSTreeController_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTreeController_Extensions.m; sourceTree = "<group>"; };
+		0A5196A411A7C86500FA3576 /* NSTreeNode_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTreeNode_Extensions.h; sourceTree = "<group>"; };
+		0A5196A511A7C86500FA3576 /* NSTreeNode_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTreeNode_Extensions.m; sourceTree = "<group>"; };
+		0A5197DB11A86B5F00FA3576 /* NTTextBasedLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTTextBasedLog.h; sourceTree = "<group>"; };
+		0A5197DC11A86B5F00FA3576 /* NTTextBasedLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTTextBasedLog.m; sourceTree = "<group>"; };
 		0A7732EA1043138400F02243 /* NTUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTUtility.h; path = classes/NTUtility.h; sourceTree = "<group>"; };
 		0A7732EB1043138400F02243 /* NTUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTUtility.m; path = classes/NTUtility.m; sourceTree = "<group>"; };
 		0A791E961016BC31003F392D /* NTDroppableTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTDroppableTextField.h; path = classes/NTDroppableTextField.h; sourceTree = "<group>"; };
@@ -153,8 +183,8 @@
 		0A904BA2100D8EAC009A2F5E /* AJRScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AJRScrollView.m; path = classes/AJRScrollView.m; sourceTree = "<group>"; };
 		0A904BA3100D8EAC009A2F5E /* CGSPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CGSPrivate.h; path = classes/CGSPrivate.h; sourceTree = "<group>"; };
 		0A904BA4100D8EAC009A2F5E /* defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = defines.h; path = classes/defines.h; sourceTree = "<group>"; };
-		0A904BA5100D8EAC009A2F5E /* GeekToolPrefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeekToolPrefs.h; path = classes/GeekToolPrefs.h; sourceTree = "<group>"; };
-		0A904BA6100D8EAC009A2F5E /* GeekToolPrefs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeekToolPrefs.m; path = classes/GeekToolPrefs.m; sourceTree = "<group>"; };
+		0A904BA5100D8EAC009A2F5E /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = classes/AppDelegate.h; sourceTree = "<group>"; };
+		0A904BA6100D8EAC009A2F5E /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = classes/AppDelegate.m; sourceTree = "<group>"; };
 		0A904BA7100D8EAC009A2F5E /* GroupController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupController.h; path = classes/GroupController.h; sourceTree = "<group>"; };
 		0A904BA8100D8EAC009A2F5E /* GroupController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupController.m; path = classes/GroupController.m; sourceTree = "<group>"; };
 		0A904BAC100D8EAC009A2F5E /* LogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogController.h; path = classes/LogController.h; sourceTree = "<group>"; };
@@ -182,7 +212,7 @@
 		0A904BD7100D8F2B009A2F5E /* defaultFailure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = defaultFailure.png; path = resources/defaultFailure.png; sourceTree = "<group>"; };
 		0A904BD8100D8F2B009A2F5E /* defaultSuccess.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = defaultSuccess.png; path = resources/defaultSuccess.png; sourceTree = "<group>"; };
 		0A904BD9100D8F2B009A2F5E /* delete.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = delete.tif; path = resources/delete.tif; sourceTree = "<group>"; };
-		0A904BDB100D8F2B009A2F5E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/GeektoolPrefs.xib; sourceTree = "<group>"; };
+		0A904BDB100D8F2B009A2F5E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/nerdToolPrefs.xib; sourceTree = "<group>"; };
 		0A904BDD100D8F2B009A2F5E /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0A904BDF100D8F2B009A2F5E /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		0A904BE4100D8F2B009A2F5E /* GeektoolPreferencePanePref.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = GeektoolPreferencePanePref.tiff; path = resources/GeektoolPreferencePanePref.tiff; sourceTree = "<group>"; };
@@ -266,15 +296,26 @@
 			name = "Generic log type UI";
 			sourceTree = "<group>";
 		};
-		0A194D8C0FED967C0062EA84 /* Data Classes */ = {
+		0A194D8C0FED967C0062EA84 /* Data Model Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0A422603102220BE0074C19D /* LogProtocol.h */,
+				0A5195C911A7AE8D00FA3576 /* NTTreeNode.h */,
+				0A5195CA11A7AE8D00FA3576 /* NTTreeNode.m */,
 				0A904BBE100D8EAC009A2F5E /* NTGroup.h */,
 				0A904BBF100D8EAC009A2F5E /* NTGroup.m */,
 				0AB8A1F210154CF0006FE649 /* NTLog.h */,
 				0AB8A1F110154CF0006FE649 /* NTLog.m */,
+				0AA4DFF6101648AD00C010F3 /* Quartz */,
+				0A42233710212E310074C19D /* WebKit */,
+				0AA4DFF7101648AF00C010F3 /* Image */,
+				0A5197DB11A86B5F00FA3576 /* NTTextBasedLog.h */,
+				0A5197DC11A86B5F00FA3576 /* NTTextBasedLog.m */,
+				0A7732E7104312FF00F02243 /* Utility */,
+				0AA4DFF5101648A000C010F3 /* Shell */,
+				0AA4DFF8101648B200C010F3 /* File */,
 			);
-			name = "Data Classes";
+			name = "Data Model Classes";
 			sourceTree = "<group>";
 		};
 		0A42233710212E310074C19D /* WebKit */ = {
@@ -293,12 +334,24 @@
 			children = (
 				0A904BB2100D8EAC009A2F5E /* NSArrayController+Duplicate.h */,
 				0A904BB3100D8EAC009A2F5E /* NSArrayController+Duplicate.m */,
-				0A904BB4100D8EAC009A2F5E /* NSDictionary+IntAndBoolAccessors.h */,
-				0A904BB5100D8EAC009A2F5E /* NSDictionary+IntAndBoolAccessors.m */,
+				0A5196A211A7C86500FA3576 /* NSTreeController_Extensions.h */,
+				0A5196A311A7C86500FA3576 /* NSTreeController_Extensions.m */,
+				0A51960B11A7B9EF00FA3576 /* NSTreeController-DMExtensions.h */,
+				0A51960C11A7B9EF00FA3576 /* NSTreeController-DMExtensions.m */,
+				0A51961311A7BB7B00FA3576 /* NSOutlineView-DMExtensions.h */,
+				0A51961411A7BB7B00FA3576 /* NSOutlineView-DMExtensions.m */,
+				0A5196A411A7C86500FA3576 /* NSTreeNode_Extensions.h */,
+				0A5196A511A7C86500FA3576 /* NSTreeNode_Extensions.m */,
 				0A904BB6100D8EAC009A2F5E /* NSIndexSet+CountOfIndexesInRange.h */,
 				0A904BB7100D8EAC009A2F5E /* NSIndexSet+CountOfIndexesInRange.m */,
+				0A5196A011A7C86500FA3576 /* NSIndexPath_Extensions.h */,
+				0A5196A111A7C86500FA3576 /* NSIndexPath_Extensions.m */,
+				0A904BB4100D8EAC009A2F5E /* NSDictionary+IntAndBoolAccessors.h */,
+				0A904BB5100D8EAC009A2F5E /* NSDictionary+IntAndBoolAccessors.m */,
 				0A4226BC102285130074C19D /* NS(Attributed)String+Geometrics.h */,
 				0A4226BD102285130074C19D /* NS(Attributed)String+Geometrics.m */,
+				0A51969E11A7C86500FA3576 /* NSArray_Extensions.h */,
+				0A51969F11A7C86500FA3576 /* NSArray_Extensions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -324,12 +377,14 @@
 		0A7D372A0FD802B10070D678 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				0A904BA5100D8EAC009A2F5E /* GeekToolPrefs.h */,
-				0A904BA6100D8EAC009A2F5E /* GeekToolPrefs.m */,
+				0A904BA5100D8EAC009A2F5E /* AppDelegate.h */,
+				0A904BA6100D8EAC009A2F5E /* AppDelegate.m */,
 				0A904BA7100D8EAC009A2F5E /* GroupController.h */,
 				0A904BA8100D8EAC009A2F5E /* GroupController.m */,
 				0A904BAC100D8EAC009A2F5E /* LogController.h */,
 				0A904BAD100D8EAC009A2F5E /* LogController.m */,
+				0A51964611A7C07400FA3576 /* NTTreeController.h */,
+				0A51964711A7C07400FA3576 /* NTTreeController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -392,18 +447,13 @@
 			name = File;
 			sourceTree = "<group>";
 		};
-		0AB8769C10103BA90000E274 /* Log Types */ = {
+		0AB8769C10103BA90000E274 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				0A422603102220BE0074C19D /* LogProtocol.h */,
-				0A7732E7104312FF00F02243 /* Utility */,
-				0AA4DFF5101648A000C010F3 /* Shell */,
-				0AA4DFF8101648B200C010F3 /* File */,
-				0AA4DFF7101648AF00C010F3 /* Image */,
-				0AA4DFF6101648AD00C010F3 /* Quartz */,
-				0A42233710212E310074C19D /* WebKit */,
+				0A5195FC11A7B35C00FA3576 /* NTOutlineView.h */,
+				0A5195FD11A7B35C00FA3576 /* NTOutlineView.m */,
 			);
-			name = "Log Types";
+			name = UI;
 			sourceTree = "<group>";
 		};
 		0AB89EF11014A61F006FE649 /* Run Only */ = {
@@ -464,8 +514,8 @@
 				0A4E504D10A3941F000653AF /* Models */,
 				0A439DA00FE9D29D00BB8B6A /* Categories */,
 				0A7D372A0FD802B10070D678 /* Controllers */,
-				0A194D8C0FED967C0062EA84 /* Data Classes */,
-				0AB8769C10103BA90000E274 /* Log Types */,
+				0A194D8C0FED967C0062EA84 /* Data Model Classes */,
+				0AB8769C10103BA90000E274 /* UI */,
 				080E96DDFE201D6D7F000001 /* Generic log type UI */,
 				0AB8A0221014BE90006FE649 /* Text-based log type UI */,
 				0A94855E100C45BA0071EFF9 /* Preferences UI Classes */,
@@ -515,7 +565,7 @@
 				8D1107310486CEB800E47090 /* Info.plist */,
 				0A904BDC100D8F2B009A2F5E /* InfoPlist.strings */,
 				0A904BDE100D8F2B009A2F5E /* Localizable.strings */,
-				0A904BDA100D8F2B009A2F5E /* GeektoolPrefs.xib */,
+				0A904BDA100D8F2B009A2F5E /* nerdToolPrefs.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -561,7 +611,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				0A88EC74101777B900EF5B6F /* PBXTargetDependency */,
 			);
 			name = NerdTool;
 			productInstallPath = "$(HOME)/Applications";
@@ -611,7 +660,7 @@
 				0A904BF9100D8F2B009A2F5E /* defaultFailure.png in Resources */,
 				0A904BFA100D8F2B009A2F5E /* defaultSuccess.png in Resources */,
 				0A904BFB100D8F2B009A2F5E /* delete.tif in Resources */,
-				0A904BFC100D8F2B009A2F5E /* GeektoolPrefs.xib in Resources */,
+				0A904BFC100D8F2B009A2F5E /* nerdToolPrefs.xib in Resources */,
 				0A904BFD100D8F2B009A2F5E /* InfoPlist.strings in Resources */,
 				0A904BFE100D8F2B009A2F5E /* Localizable.strings in Resources */,
 				0A904C01100D8F2B009A2F5E /* GeektoolPreferencePanePref.tiff in Resources */,
@@ -664,6 +713,16 @@
 				0AA4E0A110165DB100C010F3 /* NTShell.m in Sources */,
 				0A0BC2DB1028ABF700716B75 /* NTWeb.m in Sources */,
 				0A7732ED1043138400F02243 /* NTUtility.m in Sources */,
+				0A5195E411A7B15600FA3576 /* NTTreeNode.m in Sources */,
+				0A5195FF11A7B35C00FA3576 /* NTOutlineView.m in Sources */,
+				0A51960E11A7B9EF00FA3576 /* NSTreeController-DMExtensions.m in Sources */,
+				0A51961611A7BB7B00FA3576 /* NSOutlineView-DMExtensions.m in Sources */,
+				0A51964911A7C07400FA3576 /* NTTreeController.m in Sources */,
+				0A5196AA11A7C86500FA3576 /* NSArray_Extensions.m in Sources */,
+				0A5196AB11A7C86500FA3576 /* NSIndexPath_Extensions.m in Sources */,
+				0A5196AC11A7C86500FA3576 /* NSTreeController_Extensions.m in Sources */,
+				0A5196AD11A7C86500FA3576 /* NSTreeNode_Extensions.m in Sources */,
+				0A5197DE11A86B5F00FA3576 /* NTTextBasedLog.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -674,7 +733,7 @@
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				0A904BC2100D8EAC009A2F5E /* AIQuartzView.m in Sources */,
 				0A904BC3100D8EAC009A2F5E /* AJRScrollView.m in Sources */,
-				0A904BC4100D8EAC009A2F5E /* GeekToolPrefs.m in Sources */,
+				0A904BC4100D8EAC009A2F5E /* AppDelegate.m in Sources */,
 				0A904BC5100D8EAC009A2F5E /* GroupController.m in Sources */,
 				0A904BC8100D8EAC009A2F5E /* LogController.m in Sources */,
 				0A904BC9100D8EAC009A2F5E /* LogTextField.m in Sources */,
@@ -698,18 +757,20 @@
 				0A4226BE102285130074C19D /* NS(Attributed)String+Geometrics.m in Sources */,
 				0A7732EC1043138400F02243 /* NTUtility.m in Sources */,
 				0A4E504F10A3944B000653AF /* NerdtoolDataModel.xcdatamodel in Sources */,
+				0A5195CB11A7AE8D00FA3576 /* NTTreeNode.m in Sources */,
+				0A5195FE11A7B35C00FA3576 /* NTOutlineView.m in Sources */,
+				0A51960D11A7B9EF00FA3576 /* NSTreeController-DMExtensions.m in Sources */,
+				0A51961511A7BB7B00FA3576 /* NSOutlineView-DMExtensions.m in Sources */,
+				0A51964811A7C07400FA3576 /* NTTreeController.m in Sources */,
+				0A5196A611A7C86500FA3576 /* NSArray_Extensions.m in Sources */,
+				0A5196A711A7C86500FA3576 /* NSIndexPath_Extensions.m in Sources */,
+				0A5196A811A7C86500FA3576 /* NSTreeController_Extensions.m in Sources */,
+				0A5196A911A7C86500FA3576 /* NSTreeNode_Extensions.m in Sources */,
+				0A5197DD11A86B5F00FA3576 /* NTTextBasedLog.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		0A88EC74101777B900EF5B6F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 0AB89EEA1014A5C4006FE649 /* NerdToolRO */;
-			targetProxy = 0A88EC73101777B900EF5B6F /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		0A37B787106592A200BF4C07 /* utilityPrefs.xib */ = {
@@ -736,12 +797,12 @@
 			name = webPrefs.xib;
 			sourceTree = "<group>";
 		};
-		0A904BDA100D8F2B009A2F5E /* GeektoolPrefs.xib */ = {
+		0A904BDA100D8F2B009A2F5E /* nerdToolPrefs.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				0A904BDB100D8F2B009A2F5E /* English */,
 			);
-			name = GeektoolPrefs.xib;
+			name = nerdToolPrefs.xib;
 			path = resources;
 			sourceTree = "<group>";
 		};

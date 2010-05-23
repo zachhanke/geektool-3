@@ -1,17 +1,33 @@
-//
-//  NTLog.h
-//  NerdTool
-//
-//  Created by Kevin Nygaard on 7/20/09.
-//  Copyright 2009 __MyCompanyName__. All rights reserved.
-//
+/*
+ * NTLog.h
+ * NerdTool
+ * Created by Kevin Nygaard on 7/20/09.
+ * Copyright 2009 MutableCode. All rights reserved.
+ *
+ * This file is part of NerdTool.
+ * 
+ * NerdTool is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * NerdTool is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NerdTool.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #import <Cocoa/Cocoa.h>
+#import <CoreData/CoreData.h>
+#import "NTTreeNode.h"
 
 @class NTGroup;
 @class LogWindow;
 
-@interface NTLog : NSObject
+@interface NTLog : NTTreeNode
 {
     NSMutableDictionary *properties;
     NSNumber *active;
@@ -37,16 +53,15 @@
     NSMutableString *lastRecievedString;
 }
 
-@property (nonatomic, retain) NSNumber * alwaysOnTop;
-@property (nonatomic, retain) NSNumber * enabled;
-@property (nonatomic, retain) NSNumber * h;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSNumber * shadowWindow;
-@property (nonatomic, retain) NSNumber * sizeToScreen;
-@property (nonatomic, retain) NSNumber * w;
-@property (nonatomic, retain) NSNumber * x;
-@property (nonatomic, retain) NSNumber * y;
-@property (nonatomic, retain) NSManagedObject * group;
+// Core Data Properties
+@property (retain) NSNumber *alwaysOnTop;
+@property (retain) NSString *name;
+@property (retain) NSNumber *shadowWindow;
+@property (retain) NSNumber *sizeToScreen;
+@property (retain) NSNumber *h;
+@property (retain) NSNumber *w;
+@property (retain) NSNumber *x;
+@property (retain) NSNumber *y;
 
 @property (retain) NSWindowController *windowController;
 @property (assign) LogWindow *window;

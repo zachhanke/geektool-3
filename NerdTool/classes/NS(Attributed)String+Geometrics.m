@@ -1,3 +1,9 @@
+/*
+ * AUTHOR
+ 
+ Please send bug reports or other comments to Jerry Krinock, jerry@ieee.org
+ Updates may be available at http://sheepsystems.com/sourceCode
+ */ 
 #import "NS(Attributed)String+Geometrics.h"
 
 int gNSStringGeometricsTypesetterBehavior = NSTypesetterLatestBehavior ;

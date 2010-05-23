@@ -1,10 +1,24 @@
-//
-//  NTShell.m
-//  NerdTool
-//
-//  Created by Kevin Nygaard on 7/16/09.
-//  Copyright 2009 __MyCompanyName__. All rights reserved.
-//
+/*
+ * NTShell.m
+ * NerdTool
+ * Created by Kevin Nygaard on 7/16/09.
+ * Copyright 2009 MutableCode. All rights reserved.
+ *
+ * This file is part of NerdTool.
+ * 
+ * NerdTool is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * NerdTool is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NerdTool.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #import "NTShell.h"
 #import "NTLog.h"
@@ -15,8 +29,53 @@
 
 #import "ANSIEscapeHelper.h"
 
-
 @implementation NTShell
+
+
+@dynamic command;
+@dynamic printMode;
+@dynamic refresh;
+
+- (void)awakeFromInsert
+{
+	self.isLeaf = [NSNumber numberWithBool:YES];
+    
+    self.font = [NSFont systemFontOfSize:[NSFont systemFontSize]];
+    self.textColor = kDefaultANSIColorBgBlack;
+    self.backgroundColor = kDefaultANSIColorBgBlack;    
+    self.bgBlack = kDefaultANSIColorBgBlack;
+    self.bgBlue = kDefaultANSIColorBgBlue;
+    self.bgCyan = kDefaultANSIColorBgCyan;
+    self.bgGreen = kDefaultANSIColorBgGreen;
+    self.bgMagenta = kDefaultANSIColorBgMagenta;
+    self.bgRed = kDefaultANSIColorBgRed;
+    self.bgWhite = kDefaultANSIColorBgWhite;
+    self.bgYellow = kDefaultANSIColorBgYellow;
+    self.fgBlack = kDefaultANSIColorFgBlack;
+    self.fgBlue = kDefaultANSIColorFgBlue;
+    self.fgCyan = kDefaultANSIColorFgCyan;
+    self.fgGreen = kDefaultANSIColorFgGreen;
+    self.fgMagenta = kDefaultANSIColorFgMagenta;
+    self.fgRed = kDefaultANSIColorFgRed;
+    self.fgWhite = kDefaultANSIColorFgWhite;
+    self.fgYellow = kDefaultANSIColorFgYellow;
+    self.bgBrightBlack = kDefaultANSIColorBgBrightBlack;
+    self.bgBrightBlue = kDefaultANSIColorBgBrightBlue;
+    self.bgBrightCyan = kDefaultANSIColorBgBrightCyan;
+    self.bgBrightGreen = kDefaultANSIColorBgBrightGreen;
+    self.bgBrightMagenta = kDefaultANSIColorBgBrightMagenta;
+    self.bgBrightRed = kDefaultANSIColorBgBrightRed;
+    self.bgBrightWhite = kDefaultANSIColorBgBrightWhite;
+    self.bgBrightYellow = kDefaultANSIColorBgBrightYellow;
+    self.fgBrightBlack = kDefaultANSIColorFgBrightBlack;
+    self.fgBrightBlue = kDefaultANSIColorFgBrightBlue;
+    self.fgBrightCyan = kDefaultANSIColorFgBrightCyan;
+    self.fgBrightGreen = kDefaultANSIColorFgBrightGreen;
+    self.fgBrightMagenta = kDefaultANSIColorFgBrightMagenta;
+    self.fgBrightRed = kDefaultANSIColorFgBrightRed;
+    self.fgBrightWhite = kDefaultANSIColorFgBrightWhite;
+    self.fgBrightYellow = kDefaultANSIColorFgBrightYellow;    
+}
 
 #pragma mark Properties
 - (NSString *)logTypeName
@@ -113,41 +172,41 @@
 - (void)setupInterfaceBindingsWithObject:(id)bindee
 {
     // These can get turned off if you have the text field selected, and then change logs. When you go back to that log, things are screwed up. The setEditable: fixes this (as well as makes them tasty :P)
-    [command setEditable:YES];
-    [refresh setEditable:YES];
+    [commandOutlet setEditable:YES];
+    [refreshOutlet setEditable:YES];
     
-    [command bind:@"value" toObject:bindee withKeyPath:@"selection.properties.command" options:nil];
-    [refresh bind:@"value" toObject:bindee withKeyPath:@"selection.properties.refresh" options:nil];
-    [printMode bind:@"selectedIndex" toObject:bindee withKeyPath:@"selection.properties.printMode" options:nil];
+    [commandOutlet bind:@"value" toObject:bindee withKeyPath:@"selection.command" options:nil];
+    [refreshOutlet bind:@"value" toObject:bindee withKeyPath:@"selection.refresh" options:nil];
+    [printModeOutlet bind:@"selectedIndex" toObject:bindee withKeyPath:@"selection.printMode" options:nil];
 }
 
 - (void)destroyInterfaceBindings
 {
-    [command unbind:@"value"];
-    [refresh unbind:@"value"];
-    [printMode unbind:@"selectedIndex"];
+    [commandOutlet unbind:@"value"];
+    [refreshOutlet unbind:@"value"];
+    [printModeOutlet unbind:@"selectedIndex"];
 }
 
 #pragma mark Observing
 - (void)setupPreferenceObservers
 {
-    [self addObserver:self forKeyPath:@"properties.command" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"properties.refresh" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"properties.printMode" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"command" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"refresh" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"printMode" options:0 context:NULL];
     [super setupPreferenceObservers];
 }
 
 - (void)removePreferenceObservers
 {
-    [self removeObserver:self forKeyPath:@"properties.command"];
-    [self removeObserver:self forKeyPath:@"properties.refresh"];
-    [self removeObserver:self forKeyPath:@"properties.printMode"];
+    [self removeObserver:self forKeyPath:@"command"];
+    [self removeObserver:self forKeyPath:@"refresh"];
+    [self removeObserver:self forKeyPath:@"printMode"];
     [super removePreferenceObservers];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([keyPath isEqualToString:@"properties.enabled"] || [keyPath isEqualToString:@"active"])
+    if ([keyPath isEqualToString:@"enabled"] || [keyPath isEqualToString:@"active"])
     {
         if (windowController) [self destroyLogProcess];
         if (![[self active]boolValue] || ![properties boolForKey:@"enabled"]) return;
@@ -157,11 +216,11 @@
     }
     // check if our LogProcess is alive
     else if (!windowController) return;
-    else if ([keyPath isEqualToString:@"properties.command"] || [keyPath isEqualToString:@"properties.refresh"] || [keyPath isEqualToString:@"properties.printMode"])
+    else if ([keyPath isEqualToString:@"command"] || [keyPath isEqualToString:@"refresh"] || [keyPath isEqualToString:@"printMode"])
     {
         [self updateWindowIncludingTimer:YES];
     }
-    else if ([keyPath isEqualToString:@"properties.useAsciiEscapes"] || [keyPath isEqualToString:@"properties.stringEncoding"])
+    else if ([keyPath isEqualToString:@"useAsciiEscapes"] || [keyPath isEqualToString:@"stringEncoding"])
     {
         if (windowController && timer) [timer fire];
     }    
