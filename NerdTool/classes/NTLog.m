@@ -59,70 +59,57 @@
 
 @synthesize lastRecievedString;
 
-#pragma mark Properties
-// Subclasses would probably want to override the following methods
+#pragma mark Properties (Subclass these)
+// Subclasses must overwrite the following methods
 - (NSString *)logTypeName
 {
-    return @"Box";
-}
-
-- (BOOL)needsDisplayUIBox
-{
-    return YES;
+    NSAssert(YES,@"Method was not overwritten: `logTypeName'");
+    return @"";
 }
 
 - (NSString *)preferenceNibName
 {
+    NSAssert(YES,@"Method was not overwritten: `preferenceNibName'");
     return @"";
 }
 
 - (NSString *)displayNibName
 {
+    NSAssert(YES,@"Method was not overwritten: `displayNibName'");
     return @"";
 }
 
 - (NSDictionary *)defaultProperties
 {
+    NSAssert(YES,@"Method was not overwritten: `defaultProperties'");
     return [NSDictionary dictionary];
 }
 
 - (void)setupInterfaceBindingsWithObject:(id)bindee
 {
+    NSAssert(YES,@"Method was not overwritten: `setupInterfaceBindingsWithObject:'");
     return;
 }
 
 - (void)destroyInterfaceBindings
 {
+    NSAssert(YES,@"Method was not overwritten: `destroyInterfaceBindings'");
     return;
 }
 
 #pragma mark Window Management
 - (void)updateWindowIncludingTimer:(BOOL)updateTimer
 {
+    // change the window size
     NSRect newRect = [self screenToRect:[self rect]];
-    if ([properties boolForKey:@"sizeToScreen"]) newRect = [[[NSScreen screens]objectAtIndex:0]frame];
-    
+    if ([properties boolForKey:@"sizeToScreen"]) newRect = [[[NSScreen screens] objectAtIndex:0] frame];
     [window setFrame:newRect display:NO];
-    
-    NSRect tmpRect = [self rect];
-    tmpRect.origin = NSZeroPoint;
-    
+        
+    // set various attributes
     [window setHasShadow:[self.shadowWindow boolValue]];
     [window setLevel:[self.alwaysOnTop intValue]?kCGMaximumWindowLevel:kCGDesktopWindowLevel];
     [window setSticky:![self.alwaysOnTop boolValue]];
-    
-    /*
-    if ([self needsDisplayUIBox])
-    {
-        [window setTextRect:tmpRect]; 
-        [window setTextBackgroundColor:[NSUnarchiver unarchiveObjectWithData:[properties objectForKey:@"backgroundColor"]]];
-        [[window textView]updateTextAttributesUsingProps:properties];
         
-        if (![properties boolForKey:@"useAsciiEscapes"] || !lastRecievedString) [[window textView]applyAttributes:[[window textView]attributes]];
-        else [[window textView]processAndSetText:lastRecievedString withEscapes:YES andCustomColors:[self customAnsiColors] insert:NO];
-    }
-    */
-    
     if (![window isVisible])
     {
         [self front];
@@ -144,13 +131,13 @@
 	if (!(self = [super init])) return nil;
     
     [self setProperties:[NSMutableDictionary dictionaryWithDictionary:newProperties]];
-    [self setActive:[NSNumber numberWithBool:NO]];
+    self.enabled = NO;
     
     _loadedView = NO;
     windowController = nil;
     highlightSender = nil;
     lastRecievedString = nil;
-    _visibleFrame = [[[NSScreen screens]objectAtIndex:0]frame];
+    _visibleFrame = [[[NSScreen screens] objectAtIndex:0] frame];
     
     [self setupPreferenceObservers];
     return self;
@@ -207,48 +194,6 @@
     [self addObserver:self forKeyPath:@"alwaysOnTop" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"sizeToScreen" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"shadowWindow" options:0 context:NULL];
-    
-    if (![self needsDisplayUIBox]) return;
-    [self addObserver:self forKeyPath:@"font" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"stringEncoding" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"textColor" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"backgroundColor" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"wrap" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"alignment" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"shadowText" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"useAsciiEscapes" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"fgBlack" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"fgRed" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"fgGreen" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"fgYellow" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"fgBlue" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"fgMagenta" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"fgCyan" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"fgWhite" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"bgBlack" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"bgRed" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"bgGreen" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"bgYellow" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"bgBlue" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"bgMagenta" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"bgCyan" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"bgWhite" options:0 context:NULL];    
-    [self addObserver:self forKeyPath:@"fgBrightBlack" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"fgBrightRed" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"fgBrightGreen" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"fgBrightYellow" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"fgBrightBlue" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"fgBrightMagenta" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"fgBrightCyan" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"fgBrightWhite" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"bgBrightBlack" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"bgBrightRed" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"bgBrightGreen" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"bgBrightYellow" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"bgBrightBlue" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"bgBrightMagenta" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"bgBrightCyan" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"bgBrightWhite" options:0 context:NULL];    
 }
 
 - (void)removePreferenceObservers
@@ -266,48 +211,6 @@
     [self removeObserver:self forKeyPath:@"alwaysOnTop"];
     [self removeObserver:self forKeyPath:@"sizeToScreen"];
     [self removeObserver:self forKeyPath:@"shadowWindow"];
-    
-    if (![self needsDisplayUIBox]) return;
-    [self removeObserver:self forKeyPath:@"font"];
-    [self removeObserver:self forKeyPath:@"stringEncoding"];
-    [self removeObserver:self forKeyPath:@"textColor"];
-    [self removeObserver:self forKeyPath:@"backgroundColor"];
-    [self removeObserver:self forKeyPath:@"wrap"];
-    [self removeObserver:self forKeyPath:@"alignment"];
-    [self removeObserver:self forKeyPath:@"shadowText"];
-    [self removeObserver:self forKeyPath:@"useAsciiEscapes"];
-    [self removeObserver:self forKeyPath:@"fgBlack"];
-    [self removeObserver:self forKeyPath:@"fgRed"];
-    [self removeObserver:self forKeyPath:@"fgGreen"];
-    [self removeObserver:self forKeyPath:@"fgYellow"];
-    [self removeObserver:self forKeyPath:@"fgBlue"];
-    [self removeObserver:self forKeyPath:@"fgMagenta"];
-    [self removeObserver:self forKeyPath:@"fgCyan"];
-    [self removeObserver:self forKeyPath:@"fgWhite"];
-    [self removeObserver:self forKeyPath:@"bgBlack"];
-    [self removeObserver:self forKeyPath:@"bgRed"];
-    [self removeObserver:self forKeyPath:@"bgGreen"];
-    [self removeObserver:self forKeyPath:@"bgYellow"];
-    [self removeObserver:self forKeyPath:@"bgBlue"];
-    [self removeObserver:self forKeyPath:@"bgMagenta"];
-    [self removeObserver:self forKeyPath:@"bgCyan"];
-    [self removeObserver:self forKeyPath:@"bgWhite"];    
-    [self removeObserver:self forKeyPath:@"fgBrightBlack"];
-    [self removeObserver:self forKeyPath:@"fgBrightRed"];
-    [self removeObserver:self forKeyPath:@"fgBrightGreen"];
-    [self removeObserver:self forKeyPath:@"fgBrightYellow"];
-    [self removeObserver:self forKeyPath:@"fgBrightBlue"];
-    [self removeObserver:self forKeyPath:@"fgBrightMagenta"];
-    [self removeObserver:self forKeyPath:@"fgBrightCyan"];
-    [self removeObserver:self forKeyPath:@"fgBrightWhite"];
-    [self removeObserver:self forKeyPath:@"bgBrightBlack"];
-    [self removeObserver:self forKeyPath:@"bgBrightRed"];
-    [self removeObserver:self forKeyPath:@"bgBrightGreen"];
-    [self removeObserver:self forKeyPath:@"bgBrightYellow"];
-    [self removeObserver:self forKeyPath:@"bgBrightBlue"];
-    [self removeObserver:self forKeyPath:@"bgBrightMagenta"];
-    [self removeObserver:self forKeyPath:@"bgBrightCyan"];
-    [self removeObserver:self forKeyPath:@"bgBrightWhite"];    
 }
 
 #pragma mark KVC

@@ -23,6 +23,7 @@
 // TODO plug original developer
 
 #import "NTTreeController.h"
+#import "NSIndexPath_Extensions.h"
 
 
 @interface NTTreeController (Private)
@@ -34,7 +35,7 @@
 - (void)updateSortOrderOfModelObjects
 {
 	for (NSTreeNode *node in [self flattenedNodes])
-		[[node representedObject] setValue:[NSNumber numberWithInt:[[node indexPath] indexAtPosition:[[node indexPath] length] - 1]] forKey:@"sortIndex"];
+		[[node representedObject] setValue:[NSNumber numberWithInt:[[node indexPath] lastIndex]] forKey:@"sortIndex"];
 }
 
 - (NSArray *)flattenedNodes

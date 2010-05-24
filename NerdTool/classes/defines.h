@@ -20,6 +20,15 @@
  * along with NerdTool.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Uncomment the line below to enable import functionality
+// #define ENABLE_GEEKTOOL_2_IMPORTS
+
+#define CORE_DATA_STORE_FILE @"NerdTool"
+#define DONATE_URL @"http://mutablecode.com/content/donate"
+#define kDefaultSelectionColor [[NSColor alternateSelectedControlColor] colorWithAlphaComponent:0.3]
+#define kDefaultFgColor [NSColor blackColor]
+#define kDefaultBgColor [NSColor clearColor]
+
 // PictureAlignment
 #define TOP_LEFT 0
 #define TOP 1

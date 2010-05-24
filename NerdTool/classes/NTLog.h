@@ -78,11 +78,11 @@
 @property (retain) NSTask *task;
 @property (retain) NSMutableString *lastRecievedString;
 
-// Properties
+// Abstract functions (subclass these)
+- (NSString *)logTypeName;
 - (NSString *)preferenceNibName;
 - (NSString *)displayNibName;
 - (NSDictionary *)defaultProperties;
-// Interface
 - (void)setupInterfaceBindingsWithObject:(id)bindee;
 - (void)destroyInterfaceBindings;
 

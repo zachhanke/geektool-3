@@ -24,37 +24,35 @@
 
 #import <Cocoa/Cocoa.h>
 
+
 extern NSString *NTTreeNodeType;
 
-@class NTTreeController;
-@class NTOutlineView;
+@class NTLog;
 
 @interface AppDelegate : NSObject 
 {        
-    IBOutlet id groupController;
-    IBOutlet id logController;
     IBOutlet id mainConfigWindow;
-    
-    BOOL hitROProcess;
-    IBOutlet id NTEnable;
     IBOutlet id loginItem;
     
+    // expose border
     NSMutableArray *windowControllerArray;
     NSMutableArray *exposeBorderWindowArray;    
     
-    NSMutableArray *groups;
-    
-    IBOutlet NSWindow *window;
-    
+    // Core Data
     NSPersistentStoreCoordinator *persistentStoreCoordinator;
     NSManagedObjectModel *managedObjectModel;
     NSManagedObjectContext *managedObjectContext;
+    IBOutlet NSOutlineView *outlineView;
+	IBOutlet NSTreeController *treeController;
     
-    IBOutlet NTOutlineView *outlineView;
-	IBOutlet NTTreeController *treeController;
-    
+    // Observing
+    NSArray *previousSelectedLogs;
+    IBOutlet id prefsView;
+    IBOutlet id defaultPrefsView;
+    IBOutlet id defaultPrefsViewText;
 }
-@property (retain) NSMutableArray *groups;
+
+@property (copy) NSArray *previousSelectedLogs;
 
 - (IBAction)newLeaf:(id)sender;
 - (IBAction)newGroup:(id)sender;

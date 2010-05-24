@@ -4,7 +4,7 @@
                                    2009-08-09
 Developer: Kevin Nygaard
 Website: <http://mutablecode.com>
-Email: balthamos89 AT gmail DOT com
+Email: admin AT mutablecode DOT com
 Source: <http://github.com/balthamos/geektool-3/tree/experimental>
 ================================================================================
 Description
