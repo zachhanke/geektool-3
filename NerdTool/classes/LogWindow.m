@@ -21,9 +21,8 @@
  */
 
 #import "LogWindow.h"
-#import <Carbon/Carbon.h>
+#import "NSWindow+StickyWindow.h"
 #import <WebKit/WebKit.h>
-#import "CGSPrivate.h"
 
 @implementation LogWindow
 
@@ -55,34 +54,6 @@
 {
     [self setClickThrough:!flag];
     [logView setHighlighted:flag];
-}
-
-- (void)setClickThrough:(BOOL)clickThrough
-{
-    /* carbon */
-    void *ref = [self windowRef];
-    if (clickThrough) ChangeWindowAttributes(ref,kWindowIgnoreClicksAttribute,kWindowNoAttributes);
-    else ChangeWindowAttributes(ref,kWindowNoAttributes,kWindowIgnoreClicksAttribute);
-    /* cocoa */
-    [self setIgnoresMouseEvents:clickThrough];
-}
-
-// sticky in that the window will stay put during expose
-- (void)setSticky:(BOOL)flag 
-{
-    CGSConnection cid;
-    CGSWindow wid;
-    
-    wid = [self windowNumber];
-    cid = _CGSDefaultConnection();
-    int tags[2] = {0,0};   
-    
-    if(!CGSGetWindowTags(cid,wid,tags,32))
-    {
-        if (flag) tags[0] = tags[0] | 0x00000800;
-        else tags[0] = tags[0] & ~0x00000800;
-        CGSSetWindowTags(cid,wid,tags,32);
-    }
 }
 
 #pragma mark Text Properties

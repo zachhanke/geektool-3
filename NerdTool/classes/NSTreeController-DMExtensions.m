@@ -36,7 +36,6 @@
     return [self _indexPathFromIndexPath:nil inChildren:children childCount:[children count]
                                 toObject:object];
 }
-
 @end
 
 

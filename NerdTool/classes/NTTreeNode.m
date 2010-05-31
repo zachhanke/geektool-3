@@ -34,4 +34,19 @@
 @dynamic children;
 @dynamic parent;
 
+- (NSArray *)descendants
+{
+	NSMutableArray *array = [NSMutableArray array];
+	for (NTTreeNode *child in [self children]) {
+		[array addObject:child];
+		if (![child isLeaf]) [array addObjectsFromArray:[child descendants]];
+	}
+	return [[array copy] autorelease];
+}
+
+- (NSString*)description
+{
+    return [NSString stringWithFormat: @"%@ :[%@] %@",[self logTypeName],[self.enabled boolValue] ? @"X" : @" ", self.name];
+}
+
 @end

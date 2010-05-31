@@ -24,6 +24,7 @@
 #import "NTLog.h"
 #import "LogTextField.h"
 
+#import "LogWindow.h"
 #import "defines.h"
 #import "NSDictionary+IntAndBoolAccessors.h"
 
@@ -36,45 +37,18 @@
 @dynamic printMode;
 @dynamic refresh;
 
+// Called when object is created
 - (void)awakeFromInsert
 {
-	self.isLeaf = [NSNumber numberWithBool:YES];
-    
-    self.font = [NSFont systemFontOfSize:[NSFont systemFontSize]];
-    self.textColor = kDefaultANSIColorBgBlack;
-    self.backgroundColor = kDefaultANSIColorBgBlack;    
-    self.bgBlack = kDefaultANSIColorBgBlack;
-    self.bgBlue = kDefaultANSIColorBgBlue;
-    self.bgCyan = kDefaultANSIColorBgCyan;
-    self.bgGreen = kDefaultANSIColorBgGreen;
-    self.bgMagenta = kDefaultANSIColorBgMagenta;
-    self.bgRed = kDefaultANSIColorBgRed;
-    self.bgWhite = kDefaultANSIColorBgWhite;
-    self.bgYellow = kDefaultANSIColorBgYellow;
-    self.fgBlack = kDefaultANSIColorFgBlack;
-    self.fgBlue = kDefaultANSIColorFgBlue;
-    self.fgCyan = kDefaultANSIColorFgCyan;
-    self.fgGreen = kDefaultANSIColorFgGreen;
-    self.fgMagenta = kDefaultANSIColorFgMagenta;
-    self.fgRed = kDefaultANSIColorFgRed;
-    self.fgWhite = kDefaultANSIColorFgWhite;
-    self.fgYellow = kDefaultANSIColorFgYellow;
-    self.bgBrightBlack = kDefaultANSIColorBgBrightBlack;
-    self.bgBrightBlue = kDefaultANSIColorBgBrightBlue;
-    self.bgBrightCyan = kDefaultANSIColorBgBrightCyan;
-    self.bgBrightGreen = kDefaultANSIColorBgBrightGreen;
-    self.bgBrightMagenta = kDefaultANSIColorBgBrightMagenta;
-    self.bgBrightRed = kDefaultANSIColorBgBrightRed;
-    self.bgBrightWhite = kDefaultANSIColorBgBrightWhite;
-    self.bgBrightYellow = kDefaultANSIColorBgBrightYellow;
-    self.fgBrightBlack = kDefaultANSIColorFgBrightBlack;
-    self.fgBrightBlue = kDefaultANSIColorFgBrightBlue;
-    self.fgBrightCyan = kDefaultANSIColorFgBrightCyan;
-    self.fgBrightGreen = kDefaultANSIColorFgBrightGreen;
-    self.fgBrightMagenta = kDefaultANSIColorFgBrightMagenta;
-    self.fgBrightRed = kDefaultANSIColorFgBrightRed;
-    self.fgBrightWhite = kDefaultANSIColorFgBrightWhite;
-    self.fgBrightYellow = kDefaultANSIColorFgBrightYellow;    
+    self.isLeaf = [NSNumber numberWithBool:YES];
+    [super awakeFromInsert];	
+}
+
+// Called when object is loaded
+- (void)awakeFromFetch
+{
+    [super awakeFromFetch];
+    NSLog(@"awakeFromFetch");
 }
 
 #pragma mark Properties
@@ -98,74 +72,10 @@
     return @"shellWindow";
 }
 
-- (NSDictionary *)defaultProperties
-{
-    NSDictionary *defaultProperties = [[NSDictionary alloc]initWithObjectsAndKeys:
-                                       NSLocalizedString(@"New shell log",nil),@"name",
-                                       [NSNumber numberWithBool:YES],@"enabled",
-                                       
-                                       [NSNumber numberWithInt:16],@"x",
-                                       [NSNumber numberWithInt:38],@"y",
-                                       [NSNumber numberWithInt:280],@"w",
-                                       [NSNumber numberWithInt:150],@"h",
-                                       [NSNumber numberWithBool:NO],@"alwaysOnTop",
-                                       [NSNumber numberWithBool:NO],@"sizeToScreen",
-                                       
-                                       @"date",@"command",
-                                       [NSNumber numberWithInt:10],@"refresh",
-                                       [NSNumber numberWithInt:NTWaitForData],@"printMode",
-
-                                       [NSArchiver archivedDataWithRootObject:[NSFont systemFontOfSize:[NSFont systemFontSize]]],@"font",
-                                       [NSNumber numberWithInt:NSASCIIStringEncoding],@"stringEncoding",
-                                       [[NSUserDefaults standardUserDefaults]objectForKey:@"defaultFgColor"],@"textColor",
-                                       [[NSUserDefaults standardUserDefaults]objectForKey:@"defaultBgColor"],@"backgroundColor",
-                                       [NSNumber numberWithBool:NO],@"wrap",
-                                       [NSNumber numberWithBool:NO],@"shadowText",
-                                       [NSNumber numberWithBool:NO],@"shadowWindow",
-                                       [NSNumber numberWithBool:NO],@"useAsciiEscapes",
-                                       [NSNumber numberWithInt:ALIGN_LEFT],@"alignment",
-                                       
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBlack],@"fgBlack",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgRed],@"fgRed",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgGreen],@"fgGreen",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgYellow],@"fgYellow",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBlue],@"fgBlue",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgMagenta],@"fgMagenta",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgCyan],@"fgCyan",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgWhite],@"fgWhite",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBlack],@"bgBlack",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgRed],@"bgRed",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgGreen],@"bgGreen",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgYellow],@"bgYellow",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBlue],@"bgBlue",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgMagenta],@"bgMagenta",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgCyan],@"bgCyan",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgWhite],@"bgWhite",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBrightBlack],@"fgBrightBlack",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBrightRed],@"fgBrightRed",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBrightGreen],@"fgBrightGreen",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBrightYellow],@"fgBrightYellow",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBrightBlue],@"fgBrightBlue",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBrightMagenta],@"fgBrightMagenta",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBrightCyan],@"fgBrightCyan",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorFgBrightWhite],@"fgBrightWhite",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBrightBlack],@"bgBrightBlack",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBrightRed],@"bgBrightRed",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBrightGreen],@"bgBrightGreen",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBrightYellow],@"bgBrightYellow",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBrightBlue],@"bgBrightBlue",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBrightMagenta],@"bgBrightMagenta",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBrightCyan],@"bgBrightCyan",
-                                       [NSArchiver archivedDataWithRootObject:kDefaultANSIColorBgBrightWhite],@"bgBrightWhite",
-                                       nil];
-    
-    return [defaultProperties autorelease];
-}
-
 - (void)createLogProcess
 {
     [super createLogProcess];
-    oldPrintMode = [properties integerForKey:@"printMode"];
+    oldPrintMode = [self.printMode intValue];
 }
 
 #pragma mark Interface
@@ -206,10 +116,10 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([keyPath isEqualToString:@"enabled"] || [keyPath isEqualToString:@"active"])
+    if ([keyPath isEqualToString:@"enabled"])
     {
         if (windowController) [self destroyLogProcess];
-        if (![[self active]boolValue] || ![properties boolForKey:@"enabled"]) return;
+        if (![self.enabled boolValue]) return;
         
         [self createLogProcess];
         [self updateWindowIncludingTimer:YES];
@@ -229,54 +139,85 @@
         [self updateWindowIncludingTimer:NO];
     }
     
+    // TODO: watch for infinite loop
     if (postActivationRequest)
     {
         postActivationRequest = NO;
         if(!highlightSender) return;
-        [[self highlightSender]observeValueForKeyPath:@"selectedObjects" ofObject:self change:nil context:nil];
+        //[[self highlightSender] observeValueForKeyPath:@"selectedObjects" ofObject:self change:nil context:nil];
     }
 }
 
 #pragma mark Window Management
 - (void)updateWindowIncludingTimer:(BOOL)updateTimer
-{
+{    
+    [super updateWindowIncludingTimer:updateTimer];
+    
     if (updateTimer)
     {
-        [self setArguments:[[[NSArray alloc]initWithObjects:@"-c",[[self properties]objectForKey:@"command"],nil]autorelease]];
-        [[window textView]setString:@""];
+        self.arguments = [NSArray arrayWithObjects:@"-c",self.command,nil];
+        [[window textView] setString:@""];
+        [self updateTimer];
+    }    
+}
+
+#pragma mark Timer
+- (void)setTimer:(NSTimer*)newTimer
+{
+    [timer autorelease];
+    if ([timer isValid])
+    {
+        [self retain]; // to counter our balancing done in updateTimer
+        [timer invalidate];
     }
+    timer = [newTimer retain];
+}
+
+- (void)killTimer
+{
+    if (!timer) return;
+    [self setTimer:nil];
+}
+
+- (void)updateTimer
+{
+    int refreshTime = [self.refresh intValue];
+    BOOL timerRepeats = refreshTime ? YES : NO;
     
-    [super updateWindowIncludingTimer:updateTimer];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:refreshTime target:self selector:@selector(updateCommand:) userInfo:nil repeats:timerRepeats];
+    [timer fire];
+    
+    if (timerRepeats) [self release]; // since timer repeats, self is retained. we don't want this
+    else self.timer = nil;
 }
 
 #pragma mark Task
 - (void)updateCommand:(NSTimer*)timer
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     if (task && [task isRunning])
     {
-        if ([[task arguments]isEqualToArray:[self arguments]] && [properties integerForKey:@"printMode"] == oldPrintMode) return;
-        [[NSNotificationCenter defaultCenter]removeObserver:self name:NSFileHandleReadToEndOfFileCompletionNotification object:nil];
-        [[NSNotificationCenter defaultCenter]removeObserver:self name:NSFileHandleDataAvailableNotification object:nil];
+        if ([[task arguments] isEqualToArray:[self arguments]] && [self.printMode intValue] == oldPrintMode) return;
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:NSFileHandleReadToEndOfFileCompletionNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:NSFileHandleDataAvailableNotification object:nil];
         [task terminate];
     }
-    [self setTask:[[[NSTask alloc]init]autorelease]];
+    [self setTask:[[[NSTask alloc] init] autorelease]];
     NSPipe *pipe = [NSPipe pipe];
     
-    oldPrintMode = [properties integerForKey:@"printMode"];
+    oldPrintMode = [self.printMode intValue];
     
     [task setLaunchPath:@"/bin/sh"];
     [task setArguments:[self arguments]];
     [task setEnvironment:[self env]];
-    // needed to keep xcode's console working
-    [task setStandardInput:[NSPipe pipe]];
+    [task setStandardInput:[NSPipe pipe]]; // needed to keep xcode's console working
     [task setStandardOutput:pipe];
     
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleReadToEndOfFileCompletionNotification object:[pipe fileHandleForReading]];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleDataAvailableNotification object:[pipe fileHandleForReading]];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleReadToEndOfFileCompletionNotification object:[pipe fileHandleForReading]];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processNewDataFromTask:) name:NSFileHandleDataAvailableNotification object:[pipe fileHandleForReading]];
 
-    if ([properties integerForKey:@"printMode"] == NTWaitForData) [[pipe fileHandleForReading]readToEndOfFileInBackgroundAndNotify];
-    else [[pipe fileHandleForReading]waitForDataInBackgroundAndNotify];
+    if ([self.printMode intValue] == NTWaitForData) [[pipe fileHandleForReading] readToEndOfFileInBackgroundAndNotify];
+    else [[pipe fileHandleForReading] waitForDataInBackgroundAndNotify];
     
     [task launch];    
     [pool release];
@@ -290,16 +231,15 @@
     
     NSData *newData;
     
-    if ([[aNotification name]isEqual:NSFileHandleReadToEndOfFileCompletionNotification])
+    if ([[aNotification name] isEqual:NSFileHandleReadToEndOfFileCompletionNotification])
     {
-        newData = [[aNotification userInfo]objectForKey:NSFileHandleNotificationDataItem];
-        [[NSNotificationCenter defaultCenter]removeObserver:self name:NSFileHandleReadToEndOfFileCompletionNotification object:fh];
-        [[NSNotificationCenter defaultCenter]removeObserver:self name:NSFileHandleDataAvailableNotification object:fh];        
+        newData = [[aNotification userInfo] objectForKey:NSFileHandleNotificationDataItem];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:NSFileHandleReadToEndOfFileCompletionNotification object:fh];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:NSFileHandleDataAvailableNotification object:fh];        
     }
-    else
-        newData = [fh availableData];
+    else newData = [fh availableData];
 
-    NSMutableString *newString = [[[NSMutableString alloc]initWithData:newData encoding:[properties integerForKey:@"stringEncoding"]]autorelease];
+    NSMutableString *newString = [[[NSMutableString alloc] initWithData:newData encoding:[self.stringEncoding intValue]] autorelease];
     
     if (!newString || [newString isEqualTo:@""])
     {
@@ -307,10 +247,10 @@
     }
     
     [self setLastRecievedString:newString];
-    [(LogTextField*)[window textView]processAndSetText:newString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"] andCustomColors:[self customAnsiColors] insert:([properties integerForKey:@"printMode"] == NTAppendData)];
-    [(LogTextField*)[window textView]scrollEnd];
+    [(LogTextField*)[window textView] processAndSetText:newString withEscapes:[self.useAsciiEscapes boolValue] andCustomColors:[self customAnsiColors] insert:([self.printMode intValue] == NTAppendData)];
+    [(LogTextField*)[window textView] scrollEnd];
     
-    if ([properties integerForKey:@"printMode"] == NTWaitForData) [fh readToEndOfFileInBackgroundAndNotify];
+    if ([self.printMode intValue] == NTWaitForData) [fh readToEndOfFileInBackgroundAndNotify];
     else [fh waitForDataInBackgroundAndNotify];
 
     [window display];
@@ -319,11 +259,12 @@
 
 - (void)notificationHandler:(NSNotification *)notification
 {
-    if ([[notification name]isEqualToString:NSWindowDidResizeNotification]) [(LogTextField *)[window textView]scrollEnd];
+    if ([[notification name] isEqualToString:NSWindowDidResizeNotification]) [(LogTextField *)[window textView] scrollEnd];
     [super notificationHandler:notification];
 }
 
 #pragma mark Interface
+/*
 - (BOOL)control:(NSControl*)control textView:(NSTextView*)textView doCommandBySelector:(SEL)commandSelector
 {
     BOOL result = NO;
@@ -344,6 +285,6 @@
     }
     
     return result;
-}
+}*/
 
 @end

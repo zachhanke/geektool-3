@@ -23,8 +23,24 @@
 // TODO plug original developer
 #import <Cocoa/Cocoa.h>
 
+typedef enum {
+    NTLogOperatorNothing     = 1 << 0,
+    NTLogOperatorReorderLogs = 1 << 1,
+    NTLogOperatorCreateLogs  = 1 << 2,
+    NTLogOperatorDestroyLogs = 1 << 3
+} NSLogOperator;
 
-@interface NTTreeController : NSTreeController {
 
+@interface NTTreeController : NSTreeController
+{
+    // Observing
+    NSArray *previousSelectedLogs;
+    IBOutlet id prefsView;
+    IBOutlet id defaultPrefsView;
+    IBOutlet id defaultPrefsViewText;    
 }
+- (void)_updateSortOrderOfModelObjects;
+
+@property (copy) NSArray *previousSelectedLogs;
+
 @end

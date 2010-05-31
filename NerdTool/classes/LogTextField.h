@@ -25,16 +25,20 @@
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 
+@class NTTextBasedLog;
 @interface LogTextField : NSTextView
 {
+    NTTextBasedLog *parentLog;
     NSDictionary *attributes;
 }
+
+@property (retain) NTTextBasedLog *parentLog;
 @property (copy) NSDictionary *attributes;
 
 - (void)awakeFromNib;
 // Text Properties
 - (void)applyAttributes:(NSDictionary *)attrs;
-- (void)updateTextAttributesUsingProps:(NSDictionary *)properties;
+- (void)updateTextAttributesUsingProps;
 - (void)processAndSetText:(NSMutableString *)newString withEscapes:(BOOL)translateAsciiEscapes andCustomColors:(NSDictionary*)customColors insert:(BOOL)insert;
 - (NSAttributedString *)combineAttributes:(NSDictionary *)attrs withAttributedString:(NSAttributedString *)attributedString;
 // Text Actions

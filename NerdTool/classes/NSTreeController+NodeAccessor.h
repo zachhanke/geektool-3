@@ -1,8 +1,12 @@
 /*
- * NTTreeNode.h
+ * NSTreeController+NodeAccessor.h
  * NerdTool
- * Created by Kevin Nygaard on 5/22/10.
- * Copyright 2010 MutableCode. All rights reserved.
+ * Created by Kevin Nygaard on 5/28/10.
+ * Copyright 2009 MutableCode. All rights reserved.
+ * 
+ * Adapted from:
+ * $Id: UtilityFunctions.m 1066 2007-11-12 07:14:42Z stephen_booth $
+ * Copyright (C) 2006 - 2007 Stephen F. Booth <me@sbooth.org>
  *
  * This file is part of NerdTool.
  * 
@@ -21,28 +25,8 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import <CoreData/CoreData.h>
 
 
-@interface NTTreeNode : NSManagedObject
-{
-}
-
-// Core Data Properties
-@property (retain) NSNumber *enabled;
-@property (retain) NSNumber *isLeaf;
-@property (retain) NSNumber *isSelectable;
-@property (retain) NSString *name;
-@property (retain) NSNumber *sortIndex;
-@property (retain) NSSet *children;
-@property (retain) NTTreeNode *parent;
-
-@end
-
-@interface NTTreeNode (CoreDataGeneratedAccessors)
-- (void)addChildrenObject:(NTTreeNode *)value;
-- (void)removeChildrenObject:(NTTreeNode *)value;
-- (void)addChildren:(NSSet *)value;
-- (void)removeChildren:(NSSet *)value;
-
+@interface NSTreeController (NodeAccessor)
+- (NSTreeNode *)treeNodeForRepresentedObject:(id)representedObject;
 @end

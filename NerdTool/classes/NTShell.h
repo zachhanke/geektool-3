@@ -32,7 +32,7 @@ enum printMode
     NTPrintOnlyNewData
 };
 
-@interface NTShell : NTTextBasedLog <LogProtocol>
+@interface NTShell : NTTextBasedLog
 {
     IBOutlet id commandOutlet;
     IBOutlet id refreshOutlet;

@@ -1,8 +1,8 @@
 /*
- * NTFontDisplay.h
+ * NTTreeNode.h
  * NerdTool
- * Created by Kevin Nygaard on 7/13/09.
- * Copyright 2009 MutableCode. All rights reserved.
+ * Created by Kevin Nygaard on 5/22/10.
+ * Copyright 2010 MutableCode. All rights reserved.
  *
  * This file is part of NerdTool.
  * 
@@ -21,11 +21,29 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import <CoreData/CoreData.h>
 
 
-@interface NTFontDisplay : NSView
+@interface NTTreeNode : NSManagedObject
 {
-    IBOutlet id treeController;
 }
+
+// Core Data Properties
+@property (retain) NSNumber *enabled;
+@property (retain) NSNumber *isLeaf;
+@property (retain) NSNumber *isSelectable;
+@property (retain) NSString *name;
+@property (retain) NSNumber *sortIndex;
+@property (retain) NSSet *children;
+@property (retain) NTTreeNode *parent;
+
+- (NSArray *)descendants;
+@end
+
+@interface NTTreeNode (CoreDataGeneratedAccessors)
+- (void)addChildrenObject:(NTTreeNode *)value;
+- (void)removeChildrenObject:(NTTreeNode *)value;
+- (void)addChildren:(NSSet *)value;
+- (void)removeChildren:(NSSet *)value;
 
 @end

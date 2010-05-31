@@ -54,14 +54,14 @@
 }
 
 // Core Data Properties
-@property (retain) NSNumber *alwaysOnTop;
-@property (retain) NSString *name;
-@property (retain) NSNumber *shadowWindow;
-@property (retain) NSNumber *sizeToScreen;
-@property (retain) NSNumber *h;
-@property (retain) NSNumber *w;
-@property (retain) NSNumber *x;
-@property (retain) NSNumber *y;
+@property (nonatomic, retain) NSNumber *alwaysOnTop;
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSNumber *shadowWindow;
+@property (nonatomic, retain) NSNumber *sizeToScreen;
+@property (nonatomic, retain) NSNumber *h;
+@property (nonatomic, retain) NSNumber *w;
+@property (nonatomic, retain) NSNumber *x;
+@property (nonatomic, retain) NSNumber *y;
 
 @property (retain) NSWindowController *windowController;
 @property (assign) LogWindow *window;
@@ -82,7 +82,6 @@
 - (NSString *)logTypeName;
 - (NSString *)preferenceNibName;
 - (NSString *)displayNibName;
-- (NSDictionary *)defaultProperties;
 - (void)setupInterfaceBindingsWithObject:(id)bindee;
 - (void)destroyInterfaceBindings;
 
@@ -120,10 +119,4 @@
 - (NSRect)rect;
 - (BOOL)equals:(NTLog*)comp;
 - (NSString*)description;
-// Copying
-- (id)copyWithZone:(NSZone *)zone;
-- (id)mutableCopyWithZone:(NSZone *)zone;
-// Coding
-- (id)initWithCoder:(NSCoder *)coder;
-- (void)encodeWithCoder:(NSCoder *)coder;
 @end

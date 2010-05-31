@@ -42,7 +42,7 @@
 
 // expose border
 #import "NTExposeBorder.h"
-#import "CGSPrivate.h"
+#import "NSWindow+StickyWindow.h"
 
 // drag n drop
 #import "NSTreeNode_Extensions.h"
@@ -63,8 +63,6 @@ NSString *NTTreeNodeType = @"NTTreeNodeType";
 #pragma mark  
 @implementation AppDelegate
 
-@synthesize previousSelectedLogs;
-
 - (id)init
 {
     // initialize variables we will need
@@ -80,12 +78,12 @@ NSString *NTTreeNodeType = @"NTTreeNodeType";
 {
     [self loadPreferences];
     
+    // TODO: uncomment to register for wake notifications
     // register for wake notifications
     //[[[NSWorkspace sharedWorkspace]notificationCenter]addObserver:self selector:@selector(receiveWakeNote) name: NSWorkspaceDidWakeNotification object:NULL];
     
-    [[NSColorPanel sharedColorPanel]setShowsAlpha:YES];
+    [[NSColorPanel sharedColorPanel] setShowsAlpha:YES];
     [outlineView registerForDraggedTypes:[NSArray arrayWithObject:NTTreeNodeType]];
-    [treeController addObserver:self forKeyPath:@"selectedObjects" options:0 context:nil];
 }
 
 - (void)receiveWakeNote
@@ -96,6 +94,7 @@ NSString *NTTreeNodeType = @"NTTreeNodeType";
 
 #pragma mark -
 #pragma mark NerdToolRO
+// TODO: fix up all of RO
 - (IBAction)refreshGroupSelection:(id)sender
 {
     // TODO update
@@ -122,6 +121,7 @@ NSString *NTTreeNodeType = @"NTTreeNodeType";
 #pragma mark IBActions: CoreData Actions
 - (IBAction)newLeaf:(id)sender
 {
+    // TODO: put in code to select different types of logs to add
 	NTLog *leafNode = [NSEntityDescription insertNewObjectForEntityForName:@"ShellLog" inManagedObjectContext:[self managedObjectContext]];
 	static NSUInteger count = 0;
 	leafNode.name = [NSString stringWithFormat:@"Log %i",++count];
@@ -180,15 +180,15 @@ NSString *NTTreeNodeType = @"NTTreeNodeType";
 
 - (void)loadPreferences
 {
-    NSData *selectionColorData = [[NSUserDefaults standardUserDefaults]objectForKey:@"selectionColor"];
+    NSData *selectionColorData = [[NSUserDefaults standardUserDefaults] objectForKey:@"selectionColor"];
     if (!selectionColorData) selectionColorData = [NSArchiver archivedDataWithRootObject:kDefaultSelectionColor];
     [[NSUserDefaults standardUserDefaults] setObject:selectionColorData forKey:@"selectionColor"];
     
-    NSData *defaultFgColor = [[NSUserDefaults standardUserDefaults]objectForKey:@"defaultFgColor"];
+    NSData *defaultFgColor = [[NSUserDefaults standardUserDefaults] objectForKey:@"defaultFgColor"];
     if (!defaultFgColor) defaultFgColor = [NSArchiver archivedDataWithRootObject:kDefaultFgColor];
     [[NSUserDefaults standardUserDefaults] setObject:defaultFgColor forKey:@"defaultFgColor"];    
     
-    NSData *defaultBgColor = [[NSUserDefaults standardUserDefaults]objectForKey:@"defaultBgColor"];
+    NSData *defaultBgColor = [[NSUserDefaults standardUserDefaults] objectForKey:@"defaultBgColor"];
     if (!defaultBgColor) defaultBgColor = [NSArchiver archivedDataWithRootObject:kDefaultBgColor];
     [[NSUserDefaults standardUserDefaults] setObject:defaultBgColor forKey:@"defaultBgColor"];    
     
@@ -196,7 +196,7 @@ NSString *NTTreeNodeType = @"NTTreeNodeType";
     [self trackROProcess:nil];
     
     // is it a startup item?
-    [loginItem setState:[self isLoginItem:[[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"NerdToolRO.app"]]];
+    [loginItem setState:[self isLoginItem:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"NerdToolRO.app"]]];
 }
 
 #pragma mark Core Data Boilerplate
@@ -292,7 +292,7 @@ NSString *NTTreeNodeType = @"NTTreeNodeType";
 #pragma mark Application Management
 - (void)windowWillClose:(NSNotification *)notification
 {
-    // TODO: change
+    // TODO: change this
     //if ([logController content]) [logController setSelectedObjects:nil];
 }
 
@@ -305,7 +305,7 @@ NSString *NTTreeNodeType = @"NTTreeNodeType";
 // if the resolution is changed, reload the active group
 - (void)applicationDidChangeScreenParameters:(NSNotification *)aNotification
 {
-    // TODO update
+    // TODO: update
     //[groupController observeValueForKeyPath:@"selectedObjects" ofObject:nil change:nil context:nil];
 }
 
@@ -346,7 +346,7 @@ NSString *NTTreeNodeType = @"NTTreeNodeType";
         }
     }
     
-    // TODO we just want to get rid of logs that could still be running (like tail -F). The controller holds a lot of retains, and we have one.
+    // TODO: we just want to get rid of logs that could still be running (like tail -F). The controller holds a lot of retains, and we have one.
     //[groupController release];
     
     // do we want to run the RO process before we leave?
@@ -359,6 +359,7 @@ NSString *NTTreeNodeType = @"NTTreeNodeType";
 }
 
 #pragma mark Misc
+// used so we can keep our tree in order
 - (NSArray *)treeNodeSortDescriptors
 {
 	return [NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"sortIndex" ascending:YES] autorelease]];
@@ -366,6 +367,7 @@ NSString *NTTreeNodeType = @"NTTreeNodeType";
 
 /*
  Implementation of dealloc, to release the retained variables.
+ This does not need to be a separate function, as when this variable is deallocated, the rest of the program will be soon
  */ 
 - (void)dealloc
 {
@@ -381,69 +383,10 @@ NSString *NTTreeNodeType = @"NTTreeNodeType";
 
 #pragma mark 
 
-@implementation AppDelegate (TreeControllerObserver)
-// based on selection, highlight/dehighlight the log window
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    // when a selection is changed
-    if([keyPath isEqualToString:@"selectedObjects"])
-    {        
-        // clear prefsView
-        [[prefsView subviews] makeObjectsPerformSelector: @selector(removeFromSuperview)];
-        
-        // unselect our previous items
-        for (NTLog *previousSelectedLog in previousSelectedLogs)
-        {
-            [previousSelectedLog setHighlighted:NO from:self];
-            [previousSelectedLog removePreferenceObservers];
-            [[previousSelectedLog unloadPrefsViewAndUnbind] removeFromSuperview];
-        }
-        // we are done with this. nil it out now in case we exit early
-        self.previousSelectedLogs = nil;
-        
-        // handle the case where we have nothing selected
-        if (![[treeController selectedObjects] count])
-        {
-            [defaultPrefsViewText setStringValue:@"No Selection"];
-            [prefsView addSubview:defaultPrefsView];
-            return;
-        }        
-        
-        id firstItem = [[treeController selectedObjects] objectAtIndex:0];
-        for (id item in [treeController selectedObjects])
-        {
-            // have we selected a group?
-            if ([item isKindOfClass:[NTGroup class]])
-            {
-                [defaultPrefsViewText setStringValue:@"Group selected"];
-                [prefsView addSubview:defaultPrefsView];
-                return;
-            }
-            
-            // can the selected items share the preference view?
-            if (![firstItem isKindOfClass:[item class]])
-            {
-                [defaultPrefsViewText setStringValue:@"Multiple Values"];
-                [prefsView addSubview:defaultPrefsView];
-                return;
-            }
-        }
-        
-        // We are assured that these are all NTLogs
-        self.previousSelectedLogs = [treeController selectedObjects];
-        for (NTLog *selectedLog in previousSelectedLogs)
-        {
-            [selectedLog setHighlighted:YES from:self];
-            [selectedLog setupPreferenceObservers];
-        }
-        [prefsView addSubview:[firstItem loadPrefsViewAndBind:treeController]];
-    }
-    else [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-}
-@end
-
 #ifdef ENABLE_GEEKTOOL_2_IMPORTS
 @implementation AppDelegate (LogImport)
+
+// TODO: all of this should be rewritten to import things into CD
 - (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo
 {
     [NSApp endSheet:sheet];
@@ -508,6 +451,7 @@ NSString *NTTreeNodeType = @"NTTreeNodeType";
 #endif // ENABLE_GEEKTOOL_2_IMPORTS
 
 @implementation AppDelegate (ExposeBorder)
+
 - (void)exposeBorder:(BOOL)activate
 {
     [exposeBorderWindowArray removeAllObjects];
@@ -527,16 +471,7 @@ NSString *NTTreeNodeType = @"NTTreeNodeType";
         [exposeBorderWindow setOpaque:NO];
         [exposeBorderWindow setLevel:kCGDesktopWindowLevel];
         [exposeBorderWindow setBackgroundColor:[NSColor clearColor]];
-        
-        CGSWindow wid = [exposeBorderWindow windowNumber];
-        CGSConnection cid = _CGSDefaultConnection();
-        int tags[2] = {0,0};   
-        
-        if(!CGSGetWindowTags(cid,wid,tags,32))
-        {
-            tags[0] = tags[0] | 0x00000800;
-            CGSSetWindowTags(cid,wid,tags,32);
-        }    
+        [exposeBorderWindow setSticky:YES];
         
         NTExposeBorder *view = [[NTExposeBorder alloc] initWithFrame:visibleFrame];
         [exposeBorderWindow setContentView:view];

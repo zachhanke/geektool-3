@@ -79,13 +79,7 @@
 // all the real objects in the tree, depth-first searching
 - (NSArray *)flattenedContent;
 {
-	NSMutableArray *mutableArray = [NSMutableArray array];
-	for (id realNode in self.content) {
-		[mutableArray addObject:realNode];
-		if (![[realNode valueForKey:[self leafKeyPath]] boolValue])
-			[mutableArray addObjectsFromArray:[realNode valueForKey:@"descendants"]];
-	}
-	return [[mutableArray copy] autorelease];
+    return [[self flattenedNodes] valueForKey:@"representedObject"];
 }
 
 // all the NSTreeNodes in the tree, depth-first searching

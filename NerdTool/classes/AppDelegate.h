@@ -44,15 +44,7 @@ extern NSString *NTTreeNodeType;
     NSManagedObjectContext *managedObjectContext;
     IBOutlet NSOutlineView *outlineView;
 	IBOutlet NSTreeController *treeController;
-    
-    // Observing
-    NSArray *previousSelectedLogs;
-    IBOutlet id prefsView;
-    IBOutlet id defaultPrefsView;
-    IBOutlet id defaultPrefsViewText;
 }
-
-@property (copy) NSArray *previousSelectedLogs;
 
 - (IBAction)newLeaf:(id)sender;
 - (IBAction)newGroup:(id)sender;

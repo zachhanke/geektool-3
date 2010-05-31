@@ -23,6 +23,7 @@
 #import "NTTextBasedLog.h"
 #import "LogWindow.h"
 #import "LogTextField.h"
+#import "ANSIEscapeHelper.h"
 
 @implementation NTTextBasedLog
 
@@ -68,8 +69,52 @@
 @dynamic useAsciiEscapes;
 @dynamic wrap;
 
+- (void)awakeFromInsert
+{
+    [super awakeFromInsert];
+    
+    // Set some defaults that we can't set in our CoreData model
+    self.font = [NSFont systemFontOfSize:[NSFont systemFontSize]];
+    self.textColor = kDefaultANSIColorBgBlack;
+    self.backgroundColor = kDefaultANSIColorBgBlack;    
+    self.bgBlack = kDefaultANSIColorBgBlack;
+    self.bgBlue = kDefaultANSIColorBgBlue;
+    self.bgCyan = kDefaultANSIColorBgCyan;
+    self.bgGreen = kDefaultANSIColorBgGreen;
+    self.bgMagenta = kDefaultANSIColorBgMagenta;
+    self.bgRed = kDefaultANSIColorBgRed;
+    self.bgWhite = kDefaultANSIColorBgWhite;
+    self.bgYellow = kDefaultANSIColorBgYellow;
+    self.fgBlack = kDefaultANSIColorFgBlack;
+    self.fgBlue = kDefaultANSIColorFgBlue;
+    self.fgCyan = kDefaultANSIColorFgCyan;
+    self.fgGreen = kDefaultANSIColorFgGreen;
+    self.fgMagenta = kDefaultANSIColorFgMagenta;
+    self.fgRed = kDefaultANSIColorFgRed;
+    self.fgWhite = kDefaultANSIColorFgWhite;
+    self.fgYellow = kDefaultANSIColorFgYellow;
+    self.bgBrightBlack = kDefaultANSIColorBgBrightBlack;
+    self.bgBrightBlue = kDefaultANSIColorBgBrightBlue;
+    self.bgBrightCyan = kDefaultANSIColorBgBrightCyan;
+    self.bgBrightGreen = kDefaultANSIColorBgBrightGreen;
+    self.bgBrightMagenta = kDefaultANSIColorBgBrightMagenta;
+    self.bgBrightRed = kDefaultANSIColorBgBrightRed;
+    self.bgBrightWhite = kDefaultANSIColorBgBrightWhite;
+    self.bgBrightYellow = kDefaultANSIColorBgBrightYellow;
+    self.fgBrightBlack = kDefaultANSIColorFgBrightBlack;
+    self.fgBrightBlue = kDefaultANSIColorFgBrightBlue;
+    self.fgBrightCyan = kDefaultANSIColorFgBrightCyan;
+    self.fgBrightGreen = kDefaultANSIColorFgBrightGreen;
+    self.fgBrightMagenta = kDefaultANSIColorFgBrightMagenta;
+    self.fgBrightRed = kDefaultANSIColorFgBrightRed;
+    self.fgBrightWhite = kDefaultANSIColorFgBrightWhite;
+    self.fgBrightYellow = kDefaultANSIColorFgBrightYellow;     
+}
+
 - (void)setupPreferenceObservers
 {
+    [super setupPreferenceObservers];
+    
     [self addObserver:self forKeyPath:@"font" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"stringEncoding" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"textColor" options:0 context:NULL];
@@ -110,12 +155,12 @@
     [self addObserver:self forKeyPath:@"bgBrightMagenta" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"bgBrightCyan" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"bgBrightWhite" options:0 context:NULL];    
-    
-    [super setupPreferenceObservers];
 }
 
 - (void)removePreferenceObservers
 {
+    [super removePreferenceObservers];
+    
     [self removeObserver:self forKeyPath:@"font"];
     [self removeObserver:self forKeyPath:@"stringEncoding"];
     [self removeObserver:self forKeyPath:@"textColor"];
@@ -156,25 +201,65 @@
     [self removeObserver:self forKeyPath:@"bgBrightMagenta"];
     [self removeObserver:self forKeyPath:@"bgBrightCyan"];
     [self removeObserver:self forKeyPath:@"bgBrightWhite"];    
+}
+
+- (NSDictionary*)customAnsiColors
+{
+    NSDictionary *colors = [[NSDictionary alloc] initWithObjectsAndKeys:
+                            self.fgBlack, [NSNumber numberWithInt:SGRCodeFgBlack],
+                            self.fgRed, [NSNumber numberWithInt:SGRCodeFgRed],
+                            self.fgGreen, [NSNumber numberWithInt:SGRCodeFgGreen],
+                            self.fgYellow, [NSNumber numberWithInt:SGRCodeFgYellow],
+                            self.fgBlue, [NSNumber numberWithInt:SGRCodeFgBlue],
+                            self.fgMagenta, [NSNumber numberWithInt:SGRCodeFgMagenta],
+                            self.fgCyan, [NSNumber numberWithInt:SGRCodeFgCyan],
+                            self.fgWhite, [NSNumber numberWithInt:SGRCodeFgWhite],
+                            self.bgBlack, [NSNumber numberWithInt:SGRCodeBgBlack],
+                            self.bgRed, [NSNumber numberWithInt:SGRCodeBgRed],
+                            self.bgGreen, [NSNumber numberWithInt:SGRCodeBgGreen],
+                            self.bgYellow, [NSNumber numberWithInt:SGRCodeBgYellow],
+                            self.bgBlue, [NSNumber numberWithInt:SGRCodeBgBlue],
+                            self.bgMagenta, [NSNumber numberWithInt:SGRCodeBgMagenta],
+                            self.bgCyan, [NSNumber numberWithInt:SGRCodeBgCyan],
+                            self.bgWhite, [NSNumber numberWithInt:SGRCodeBgWhite],
+                            self.fgBrightBlack, [NSNumber numberWithInt:SGRCodeFgBrightBlack],
+                            self.fgBrightRed, [NSNumber numberWithInt:SGRCodeFgBrightRed],
+                            self.fgBrightGreen, [NSNumber numberWithInt:SGRCodeFgBrightGreen],
+                            self.fgBrightYellow, [NSNumber numberWithInt:SGRCodeFgBrightYellow],
+                            self.fgBrightBlue, [NSNumber numberWithInt:SGRCodeFgBrightBlue],
+                            self.fgBrightMagenta, [NSNumber numberWithInt:SGRCodeFgBrightMagenta],
+                            self.fgBrightCyan, [NSNumber numberWithInt:SGRCodeFgBrightCyan],
+                            self.fgBrightWhite, [NSNumber numberWithInt:SGRCodeFgBrightWhite],
+                            self.bgBrightBlack, [NSNumber numberWithInt:SGRCodeBgBrightBlack],
+                            self.bgBrightRed, [NSNumber numberWithInt:SGRCodeBgBrightRed],
+                            self.bgBrightGreen, [NSNumber numberWithInt:SGRCodeBgBrightGreen],
+                            self.bgBrightYellow, [NSNumber numberWithInt:SGRCodeBgBrightYellow],
+                            self.bgBrightBlue, [NSNumber numberWithInt:SGRCodeBgBrightBlue],
+                            self.bgBrightMagenta, [NSNumber numberWithInt:SGRCodeBgBrightMagenta],
+                            self.bgBrightCyan, [NSNumber numberWithInt:SGRCodeBgBrightCyan],
+                            self.bgBrightWhite, [NSNumber numberWithInt:SGRCodeBgBrightWhite],
+                            nil];
+    return [colors autorelease];
     
-    [super removePreferenceObservers];
 }
 
 - (void)updateWindowIncludingTimer:(BOOL)updateTimer
 {
-    // super is called first, as it sets up stuff dealing with rect
     [super updateWindowIncludingTimer:updateTimer];
     
-    // Configure text based things
+    // text setup
     NSRect tmpRect = [self rect];
     tmpRect.origin = NSZeroPoint;
     
     [self.window setTextRect:tmpRect]; 
     [self.window setTextBackgroundColor:self.backgroundColor];
-    [[self.window textView] updateTextAttributesUsingProps:properties];
+    
+    // text presentation
+    [[self.window textView] setParentLog:self];
+    [[self.window textView] updateTextAttributesUsingProps];
     
     if (![self.useAsciiEscapes boolValue] || !lastRecievedString) [[window textView] applyAttributes:[[window textView] attributes]];
-    else [[window textView] processAndSetText:lastRecievedString withEscapes:YES andCustomColors:[self customAnsiColors] insert:NO];
+    else [[window textView] processAndSetText:lastRecievedString withEscapes:YES andCustomColors:[self customAnsiColors] insert:NO];    
 }    
 
 @end
