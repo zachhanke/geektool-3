@@ -38,15 +38,15 @@
 {
 	NSMutableArray *array = [NSMutableArray array];
 	for (NTTreeNode *child in [self children]) {
-		[array addObject:child];
-		if (![child isLeaf]) [array addObjectsFromArray:[child descendants]];
+		if (![[child isLeaf] boolValue]) [array addObjectsFromArray:[child descendants]];
+        else [array addObject:child];
 	}
 	return [[array copy] autorelease];
 }
 
 - (NSString*)description
 {
-    return [NSString stringWithFormat: @"%@ :[%@] %@",[self logTypeName],[self.enabled boolValue] ? @"X" : @" ", self.name];
+    return [NSString stringWithFormat: @"%@ :[%@] %@",[self className],[self.enabled boolValue] ? @"X" : @" ", self.name];
 }
 
 @end

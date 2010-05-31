@@ -11,4 +11,5 @@
 
 @interface NSWindow (StickyWindow)
 - (void)setSticky:(BOOL)flag;
+- (void)setClickThrough:(BOOL)clickThrough;
 @end

@@ -109,7 +109,7 @@
         
     // set various attributes
     [self.window setHasShadow:[self.shadowWindow boolValue]];
-    [self.window setLevel:[self.alwaysOnTop boolValue] ? kCGMaximumWindowLevel : kCGDesktopWindowLevel];
+    [self.window setLevel:[self.alwaysOnTop boolValue] ? kCGMaximumWindowLevel : kCGDesktopIconWindowLevel];
     [self.window setSticky:![self.alwaysOnTop boolValue]];
         
     postActivationRequest = YES;
@@ -130,12 +130,13 @@
     lastRecievedString = nil;
     _visibleFrame = [[[NSScreen screens] objectAtIndex:0] frame];
     
-    [self setupPreferenceObservers];
+    // TODO: this may be unnecessary
+    //[self setupPreferenceObservers];
 }
 
 - (void)dealloc
 {
-    [self removePreferenceObservers];
+    //[self removePreferenceObservers];
     [self destroyLogProcess];
     [properties release];
     [active release];
@@ -304,9 +305,8 @@
 - (void)setHighlighted:(BOOL)val from:(id)sender
 {
     highlightSender = sender;
-    
+    if (!windowController) [sender observeValueForKeyPath:@"enabled" ofObject:self change:nil context:nil];
     if (windowController) [[self window] setHighlighted:val];
-    else postActivationRequest = YES;
 }
 
 - (void)front
