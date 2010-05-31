@@ -21,9 +21,10 @@
  */
 
 #import "GroupController.h"
+#import "NSArrayController+Duplicate.h"
+
 #import "NTGroup.h"
 
-#import "NSArrayController+Duplicate.h"
 
 @implementation GroupController
 

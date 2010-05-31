@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with NerdTool.  If not, see <http://www.gnu.org/licenses/>.
  */
-// TODO plug original dev
+// TODO: plug original dev
 
 #import "NTOutlineView.h"
 

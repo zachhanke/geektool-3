@@ -20,10 +20,12 @@
  * along with NerdTool.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// TODO plug original developer
+// TODO: plug original developer
 
 #import "AJRScrollView.h"
+
 #import "LogTextField.h"
+
 
 // Holds our text view. Turns out this class was taken from some Cocoa mailing list to work around a problem with displaying semi-transparency for scroll views pre-Jaguar. Background colors are now displayed through NSTextField instead of NSScroll/ClipView
 @implementation AJRScrollView

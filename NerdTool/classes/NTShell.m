@@ -21,17 +21,16 @@
  */
 
 #import "NTShell.h"
-#import "NTLog.h"
-#import "LogTextField.h"
-
-#import "LogWindow.h"
 #import "defines.h"
 #import "NSDictionary+IntAndBoolAccessors.h"
 
+#import "NTLog.h"
+#import "LogWindow.h"
+#import "LogTextField.h"
 #import "ANSIEscapeHelper.h"
 
-@implementation NTShell
 
+@implementation NTShell
 
 @dynamic command;
 @dynamic printMode;

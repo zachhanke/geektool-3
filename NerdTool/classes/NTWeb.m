@@ -21,9 +21,11 @@
  */
 
 #import "NTWeb.h"
-#import <WebKit/WebKit.h>
 #import "defines.h"
 #import "NSDictionary+IntAndBoolAccessors.h"
+
+#import <WebKit/WebKit.h>
+
 
 @implementation NTWeb
 #pragma mark Properties

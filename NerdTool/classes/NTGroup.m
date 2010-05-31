@@ -22,6 +22,7 @@
 
 #import "NTGroup.h"
 
+
 @implementation NTGroup
 
 // Core Data Properties

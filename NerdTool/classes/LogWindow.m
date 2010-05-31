@@ -22,7 +22,9 @@
 
 #import "LogWindow.h"
 #import "NSWindow+StickyWindow.h"
+
 #import <WebKit/WebKit.h>
+
 
 @implementation LogWindow
 

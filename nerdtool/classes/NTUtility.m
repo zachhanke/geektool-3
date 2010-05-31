@@ -21,21 +21,13 @@
  */
 
 #import "NTUtility.h"
-
-
-#import "NTLog.h"
-#import "LogTextField.h"
-
 #import "defines.h"
 #import "NSDictionary+IntAndBoolAccessors.h"
 
+#import "NTLog.h"
+#import "LogTextField.h"
 #import "ANSIEscapeHelper.h"
 
-
-#define DEFAULT_FLAG_DISKSPACE @"default"
-#define DEFAULT_FLAG_UPTIME @"default"
-#define DEFAULT_FLAG_CURRENTLOAD @"default"
-#define DEFAULT_FLAG_CURRENTTASKS @"default"
 
 @implementation NTUtility
 

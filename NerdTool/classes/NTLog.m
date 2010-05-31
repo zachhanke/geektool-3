@@ -21,19 +21,20 @@
  */
 
 #import "NTLog.h"
-#import "LogWindow.h"
-#import "LogTextField.h"
-#import "NTGroup.h"
-#import "ANSIEscapeHelper.h"
-
 #import "defines.h"
 #import "NSDictionary+IntAndBoolAccessors.h"
 #import "NS(Attributed)String+Geometrics.h"
 #import "NTTextBasedLog.h"
 #import "NSWindow+StickyWindow.h"
 
-@implementation NTLog
+#import "NTGroup.h"
+#import "LogWindow.h"
+#import "LogTextField.h"
+#import "ANSIEscapeHelper.h"
 
+
+
+@implementation NTLog
 
 // Core Data Properties
 @dynamic alwaysOnTop;

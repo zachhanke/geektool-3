@@ -21,13 +21,12 @@
  */
 
 #import "NTFile.h"
-#import "LogWindow.h"
-#import "LogTextField.h"
-#import "NTGroup.h"
-
 #import "defines.h"
 #import "NSDictionary+IntAndBoolAccessors.h"
 
+#import "NTGroup.h"
+#import "LogWindow.h"
+#import "LogTextField.h"
 #import "ANSIEscapeHelper.h"
 
 

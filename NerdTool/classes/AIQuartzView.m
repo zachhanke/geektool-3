@@ -21,9 +21,10 @@
  */
 
 #import "AIQuartzView.h"
+#import "defines.h"
+
 #import "LogWindow.h"
 
-#define MAX_FRAMERATE 1.0
 
 @implementation AIQuartzView
 

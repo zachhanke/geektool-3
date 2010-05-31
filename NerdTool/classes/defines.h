@@ -75,3 +75,21 @@
 
 // menu
 #define MENU_Y_OFFSET 40
+
+// NSLog view
+#define MoveDragType 2
+#define ResizeDragType 1
+
+#define SNAP_TOLERANCE 5.0
+
+#define MIN_W 40
+#define MIN_H 10
+
+// NTUtility
+#define DEFAULT_FLAG_DISKSPACE @"default"
+#define DEFAULT_FLAG_UPTIME @"default"
+#define DEFAULT_FLAG_CURRENTLOAD @"default"
+#define DEFAULT_FLAG_CURRENTTASKS @"default"
+
+// AIQuartz
+#define MAX_FRAMERATE 1.0

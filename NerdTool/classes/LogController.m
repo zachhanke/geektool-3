@@ -21,9 +21,12 @@
  */
 
 #import "LogController.h"
-#import "GroupController.h"
+#import "defines.h"
+#import "NSIndexSet+CountOfIndexesInRange.h"
+#import "NSArrayController+Duplicate.h"
+#import "NSTreeController-DMExtensions.h"
+
 #import "NTGroup.h"
-#import "LogWindow.h"
 #import "NTLog.h"
 #import "NTShell.h"
 #import "NTFile.h"
@@ -31,12 +34,8 @@
 #import "NTQuartz.h"
 #import "NTWeb.h"
 #import "NTUtility.h"
+#import "LogWindow.h"
 
-#import "defines.h"
-#import "NSIndexSet+CountOfIndexesInRange.h"
-#import "NSArrayController+Duplicate.h"
-
-#import "NSTreeController-DMExtensions.h"
 
 @implementation LogController
 

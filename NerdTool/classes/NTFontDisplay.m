@@ -21,10 +21,11 @@
  */
 
 #import "NTFontDisplay.h"
+#import "defines.h"
+
 #import "NTGroup.h"
 #import "NTLog.h"
 #import "NTTextBasedLog.h"
-#import "defines.h"
 
 @implementation NTFontDisplay
 - (BOOL)isOpaque

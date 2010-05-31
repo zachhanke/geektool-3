@@ -21,19 +21,12 @@
  */
 
 #import "NSLogView.h"
+#import "defines.h"
+
 #import "NTGroup.h"
 #import "LogWindow.h"
 #import "LogTextField.h"
 
-#import "defines.h"
-
-#define MoveDragType 2
-#define ResizeDragType 1
-
-#define SNAP_TOLERANCE 5.0
-
-#define MIN_W 40
-#define MIN_H 10
 
 // this class exists so we can move/resize our borderless window unfortunately, these common functions are unavailable to us because we are using an NSBorderlessWindow, so we must recreate them manually ourselves
 @implementation NSLogView

@@ -23,13 +23,14 @@
  */
 
 #import "LogTextField.h"
-
-#import "NTTextBasedLog.h"
-#import "ANSIEscapeHelper.h"
 #import "defines.h"
 #import "NSDictionary+IntAndBoolAccessors.h"
 
+#import "NTTextBasedLog.h"
+#import "ANSIEscapeHelper.h"
+
 #define ZeroRange NSMakeRange(NSNotFound, 0)
+
 
 @implementation LogTextField
 

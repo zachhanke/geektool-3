@@ -21,9 +21,11 @@
  */
 
 #import "NTTextBasedLog.h"
+
 #import "LogWindow.h"
 #import "LogTextField.h"
 #import "ANSIEscapeHelper.h"
+
 
 @implementation NTTextBasedLog
 
