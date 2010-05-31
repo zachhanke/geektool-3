@@ -87,6 +87,7 @@
 #pragma mark Mouse Handling
 - (void)mouseDown:(NSEvent *)theEvent
 {
+    [NSApp preventWindowOrdering]; // don't allow the window to be brought forward
     NSWindow *window = [self window];
     dragType = 0;
     
@@ -102,9 +103,9 @@
     else
         dragType = MoveDragType;
     
-    if ([[NSUserDefaults standardUserDefaults]boolForKey:@"lockSize"]) dragType = MoveDragType;
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"lockSize"]) dragType = MoveDragType;
     
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"NSLogViewMouseDown" object:window];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"NSLogViewMouseDown" object:window];
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent
@@ -188,7 +189,7 @@
 
 - (void)mouseUp:(NSEvent *)theEvent;
 {
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"NSLogViewMouseUp" object:[self window]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"NSLogViewMouseUp" object:[self window]];
     
     [text display];
 }

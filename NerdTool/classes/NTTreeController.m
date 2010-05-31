@@ -206,17 +206,19 @@
 - (NTLog *)_findNextEnabledLogAbove:(NTTreeNode *)item
 {
     // find root
-    NSArray *allItems = [self flattenedContent];
+    NSArray *allItems = [self flattenedContent]; // this array comes sorted
     
     // keep enabled items only
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.enabled == 1 AND self.sortIndex < %i AND self isKindOfClass: %@", [[item sortIndex] intValue], [NTLog class]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.enabled == 1 AND self isKindOfClass: %@", [NTLog class]];
     NSArray *enabledItems = [allItems filteredArrayUsingPredicate:predicate];
     
     // sort array
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"self.sortIndex" ascending:YES];
-    NSArray *sortedEnabledItems = [enabledItems sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    NSRange range;
+    range.location = 0;
+    range.length = [enabledItems indexOfObject:item];
+    NSArray *aboveItems = [enabledItems subarrayWithRange:range];
     
-    return [sortedEnabledItems lastObject];
+    return [aboveItems lastObject];
 }
 
 - (BOOL)_parentHierarchyEnabledForItem:(NTTreeNode *)item

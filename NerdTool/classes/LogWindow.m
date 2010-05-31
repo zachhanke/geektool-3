@@ -46,9 +46,10 @@
 }
 
 // Custom windows that use the NSBorderlessWindowMask can't become key by default. Override this method so that controls in this window will be enabled.
+// Works better with it off, since the key config window doesn't get stolen by the logs
 - (BOOL)canBecomeKeyWindow
 {
-    return YES;
+    return NO;
 }
 
 #pragma mark Window Properties

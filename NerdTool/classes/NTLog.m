@@ -111,9 +111,7 @@
     [self.window setHasShadow:[self.shadowWindow boolValue]];
     [self.window setLevel:[self.alwaysOnTop boolValue] ? kCGMaximumWindowLevel : kCGDesktopIconWindowLevel];
     [self.window setSticky:![self.alwaysOnTop boolValue]];
-        
-    postActivationRequest = YES;
-
+    
     // display window. Window should be loaded since we have been calling [winCtrl window] all the time
     [self.window display];
 }
@@ -280,7 +278,7 @@
         _visibleFrame = [[[NSScreen screens] objectAtIndex:0] frame];
     }
     else if (([[notification name] isEqualToString:NSWindowDidResizeNotification] || [[notification name] isEqualToString:NSWindowDidMoveNotification]))
-    {                
+    {     
         NSRect newCoords = [self screenToRect:[[notification object] frame]];
         self.x = [NSNumber numberWithInt:NSMinX(newCoords)];
         self.y = [NSNumber numberWithInt:NSMinY(newCoords)];
