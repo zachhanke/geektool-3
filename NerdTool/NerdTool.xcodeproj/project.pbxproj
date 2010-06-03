@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A0B6E8811B83D0900B436EF /* Nerdtool replacement.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0A0B6E8711B83D0900B436EF /* Nerdtool replacement.icns */; };
 		0A0BC2DB1028ABF700716B75 /* NTWeb.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A422401102130C80074C19D /* NTWeb.m */; };
 		0A0BC2ED1028AC3500716B75 /* webWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A42233A10212EE60074C19D /* webWindow.xib */; };
 		0A0BC2F41028AC5C00716B75 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A42234E1021300B0074C19D /* WebKit.framework */; };
@@ -139,6 +140,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A0B6E8711B83D0900B436EF /* Nerdtool replacement.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = "Nerdtool replacement.icns"; path = "resources/Nerdtool replacement.icns"; sourceTree = "<group>"; };
 		0A0BC45D102A09A900716B75 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = readme.txt; path = resources/readme.txt; sourceTree = "<group>"; };
 		0A0BC469102A0F0200716B75 /* changelog.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = changelog.txt; path = resources/changelog.txt; sourceTree = "<group>"; };
 		0A1F659411B405D8001841A0 /* NTTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTTreeController.h; path = classes/NTTreeController.h; sourceTree = "<group>"; };
@@ -585,6 +587,7 @@
 				0A904BE7100D8F2B009A2F5E /* left.png */,
 				0A904BF5100D8F2B009A2F5E /* right.png */,
 				0AB89D371012FD03006FE649 /* logo.icns */,
+				0A0B6E8711B83D0900B436EF /* Nerdtool replacement.icns */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				0A904BDC100D8F2B009A2F5E /* InfoPlist.strings */,
 				0A904BDE100D8F2B009A2F5E /* Localizable.strings */,
@@ -708,6 +711,7 @@
 				0A0BC45E102A09A900716B75 /* readme.txt in Resources */,
 				0A0BC46A102A0F0200716B75 /* changelog.txt in Resources */,
 				0A37B78A106592A200BF4C07 /* utilityPrefs.xib in Resources */,
+				0A0B6E8811B83D0900B436EF /* Nerdtool replacement.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

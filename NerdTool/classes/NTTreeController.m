@@ -22,6 +22,9 @@
 
 // TODO plug original developer
 
+#define TREE_UP_DIRECTION 0
+#define TREE_DOWN_DIRECTION 1
+
 #import "NTTreeController.h"
 #import "NSTreeController_Extensions.h"
 #import "NSTreeNode_Extensions.h"
@@ -30,11 +33,13 @@
 #import "NTLog.h"
 #import "NTTreeNode.h"
 
+
 @interface NTTreeController (Observer)
-- (NTLog *)_findNextEnabledLogAbove:(NTTreeNode *)item;
+- (NTLog *)_findNextReferenceLogFor:(NTTreeNode *)item direction:(NSWindowOrderingMode*)direction;
 - (BOOL)_parentHierarchyEnabledForItem:(NTTreeNode *)item;
-- (void)operateOnNTLogArray:(NSArray *)logItems withOptions:(NSLogOperator)options refLog:(NTLog *)refLog;
+- (void)operateOnNTLogArray:(NSArray *)logItems withOptions:(NSLogOperator)options refLog:(NTLog *)refLog direction:(NSWindowOrderingMode)direction;
 @end
+
 
 @implementation NTTreeController
 
@@ -73,8 +78,21 @@
 - (void)moveNodes:(NSArray *)nodes toIndexPath:(NSIndexPath *)indexPath;
 {
 	[super moveNodes:nodes toIndexPath:indexPath];
-	[self _updateSortOrderOfModelObjects];
+    [self _updateSortOrderOfModelObjects];
+        
+    for (NSTreeNode *item in nodes)
+    {
+        NTTreeNode *object = [item representedObject];
+        if (![self _parentHierarchyEnabledForItem:object]) return; // return if a parent hierarchy is not enabled
+        
+        BOOL groupSelected = ([object isKindOfClass:[NTGroup class]]) ? YES : NO;
+        NSWindowOrderingMode direction = NSWindowAbove;
 
+        NSArray *logs = (groupSelected) ? [object descendants] : [NSArray arrayWithObject:object];
+        
+        NTLog *refLog = [self _findNextReferenceLogFor:object directionBuffer:&direction];
+        [self operateOnNTLogArray:logs withOptions:(NTLogOperatorCreateLogs | NTLogOperatorReorderLogs) refLog:refLog direction:direction];
+    }
 }
 
 - (void)_updateSortOrderOfModelObjects
@@ -151,18 +169,25 @@
         }
         [prefsView addSubview:[firstItem loadPrefsViewAndBind:object]];
     }
-    // when we add/remove/rearrange an item
     /*
+    // when we add/remove/rearrange an item
     else if([keyPath isEqualToString:@"arrangedObjects"])
     {
-        NSLog(@"Selected objects");
+        NSArray *allItems = [self flattenedContent]; // this array comes sorted
+        
+        // keep enabled items only
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.enabled == 1 AND self isKindOfClass: %@", [NTLog class]];
+        NSArray *enabledItems = [allItems filteredArrayUsingPredicate:predicate];
+        
+        [self operateOnNTLogArray:enabledItems withOptions:(NTLogOperatorCreateLogs | NTLogOperatorReorderLogs) refLog:nil direction:NSWindowAbove];
     }
      */
     // when something is enabled/disabled
-   else if([keyPath isEqualToString:@"enabled"])
+    else if([keyPath isEqualToString:@"enabled"])
     {
         BOOL groupSelected = ([object isKindOfClass:[NTGroup class]]) ? YES : NO;
         BOOL currentEnabledState = [[object valueForKey:@"enabled"] boolValue];
+        NSWindowOrderingMode direction = NSWindowAbove;
         /*
          * Group?    Enabled?    Action
          *   NO         NO       If parent hierarchy is enabled, kill Log process (no other info needed)
@@ -171,54 +196,61 @@
          *   YES        YES      If parent hierarchy is enabled, create all enabled members of group (need next enabled Log above, if it exists)
          */
         if (![self _parentHierarchyEnabledForItem:object]) return; // return if a parent hierarchy is not enabled
+        NSArray *logs = (groupSelected || !currentEnabledState) ? [object descendants] : [NSArray arrayWithObject:object];
         
-        if (groupSelected)
-        {
-            NSArray *descendants = [object descendants];
-            if (currentEnabledState)
-            {
-                // make sure the guy above us has a window, otherwise he's worthless to us
-                NTLog *nextEnableLogAbove = [self _findNextEnabledLogAbove:object];
-                nextEnableLogAbove = ([nextEnableLogAbove window]) ? nextEnableLogAbove : nil;
-                [self operateOnNTLogArray:descendants withOptions:(NTLogOperatorCreateLogs | NTLogOperatorReorderLogs) refLog:nextEnableLogAbove];
-            }
-            else [self operateOnNTLogArray:descendants withOptions:NTLogOperatorDestroyLogs refLog:nil];
-        }
-        else
-        {
-            NSArray *descendants = [object descendants];
-            NSArray *selectedLog = [NSArray arrayWithObject:object];
-            
-            if (currentEnabledState)
-            {                
-                NTLog *nextEnableLogAbove = [self _findNextEnabledLogAbove:object];
-                nextEnableLogAbove = ([nextEnableLogAbove window]) ? nextEnableLogAbove : nil;
-                
-                [self operateOnNTLogArray:selectedLog withOptions:(NTLogOperatorCreateLogs | NTLogOperatorReorderLogs) refLog:nextEnableLogAbove];
-            }
-            else [self operateOnNTLogArray:selectedLog withOptions:NTLogOperatorDestroyLogs refLog:nil];
-        }
+        // make sure the guy above us has a window, otherwise he's worthless to us
+        NTLog *refLog = [self _findNextReferenceLogFor:object directionBuffer:&direction];
+        [self operateOnNTLogArray:logs withOptions:(currentEnabledState) ? (NTLogOperatorCreateLogs | NTLogOperatorReorderLogs) : NTLogOperatorDestroyLogs refLog:refLog direction:direction];
     }
-    else [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+} 
+// fancy block statement
+- (BOOL (^)(id obj, NSUInteger idx, BOOL *stop))blockTestingForRefLog
+{
+    return [[^(id obj, NSUInteger idx, BOOL *stop)
+             {
+                 if ([obj enabled] && 
+                     [obj isKindOfClass:[NTLog class]] && 
+                     [obj window])
+                 {
+                     *stop = YES;
+                     return YES;
+                 }
+                 return NO;
+             } copy] autorelease];
 }
 
 // returns nil if there isn't one
-- (NTLog *)_findNextEnabledLogAbove:(NTTreeNode *)item
+- (NTLog *)_findNextReferenceLogFor:(NTTreeNode *)item direction:(NSWindowOrderingMode*)direction
 {
     // find root
     NSArray *allItems = [self flattenedContent]; // this array comes sorted
     
-    // keep enabled items only
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.enabled == 1 AND self isKindOfClass: %@", [NTLog class]];
-    NSArray *enabledItems = [allItems filteredArrayUsingPredicate:predicate];
+    // find which part of the array is good for us to use
+    int baseLogIndex = [allItems indexOfObject:item];
     
-    // sort array
     NSRange range;
-    range.location = 0;
-    range.length = [enabledItems indexOfObject:item];
-    NSArray *aboveItems = [enabledItems subarrayWithRange:range];
+    NSUInteger top = NSNotFound;
+    NSUInteger bottom = NSNotFound;
     
-    return [aboveItems lastObject];
+    // look at top
+    range.location = 0;
+    range.length = baseLogIndex;
+    NSIndexSet *topSet = [NSIndexSet indexSetWithIndexesInRange:range];
+    top = [allItems indexOfObjectAtIndexes:topSet options:NSEnumerationReverse passingTest:[self blockTestingForRefLog]];
+    
+    if (direction) *direction = NSWindowBelow;
+    if (top != NSNotFound) return [allItems objectAtIndex:top];
+    
+    // look at bottom
+    range.location = baseLogIndex + 1;
+    range.length = (range.location < [allItems count]) ? [allItems count] - range.location : 0;
+    NSIndexSet *bottomSet = [NSIndexSet indexSetWithIndexesInRange:range];
+    bottom = [allItems indexOfObjectAtIndexes:bottomSet options:NSEnumerationConcurrent passingTest:[self blockTestingForRefLog]];
+    
+    if (direction) *direction = NSWindowAbove;
+    if (top != NSNotFound) return [allItems objectAtIndex:bottom];
+    
+    return nil;
 }
 
 - (BOOL)_parentHierarchyEnabledForItem:(NTTreeNode *)item
@@ -229,7 +261,7 @@
     return parentHierarchyEnabled;
 }
 
-- (void)operateOnNTLogArray:(NSArray *)logItems withOptions:(NSLogOperator)options refLog:(NTLog *)refLog
+- (void)operateOnNTLogArray:(NSArray *)logItems withOptions:(NSLogOperator)options refLog:(NTLog *)refLog direction:(NSWindowOrderingMode)direction
 {
     NSEnumerator *e = [logItems reverseObjectEnumerator];
     for (NTLog *log in e)
@@ -242,8 +274,10 @@
         if (NTLogOperatorReorderLogs & options)
         {
             // if we have a refLog, use that. Otherwise, just do a crude process
-            if (refLog) [[log window] orderWindow:NSWindowBelow relativeTo:[[refLog window] windowNumber]];
-            else [log front];
+            if (refLog)
+                [[log window] orderWindow:direction relativeTo:[[refLog window] windowNumber]];
+            else
+                [log front];
         }
         if (NTLogOperatorDestroyLogs & options) [log destroyLogProcess];
     }
