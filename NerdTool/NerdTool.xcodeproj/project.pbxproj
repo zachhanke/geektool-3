@@ -46,11 +46,10 @@
 		0A42233C10212EE60074C19D /* webWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A42233A10212EE60074C19D /* webWindow.xib */; };
 		0A42234F1021300B0074C19D /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A42234E1021300B0074C19D /* WebKit.framework */; };
 		0A4223FF102130900074C19D /* webPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A4223FD102130900074C19D /* webPrefs.xib */; };
-		0A422402102130C80074C19D /* NTWeb.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A422401102130C80074C19D /* NTWeb.m */; };
 		0A4226BE102285130074C19D /* NS(Attributed)String+Geometrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A4226BD102285130074C19D /* NS(Attributed)String+Geometrics.m */; };
 		0A4E504F10A3944B000653AF /* NerdtoolDataModel.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 0A4E504E10A3944B000653AF /* NerdtoolDataModel.xcdatamodel */; };
 		0A4E509C10A3E3DA000653AF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A4E508210A3E3D8000653AF /* CoreData.framework */; };
-		0A7732EC1043138400F02243 /* NTUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7732EB1043138400F02243 /* NTUtility.m */; };
+		0A6CE8FA11B9890F005F175B /* NTGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BBF100D8EAC009A2F5E /* NTGroup.m */; };
 		0A7732ED1043138400F02243 /* NTUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7732EB1043138400F02243 /* NTUtility.m */; };
 		0A791E981016BC31003F392D /* NTDroppableTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A791E971016BC31003F392D /* NTDroppableTextField.m */; };
 		0A7D38890FD805FA0070D678 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7D38870FD805FA0070D678 /* Quartz.framework */; };
@@ -68,7 +67,6 @@
 		0A904BCE100D8EAC009A2F5E /* NSLogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BB9100D8EAC009A2F5E /* NSLogView.m */; };
 		0A904BCF100D8EAC009A2F5E /* NTExposeBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BBB100D8EAC009A2F5E /* NTExposeBorder.m */; };
 		0A904BD0100D8EAC009A2F5E /* NTFontDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BBD100D8EAC009A2F5E /* NTFontDisplay.m */; };
-		0A904BD1100D8EAC009A2F5E /* NTGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BBF100D8EAC009A2F5E /* NTGroup.m */; };
 		0A904BF7100D8F2B009A2F5E /* center.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BD5100D8F2B009A2F5E /* center.png */; };
 		0A904BF8100D8F2B009A2F5E /* corner.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BD6100D8F2B009A2F5E /* corner.tif */; };
 		0A904BF9100D8F2B009A2F5E /* defaultFailure.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A904BD7100D8F2B009A2F5E /* defaultFailure.png */; };
@@ -114,14 +112,10 @@
 		0AB89F041014A923006FE649 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7D38870FD805FA0070D678 /* Quartz.framework */; };
 		0AB89F121014A982006FE649 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7D38880FD805FA0070D678 /* Carbon.framework */; };
 		0AB8A1E910154C9F006FE649 /* NTShell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8A1E510154C9F006FE649 /* NTShell.m */; };
-		0AB8A1EA10154C9F006FE649 /* NTFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8A1E710154C9F006FE649 /* NTFile.m */; };
-		0AB8A1ED10154CBA006FE649 /* NTRunOnly.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8A1EB10154CBA006FE649 /* NTRunOnly.m */; };
 		0AB8A1F010154CE1006FE649 /* ANSIEscapeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8A1EE10154CE1006FE649 /* ANSIEscapeHelper.m */; };
 		0AB8A1F310154CF0006FE649 /* NTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8A1F110154CF0006FE649 /* NTLog.m */; };
 		0AB8A22C101604D3006FE649 /* imageWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AB8A22A101604D3006FE649 /* imageWindow.xib */; };
-		0AB8A2CF1016140E006FE649 /* NTImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8A2CD1016140E006FE649 /* NTImage.m */; };
 		0AB8A2D210161421006FE649 /* NTRO.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AB8A2D010161421006FE649 /* NTRO.xib */; };
-		0AB8A2DB1016149A006FE649 /* NTQuartz.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8A2DA1016149A006FE649 /* NTQuartz.m */; };
 		0AB8A2EF101616E2006FE649 /* quartzWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AB8A2ED101616E2006FE649 /* quartzWindow.xib */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -197,10 +191,6 @@
 		0A904BA4100D8EAC009A2F5E /* defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = defines.h; path = classes/defines.h; sourceTree = "<group>"; };
 		0A904BA5100D8EAC009A2F5E /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = classes/AppDelegate.h; sourceTree = "<group>"; };
 		0A904BA6100D8EAC009A2F5E /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = classes/AppDelegate.m; sourceTree = "<group>"; };
-		0A904BA7100D8EAC009A2F5E /* GroupController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupController.h; path = classes/GroupController.h; sourceTree = "<group>"; };
-		0A904BA8100D8EAC009A2F5E /* GroupController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupController.m; path = classes/GroupController.m; sourceTree = "<group>"; };
-		0A904BAC100D8EAC009A2F5E /* LogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogController.h; path = classes/LogController.h; sourceTree = "<group>"; };
-		0A904BAD100D8EAC009A2F5E /* LogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogController.m; path = classes/LogController.m; sourceTree = "<group>"; };
 		0A904BAE100D8EAC009A2F5E /* LogTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogTextField.h; path = classes/LogTextField.h; sourceTree = "<group>"; };
 		0A904BAF100D8EAC009A2F5E /* LogTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogTextField.m; path = classes/LogTextField.m; sourceTree = "<group>"; };
 		0A904BB0100D8EAC009A2F5E /* LogWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogWindow.h; path = classes/LogWindow.h; sourceTree = "<group>"; };
@@ -402,10 +392,6 @@
 			children = (
 				0A904BA5100D8EAC009A2F5E /* AppDelegate.h */,
 				0A904BA6100D8EAC009A2F5E /* AppDelegate.m */,
-				0A904BA7100D8EAC009A2F5E /* GroupController.h */,
-				0A904BA8100D8EAC009A2F5E /* GroupController.m */,
-				0A904BAC100D8EAC009A2F5E /* LogController.h */,
-				0A904BAD100D8EAC009A2F5E /* LogController.m */,
 				0A1F659411B405D8001841A0 /* NTTreeController.h */,
 				0A1F659511B405D8001841A0 /* NTTreeController.m */,
 			);
@@ -770,18 +756,11 @@
 				0A904BCE100D8EAC009A2F5E /* NSLogView.m in Sources */,
 				0A904BCF100D8EAC009A2F5E /* NTExposeBorder.m in Sources */,
 				0A904BD0100D8EAC009A2F5E /* NTFontDisplay.m in Sources */,
-				0A904BD1100D8EAC009A2F5E /* NTGroup.m in Sources */,
 				0AB8A1E910154C9F006FE649 /* NTShell.m in Sources */,
-				0AB8A1EA10154C9F006FE649 /* NTFile.m in Sources */,
-				0AB8A1ED10154CBA006FE649 /* NTRunOnly.m in Sources */,
 				0AB8A1F010154CE1006FE649 /* ANSIEscapeHelper.m in Sources */,
 				0AB8A1F310154CF0006FE649 /* NTLog.m in Sources */,
-				0AB8A2CF1016140E006FE649 /* NTImage.m in Sources */,
-				0AB8A2DB1016149A006FE649 /* NTQuartz.m in Sources */,
 				0A791E981016BC31003F392D /* NTDroppableTextField.m in Sources */,
-				0A422402102130C80074C19D /* NTWeb.m in Sources */,
 				0A4226BE102285130074C19D /* NS(Attributed)String+Geometrics.m in Sources */,
-				0A7732EC1043138400F02243 /* NTUtility.m in Sources */,
 				0A4E504F10A3944B000653AF /* NerdtoolDataModel.xcdatamodel in Sources */,
 				0A1F659711B405D8001841A0 /* NTTreeController.m in Sources */,
 				0A1F659B11B405E0001841A0 /* NTTreeNode.m in Sources */,
@@ -797,6 +776,7 @@
 				0A1F65C811B4067D001841A0 /* NSTreeController_Extensions.m in Sources */,
 				0A1F65C911B4067D001841A0 /* NSTreeController-DMExtensions.m in Sources */,
 				0A1F65CA11B4067D001841A0 /* NSTreeController+NodeAccessor.m in Sources */,
+				0A6CE8FA11B9890F005F175B /* NTGroup.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

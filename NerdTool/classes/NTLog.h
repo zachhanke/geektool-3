@@ -29,28 +29,29 @@
 
 @interface NTLog : NTTreeNode
 {
-    NSMutableDictionary *properties;
-    NSNumber *active;
-    NTGroup *parentGroup;
-
+    // log window creation
     NSWindowController *windowController;
     LogWindow *window;
+    
+    // log window movement
+    BOOL _isBeingDragged;
 
+    // resolution change detection
+    NSRect _visibleFrame;
+    
+    // preference view management
     BOOL _loadedView;
     IBOutlet id prefsView;
 
-    id highlightSender;
-    BOOL postActivationRequest;
-    BOOL _isBeingDragged;
-
-    NSArray *arguments;
+    
+    //// Below are ivars that are not used directly by NTLog
+    // Set by NTLog for subclasses
     NSDictionary *env;
+    
+    // Created for use by subclasses (not referenced in NTLog except in creation/destruction)
+    NSArray *arguments;
     NSTimer *timer;
-    NSTask *task;
-    
-    NSRect _visibleFrame;
-    
-    NSMutableString *lastRecievedString;
+    NSTask *task; // custom accessor setup
 }
 
 // Core Data Properties
@@ -63,33 +64,29 @@
 @property (nonatomic, retain) NSNumber *x;
 @property (nonatomic, retain) NSNumber *y;
 
+// Standard properties
 @property (retain) NSWindowController *windowController;
 @property (assign) LogWindow *window;
 
 @property (assign) IBOutlet id prefsView;
 
-@property (assign) id highlightSender;
-@property (assign) BOOL postActivationRequest;
-@property (assign) BOOL _isBeingDragged;
-
 @property (copy) NSArray *arguments;
 @property (copy) NSDictionary *env;
 @property (retain) NSTimer *timer;
 @property (retain) NSTask *task;
-@property (retain) NSMutableString *lastRecievedString;
 
-// Abstract functions (subclass these)
+// Properties (Subclass these)
 - (NSString *)logTypeName;
 - (NSString *)preferenceNibName;
 - (NSString *)displayNibName;
 - (void)setupInterfaceBindingsWithObject:(id)bindee;
 - (void)destroyInterfaceBindings;
-
 // Window Management
 - (void)updateWindowIncludingTimer:(BOOL)updateTimer;
-// Log Container
-- (id)initWithProperties:(NSDictionary*)newProperties;
-- (id)init;
+- (void)awakeFromInsert;
+- (void)awakeFromFetch;
+- (void)createLog;
+- (void)destroyLog;
 - (void)dealloc;
 // Interface
 - (NSView *)loadPrefsViewAndBind:(id)bindee;
@@ -98,25 +95,25 @@
 - (void)removePreferenceObservers;
 // KVC
 - (void)set_isBeingDragged:(BOOL)var;
-// Log Process
-// Management
-- (void)createLogProcess;
-- (void)destroyLogProcess;
-// Observing
+// Process Creation/Destruction
+- (BOOL)createLogProcess;
+- (BOOL)destroyLogProcess;
+// Window Creation/Destruction
+- (BOOL)createWindow;
+- (BOOL)destroyWindow;
+// Environment Creation/Destruction
+- (void)createEnv;
+- (void)destroyEnv;
+// Observing Creation/Destruction
 - (void)setupProcessObservers;
 - (void)notificationHandler:(NSNotification *)notification;
+- (void)removeProcessObservers;
 // KVC
-- (void)setTimer:(NSTimer*)newTimer;
-- (void)killTimer;
-- (void)updateTimer;
+- (void)setTask:(NSTask*)newTask;
 // Window Management
 - (void)setHighlighted:(BOOL)val from:(id)sender;
 - (void)front;
-- (IBAction)attemptBestWindowSize:(id)sender;
 // Convience
-- (NSDictionary*)customAnsiColors;
 - (NSRect)screenToRect:(NSRect)appleCoordRect;
 - (NSRect)rect;
-- (BOOL)equals:(NTLog*)comp;
-- (NSString*)description;
 @end

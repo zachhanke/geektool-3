@@ -23,7 +23,6 @@
 #import "NTLog.h"
 #import "defines.h"
 #import "NSDictionary+IntAndBoolAccessors.h"
-#import "NS(Attributed)String+Geometrics.h"
 #import "NTTextBasedLog.h"
 #import "NSWindow+StickyWindow.h"
 
@@ -31,7 +30,6 @@
 #import "LogWindow.h"
 #import "LogTextField.h"
 #import "ANSIEscapeHelper.h"
-
 
 
 @implementation NTLog
@@ -46,21 +44,16 @@
 @dynamic x;
 @dynamic y;
 
+// Standard Properties
 @synthesize windowController;
 @synthesize window;
 
 @synthesize prefsView;
 
-@synthesize highlightSender;
-@synthesize postActivationRequest;
-@synthesize _isBeingDragged;
-
 @synthesize arguments;
 @synthesize env;
 @synthesize timer;
 @synthesize task;
-
-@synthesize lastRecievedString;
 
 #pragma mark Properties (Subclass these)
 // Subclasses must overwrite the following methods
@@ -95,55 +88,62 @@
 }
 
 #pragma mark Window Management
-- (NSWindow*)window
-{
-    return [windowController window];
-}
-
 - (void)updateWindowIncludingTimer:(BOOL)updateTimer
 {
+    // exit if we don't have a window
+    if (!self.window) return;
+    
     // change the window size
     NSRect newRect = [self screenToRect:[self rect]];
     if ([self.sizeToScreen boolValue]) newRect = [[[NSScreen screens] objectAtIndex:0] frame];
-    [window setFrame:newRect display:NO];
+    [self.window setFrame:newRect display:NO];
         
     // set various attributes
     [self.window setHasShadow:[self.shadowWindow boolValue]];
     [self.window setLevel:[self.alwaysOnTop boolValue] ? kCGMaximumWindowLevel : kCGDesktopIconWindowLevel];
     [self.window setSticky:![self.alwaysOnTop boolValue]];
-    
-    // display window. Window should be loaded since we have been calling [winCtrl window] all the time
-    [self.window display];
 }
 
 #pragma mark -
-#pragma mark Log Container
-#pragma mark -
-
 - (void)awakeFromInsert
 {
+    [self createLog];
+}
+
+- (void)awakeFromFetch
+{
+    [self createLog];
+}
+
+// this function as the -init method. This represents a log that is ready to go and interacted with, though not necessarily selected or enabled. For that, see -createLogProcess
+- (void)createLog
+{
+    self.windowController = nil;
     _loadedView = NO;
-    windowController = nil;
-    highlightSender = nil;
-    lastRecievedString = nil;
     _visibleFrame = [[[NSScreen screens] objectAtIndex:0] frame];
     
-    // TODO: this may be unnecessary
-    //[self setupPreferenceObservers];
+    // the following are not in -setupPreferenceObservers because they should be always active as long as the log is
+    [self addObserver:self forKeyPath:@"name" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"enabled" options:0 context:NULL];
+}
+
+- (void)destroyLog
+{
+    [self removeObserver:self forKeyPath:@"name"];
+    [self removeObserver:self forKeyPath:@"enabled"];
+    [self destroyLogProcess];
 }
 
 - (void)dealloc
 {
-    //[self removePreferenceObservers];
-    [self destroyLogProcess];
-    [properties release];
-    [active release];
+    [self destroyLog];
     [super dealloc];
 }
 
 #pragma mark Interface
 - (NSView *)loadPrefsViewAndBind:(id)bindee
 {
+    // return nil if we have already loaded the prefs
     if (_loadedView) return nil;
     if (!prefsView) [NSBundle loadNibNamed:[self preferenceNibName] owner:self];
     
@@ -155,6 +155,7 @@
 
 - (NSView *)unloadPrefsViewAndUnbind
 {
+    // if we don't have any prefs to unbind, return nil
     if (!_loadedView) return nil;
     
     [self destroyInterfaceBindings];
@@ -164,13 +165,7 @@
 }
 
 - (void)setupPreferenceObservers
-{
-    [self addObserver:self forKeyPath:@"active" options:0 context:NULL];
-    
-    [self addObserver:self forKeyPath:@"name" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"enabled" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"group" options:0 context:NULL];
-    
+{    
     [self addObserver:self forKeyPath:@"x" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"y" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"w" options:0 context:NULL];
@@ -181,13 +176,7 @@
 }
 
 - (void)removePreferenceObservers
-{
-    [self removeObserver:self forKeyPath:@"active"];
-    
-    [self removeObserver:self forKeyPath:@"name"];
-    [self removeObserver:self forKeyPath:@"enabled"];
-    [self removeObserver:self forKeyPath:@"group"];
-    
+{    
     [self removeObserver:self forKeyPath:@"x"];
     [self removeObserver:self forKeyPath:@"y"];
     [self removeObserver:self forKeyPath:@"w"];
@@ -221,18 +210,48 @@
 }
 
 #pragma mark -
-#pragma mark Log Process
-#pragma mark -
-#pragma mark Management
-- (void)createLogProcess
+#pragma mark Process Creation/Destruction
+- (BOOL)createLogProcess
 {   
-    self.windowController = [[NSWindowController alloc] initWithWindowNibName:[self displayNibName]];
-    self.windowController.window = [windowController window];
-    //[self.windowController window]; // this is only to make sure that the window is loaded. may not need t odo this
+    if (![self createWindow]) return FALSE; // if we didn't create a window, bail
+    [self createEnv];
+    [self setupProcessObservers];
+    return TRUE;
+}
+
+- (BOOL)destroyLogProcess
+{    
+    if (![self destroyWindow]) return FALSE; // if we didn't destroy a window, bail
+    [self destroyEnv];
+    [self removeProcessObservers];
     
+    self.arguments = nil;
+    self.task = nil;
+    self.timer = nil;
+    return TRUE;
+}
+
+#pragma mark Window Creation/Destruction
+- (BOOL)createWindow
+{
+    if (self.windowController) return FALSE;
+    self.windowController = [[NSWindowController alloc] initWithWindowNibName:[self displayNibName]];    
     self.window = (LogWindow *)[windowController window];
     window.parentLog = self;
-    
+    return TRUE;
+}
+
+- (BOOL)destroyWindow
+{
+    if (!self.windowController) return FALSE;
+    [windowController close];
+    self.windowController = nil;
+    return TRUE;
+}
+
+#pragma mark Environment Creation/Destruction
+- (void)createEnv
+{
     // TODO: make this env the same as a login env, with all the paths from approprite rc files
     // append app support folder to shell PATH
     NSProcessInfo *info = [NSProcessInfo processInfo];
@@ -242,26 +261,15 @@
     [tmpEnv setObject:@"xterm-color" forKey:@"TERM"];
     
     self.env = tmpEnv;
-    
-    [self setupProcessObservers];
-    
     [tmpEnv release];
 }
 
-- (void)destroyLogProcess
+- (void)destroyEnv
 {
-    // removes process observers (they call notificationHandler:)
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [windowController close];
-    self.windowController = nil;
     self.env = nil;
-    
-    self.arguments = nil;
-    self.task = nil;
-    self.timer = nil;
 }
 
-#pragma mark Observing
+#pragma mark Observing Creation/Destruction
 - (void)setupProcessObservers
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationHandler:) name:@"NSLogViewMouseDown" object:window];
@@ -291,6 +299,12 @@
         [self set_isBeingDragged:NO];
 }
 
+- (void)removeProcessObservers
+{
+    // removes process observers (they call notificationHandler:)
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #pragma mark KVC
 - (void)setTask:(NSTask*)newTask
 {
@@ -302,22 +316,13 @@
 #pragma mark Window Management
 - (void)setHighlighted:(BOOL)val from:(id)sender
 {
-    highlightSender = sender;
-    if (!windowController) [sender observeValueForKeyPath:@"enabled" ofObject:self change:nil context:nil];
-    if (windowController) [[self window] setHighlighted:val];
+    if (!self.windowController && self.enabled) [self createLog];
+    [[self window] setHighlighted:val];
 }
 
 - (void)front
 {
     [window orderFront:self];
-}
-
-- (IBAction)attemptBestWindowSize:(id)sender
-{
-    NSSize bestFit = [[[window textView] attributedString] sizeForWidth:(([properties boolForKey:@"wrap"]) ? NSWidth([window frame]) : FLT_MAX) height:FLT_MAX];
-    [window setContentSize:bestFit];
-    [[NSNotificationCenter defaultCenter] postNotificationName:NSWindowDidResizeNotification object:window];
-    [window displayIfNeeded];
 }
 
 #pragma mark  

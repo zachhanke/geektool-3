@@ -30,7 +30,7 @@ extern NSString *NTTreeNodeType;
 @class NTLog;
 
 @interface AppDelegate : NSObject 
-{        
+{  
     IBOutlet id mainConfigWindow;
     IBOutlet id loginItem;
     

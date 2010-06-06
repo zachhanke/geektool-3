@@ -29,13 +29,13 @@
 }
 
 // Core Data Properties
-@property (retain) NSNumber *enabled;
-@property (retain) NSNumber *isLeaf;
-@property (retain) NSNumber *isSelectable;
-@property (retain) NSString *name;
-@property (retain) NSNumber *sortIndex;
-@property (retain) NSSet *children;
-@property (retain) NTTreeNode *parent;
+@property (nonatomic, retain) NSNumber * enabled;
+@property (nonatomic, retain) NSNumber * isLeaf;
+@property (nonatomic, retain) NSNumber * isSelectable;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSNumber * sortIndex;
+@property (nonatomic, retain) NSSet* children;
+@property (nonatomic, retain) NTTreeNode * parent;
 
 - (NSArray *)descendants;
 @end

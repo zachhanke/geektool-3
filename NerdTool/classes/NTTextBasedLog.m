@@ -21,6 +21,8 @@
  */
 
 #import "NTTextBasedLog.h"
+#import "defines.h"
+#import "NS(Attributed)String+Geometrics.h"
 
 #import "LogWindow.h"
 #import "LogTextField.h"
@@ -71,14 +73,21 @@
 @dynamic useAsciiEscapes;
 @dynamic wrap;
 
+// Standard properties
+@synthesize lastRecievedString;
+@synthesize colorTestString;
+
 - (void)awakeFromInsert
 {
     [super awakeFromInsert];
     
+    // Standard properties
+    self.lastRecievedString = nil;
+    
     // Set some defaults that we can't set in our CoreData model
     self.font = [NSFont systemFontOfSize:[NSFont systemFontSize]];
-    self.textColor = kDefaultANSIColorBgBlack;
-    self.backgroundColor = kDefaultANSIColorBgBlack;    
+    self.textColor = kDefaultFgColor;
+    self.backgroundColor = kDefaultBgColor;    
     self.bgBlack = kDefaultANSIColorBgBlack;
     self.bgBlue = kDefaultANSIColorBgBlue;
     self.bgCyan = kDefaultANSIColorBgCyan;
@@ -205,6 +214,129 @@
     [self removeObserver:self forKeyPath:@"bgBrightWhite"];    
 }
 
+- (void)destroyLogProcess
+{
+    self.lastRecievedString = nil;
+    
+    [super destroyLogProcess];
+}
+
+- (void)updateWindowIncludingTimer:(BOOL)updateTimer
+{
+    [super updateWindowIncludingTimer:updateTimer];
+    
+    // text setup
+    NSRect tmpRect = [self rect];
+    tmpRect.origin = NSZeroPoint;
+    
+    [self.window setTextRect:tmpRect]; 
+    [self.window setTextBackgroundColor:self.backgroundColor];
+    
+    // text presentation
+    [[self.window textView] setParentLog:self];
+    [[self.window textView] updateTextAttributesUsingProps];
+    
+    if (![self.useAsciiEscapes boolValue] || !lastRecievedString) [[window textView] applyAttributes:[[window textView] attributes]];
+    else [[window textView] processAndSetText:lastRecievedString withEscapes:YES andCustomColors:[self customAnsiColors] insert:NO];
+}    
+
+- (IBAction)attemptBestWindowSize:(id)sender
+{
+    NSSize bestFit = [[[window textView] attributedString] sizeForWidth:(([self.wrap boolValue]) ? NSWidth([window frame]) : FLT_MAX) height:FLT_MAX];
+    [window setContentSize:bestFit];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NSWindowDidResizeNotification object:window];
+    [window displayIfNeeded];
+}
+
+#pragma mark Custom ANSI Colors
+- (void)updatePreviewText
+{
+    NSString *testString = @"TEST";
+    NSNumber *boldness = [NSNumber numberWithFloat:-5.0];
+    float size = 32.0;
+    NSFont *displayFont = [NSFont fontWithName:@"Helvetica" size:size];
+    BOOL firstTime = YES;
+    
+    NSMutableAttributedString *stringToPrint = [[[NSMutableAttributedString alloc] init] autorelease];
+    for (NSColor *bgColor in self.ansiBgColors)
+    {
+        if (!firstTime)
+        {
+            firstTime = NO;
+            [stringToPrint appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\n"] autorelease]];
+        }
+
+        for (NSColor *fgColor in self.ansiFgColors)
+        {
+            NSDictionary *normAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       fgColor,NSForegroundColorAttributeName,
+                                       bgColor,NSBackgroundColorAttributeName,
+                                       boldness,NSStrokeWidthAttributeName,
+                                       displayFont,NSFontAttributeName,
+                                       nil];
+            
+            NSAttributedString *normString = [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ ",testString] attributes:normAttrs] autorelease];
+
+            [stringToPrint appendAttributedString:normString];
+        }
+        
+        [stringToPrint appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\n"] autorelease]];
+
+        for (NSColor *fgBrightColor in self.ansiFgBrightColors)
+        {
+            NSDictionary *brightAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       fgBrightColor,NSForegroundColorAttributeName,
+                                       bgColor,NSBackgroundColorAttributeName,
+                                       boldness,NSStrokeWidthAttributeName,
+                                       displayFont,NSFontAttributeName,
+                                       nil];
+            
+            NSAttributedString *brightString = [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ ",testString] attributes:brightAttrs] autorelease];
+            
+            [stringToPrint appendAttributedString:brightString];
+        }
+    }
+    self.colorTestString = stringToPrint;
+}
+
+- (NSArray*)colorNames
+{
+    return [NSArray arrayWithObjects:@"fgBlack",
+            @"fgRed",
+            @"fgGreen",
+            @"fgYellow",
+            @"fgBlue",
+            @"fgMagenta",
+            @"fgCyan",
+            @"fgWhite",
+            @"bgBlack",
+            @"bgRed",
+            @"bgGreen",
+            @"bgYellow",
+            @"bgBlue",
+            @"bgMagenta",
+            @"bgCyan",
+            @"bgWhite",
+            @"fgBrightBlack",
+            @"fgBrightRed",
+            @"fgBrightGreen",
+            @"fgBrightYellow",
+            @"fgBrightBlue",
+            @"fgBrightMagenta",
+            @"fgBrightCyan",
+            @"fgBrightWhite",
+            @"bgBrightBlack",
+            @"bgBrightRed",
+            @"bgBrightGreen",
+            @"bgBrightYellow",
+            @"bgBrightBlue",
+            @"bgBrightMagenta",
+            @"bgBrightCyan",
+            @"bgBrightWhite",
+            nil];
+    
+}
+
 - (NSDictionary*)customAnsiColors
 {
     NSDictionary *colors = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -245,23 +377,60 @@
     
 }
 
-- (void)updateWindowIncludingTimer:(BOOL)updateTimer
+- (NSArray*)ansiFgColors
 {
-    [super updateWindowIncludingTimer:updateTimer];
-    
-    // text setup
-    NSRect tmpRect = [self rect];
-    tmpRect.origin = NSZeroPoint;
-    
-    [self.window setTextRect:tmpRect]; 
-    [self.window setTextBackgroundColor:self.backgroundColor];
-    
-    // text presentation
-    [[self.window textView] setParentLog:self];
-    [[self.window textView] updateTextAttributesUsingProps];
-    
-    if (![self.useAsciiEscapes boolValue] || !lastRecievedString) [[window textView] applyAttributes:[[window textView] attributes]];
-    else [[window textView] processAndSetText:lastRecievedString withEscapes:YES andCustomColors:[self customAnsiColors] insert:NO];    
-}    
+    return [NSArray arrayWithObjects:
+            self.fgBlack,
+            self.fgRed,
+            self.fgGreen,
+            self.fgYellow,
+            self.fgBlue,
+            self.fgMagenta,
+            self.fgCyan,
+            self.fgWhite,
+            nil];    
+}
+
+- (NSArray*)ansiBgColors
+{
+    return [NSArray arrayWithObjects:
+            self.bgBlack,
+            self.bgRed,
+            self.bgGreen,
+            self.bgYellow,
+            self.bgBlue,
+            self.bgMagenta,
+            self.bgCyan,
+            self.bgWhite,
+            nil];
+}
+
+- (NSArray*)ansiBgBrightColors
+{
+    return [NSArray arrayWithObjects:
+            self.bgBrightBlack,
+            self.bgBrightRed,
+            self.bgBrightGreen,
+            self.bgBrightYellow,
+            self.bgBrightBlue,
+            self.bgBrightMagenta,
+            self.bgBrightCyan,
+            self.bgBrightWhite,
+            nil];    
+}
+
+- (NSArray*)ansiFgBrightColors
+{
+    return [NSArray arrayWithObjects:
+            self.fgBrightBlack,
+            self.fgBrightRed,
+            self.fgBrightGreen,
+            self.fgBrightYellow,
+            self.fgBrightBlue,
+            self.fgBrightMagenta,
+            self.fgBrightCyan,
+            self.fgBrightWhite,
+            nil];    
+}
 
 @end

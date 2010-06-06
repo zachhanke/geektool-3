@@ -99,51 +99,46 @@
 #pragma mark Observing
 - (void)setupPreferenceObservers
 {
+    [super setupPreferenceObservers];
+
     [self addObserver:self forKeyPath:@"command" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"refresh" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"printMode" options:0 context:NULL];
-    [super setupPreferenceObservers];
+    [self addObserver:self forKeyPath:@"printMode" options:0 context:NULL];    
 }
 
 - (void)removePreferenceObservers
 {
+    [super removePreferenceObservers];
+
     [self removeObserver:self forKeyPath:@"command"];
     [self removeObserver:self forKeyPath:@"refresh"];
     [self removeObserver:self forKeyPath:@"printMode"];
-    [super removePreferenceObservers];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if ([keyPath isEqualToString:@"enabled"])
     {
-        if (windowController) [self destroyLogProcess];
+        if (self.windowController) [self destroyLogProcess];
         if (![self.enabled boolValue]) return;
         
         [self createLogProcess];
         [self updateWindowIncludingTimer:YES];
     }
-    // check if our LogProcess is alive
-    else if (!windowController) return;
+    // if we aren't enabled, we don't need to bother with the rest: they are for updating the log window
+    else if (!self.enabled) return;
     else if ([keyPath isEqualToString:@"command"] || [keyPath isEqualToString:@"refresh"] || [keyPath isEqualToString:@"printMode"])
     {
         [self updateWindowIncludingTimer:YES];
     }
     else if ([keyPath isEqualToString:@"useAsciiEscapes"] || [keyPath isEqualToString:@"stringEncoding"])
     {
-        if (windowController && timer) [timer fire];
+        if (self.windowController && self.timer) [timer fire];
     }    
-    else
+    else if (![keyPath isEqualToString:@"name"])
     {
         [self updateWindowIncludingTimer:NO];
-    }
-    
-    // TODO: watch for infinite loop
-    if (postActivationRequest)
-    {
-        postActivationRequest = NO;
-        if(!highlightSender) return;
-        //[[self highlightSender] observeValueForKeyPath:@"selectedObjects" ofObject:self change:nil context:nil];
+        [self updatePreviewText];
     }
 }
 

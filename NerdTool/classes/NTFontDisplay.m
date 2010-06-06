@@ -99,7 +99,7 @@
     NSRectFillUsingOperation(NSInsetRect(myBounds,2,2),NSCompositeSourceOver);
     
     NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName,textColor,NSForegroundColorAttributeName,[defShadow autorelease],NSShadowAttributeName,nil];
-    NSAttributedString *attrString = [[[NSAttributedString alloc]initWithString:stringToPrint attributes:attrsDictionary] autorelease];
+    NSAttributedString *attrString = [[[NSAttributedString alloc] initWithString:stringToPrint attributes:attrsDictionary] autorelease];
     NSSize attrSize = [attrString size];
     
     [attrString drawAtPoint:NSMakePoint(((attrSize.width / -2) + myBounds.size.width / 2),(attrSize.height / -2) + (myBounds.size.height / 2))];
@@ -166,6 +166,7 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     [self setNeedsDisplay:YES];
+    
 }
 
 - (void)dealloc

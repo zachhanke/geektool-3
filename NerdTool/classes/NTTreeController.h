@@ -24,10 +24,12 @@
 #import <Cocoa/Cocoa.h>
 
 typedef enum {
-    NTLogOperatorNothing     = 1 << 0,
-    NTLogOperatorReorderLogs = 1 << 1,
-    NTLogOperatorCreateLogs  = 1 << 2,
-    NTLogOperatorDestroyLogs = 1 << 3
+    NTLogOperatorNothing          = 1 << 0,
+    NTLogOperatorReorderLogs      = 1 << 1,
+    NTLogOperatorCreateLogs       = 1 << 2,
+    NTLogOperatorDestroyLogs      = 1 << 3,
+    NTLogOperatorHighlightLogs    = 1 << 4,
+    NTLogOperatorUnhighlightLogs  = 1 << 5
 } NSLogOperator;
 
 

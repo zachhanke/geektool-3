@@ -23,8 +23,10 @@
 #import <Cocoa/Cocoa.h>
 #import "NTLog.h"
 
-@interface NTTextBasedLog : NTLog {
-
+@interface NTTextBasedLog : NTLog
+{
+    NSMutableString *lastRecievedString;
+    NSAttributedString *colorTestString;
 }
 
 // Core Data Properties
@@ -68,6 +70,25 @@
 @property (nonatomic, retain) NSNumber * textDropShadow;
 @property (nonatomic, retain) NSNumber * useAsciiEscapes;
 @property (nonatomic, retain) NSNumber * wrap;
+
+// Standard properties
+@property (retain) NSMutableString *lastRecievedString;
+@property (copy) NSAttributedString *colorTestString;
+
+- (void)awakeFromInsert;
+- (void)setupPreferenceObservers;
+- (void)removePreferenceObservers;
+- (void)destroyLogProcess;
+- (void)updateWindowIncludingTimer:(BOOL)updateTimer;
+- (IBAction)attemptBestWindowSize:(id)sender;
+// Custom ANSI Colors
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context;
+- (NSArray*)colorNames;
+- (NSDictionary*)customAnsiColors;
+- (NSArray*)ansiFgColors;
+- (NSArray*)ansiBgColors;
+- (NSArray*)ansiBgBrightColors;
+- (NSArray*)ansiFgBrightColors;
 
 @end
 
