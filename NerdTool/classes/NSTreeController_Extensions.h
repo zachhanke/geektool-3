@@ -38,7 +38,9 @@
 - (void)selectNone;
 - (NSArray *)rootNodes;
 - (NSTreeNode *)nodeAtIndexPath:(NSIndexPath *)indexPath;
+- (NSArray *)flattenedContentForRoots:(NSArray *)rootNodes;
 - (NSArray *)flattenedContent;
+- (NSArray *)flattenedNodesForRoots:(NSArray *)rootNodes;
 - (NSArray *)flattenedNodes;
 - (NSTreeNode *)nextSiblingOfNodeAtIndexPath:(NSIndexPath *)indexPath;
 - (NSTreeNode *)nextSiblingOfNode:(NSTreeNode *)node;

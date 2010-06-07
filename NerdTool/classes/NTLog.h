@@ -111,8 +111,8 @@
 // KVC
 - (void)setTask:(NSTask*)newTask;
 // Window Management
-- (void)setHighlighted:(BOOL)val from:(id)sender;
-- (void)front;
+- (BOOL)setHighlighted:(BOOL)val from:(id)sender;
+- (BOOL)front;
 // Convience
 - (NSRect)screenToRect:(NSRect)appleCoordRect;
 - (NSRect)rect;

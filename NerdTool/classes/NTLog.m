@@ -91,7 +91,7 @@
 - (void)updateWindowIncludingTimer:(BOOL)updateTimer
 {
     // exit if we don't have a window
-    if (!self.window) return;
+    if (!self.windowController) return;
     
     // change the window size
     NSRect newRect = [self screenToRect:[self rect]];
@@ -213,7 +213,7 @@
 #pragma mark Process Creation/Destruction
 - (BOOL)createLogProcess
 {   
-    if (![self createWindow]) return FALSE; // if we didn't create a window, bail
+    if (![self createWindow]) {NSLog(@"Window already created: %@",self); return FALSE;} // if we didn't create a window, bail
     [self createEnv];
     [self setupProcessObservers];
     return TRUE;
@@ -221,7 +221,7 @@
 
 - (BOOL)destroyLogProcess
 {    
-    if (![self destroyWindow]) return FALSE; // if we didn't destroy a window, bail
+    if (![self destroyWindow]) {NSLog(@"Window already destroyed: %@",self); return FALSE;} // if we didn't destroy a window, bail
     [self destroyEnv];
     [self removeProcessObservers];
     
@@ -238,6 +238,8 @@
     self.windowController = [[NSWindowController alloc] initWithWindowNibName:[self displayNibName]];    
     self.window = (LogWindow *)[windowController window];
     window.parentLog = self;
+    
+    [self.window display];
     return TRUE;
 }
 
@@ -259,6 +261,7 @@
     NSString *appendedPath = [NSString stringWithFormat:@"%@:%@",[[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,NSUserDomainMask,YES) objectAtIndex:0] stringByAppendingPathComponent:[info processName]],[tmpEnv objectForKey:@"PATH"]];
     [tmpEnv setObject:appendedPath forKey:@"PATH"]; 
     [tmpEnv setObject:@"xterm-color" forKey:@"TERM"];
+    [tmpEnv setObject:@"1" forKey:@"NERDTOOL"];
     
     self.env = tmpEnv;
     [tmpEnv release];
@@ -314,15 +317,18 @@
 }
 
 #pragma mark Window Management
-- (void)setHighlighted:(BOOL)val from:(id)sender
+- (BOOL)setHighlighted:(BOOL)val from:(id)sender
 {
-    if (!self.windowController && self.enabled) [self createLog];
+    if (!self.windowController) return FALSE;
     [[self window] setHighlighted:val];
+    return TRUE;
 }
 
-- (void)front
+- (BOOL)front
 {
-    [window orderFront:self];
+    if (!self.windowController) return FALSE;
+    [self.window orderFront:self];
+    return TRUE;
 }
 
 #pragma mark  

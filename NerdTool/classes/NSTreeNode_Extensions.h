@@ -37,6 +37,7 @@
 - (NSArray *)descendants;
 - (NSArray *)groupDescendants;
 - (NSArray *)leafDescendants;
+- (NSArray *)enabledLeafDescendantRepObjs;
 - (NSArray *)siblings;
 - (BOOL)isDescendantOfNode:(NSTreeNode *)node;
 - (BOOL)isSiblingOfNode:(NSTreeNode *)node;

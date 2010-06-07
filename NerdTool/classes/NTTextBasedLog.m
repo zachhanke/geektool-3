@@ -77,6 +77,11 @@
 @synthesize lastRecievedString;
 @synthesize colorTestString;
 
+- (void)awakeFromFetch
+{
+    [super awakeFromFetch];
+}
+
 - (void)awakeFromInsert
 {
     [super awakeFromInsert];
@@ -125,6 +130,8 @@
 - (void)setupPreferenceObservers
 {
     [super setupPreferenceObservers];
+    
+    [self updatePreviewText];
     
     [self addObserver:self forKeyPath:@"font" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"stringEncoding" options:0 context:NULL];

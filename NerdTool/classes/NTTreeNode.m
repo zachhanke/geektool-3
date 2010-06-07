@@ -48,5 +48,4 @@
 {
     return [NSString stringWithFormat: @"%@ :[%@] %@",[self className],[self.enabled boolValue] ? @"X" : @" ", self.name];
 }
-
 @end

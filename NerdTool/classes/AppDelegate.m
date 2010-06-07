@@ -106,9 +106,9 @@ NSString *NTTreeNodeType = @"NTTreeNodeType";
     // see if RO process is running (and kill it if it is)
     // returns 0 if not running
     // returns 1 if it is running (or more accurately, was running)
-    NSString *resourcePath = [[NSBundle mainBundle]resourcePath];
+    NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
     NSString *shellCommand = [resourcePath stringByAppendingPathComponent:@"killROProcess.sh"];
-    NSTask *task = [[NSTask alloc]init];
+    NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:@"/bin/sh"];
     // needed to keep xcode's console working
     [task setStandardInput:[NSPipe pipe]];

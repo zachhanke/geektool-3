@@ -85,15 +85,16 @@
 // all the NSTreeNodes in the tree, depth-first searching
 - (NSArray *)flattenedNodes;
 {
-	NSMutableArray *mutableArray = [NSMutableArray array];
+    NSMutableArray *mutableArray = [NSMutableArray array];
 	for (NSTreeNode *node in [self rootNodes]) {
 		[mutableArray addObject:node];
 		if (![[node valueForKey:[self leafKeyPath]] boolValue])
 			[mutableArray addObjectsFromArray:[node valueForKey:@"descendants"]];
 	}
-	return [[mutableArray copy] autorelease];	
+	return [[mutableArray copy] autorelease];	    
 }
 
+#pragma mark  
 - (NSTreeNode *)treeNodeForObject:(id)object;
 {
 	NSTreeNode *treeNode = nil;

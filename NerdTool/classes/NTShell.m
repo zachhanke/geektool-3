@@ -117,16 +117,8 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([keyPath isEqualToString:@"enabled"])
-    {
-        if (self.windowController) [self destroyLogProcess];
-        if (![self.enabled boolValue]) return;
-        
-        [self createLogProcess];
-        [self updateWindowIncludingTimer:YES];
-    }
     // if we aren't enabled, we don't need to bother with the rest: they are for updating the log window
-    else if (!self.enabled) return;
+    if (!self.enabled) return;
     else if ([keyPath isEqualToString:@"command"] || [keyPath isEqualToString:@"refresh"] || [keyPath isEqualToString:@"printMode"])
     {
         [self updateWindowIncludingTimer:YES];
@@ -135,7 +127,7 @@
     {
         if (self.windowController && self.timer) [timer fire];
     }    
-    else if (![keyPath isEqualToString:@"name"])
+    else
     {
         [self updateWindowIncludingTimer:NO];
         [self updatePreviewText];
@@ -149,7 +141,7 @@
     
     if (updateTimer)
     {
-        self.arguments = [NSArray arrayWithObjects:@"-c",self.command,nil];
+        self.arguments = [NSArray arrayWithObjects:@"-l",@"-c",self.command,nil];
         [[window textView] setString:@""];
         [self updateTimer];
     }    
@@ -201,7 +193,7 @@
     
     oldPrintMode = [self.printMode intValue];
     
-    [task setLaunchPath:@"/bin/sh"];
+    [task setLaunchPath:@"/bin/bash"];
     [task setArguments:[self arguments]];
     [task setEnvironment:[self env]];
     [task setStandardInput:[NSPipe pipe]]; // needed to keep xcode's console working
