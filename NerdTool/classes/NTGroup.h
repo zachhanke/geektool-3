@@ -36,4 +36,6 @@
 @property (retain) NSNumber *isExpanded;
 @property (retain) NSNumber *isSpecialGroup;
 
+- (void)destroyLogProcess;
+
 @end

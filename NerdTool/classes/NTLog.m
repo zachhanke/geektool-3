@@ -115,7 +115,7 @@
     [self createLog];
 }
 
-// this function as the -init method. This represents a log that is ready to go and interacted with, though not necessarily selected or enabled. For that, see -createLogProcess
+// this function as the -init method. This represents a log that is ready to go and interacted with, though not necessarily selected, enabled, or visible. For that, see -createLogProcess
 - (void)createLog
 {
     self.windowController = nil;
@@ -216,6 +216,7 @@
     if (![self createWindow]) {NSLog(@"Window already created: %@",self); return FALSE;} // if we didn't create a window, bail
     [self createEnv];
     [self setupProcessObservers];
+    
     return TRUE;
 }
 
@@ -232,14 +233,16 @@
 }
 
 #pragma mark Window Creation/Destruction
+
+// create a window for the log to use. 
 - (BOOL)createWindow
 {
     if (self.windowController) return FALSE;
     self.windowController = [[NSWindowController alloc] initWithWindowNibName:[self displayNibName]];    
     self.window = (LogWindow *)[windowController window];
     window.parentLog = self;
-    
     [self.window display];
+    
     return TRUE;
 }
 
@@ -254,8 +257,6 @@
 #pragma mark Environment Creation/Destruction
 - (void)createEnv
 {
-    // TODO: make this env the same as a login env, with all the paths from approprite rc files
-    // append app support folder to shell PATH
     NSProcessInfo *info = [NSProcessInfo processInfo];
     NSMutableDictionary *tmpEnv = [[info environment] mutableCopy];
     NSString *appendedPath = [NSString stringWithFormat:@"%@:%@",[[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,NSUserDomainMask,YES) objectAtIndex:0] stringByAppendingPathComponent:[info processName]],[tmpEnv objectForKey:@"PATH"]];

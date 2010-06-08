@@ -38,6 +38,9 @@
 @property (nonatomic, retain) NTTreeNode * parent;
 
 - (NSArray *)descendants;
+- (void)destroyLogProcess;
+- (void)createLogProcess;
+
 @end
 
 @interface NTTreeNode (CoreDataGeneratedAccessors)
@@ -45,5 +48,4 @@
 - (void)removeChildrenObject:(NTTreeNode *)value;
 - (void)addChildren:(NSSet *)value;
 - (void)removeChildren:(NSSet *)value;
-
 @end

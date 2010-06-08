@@ -48,4 +48,15 @@
 {
     return [NSString stringWithFormat: @"%@ :[%@] %@",[self className],[self.enabled boolValue] ? @"X" : @" ", self.name];
 }
+
+- (void)createLogProcess
+{
+    NSAssert(YES,@"Method was not overwritten: `createLogProcess'");
+}
+
+- (void)destroyLogProcess
+{
+    NSAssert(YES,@"Method was not overwritten: `destroyLogProcess'");
+}
+
 @end

@@ -36,4 +36,9 @@
 	self.isLeaf = [NSNumber numberWithBool:NO];
 }
 
+- (void)destroyLogProcess
+{
+    [self.children makeObjectsPerformSelector:@selector(destroyLogProcess)];
+}
+
 @end
