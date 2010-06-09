@@ -213,6 +213,7 @@
 #pragma mark Process Creation/Destruction
 - (BOOL)createLogProcess
 {   
+    NSLog(@"Creating log process: %@",self);
     if (![self createWindow]) {NSLog(@"Window already created: %@",self); return FALSE;} // if we didn't create a window, bail
     [self createEnv];
     [self setupProcessObservers];
@@ -222,6 +223,7 @@
 
 - (BOOL)destroyLogProcess
 {    
+    NSLog(@"Destroying log process: %@",self);
     if (![self destroyWindow]) {NSLog(@"Window already destroyed: %@",self); return FALSE;} // if we didn't destroy a window, bail
     [self destroyEnv];
     [self removeProcessObservers];

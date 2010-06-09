@@ -102,19 +102,6 @@
     [self moveNodeWindows:enabledArray];
 }
 
-- (void)createAndDestroyLogsIfNecessary:(NSArray *)nodes
-{
-    for (NTLog *node in nodes)
-    {
-        if (![self _parentHierarchyEnabledForItem:node]) [node destroyLogProcess];
-        else if ([node.enabled boolValue])
-        {
-            if (![node createLogProcess]) break;
-            [node updateWindowIncludingTimer:YES];
-        }
-    }
-}
-
 - (void)_updateSortOrderOfModelObjects
 {
 	for (NSTreeNode *node in [self flattenedNodes])
@@ -200,14 +187,15 @@
         [prefsView addSubview:[firstItem loadPrefsViewAndBind:object]];
     }
     // when we add/remove/rearrange an item
-    
     else if([keyPath isEqualToString:@"arrangedObjects"])
     {
         static BOOL once = FALSE;
         if (once) return;
         once = TRUE;
-        NSArray *enabledItems = [self _allEnabledLogs];                
-        [self operateOnNTLogArray:enabledItems withOptions:(NTLogOperatorCreateLogs | NTLogOperatorReorderLogs) refLog:nil direction:NSWindowAbove];
+        
+        NSArray *logArray = [self _allLogs];
+        [self createAndDestroyLogsIfNecessary:logArray];
+        [self moveNodeWindows:logArray];
     }
     // when something is enabled/disabled
     else if([keyPath isEqualToString:@"enabled"])
@@ -242,6 +230,19 @@
 
 @implementation NTTreeController(LogManipulation)
 
+- (void)createAndDestroyLogsIfNecessary:(NSArray *)nodes
+{
+    for (NTLog *node in nodes)
+    {
+        if (![self _parentHierarchyEnabledForItem:node]) [node destroyLogProcess];
+        else if ([node.enabled boolValue])
+        {
+            if (![node createLogProcess]) continue;
+            [node updateWindowIncludingTimer:YES];
+        }
+    }
+}
+
 // TODO: GCD Blocking canidate
 // Be careful; there are relationships between the elements of the array. If anything, the logs can be created/destroyed in parallel, but need to be reordered serially.
 - (void)operateOnNTLogArray:(NSArray *)logItems withOptions:(NSLogOperator)options refLog:(NTLog *)refLog direction:(NSWindowOrderingMode)direction
@@ -251,7 +252,7 @@
     {
         if (NTLogOperatorCreateLogs & options)
         {
-            if (![log createLogProcess]) break;
+            if (![log createLogProcess]) continue;
             [log updateWindowIncludingTimer:YES];
         }
         if (NTLogOperatorDestroyLogs & options) [log destroyLogProcess];
@@ -371,26 +372,30 @@
 
 @implementation NTTreeController (TreeAccessors)
 
+// an array of all NTLog objects (sorted)
+- (NSArray *)_allLogs
+{
+    return [self _leafDescendantRepObjsForNodes:[self rootNodes]];
+}
+
 // an array of all enabled NTLog objects (sorted)
 - (NSArray *)_allEnabledLogs
 {
     return [self _enabledLeafDescendantRepObjsForNodes:[self rootNodes]];
 }
 
-// a (sorted) array of all NTLog objects that descend from the NTGroup `group'
-- (NSArray *)_leafDescendantRepObjsForGroup:(NTGroup *)group
+#pragma mark Node Leaf Descendants
+// a (sorted) array of all NTLog objects that descend from the array of NTTreeNode `nodes'
+- (NSArray *)_leafDescendantRepObjsForNodes:(NSArray *)nodes
 {
-    NSTreeNode *groupTreeNode = [self treeNodeForObject:group];
-    return [[groupTreeNode leafDescendants] valueForKey:@"representedObject"];
-}
-
-// a (sorted) array of all enabled NTLog objects that descend from the NTGroup `group', provided that the parent hierarchy is also enabled
-- (NSArray *)_enabledDescendantLogsForGroup:(NTGroup *)group
-{
-    if (![self _parentHierarchyEnabledForItem:group]) return nil; // bail early if our hierarchy isn't enabled
+    NSMutableArray *array = [NSMutableArray array];
+    for (NSTreeNode *item in nodes)
+    {
+		if ([item isLeaf]) [array addObject:[item representedObject]];
+		else [array addObjectsFromArray:[self _leafDescendantRepObjsForNodes:[item childNodes]]];      
+    }
     
-    NSTreeNode *groupTreeNode = [self treeNodeForObject:group];
-    return [self _enabledLeafDescendantRepObjsForNodes:[NSArray arrayWithObject:groupTreeNode]];
+    return [[array copy] autorelease];
 }
 
 // a (sorted) array of all enabled NTLog objects that descend from the array of NTTreeNode `nodes', provided that the parent hierarchy is also enabled
@@ -411,17 +416,23 @@
 	return [[array copy] autorelease];    
 }
 
-- (NSArray *)_leafDescendantRepObjsForNodes:(NSArray *)nodes
+#pragma mark Group Leaf Descendants
+// a (sorted) array of all NTLog objects that descend from the NTGroup `group'
+- (NSArray *)_leafDescendantRepObjsForGroup:(NTGroup *)group
 {
-    NSMutableArray *array = [NSMutableArray array];
-    for (NSTreeNode *item in nodes)
-    {
-		if ([item isLeaf]) [array addObject:[item representedObject]];
-		else [array addObjectsFromArray:[self _leafDescendantRepObjsForNodes:[item childNodes]]];      
-    }
-    
-    return [[array copy] autorelease];
+    NSTreeNode *groupTreeNode = [self treeNodeForObject:group];
+    return [[groupTreeNode leafDescendants] valueForKey:@"representedObject"];
 }
+
+// a (sorted) array of all enabled NTLog objects that descend from the NTGroup `group', provided that the parent hierarchy is also enabled
+- (NSArray *)_enabledDescendantLogsForGroup:(NTGroup *)group
+{
+    if (![self _parentHierarchyEnabledForItem:group]) return nil; // bail early if our hierarchy isn't enabled
+    
+    NSTreeNode *groupTreeNode = [self treeNodeForObject:group];
+    return [self _enabledLeafDescendantRepObjsForNodes:[NSArray arrayWithObject:groupTreeNode]];
+}
+
 
 @end
 

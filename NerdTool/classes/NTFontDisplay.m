@@ -40,16 +40,24 @@
     NSColor *textColor = [NSColor whiteColor];
     NSShadow *defShadow = nil;    
     NSString *stringToPrint = [NSString stringWithString:NSLocalizedString(@"No Selection",nil)];
+    
     BOOL printLabel = NO;
     id firstItem = nil;
     
+    BOOL uniformFont = YES;
+    BOOL uniformShadow = YES;
+    BOOL uniformTextColor = YES;
+    BOOL uniformBackgroundColor = YES;
+    
+    // do we have something selected?
     if ([[treeController selectedObjects] count])
     {
         printLabel = YES;
         firstItem = [[treeController selectedObjects] objectAtIndex:0];
     }
     
-    for (id item in [treeController selectedObjects])
+    // pulling attributes from selection and handling multiple selections 
+    for (NTTreeNode *item in [treeController selectedObjects])
     {
         // have we selected a group?
         if ([item isKindOfClass:[NTGroup class]])
@@ -59,7 +67,7 @@
             break;
         }
         
-        // can the selected items share the preference view?
+        // have we selected a text-based log?
         if (![item isKindOfClass:[NTTextBasedLog class]])
         {
             stringToPrint = [NSString stringWithString:NSLocalizedString(@"Not Applicable",nil)];
@@ -67,27 +75,48 @@
             break;
         }
         
-        if (![[firstItem valueForKey:@"font"] isEqual:[item valueForKey:@"font"]])
+        // check font consistancy
+        if (uniformFont && ![[firstItem valueForKey:@"font"] isEqual:[item valueForKey:@"font"]])
         {
-            stringToPrint = [NSString stringWithString:NSLocalizedString(@"Multiple Values",nil)];
-            printLabel = NO;
-            break;                
+            uniformFont = NO;
+            stringToPrint = [NSString stringWithString:NSLocalizedString(@"Multiple Fonts",nil)];
         }
+                
+        // check shadow consistancy
+        if (uniformShadow && [[firstItem valueForKey:@"textDropShadow"] boolValue] != [[item valueForKey:@"textDropShadow"] boolValue])
+        {
+            uniformShadow = NO;
+        }
+        
+        // check text color consistancy
+        if (uniformTextColor && ![[firstItem valueForKey:@"textColor"] isEqual:[item valueForKey:@"textColor"]])
+        {
+            uniformTextColor = NO;
+        }
+        
+        // check background color consistancy
+        if (uniformBackgroundColor && ![[firstItem valueForKey:@"backgroundColor"] isEqual:[item valueForKey:@"backgroundColor"]])
+        {
+            uniformBackgroundColor = NO;
+        }        
         
     }
     
     if (printLabel)
     {
-        font = [firstItem valueForKey:@"font"];
-        backgroundColor = [firstItem valueForKey:@"backgroundColor"];
-        textColor = [firstItem valueForKey:@"textColor"];
-        if ([[firstItem valueForKey:@"textDropShadow"] boolValue])
+        if (uniformFont)
+        {
+            font = [firstItem valueForKey:@"font"];
+            stringToPrint = [NSString stringWithFormat:@"%@",[font displayName]];
+        }
+        if (uniformTextColor) textColor = [firstItem valueForKey:@"textColor"];
+        if (uniformBackgroundColor) backgroundColor = [firstItem valueForKey:@"backgroundColor"];
+        if (uniformShadow && [[firstItem valueForKey:@"textDropShadow"] boolValue])
         {
             defShadow = [[NSShadow alloc] init];
             [defShadow setShadowOffset:(NSSize){SHADOW_W,SHADOW_H}];
             [defShadow setShadowBlurRadius:SHADOW_RADIUS];
         }
-        stringToPrint = [NSString stringWithFormat:@"%@",[font displayName]];
     }
     
     
@@ -166,7 +195,6 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     [self setNeedsDisplay:YES];
-    
 }
 
 - (void)dealloc
