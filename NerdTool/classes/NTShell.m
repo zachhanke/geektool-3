@@ -117,8 +117,12 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    // if we aren't enabled, we don't need to bother with the rest: they are for updating the log window
-    if (!self.enabled) return;
+    if ([keyPath isEqualToString:@"effectiveEnabled"])
+    {
+        NSLog(@"[%@] Effective enabled (%i)",self,[self effectiveEnabled]);
+        if ([self effectiveEnabled]) [self createLogProcess];
+        else [self destroyLogProcess];
+    }
     else if ([keyPath isEqualToString:@"command"] || [keyPath isEqualToString:@"refresh"] || [keyPath isEqualToString:@"printMode"])
     {
         [self updateWindowIncludingTimer:YES];

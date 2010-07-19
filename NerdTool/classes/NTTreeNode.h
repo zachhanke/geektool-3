@@ -26,6 +26,8 @@
 
 @interface NTTreeNode : NSManagedObject
 {
+    NSNumber * parentHierarchyEnabled;
+    BOOL effectiveEnabled;
 }
 
 // Core Data Properties
@@ -37,7 +39,15 @@
 @property (nonatomic, retain) NSSet* children;
 @property (nonatomic, retain) NTTreeNode * parent;
 
-- (NSArray *)descendants;
+@property (copy) NSNumber * parentHierarchyEnabled;
+
+- (BOOL)effectiveEnabled;
+- (NSSet *)unorderedDescendants;
+- (NSSet *)_unorderedDescendants;
+- (NSArray *)orderedDescendants;
+- (NSArray *)_orderedDescendants;
+- (NSArray *)orderedEnabledDescendants;
+- (NSArray *)_orderedEnabledDescendants;
 - (void)destroyLogProcess;
 - (void)createLogProcess;
 

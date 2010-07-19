@@ -13,6 +13,7 @@
 		0A0BC2F41028AC5C00716B75 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A42234E1021300B0074C19D /* WebKit.framework */; };
 		0A0BC45E102A09A900716B75 /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0A0BC45D102A09A900716B75 /* readme.txt */; };
 		0A0BC46A102A0F0200716B75 /* changelog.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0A0BC469102A0F0200716B75 /* changelog.txt */; };
+		0A11F84211C08AFF00348842 /* NerdtoolDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0A11F84111C08AFF00348842 /* NerdtoolDataModel.xcdatamodeld */; };
 		0A1F659611B405D8001841A0 /* NTTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A1F659511B405D8001841A0 /* NTTreeController.m */; };
 		0A1F659711B405D8001841A0 /* NTTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A1F659511B405D8001841A0 /* NTTreeController.m */; };
 		0A1F659A11B405E0001841A0 /* NTTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A1F659911B405E0001841A0 /* NTTreeNode.m */; };
@@ -47,7 +48,6 @@
 		0A42234F1021300B0074C19D /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A42234E1021300B0074C19D /* WebKit.framework */; };
 		0A4223FF102130900074C19D /* webPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A4223FD102130900074C19D /* webPrefs.xib */; };
 		0A4226BE102285130074C19D /* NS(Attributed)String+Geometrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A4226BD102285130074C19D /* NS(Attributed)String+Geometrics.m */; };
-		0A4E504F10A3944B000653AF /* NerdtoolDataModel.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 0A4E504E10A3944B000653AF /* NerdtoolDataModel.xcdatamodel */; };
 		0A4E509C10A3E3DA000653AF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A4E508210A3E3D8000653AF /* CoreData.framework */; };
 		0A6CE8FA11B9890F005F175B /* NTGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A904BBF100D8EAC009A2F5E /* NTGroup.m */; };
 		0A7732ED1043138400F02243 /* NTUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A7732EB1043138400F02243 /* NTUtility.m */; };
@@ -137,6 +137,7 @@
 		0A0B6E8711B83D0900B436EF /* Nerdtool replacement.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = "Nerdtool replacement.icns"; path = "resources/Nerdtool replacement.icns"; sourceTree = "<group>"; };
 		0A0BC45D102A09A900716B75 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = readme.txt; path = resources/readme.txt; sourceTree = "<group>"; };
 		0A0BC469102A0F0200716B75 /* changelog.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = changelog.txt; path = resources/changelog.txt; sourceTree = "<group>"; };
+		0A11F84311C08AFF00348842 /* NerdtoolDataModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "NerdtoolDataModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		0A1F659411B405D8001841A0 /* NTTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTTreeController.h; path = classes/NTTreeController.h; sourceTree = "<group>"; };
 		0A1F659511B405D8001841A0 /* NTTreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTTreeController.m; path = classes/NTTreeController.m; sourceTree = "<group>"; };
 		0A1F659811B405E0001841A0 /* NTTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTTreeNode.h; path = classes/NTTreeNode.h; sourceTree = "<group>"; };
@@ -372,7 +373,7 @@
 		0A4E504D10A3941F000653AF /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				0A4E504E10A3944B000653AF /* NerdtoolDataModel.xcdatamodel */,
+				0A11F84111C08AFF00348842 /* NerdtoolDataModel.xcdatamodeld */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -761,7 +762,7 @@
 				0AB8A1F310154CF0006FE649 /* NTLog.m in Sources */,
 				0A791E981016BC31003F392D /* NTDroppableTextField.m in Sources */,
 				0A4226BE102285130074C19D /* NS(Attributed)String+Geometrics.m in Sources */,
-				0A4E504F10A3944B000653AF /* NerdtoolDataModel.xcdatamodel in Sources */,
+				0A11F84211C08AFF00348842 /* NerdtoolDataModel.xcdatamodeld in Sources */,
 				0A1F659711B405D8001841A0 /* NTTreeController.m in Sources */,
 				0A1F659B11B405E0001841A0 /* NTTreeNode.m in Sources */,
 				0A1F659F11B405EA001841A0 /* NTTextBasedLog.m in Sources */,
@@ -1045,6 +1046,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		0A11F84111C08AFF00348842 /* NerdtoolDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				0A4E504E10A3944B000653AF /* NerdtoolDataModel.xcdatamodel */,
+				0A11F84311C08AFF00348842 /* NerdtoolDataModel 2.xcdatamodel */,
+			);
+			currentVersion = 0A4E504E10A3944B000653AF /* NerdtoolDataModel.xcdatamodel */;
+			path = NerdtoolDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
 }

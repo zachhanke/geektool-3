@@ -34,6 +34,17 @@
 - (void)awakeFromInsert
 {
 	self.isLeaf = [NSNumber numberWithBool:NO];
+    self.parent = nil;
+}
+
+- (void)updateWindowIncludingTimer:(BOOL)updateTimer
+{
+    [self.children makeObjectsPerformSelector:@selector(updateWindowIncludingTimer:) withObject:updateTimer];
+}
+
+- (void)createLogProcess
+{
+    [self.children makeObjectsPerformSelector:@selector(createLogProcess)];
 }
 
 - (void)destroyLogProcess

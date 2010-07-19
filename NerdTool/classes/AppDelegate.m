@@ -235,6 +235,9 @@ NSString *NTTreeNodeType = @"NTTreeNodeType";
         NSString *applicationSupportFolder = nil;
         NSURL *url;
         NSError *error;
+        NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                                 [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
         
         fileManager = [NSFileManager defaultManager];
         applicationSupportFolder = [self applicationSupportFolder];
@@ -244,7 +247,7 @@ NSString *NTTreeNodeType = @"NTTreeNodeType";
         
         url = [NSURL fileURLWithPath:[applicationSupportFolder stringByAppendingPathComponent:[[NSString stringWithString:CORE_DATA_STORE_FILE] stringByAppendingString:@".xml"]]];
         persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-        if (![persistentStoreCoordinator addPersistentStoreWithType:NSXMLStoreType configuration:nil URL:url options:nil error:&error]) {
+        if (![persistentStoreCoordinator addPersistentStoreWithType:NSXMLStoreType configuration:nil URL:url options:options error:&error]) {
             [[NSApplication sharedApplication] presentError:error];
         }    
     }

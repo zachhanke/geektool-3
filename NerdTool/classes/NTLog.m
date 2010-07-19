@@ -91,7 +91,8 @@
 - (void)updateWindowIncludingTimer:(BOOL)updateTimer
 {
     // exit if we don't have a window
-    if (!self.windowController) return;
+    if (!self.windowController) {NSLog(@"[%@] >> Updating window failed. No window controller.",self); return;}
+    if (![self.windowController window]) {NSLog(@"[%@] >> Updating window failed. No window.",self); return;}
     
     // change the window size
     NSRect newRect = [self screenToRect:[self rect]];
@@ -107,11 +108,15 @@
 #pragma mark -
 - (void)awakeFromInsert
 {
+    [super awakeFromFetch];
+
     [self createLog];
 }
 
 - (void)awakeFromFetch
 {
+    [super awakeFromFetch];
+    
     [self createLog];
 }
 
@@ -123,21 +128,15 @@
     _visibleFrame = [[[NSScreen screens] objectAtIndex:0] frame];
     
     // the following are not in -setupPreferenceObservers because they should be always active as long as the log is
-    [self addObserver:self forKeyPath:@"name" options:0 context:NULL];
-    [self addObserver:self forKeyPath:@"enabled" options:0 context:NULL];
+    //[self addObserver:self forKeyPath:@"name" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"effectiveEnabled" options:0 context:NULL];
 }
 
 - (void)destroyLog
 {
-    [self removeObserver:self forKeyPath:@"name"];
-    [self removeObserver:self forKeyPath:@"enabled"];
+    //[self removeObserver:self forKeyPath:@"name"];
+    [self removeObserver:self forKeyPath:@"effectiveEnabled"];
     [self destroyLogProcess];
-}
-
-- (void)dealloc
-{
-    [self destroyLog];
-    [super dealloc];
 }
 
 #pragma mark Interface
@@ -213,8 +212,8 @@
 #pragma mark Process Creation/Destruction
 - (BOOL)createLogProcess
 {   
-    NSLog(@"Creating log process: %@",self);
-    if (![self createWindow]) {NSLog(@"Window already created: %@",self); return FALSE;} // if we didn't create a window, bail
+    NSLog(@"[%@] Creating log process.",self);
+    if (![self createWindow]) {NSLog(@"[%@] >> Log process creation failed. Window already created.",self); return FALSE;} // if we didn't create a window, bail
     [self createEnv];
     [self setupProcessObservers];
     
@@ -223,8 +222,8 @@
 
 - (BOOL)destroyLogProcess
 {    
-    NSLog(@"Destroying log process: %@",self);
-    if (![self destroyWindow]) {NSLog(@"Window already destroyed: %@",self); return FALSE;} // if we didn't destroy a window, bail
+    NSLog(@"[%@] Destroying log process",self);
+    if (![self destroyWindow]) {NSLog(@"[%@] >> Log process destruction failed. Window already destroyed.",self); return FALSE;} // if we didn't destroy a window, bail
     [self destroyEnv];
     [self removeProcessObservers];
     
@@ -245,6 +244,7 @@
     window.parentLog = self;
     [self.window display];
     
+    NSLog(@"[%@] >> Window created.", self);
     return TRUE;
 }
 
@@ -253,6 +253,8 @@
     if (!self.windowController) return FALSE;
     [windowController close];
     self.windowController = nil;
+    
+    NSLog(@"[%@] >> Window destroyed.", self);
     return TRUE;
 }
 

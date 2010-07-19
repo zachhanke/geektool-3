@@ -79,6 +79,7 @@
         if (uniformFont && ![[firstItem valueForKey:@"font"] isEqual:[item valueForKey:@"font"]])
         {
             uniformFont = NO;
+            printLabel = NO;
             stringToPrint = [NSString stringWithString:NSLocalizedString(@"Multiple Fonts",nil)];
         }
                 

@@ -28,7 +28,7 @@
 @class LogWindow;
 
 @interface NTLog : NTTreeNode
-{
+{    
     // log window creation
     NSWindowController *windowController;
     LogWindow *window;
