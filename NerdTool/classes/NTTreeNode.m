@@ -53,12 +53,15 @@
     else self.parentHierarchyEnabled = [NSNumber numberWithBool:FALSE];
     
     [self addObserver:self forKeyPath:@"parent" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"children" options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"enabled" options:0 context:NULL];
     [self addObserver:self forKeyPath:@"parentHierarchyEnabled" options:0 context:NULL];
 }
 
 - (void)destroyNode
 {
     [self removeObserver:self forKeyPath:@"parent"];
+    [self removeObserver:self forKeyPath:@"enabled"];
     [self removeObserver:self forKeyPath:@"parentHierarchyEnabled"];
 }
 
@@ -72,17 +75,17 @@
 {
     if([keyPath isEqualToString:@"parent"])
     {
-        
-        [[object children] makeObjectsPerformSelector:@selector(setParentHierarchyEnabled:) withObject:self.parentHierarchyEnabled];
+        //[[object children] makeObjectsPerformSelector:@selector(setParentHierarchyEnabled:) withObject:self.parentHierarchyEnabled];
     }
-    else if([keyPath isEqualToString:@"parentHierarchyEnabled"])
+    else if([keyPath isEqualToString:@"parentHierarchyEnabled"])// TODO working with enable around here. what does it need to do. Who should handle it?
     {
-        [[object children] makeObjectsPerformSelector:@selector(setParentHierarchyEnabled:) withObject:self.parentHierarchyEnabled];
+        //[[object children] makeObjectsPerformSelector:@selector(setParentHierarchyEnabled:) withObject:self.parentHierarchyEnabled];
     }
+    else if([keyPath isEqualToString:@"children"]){}
     else [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
-
+/*
 + (NSSet *)keyPathsForValuesAffectingParent
 {
     return [NSSet setWithObjects:@"children", nil];
@@ -91,32 +94,64 @@
 + (NSSet *)keyPathsForValuesAffectingEffectiveEnabled
 {
     return [NSSet setWithObjects:@"parentHierarchyEnabled", @"enabled", nil];
-}
+}*/
 
 #pragma mark Children
+/**
+ * @returns ordered (sorted) array of the object's children
+ */
 - (NSArray *)sortedChildren
 {
+    NSSet *children = [self children];
+    return [self sortSet:children];
+}
+
+/**
+ * @returns ordered (sorted) array of the object's enabled children
+ */
+- (NSArray *)sortedEnabledChildren
+{
+    NSSet *enabledChildren = [[self children] objectsPassingTest:[self objectEnabled]];
+    return [self sortSet:enabledChildren];
+}
+
+/**
+ * @returns sorts a set into an array using the property `sortIndex'
+ */
+- (NSArray *)sortSet:(NSSet *)set
+{
     NSArray *sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"sortIndex" ascending:YES]];
-    return [[self children] sortedArrayUsingDescriptors:sortDescriptors];
+    return [set sortedArrayUsingDescriptors:sortDescriptors];
+}
+
+/**
+ * A GCD Block statement to find objects that are enabled
+ */
+- (BOOL (^)(id obj, BOOL *stop))objectEnabled
+{
+    return [[^(id obj, BOOL *stop)
+             {
+                 if ([[obj enabled] boolValue])
+                 {
+                     *stop = YES;
+                     return YES;
+                 }
+                 return NO;
+             } copy] autorelease];
 }
 
 #pragma mark Descendants
-/*
- * NOTE: The reason that these descendants functions include `self' is to avoid creating a proxy object. The function names are somewhat misleading, as it implies that you be your own child.
- * We are trying to get a flat list of NTLogs. With this inclusive implementation, I can call an array of NTTreeNodes and get my flat NTLog list. The alternative to this is creating a proxy NTGroup, point it's children to the NTTreeNode array, and then call -descendants (non-inclusive flavor). This would restore the meaning of `descendant', but when I tried to implement it, I felt the creation of the proxy object was very shady with all the MO stuff going on. I really don't care about keeping track of my changes this proxy object does; I just want access to the functions.
- * Hopefully, my reasoning makes sense to everyone.
+
+/**
+ * Returns unordered set of all leaf descendants (NTLogs). If none exist, an
+ * empty set is returned.
+ *
+ * @returns unordered set of all leaf descendants (NTLogs)
  */
-// Returns an unordered set of all leaf descendants (NTLogs). Inclusive. If none exist, nil is returned.
 - (NSSet *)unorderedDescendants
 {
-    // This is why the fn is inclusive. Return self if it's a leaf.
-    if ([[self isLeaf] boolValue]) return [NSSet setWithObject:self];
-    return [self _unorderedDescendants];
-}
-
-- (NSSet *)_unorderedDescendants
-{
 	NSMutableSet *set = [NSMutableSet set];
+
 	for (NTTreeNode *child in [self children])
     {
 		if ([[child isLeaf] boolValue]) [set addObject:child];
@@ -125,15 +160,18 @@
 	return [[set copy] autorelease];
 }
 
-// Returns an ordered set of all leaf descendants (NTLogs). Inclusive. If none exist, nil is returned.
+/**
+ * Returns an ordered (sorted) array of all leaf descendants (NTLogs). If none
+ * exist, an empty array is returned.
+ *
+ * For those of you clever folk, you CANNOT call -unorderedDescendants and then
+ * try to sort by `sortIndex'.  `sortIndex' is on a per child relationship, so a
+ * parent's children can have indicies of 1, 2, 3, 4, etc.  and the parent's
+ * children's children could also have indicies of 1, 2, 3, 4, etc.
+ *
+ * @returns Ordered (sorted) array of all leaf descendants (NTLogs).
+ */
 - (NSArray *)orderedDescendants
-{
-    // This is why the fn is inclusive. Return self if it's a leaf.
-    if ([[self isLeaf] boolValue]) return [NSArray arrayWithObject:self];
-    return [self _orderedDescendants];
-}
-
-- (NSArray *)_orderedDescendants
 {
     NSMutableArray *array = [NSMutableArray array];
     
@@ -145,30 +183,23 @@
 	return [[array copy] autorelease];    
 }
 
-// Returns an ordered set of all effective enabled leaf descendants (NTLogs). Inclusive. If none exist, nil is returned.
+/**
+ * Returns an ordered (sorted) array of all effective enabled leaf descendants
+ * (NTLogs). If none exist, an empty array is returned. 
+ *
+ * Like the unordered situation, you CANNOT use the -enabledDescendants and
+ * parse out the enabled bits. Actually, you could, but you would be traversing
+ * through the array twice (which is bad).  
+ *
+ * @returns Ordered (sorted) array of all effective enabled leaf descendants
+ * (NTLogs)
+ */
 - (NSArray *)orderedEnabledDescendants
-{
-    // If we are not enabled, then our descendants are also not enabled
-    if (![self.enabled boolValue]) return nil;
-
-    // If our parent hierarchy is not enabled, then neither are we, and hence, neither are our descendants
-    if (![self parentHierarchyEnabled]) return nil;
-    
-    // This is why the fn is inclusive. Return self if it's a leaf.
-    if ([[self isLeaf] boolValue]) return [NSArray arrayWithObject:self];
-        
-    return [self _orderedEnabledDescendants];
-}
-
-- (NSArray *)_orderedEnabledDescendants
 {
     NSMutableArray *array = [NSMutableArray array];
     
-    for (NTTreeNode *child in [self sortedChildren])
+    for (NTTreeNode *child in [self sortedEnabledChildren])
     {
-        // If the child is not enabled, go to the next one
-        if (![[child enabled] boolValue]) continue;
-        
         if ([[child isLeaf] boolValue]) [array addObject:child];
         else [array addObjectsFromArray:[child orderedEnabledDescendants]];
 	}

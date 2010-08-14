@@ -32,8 +32,7 @@
 
 // Core Data Properties
 @property (nonatomic, retain) NSNumber * enabled;
-@property (nonatomic, retain) NSNumber * isLeaf;
-@property (nonatomic, retain) NSNumber * isSelectable;
+@property (nonatomic, retain) NSNumber * isLeaf; @property (nonatomic, retain) NSNumber * isSelectable;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSNumber * sortIndex;
 @property (nonatomic, retain) NSSet* children;
@@ -41,15 +40,24 @@
 
 @property (copy) NSNumber * parentHierarchyEnabled;
 
+- (void)configureNode;
+- (void)destroyNode;
+
 - (BOOL)effectiveEnabled;
+
+- (NSSet *)children;
+- (NSArray *)sortedChildren;
+- (NSArray *)sortedEnabledChildren;
+
+- (NSArray *)sortSet:(NSSet *)set;
+- (BOOL (^)(id obj, BOOL *stop))objectEnabled;
+
 - (NSSet *)unorderedDescendants;
-- (NSSet *)_unorderedDescendants;
 - (NSArray *)orderedDescendants;
-- (NSArray *)_orderedDescendants;
 - (NSArray *)orderedEnabledDescendants;
-- (NSArray *)_orderedEnabledDescendants;
-- (void)destroyLogProcess;
+
 - (void)createLogProcess;
+- (void)destroyLogProcess;
 
 @end
 

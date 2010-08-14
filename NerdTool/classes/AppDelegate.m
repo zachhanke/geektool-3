@@ -60,6 +60,10 @@ NSString *NTTreeNodeType = @"NTTreeNodeType";
 - (BOOL)isLoginItem:(NSString*)path;
 @end
 
+/*
+ This class gives hooks for the user to interface with
+ */
+
 #pragma mark  
 @implementation AppDelegate
 

@@ -23,6 +23,9 @@
 
 #import "NTOutlineView.h"
 
+/*
+ This is the UI to view the tree
+ */
 
 @implementation NTOutlineView
 

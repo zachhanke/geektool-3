@@ -20,7 +20,7 @@
  * along with NerdTool.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// TODO plug original developer
+// TODO: plug original developer
 
 #import "NTTreeController.h"
 #import "NSTreeController_Extensions.h"
@@ -31,7 +31,7 @@
 #import "NTLog.h"
 #import "NTGroup.h"
 #import "NTTreeNode.h"
-
+#import "NTShell.h"
 
 @interface NTTreeController (Observer)
 @end
@@ -49,50 +49,150 @@
 @end
 
 @interface NTTreeController (TreeAccessors)
-- (NSSet *)_unorderedAllLogs;
-- (NSArray *)_allLogs;
-- (NSArray *)_allEnabledLogs;
+- (NSSet *)_allLogsUnordered;
+- (NSArray *)_allLogsOrdered;
+- (NSArray *)_allLogsEnabled;
 - (NSSet *)_unorderedLogsIn:(NSSet *)ntNodes;
-- (NSArray *)_logsIn:(NSArray *)ntNodes;
+- (NSArray *)_orderedLogsIn:(NSArray *)ntNodes;
 - (NSArray *)_enabledLogsIn:(NSArray *)ntNodes;
 
-- (NSArray *)_leafDescendantRepObjsForNodes:(NSArray *)nodes;
-- (NSArray *)_enabledLeafDescendantRepObjsForNodes:(NSArray *)nodes;
-- (NSArray *)_leafDescendantRepObjsForGroup:(NTGroup *)group;
-- (NSArray *)_enabledDescendantLogsForGroup:(NTGroup *)group;
-- (NSArray *)_leafDescendantRepObjsForNTNodes:(NSArray *)ntNodes;
+- (NSArray *)_descendantLogsForNodes:(NSArray *)nodes;
+- (NSArray *)_enabledDescendantLogsForNodes:(NSArray *)nodes;
+- (NSArray *)_NTLogsBeneathGroup:(NTGroup *)group;
+- (NSArray *)_enabledNTLogsBeneathGroup:(NTGroup *)group;
+- (NSArray *)_descendantLogsForNTNodes:(NSArray *)ntNodes;
 - (NSSet *)_unorderedLeafDescendantForNTNodes:(NSSet *)ntNodes;
 - (NSArray *)_leafDescendantRepObjsForIndexPaths:(NSArray *)indexPaths;
 @end
 
-
+/**
+ * Responsible for managing the tree. Adding object(s), deleting object(s), moving object(s).
+ * It should also be able to list the contents of the tree in a simple manner.
+ * Because this class moves the logs around, it should also maintain the order
+ */
 @implementation NTTreeController
 
 @synthesize previousSelectedLogs;
 
 #pragma mark Content Modifiers
+
+// Generates root node if we need one. Returns TRUE if it generated one, FALSE if one was already there.
+- (BOOL)generateRootObject
+{
+    BOOL generated = NO;
+    int rootNodes = [self numberOfRootNodes];
+    
+    if (rootNodes <= 0)
+    {
+        // TODO: should set parent of existing nodes to ROOT
+        NTGroup *root = [NSEntityDescription insertNewObjectForEntityForName:@"Group" inManagedObjectContext:[self managedObjectContext]];
+        root.name = @"ROOT";
+        root.isSpecialGroup = [NSNumber numberWithBool:YES];
+        [self insertObject:root atArrangedObjectIndexPath:[NSIndexPath indexPathWithIndex:0]];	
+        generated = TRUE;
+    }
+    else if (rootNodes > 1)
+    {
+        [NSException raise:@"MyException" format:@"There are more than one root nodes!"];
+    }
+
+    return generated;
+}
+
+- (int)numberOfRootNodes
+{
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"Group" inManagedObjectContext:[self managedObjectContext]]];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"isSpecialGroup == 1"]]; 
+    
+    NSError *error = nil;
+    int rootNodes = [[self managedObjectContext] countForFetchRequest:request error:&error];
+    
+    [request release];
+    return rootNodes;
+}
+
+- (NTGroup*)rootNode
+{
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"Group" inManagedObjectContext:[self managedObjectContext]]];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"isSpecialGroup == 1"]];
+    
+    NSError* error = nil;
+    NSArray* managedObjects = [[self managedObjectContext] executeFetchRequest:request error:&error];
+
+    if(!managedObjects)
+    {
+        [NSException raise:@"MyException" format:@"Error occurred during fetch: %@",error];
+    }
+    
+    NTGroup* rootItem = nil;
+    if([managedObjects count]) rootItem = [managedObjects objectAtIndex:0];
+    
+    [request release];
+    return rootItem;
+}
+
+/**
+ * Inserts NTTreeNode `object' at NSIndexPath `indexPath'.
+ * @param[in] object The object to insert. A solid NTTreeNode object (NTLog or NTGroup)
+ * @param[in] indexPath Index path to insert object.
+ */
 - (void)insertObject:(id)object atArrangedObjectIndexPath:(NSIndexPath *)indexPath;
 {
+    if([indexPath length] == 1)
+    {
+        NTGroup *rootItem = [self rootNode];        
+        if (!rootItem) [NSException raise:@"MyException" format:@"Could not find root note!"];
+        ((NTTreeNode*)object).parent = rootItem;
+    }
+    
 	[super insertObject:object atArrangedObjectIndexPath:indexPath];
 	[self _updateSortOrderOfModelObjects];
     
-    NSArray *objectArray = [self _leafDescendantRepObjsForNTNodes:[NSArray arrayWithObject:object]];
+    // TODO: objects should create themselves KVO on effectiveenabled
+    //NSArray *objectArray = [self _orderedLogsIn:[NSArray arrayWithObject:object]];
+    //[self createAndDestroyLogsIfNecessary:objectArray];
     
-    [self createAndDestroyLogsIfNecessary:objectArray];
-    [self moveNodeWindows:objectArray];    
+    // make sure that log windows are moved after their windos have been
+    // initialized. Otherwise, we "move" the windows, then create them
+    //[self moveNodeWindows:objectArray];
 }
 
+/**
+ * Inserts multiple NTTreeNode `objects' at multiple NSIndexPath's `indexPaths'.
+ * @param[in] objects An array of solid NTTreeNode objects (NTLog or NTGroup) to insert.
+ * @param[in] indexPath An array of index paths to insert objects.
+ */
 - (void)insertObjects:(NSArray *)objects atArrangedObjectIndexPaths:(NSArray *)indexPaths;
 {
+    NTGroup *rootItem = [self rootNode];
+    for (NSIndexPath *path in indexPaths)
+    {
+        if ([path length] == 1)
+        {
+            static NSUInteger i = 0;
+            id object = [objects objectAtIndex:i];
+            if (!rootItem) [NSException raise:@"MyException" format:@"Could not find root note!"];
+            ((NTTreeNode*)object).parent = rootItem;
+            i++;
+        }
+    }
 	[super insertObjects:objects atArrangedObjectIndexPaths:indexPaths];
 	[self _updateSortOrderOfModelObjects];
 
-    NSArray *objectArray = [self _leafDescendantRepObjsForNTNodes:objects];
+    // TODO: objects should create themselves KVO on effectiveenabled
+    //NSArray *objectArray = [self _orderedLogsIn:objects];    
+    //[self createAndDestroyLogsIfNecessary:objectArray];
     
-    [self createAndDestroyLogsIfNecessary:objectArray];
-    [self moveNodeWindows:objectArray];    
+    //[self moveNodeWindows:objectArray];    
 }
 
+/**
+ * Removes object located at NSIndexPath `indexPath'.
+ * This function should not be called directly.
+ * @param[in] indexPath NSIndexPath to object to remove
+ */
 - (void)removeObjectAtArrangedObjectIndexPath:(NSIndexPath *)indexPath;
 {
     NSArray *objectArray = [self _leafDescendantRepObjsForIndexPaths:[NSArray arrayWithObject:indexPath]];
@@ -103,6 +203,11 @@
     [objectArray makeObjectsPerformSelector:@selector(destroyLog)];
 }
 
+/**
+ * Removes objects located at NSIndexPath's `indexPaths'.
+ * This function should not be called directly.
+ * @param[in] indexPaths NSArray of NSIndexPath's of objects to remove
+ */
 - (void)removeObjectsAtArrangedObjectIndexPaths:(NSArray *)indexPaths;
 {
     NSArray *objectArray = [self _leafDescendantRepObjsForIndexPaths:indexPaths];
@@ -113,25 +218,45 @@
     [objectArray makeObjectsPerformSelector:@selector(destroyLog)];    
 }
 
+/**
+ * Moves NSTreeNode `node' to NSIndexPath `indexPath'.
+ * @param[in] node NSTreeNode to move.
+ * @param[in] indexPath NSIndexPath of where to move `node'.
+ */
 - (void)moveNode:(NSTreeNode *)node toIndexPath:(NSIndexPath *)indexPath;
 {
 	[super moveNode:node toIndexPath:indexPath];
-	[self _updateSortOrderOfModelObjects];	
-}
-
-- (void)moveNodes:(NSArray *)nodes toIndexPath:(NSIndexPath *)indexPath;
-{
-	[super moveNodes:nodes toIndexPath:indexPath];
-    [self _updateSortOrderOfModelObjects];
+	[self _updateSortOrderOfModelObjects];
     
-    // !!!: uncomment
-    //NSArray *enabledArray = [self _enabledLeafDescendantRepObjsForNodes:nodes];
-    //NSArray *allArray = [self _leafDescendantRepObjsForNodes:nodes];
+    NSArray *enabledArray = [self _enabledDescendantLogsForNodes:[NSArray arrayWithObject:node]];
+    NSArray *allArray = [self _descendantLogsForNodes:[NSArray arrayWithObject:node]];
     
     //[self createAndDestroyLogsIfNecessary:allArray];
     //[self moveNodeWindows:enabledArray];
 }
 
+/**
+ * Moves all NSTreeNodes `nodes' to NSIndexPath `indexPath'.
+ * @param[in] nodes NSArray of NSTreeNode's to move.
+ * @param[in] indexPath NSIndexPath of where to move `nodes'.
+ */
+- (void)moveNodes:(NSArray *)nodes toIndexPath:(NSIndexPath *)indexPath;
+{
+	[super moveNodes:nodes toIndexPath:indexPath];
+    [self _updateSortOrderOfModelObjects];
+    
+    NSArray *enabledArray = [self _enabledDescendantLogsForNodes:nodes];
+    NSArray *allArray = [self _descendantLogsForNodes:nodes];
+    
+    //[self createAndDestroyLogsIfNecessary:allArray];
+    //[self moveNodeWindows:enabledArray];
+}
+
+/**
+ * Updates sort order of all NTTreeNode objects.
+ * This takes the entire opaque NSTreeNode tree structure, pulls each
+ * representive object and assigns a sort index.
+ */
 - (void)_updateSortOrderOfModelObjects
 {
 	for (NSTreeNode *node in [self flattenedNodes])
@@ -148,6 +273,7 @@
     [self addObserver:self forKeyPath:@"selectedObjects" options:0 context:nil];
     [self addObserver:self forKeyPath:@"arrangedObjects" options:NSKeyValueObservingOptionOld context:nil];
     [self addObserver:self forKeyPath:@"effectiveEnabled" options:0 context:nil];
+    [self generateRootObject];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -201,7 +327,7 @@
                 return;
             }
             
-            if (![[self _unorderedAllLogs] containsObject:item]) return;
+            if (![[self _allLogsUnordered] containsObject:item]) return;
         }
         
         // TODO: GCD Blocking canidate
@@ -221,7 +347,7 @@
         if (once) return;
         once = TRUE;
         
-        NSArray *logArray = [self _allLogs];
+        NSArray *logArray = [self _allLogsOrdered];
         [self createAndDestroyLogsIfNecessary:logArray];
         [self moveNodeWindows:logArray];
     }
@@ -237,34 +363,45 @@
 
 @implementation NTTreeController(LogManipulation)
 
-// Take an array of NTLogs and create/destroy their log processes as needed
+/**
+ * Take an array of NTLogs and create/destroy their log processes as needed.
+ * @param[in] logs An array of NTLogs to create or destroy.
+ */
 - (void)createAndDestroyLogsIfNecessary:(NSArray *)logs
 {
     for (NTLog *log in logs)
     {
-        if (![log.enabled boolValue] || ![[log parentHierarchyEnabled] boolValue]) [log destroyLogProcess];
-        else if ([log.enabled boolValue])
+        if (log.effectiveEnabled)
         {
             [log createLogProcess];
             [log updateWindowIncludingTimer:YES];
             if ([[self selectedObjects] containsObject:log]) [log setHighlighted:YES from:self];
         }
+        else [log destroyLogProcess];
     }
 }
 
-// Takes an NTLog and positions it's window correctly with respect to windows of other NTLogs
+/**
+ * Takes an NTLog and positions it's window correctly with respect to windows of other NTLogs.
+ * Using this function requires the node be enabled.
+ * TODO: Does `node' need to have an active window as well?
+ * @param[in] node NTLog to put into position.
+ */
 - (void)moveNodeWindow:(NTLog *)node
 {
-    if (!node || ![node.enabled boolValue]) return;
-    
     // since we are only moving one node, we can use all the logs for reference
-    [self moveNodeWindow:node usingRefLogs:[self _allEnabledLogs]];
+    [self moveNodeWindow:node usingRefLogs:[self _allLogsEnabled]];
 }
 
-// Moves a single NTLog into position, but restricts the references to which it can position the window against to `refLogs'.
+/**
+ * Moves a single NTLog into position, but restricts the references to which it can position the window against to `refLogs'.
+ * @param[in] node NTLog to put into position.
+ * @param[in] refLogs An array of NTLogs to use as a reference position. This
+ * array must be properly ordered.
+ */
 - (void)moveNodeWindow:(NTLog *)node usingRefLogs:(NSArray *)refLogs
 {
-    if (!node || ![node.enabled boolValue]) return;
+    if (!node || !node.effectiveEnabled) return;
     
     NTLog *refLog = nil;
     NSWindowOrderingMode direction = NSWindowAbove;
@@ -274,13 +411,17 @@
     else [node front];
 }
 
-// Takes an array of NTLogs and positions their windows correctly without using logs from `nodes'. This method assures that while moving groups of NTLogs, they will not be placed with a bad reference.
+/**
+ * Takes an array of NTLogs and positions their windows correctly without using logs from `nodes'. 
+ * This method assures that while moving groups of NTLogs, they will not be placed with a bad reference.
+ * @param[in] An array of NTLogs to move properly into position.
+ */
 - (void)moveNodeWindows:(NSArray *)nodes
 {
-    if (!nodes) return;
+    if (!nodes || [nodes count] <= 0) return;
     
     // find all canidates
-    NSArray *allLogs = [self _allEnabledLogs];
+    NSArray *allLogs = [self _allLogsEnabled];
     NSMutableArray *refLogs = [NSMutableArray array];
     NSMutableArray *nodesToKeep = [NSMutableArray array];
     NSMutableArray *nodesToDelete = [NSMutableArray array];
@@ -288,7 +429,7 @@
     NSEnumerator *e = [nodes reverseObjectEnumerator];
     for (NTLog *node in e)
     {
-        if (![node.enabled boolValue]) continue;
+        if (!node.effectiveEnabled) continue;
         
         [refLogs setArray:allLogs]; // reset our refs
         [nodesToKeep addObject:node]; // every time we run through this loop, we gain another reference log to use
@@ -301,12 +442,74 @@
     }
 }
 
+- (void)moveNodeWindows1:(NSArray *)nodes allNodes:(NSArray *)allNodes
+{
+    if (!nodes || [nodes count] <= 0) return;
+    
+    // find all canidates
+    NSArray *allLogs = allNodes;
+    NSMutableArray *refLogs = [NSMutableArray array];
+    NSMutableArray *nodesToKeep = [NSMutableArray array];
+    NSMutableArray *nodesToDelete = [NSMutableArray array];    
+    NSEnumerator *e = [nodes reverseObjectEnumerator];
+    for (NTLog *node in allLogs)
+    {
+        if (!node.effectiveEnabled) continue;
+        
+        [refLogs setArray:allLogs]; // reset our refs
+        [nodesToKeep addObject:node]; // every time we run through this loop, we gain another reference log to use
+        
+        [nodesToDelete setArray:nodes];
+        [nodesToDelete removeObjectsInArray:nodesToKeep]; // protect the nodes we want to keep
+        [refLogs removeObjectsInArray:nodesToDelete]; // kill the rest from our refs
+        
+        [self moveNodeWindow:node usingRefLogs:refLogs];
+    }
+}
+
+- (void)moveNodeWindows2:(NSArray *)nodes allNodes:(NSArray *)allNodes
+{
+    if (!nodes || [nodes count] <= 0) return;
+    
+    // find all canidates
+    NSArray *allLogs = allNodes;    
+    NSEnumerator *e = [nodes reverseObjectEnumerator];
+    for (NTLog *node in allLogs)
+    {
+        if (!node.effectiveEnabled) continue;
+        [node front];
+    }
+}
+
 @end
 
 
 @implementation NTTreeController (NodeProperties)
-// return the closest NTLog in `refLogs' to NTLog `item'. Direction is changed to the relative position of the returned NTLog to NTLog `item'
-- (NTLog *)_findNextReferenceLogFor:(NTLog *)item direction:(NSWindowOrderingMode*)direction usingRefLogs:(NSArray *)refLogs
+
+/**
+ * Finds closest neighboring NTLog to the NTLog `item'.
+ * Given a flat, ordered array representation of a tree structure (containing only NTLogs), this function will return a reference NTLog to the input `item', and include a reference direction (if the closest log is either above or below `item').
+ * This function checks for top references before bottom references.
+ * It is also important to note that in order for an NTLog in `refLogs' to be considered a neighbor, it **must** have an active window. The main purpose of this function is to facilitate window ordering, so a neighbor with no active window is useless to us.
+ * Example. `item' = foo. `refLogs' is as follows:
+ * 
+ * - EnabledLog1
+ * - EnabledLog2
+ * - DisabledLog1
+ * - DisabledLog2
+ * - foo
+ * - EnabledLog3
+ * - DisabledLog3
+ * - DisabledLog4
+ *
+ * The function would return `EnabledLog2' with a `direction' of NSWindowBelow. Note that even though EnabledLog3 is closer, EnabledLog2 is returned because the code checks the top of the array first.
+ * 
+ * @param[in] item The base NTLog. Must exist in `refLogs'.
+ * @param[in] refLogs Neighboring NTLogs to `item'. This is ordered array that represents the flattened tree structure.
+ * @param[out] direction Pointer that will contain the relative position of the neighboring log. This is where the base object is with respect to the returned object.
+ * @returns NTLog that is closest to the base NTLog.
+ */
+- (NTLog *)_findNextReferenceLogFor:(NTLog *)item direction:(NSWindowOrderingMode *)direction usingRefLogs:(NSArray *)refLogs
 {    
     // find which part of the array is good for us to use
     int baseLogIndex = [refLogs indexOfObject:item];
@@ -337,7 +540,10 @@
     return nil;
 }
 
-// Block statement to test for a good reference log
+/**
+ * A GCD Block statement for finding logs with active windowControllers.
+ * This function is used primarily by _findNextReferenceLogFor
+ */
 - (BOOL (^)(id obj, NSUInteger idx, BOOL *stop))_blockTestingForRefLog
 {
     return [[^(id obj, NSUInteger idx, BOOL *stop)
@@ -357,89 +563,138 @@
 
 @implementation NTTreeController (TreeAccessors)
 
-// Returns an unordered set of all NTLog objects
-- (NSSet *)_unorderedAllLogs
+/** 
+ * Returns an unordered set of all NTLog objects.
+ * @returns Unordered set of all NTLog objects in the tree.
+ */
+- (NSSet *)_allLogsUnordered
 {
     return [self _unorderedLogsIn:[self content]];
 }
 
-// Returns a sorted array of all NTLog objects
-- (NSArray *)_allLogs
+/** 
+ * Returns an ordered (sorted) array of all NTLog objects.
+ * @returns Ordered (sorted) array of all NTLog objects in the tree.
+ */
+- (NSArray *)_allLogsOrdered
 {
-    return [self _logsIn:[self content]];
+    return [self _orderedLogsIn:[self content]];
 }
 
-// Returns a sorted array of all effective enabled NTLog objects
-- (NSArray *)_allEnabledLogs
+/** 
+ * Returns an ordered (sorted) array of all effective enabled NTLog objects.
+ * @returns Ordered (sorted) array of all effective enabled NTLog objects in the tree.
+ */
+- (NSArray *)_allLogsEnabled
 {
     return [self _enabledLogsIn:[self content]];
 }
 
-// Returns an unordered set of NTLogs that descend from the set `ntNodes' (inclusive)
+/** 
+ * Returns an unordered set of all NTLog objects that descend from the set `ntNodes' (inclusive).
+ * @param[in] ntNodes An NSSet of NTNodes to flatten
+ * @returns Unordered set of all NTLog objects in `ntNodes'.
+ */
 - (NSSet *)_unorderedLogsIn:(NSSet *)ntNodes
 {
     NSMutableSet *set = [NSMutableSet set];
     
     for (NTTreeNode *ntNode in ntNodes)
     {
-        [set unionSet:[ntNode unorderedDescendants]];
+        if ([ntNode.isLeaf boolValue]) [set addObject:ntNode];
+        else [set unionSet:[ntNode unorderedDescendants]];
     }
     
     return [[set copy] autorelease];    
 }
 
-// Returns an ordered array of NTLogs that descend from the array `ntNodes' (inclusive)
-- (NSArray *)_logsIn:(NSArray *)ntNodes
+/** 
+ * Returns an ordered (sorted) array of all NTLog objects that descend from the set `ntNodes' (inclusive).
+ * @param[in] ntNodes An NSArray of NTNodes to flatten.
+ * @returns Ordered (sorted) array of all NTLog objects in `ntNodes'.
+ */
+- (NSArray *)_orderedLogsIn:(NSArray *)ntNodes
 {
     NSMutableArray *array = [NSMutableArray array];
     
     for (NTTreeNode *ntNode in ntNodes)
     {
-        [array addObjectsFromArray:[ntNode orderedDescendants]];
+        if ([ntNode.isLeaf boolValue]) [array addObject:ntNode];
+        else [array addObjectsFromArray:[ntNode orderedDescendants]];
     }
     
     return [[array copy] autorelease];    
 }
 
-// Returns an ordered array of effective enabled NTLogs that descend from the array `ntNodes' (inclusive)
+/** 
+ * Returns an ordered (sorted) array of all effective enabled NTLog objects that descend from the set `ntNodes' (inclusive).
+ * @param[in] ntNodes An NSArray of NTNodes to flatten.
+ * @returns Ordered (sorted) array of all effective enabled NTLog objects in `ntNodes'.
+ */
 - (NSArray *)_enabledLogsIn:(NSArray *)ntNodes
 {
     NSMutableArray *array = [NSMutableArray array];
     
     for (NTTreeNode *ntNode in ntNodes)
     {
-        [array addObjectsFromArray:[ntNode orderedEnabledDescendants]];
+        if ([ntNode.isLeaf boolValue]) [array addObject:ntNode];
+        else [array addObjectsFromArray:[ntNode orderedEnabledDescendants]];
     }
     
     return [[array copy] autorelease];    
 }
 
-- (NTTreeNode *)objectAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSArray *object = [self content];
-    int i;
-    for (i=0; i < [indexPath length]; i++)
-    {
-        object = [object objectAtIndex:[indexPath indexAtPosition:i]];
-    }
-}
-
 #pragma mark (NSTreeNode) Node Leaf Descendants
-// a (sorted) array of all NTLog objects that descend from the array of NSTreeNode `nodes'
-- (NSArray *)_leafDescendantRepObjsForNodes:(NSArray *)nodes
+/** 
+ * Returns a sorted array of all NTLog objects that descend from the array of opaque NSTreeNode `nodes'.
+ * This operation is inclusive.
+ *
+ * Example
+ *
+ * - Group1
+ *      - Log1
+ *      - Log2
+ *      - Log3
+ * - Group2
+ *      - Group3
+ *          - Log4
+ *      - Log5
+ *      - Log6
+ * - Group3
+ *      - Log6
+ *      - Log7
+ * - Log8
+ * - Log9
+ *
+ * For `nodes' Group2, Group3, and Log8, this function returns the represented objects
+ * for logs 4-8 (which will be NTLogs).
+ *
+ * TODO: What happens if the same node is in the array multiple times? Empty
+ * array? Null array?
+ *  
+ * @param[in] nodes An array of nodes to pull represented objects from.
+ * @returns Ordered (sorted) array of NTLog objects.
+ */
+- (NSArray *)_descendantLogsForNodes:(NSArray *)nodes
 {
     NSMutableArray *array = [NSMutableArray array];
+    
     for (NSTreeNode *item in nodes)
     {
 		if ([item isLeaf]) [array addObject:[item representedObject]];
-		else [array addObjectsFromArray:[self _leafDescendantRepObjsForNodes:[item childNodes]]];      
+		else [array addObjectsFromArray:[self _descendantLogsForNodes:[item childNodes]]];      
     }
     
     return [[array copy] autorelease];
 }
 
-// a (sorted) array of all enabled NTLog objects that descend from the array of NSTreeNode `nodes', provided that the parent hierarchy is also enabled
-- (NSArray *)_enabledLeafDescendantRepObjsForNodes:(NSArray *)nodes
+/** 
+ * Returns a (sorted) array of all enabled NTLog objects that descend from the array of NSTreeNode `nodes', provided that the parent hierarchy is also enabled.
+ * In other words, this returns the NTLogs that are `effectively' enabled.
+ * @param[in] nodes An array of nodes to pull represented objects from.
+ * @returns Ordered (sorted) array of enabled NTLog objects.
+ */
+- (NSArray *)_enabledDescendantLogsForNodes:(NSArray *)nodes
 {
     NSMutableArray *array = [NSMutableArray array];
     NTTreeNode *repObj = nil;
@@ -447,57 +702,12 @@
 	for (NSTreeNode *node in nodes)
     {
         repObj = [node representedObject];
-        if (![[repObj valueForKey:@"enabled"] boolValue]) continue; // is the object enabled?
-        if (![self _parentHierarchyEnabledForItem:repObj]) continue; // is the parent hierarchy of the object enabled?
+        if (![[repObj valueForKey:@"enabled"] boolValue]) continue;
         
 		if ([node isLeaf]) [array addObject:repObj];
-		else [array addObjectsFromArray:[self _enabledLeafDescendantRepObjsForNodes:[node childNodes]]];
+		else [array addObjectsFromArray:[self _enabledDescendantLogsForNodes:[node childNodes]]];
 	}
 	return [[array copy] autorelease];    
-}
-
-#pragma mark NTGroup Leaf Descendants
-// a (sorted) array of all NTLog objects that descend from the NTGroup `group'
-- (NSArray *)_leafDescendantRepObjsForGroup:(NTGroup *)group
-{
-    NSTreeNode *groupTreeNode = [self treeNodeForObject:group];
-    return [[groupTreeNode leafDescendants] valueForKey:@"representedObject"];
-}
-
-// a (sorted) array of all enabled NTLog objects that descend from the NTGroup `group', provided that the parent hierarchy is also enabled
-- (NSArray *)_enabledDescendantLogsForGroup:(NTGroup *)group
-{
-    if (![self _parentHierarchyEnabledForItem:group]) return nil; // bail early if our hierarchy isn't enabled
-    
-    NSTreeNode *groupTreeNode = [self treeNodeForObject:group];
-    return [self _enabledLeafDescendantRepObjsForNodes:[NSArray arrayWithObject:groupTreeNode]];
-}
-
-#pragma mark NTTreeNode Leaf Descendants
-- (NSArray *)_leafDescendantRepObjsForNTNodes:(NSArray *)ntNodes
-{
-    NSMutableArray *array = [NSMutableArray array];
-    for (NTTreeNode *node in ntNodes)
-    {
-        if (![[node enabled] boolValue]) continue; // is the object enabled?
-        if (![self _parentHierarchyEnabledForItem:node]) continue; // is the parent hierarchy of the object enabled?
-        
-		if ([[node isLeaf] boolValue]) [array addObject:node];
-		else [array addObjectsFromArray:[self _leafDescendantRepObjsForGroup:(NTGroup *)node]];
-	}
-    return [[array copy] autorelease];
-}
-
-// a (unsorted) array of all NTLog objects that descend from the array of NTTreeNode `nodes'
-- (NSSet *)_unorderedLeafDescendantForNTNodes:(NSSet *)ntNodes
-{
-    NSMutableSet *set = [NSMutableSet set];
-    for (NTTreeNode *node in ntNodes)
-    {        
-		if ([[node isLeaf] boolValue]) [set addObject:node];
-		else [set unionSet:[self _unorderedLeafDescendantForNTNodes:[node children]]];
-	}
-    return [[set copy] autorelease];
 }
 
 #pragma mark NSIndexPath Leaf Descendants
@@ -509,7 +719,6 @@
         [array addObject:[self nodeAtIndexPath:indexPath]];
     }
     
-    return [self _leafDescendantRepObjsForNodes:array];
+    return [self _descendantLogsForNodes:array];
 }
 @end
-
