@@ -251,8 +251,10 @@
     [(LogTextField*)[window textView]processAndSetText:newString withEscapes:[[self properties]boolForKey:@"useAsciiEscapes"] andCustomColors:[self customAnsiColors] insert:([properties integerForKey:@"printMode"] == NTAppendData)];
     [(LogTextField*)[window textView]scrollEnd];
     
+    /*
     if ([properties integerForKey:@"printMode"] == NTWaitForData) [fh readToEndOfFileInBackgroundAndNotify];
     else [fh waitForDataInBackgroundAndNotify];
+     */
 
     [window display];
     [pool release];
