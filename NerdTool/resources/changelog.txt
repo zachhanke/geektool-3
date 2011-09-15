@@ -47,4 +47,7 @@ NerdTool
 	* [Fix] Nerdtool checkbox problems (ID: 20).
 	* [Fix] Changing screen resolutions (ID: 18).
 
+0.8.1 (2011-08-21): 
+	* [Fix] Adds Lion compatibility
+
 ===========================================================================
